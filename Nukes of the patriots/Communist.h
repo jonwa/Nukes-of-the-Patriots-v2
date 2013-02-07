@@ -16,6 +16,7 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
 
+
 class President;
 class GUIElement;
 class GUIButton;
@@ -281,11 +282,14 @@ private:
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton> mFirstGeneralChoise;
-	std::shared_ptr<GUIButton> mSecondGeneralChoise;
-	std::shared_ptr<GUIButton> mThirdGeneralChoise;
-	std::shared_ptr<GUIButton> mFourthGeneralChoise;
-	std::shared_ptr<GUIButton> mFifthGeneralChoise; 
+	std::shared_ptr<GUIButton> mPickedGeneralButton;
+
+	std::shared_ptr<GUIButton> mFirstGeneralButton;
+	std::shared_ptr<GUIButton> mSecondGeneralButton;
+
+	std::shared_ptr<GUIButton> mGoToNextPortraitButton;
+	std::shared_ptr<GUIButton> mGoToPreviousPortraitButton;
+	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 
 
 

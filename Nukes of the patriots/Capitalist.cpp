@@ -429,20 +429,25 @@ void Capitalist::initializeGuiFunctions()
 	mRaiseTechByFiveButton->setOnClickFunction([=]()			{ setTech(5);	});		
 	mRaiseTechByTenButton->setOnClickFunction([=]()				{ setTech(10);	});	
 
-	mUpgradeNuclearWeaponButton->setOnClickFunction([=]()		{ upgradeNuclearWeapon(); });		
-	mUpgradeSpaceProgramButton->setOnClickFunction([=]()		{ upgradeSpaceProgram();  });		
-	mUpgradeSpyNetworkButton->setOnClickFunction([=]()			{ upgradeSpyNetwork();    });		
+	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() { upgradeNuclearWeapon(); });		
+	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  { upgradeSpaceProgram();  });		
+	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	  { upgradeSpyNetwork();    });		
 
 	/**/
-	mCapitalistUpgradeButton->setOnClickFunction([=]()			{ mUpgradeWindow->setVisible(true); });
+	mCapitalistUpgradeButton->setOnClickFunction([=]()	{ mUpgradeWindow->setVisible(true); });
 
-	mCapitalistExportButton->setOnClickFunction([=]()			{ mExportWindow->setVisible(true); });
+	mCapitalistExportButton->setOnClickFunction([=]()	{ mExportWindow->setVisible(true); });
 
-	mCapitalistEndTurnButton->setOnClickFunction([=]()			{ std::cout << "NEJ ELLER JO";  GameManager::getInstance()->nextRound();  });
+	mCapitalistEndTurnButton->setOnClickFunction([=]()	{ GameManager::getInstance()->nextRound();  });
 
 
-	mTaxesCloseButton->setOnClickFunction([=]()					{ mTaxesWindow->setVisible(false); 
-																  mTaxes = mTaxesUpdate; std::cout << mTaxes << "\nGAY" << std::endl; });
+	mTaxesCloseButton->setOnClickFunction([=]()					
+	{ 
+		mTaxesWindow->setVisible(false); 
+		mTaxes = mTaxesUpdate; 
+		std::cout << mTaxes << "\nGAY" << std::endl; 
+	});
+
 	/*Stänger ner resources fönstret "Okay-knappen"*/
 	mResourceCloseButton->setOnClickFunction([=]()				
 	{ 
@@ -450,8 +455,8 @@ void Capitalist::initializeGuiFunctions()
 		mFood = mFoodUpdate;													
 		mGoods = mGoodsUpdate;														 
 		mTech = mTechUpdate; 														
-		std::cout << "food: " <<mFood << '\n' << "goods: "<< mGoods<<'\n' << "tech: " << mTech<<'\n'; 
 	});
+
 	/*Stänger ner upgrade fönstret "Okay-knappen"*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{
@@ -459,33 +464,44 @@ void Capitalist::initializeGuiFunctions()
 		mNuclearWeapon = mNuclearWeaponUpdate;														  
 		mSpaceProgram	 = mSpaceProgramUpdate;														  
 		mSpyNetwork	 = mSpyNetworkUpdate;															  
-		std::cout << "NW " << mNuclearWeapon << '\n' << "SP " << mSpaceProgram <<'\n' << "SN " << mSpyNetwork <<'\n'; 
 	});
-	/*Stänger ner Export fönster "Okay-knappen"*/
-	mExportCloseButton->setOnClickFunction([=]()				{ mExportWindow->setVisible(false); });
 
-	mCapitalistPresident->setOnClickFunction([=]()				{});
+	/*Stänger ner Export fönster "Okay-knappen"*/
+	mExportCloseButton->setOnClickFunction([=]()				
+	{ 
+		mExportWindow->setVisible(false); 
+	});
+
+	mCapitalistPresident->setOnClickFunction([=](){});
 	
 	/*Val av president bild 1*/
 	mFirstPresidentButton->setOnClickFunction([=]()				
 	{ 
-		mChoosePresidentWindow->setVisible(false); //mPickedPresidentWindow->setVisible(true); 
-		setPresident(mFirstPresident); 
-		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
+
+		//mChoosePresidentWindow->setVisible(false); 
+		//mPickedPresidentWindow->setVisible(true); 
+		setPresident(mFirstPresident);
+
+		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
 	});
 
 	/*Val av president bild 2*/
 	mSecondPresidentButton->setOnClickFunction([=]()			
 	{ 
-		mChoosePresidentWindow->setVisible(false); //mPickedPresidentWindow->setVisible(true); 
+		//mChoosePresidentWindow->setVisible(false); 
+		//mPickedPresidentWindow->setVisible(true); 
 		setPresident(mSecondPresident);
-		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
+		
+		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
 	});			
 	
 
 	mClosePresidentWindow->setOnClickFunction([=]()				
 	{ 
-		mChoosePresidentWindow->setVisible(false); 
+		mChoosePresidentWindow->setVisible(false);
+		mPickedPresidentWindow->setVisible(true);
 	});
 }
 

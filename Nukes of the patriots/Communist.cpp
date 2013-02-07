@@ -6,6 +6,7 @@
 #include "tinyxml2.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
+#include "President.h"
 #include "GameManager.h"
 #include <sstream>
 
@@ -13,6 +14,8 @@ static int foodCost		= 10;
 static int goodsCost	= 20;
 static int techCost		= 30;
 static int taxChange	= 5;
+
+static int generalCount = 0;
 
 Communist::Communist()
 {
@@ -567,10 +570,18 @@ void Communist::initializeCommunistWindow()
 	mExportWindow->setVisible(false);
 
 
-	//mChooseGeneralWindow				= GUIWindow::create(CommunistWindows[""], mCommunistMainWindow);
-	//mPickedGeneralWindow				= GUIWindow::create(CommunistWindows[""], mCommunistMainWindow);
-	//mFirstGeneralChoise					= GUIButton::create(CommunistButtons[""], );
-	//mSecondGeneralChoise				= GUIButton::create(CommunistButtons[""], );
+	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
+	mPickedGeneralWindow				= GUIWindow::create(CommunistWindows["PickedGeneral"], mCommunistMainWindow);
+	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
+	mPickedGeneralWindow->setVisible(false);
+	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
+	
+	mGoToNextPortraitButton				= GUIButton::create(CommunistButtons["GoToNextPortrait"], mChooseGeneralWindow);
+	mGoToPreviousPortraitButton			= GUIButton::create(CommunistButtons["GoToPreviousPortrait"], mChooseGeneralWindow);
+	mCloseGeneralWindow					= GUIButton::create(CommunistButtons["CloseGeneral"], mChooseGeneralWindow);
+	//mChooseGeneralWindow->setVisible(false);
+	
+	chooseLeader();
 
 	mCommunistMainWindow->setVisible(false);
 	/*
@@ -586,18 +597,15 @@ void Communist::initializeCommunistWindow()
 
 void Communist::chooseLeader()
 {
-	mFirstGeneral	= GameManager::getInstance()->getGeneral(1);
-	mSecondGeneral  = GameManager::getInstance()->getGeneral(2);
-	mThirdGeneral	= GameManager::getInstance()->getGeneral(3);
-	mFourthGeneral  = GameManager::getInstance()->getGeneral(4);
-	mFifthGeneral	= GameManager::getInstance()->getGeneral(5);
-
+	GameManager* manager = GameManager::getInstance();
+	
+	mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstGeneralButton->getRectangle(), manager->getGeneral(generalCount)->getTexture())); 
 }
-
 
  /**/
 void Communist::initializeGuiFunctions()
 {
+
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		{ mTaxesWindow->setVisible(true); });
 	mCommunistPropagandaButton->setOnClickFunction([=]()		{ mPropagandaWindowFirst->setVisible(true); });
 	mCommunistUpgradeButton->setOnClickFunction([=]()			{ mUpgradeWindow->setVisible(true); });
@@ -609,18 +617,61 @@ void Communist::initializeGuiFunctions()
 	mResourcesCloseButton->setOnClickFunction([=]()				{ mResourcesWindow->setVisible(false); });
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	{ mPropagandaWindowFirst->setVisible(false); std::cout << "Propaganda" << std::endl;});
 
-	/*Vad som skall hända då spelaren väljer att uppgradera
-	  aningen nuclear, space eller spy*/
-	mUpgradeCloseButton->setOnClickFunction([=]()				{ mUpgradeWindow->setVisible(false); 
-																  mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
-																  mSpaceProgram = mSpaceProgramUpdate; mSpaceText->setText(intToString(getSpaceProgram()));
-															      mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;});
+	//Vad som skall hända då spelaren väljer att uppgradera
+	//antingen nuclear, space eller spy
+	mUpgradeCloseButton->setOnClickFunction([=]()				
+	{ 
+		mUpgradeWindow->setVisible(false); 
+		mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
+		mSpaceProgram = mSpaceProgramUpdate; mSpaceText->setText(intToString(getSpaceProgram()));
+		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;
+	});
 
-	mExportCloseButton->setOnClickFunction([=]()				{ mExportWindow->setVisible(false); });
+	mExportCloseButton->setOnClickFunction([=]() { mExportWindow->setVisible(false); });
 
 	mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
 	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
 	mUpgradeSpyNetworkButton->setOnClickFunction(std::bind(&Communist::upgradeSpyNetwork, this));
+
+
+	/*GUI hantering för valet av general*/
+	/*Bläddra mellan generalerna för att välja mellan de fem som finns*/
+	mGoToNextPortraitButton->setOnClickFunction([=]()			
+	{	
+		generalCount++;
+		if(generalCount > 4)
+			generalCount = 0;
+
+		mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
+	});
+
+	
+
+	mGoToPreviousPortraitButton->setOnClickFunction([=]()		
+	{	
+		generalCount--;
+		if(generalCount < 0)
+			generalCount = 4;
+		std::cout<<generalCount<<std::endl;
+
+		mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
+			
+	});
+
+
+	mCloseGeneralWindow->setOnClickFunction([=]()
+	{
+		mChooseGeneralWindow->setVisible(false);
+		mPickedGeneralWindow->setVisible(true);
+
+		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
+
+		mPickedGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture())); 
+	});
+
 }
 
 void Communist::showGUI()

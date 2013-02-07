@@ -18,7 +18,6 @@ public:
 private:
 	static GUIManager* mInstance;
 
-	sf::RenderWindow *mWindow;
 	std::vector<std::shared_ptr<GUIElement>> mGuiElements;
 
 };
