@@ -46,14 +46,14 @@ std::shared_ptr<President> Capitalist::getPresident()
 
 int Capitalist::increaseTaxCost(int currentTax)
 {						
-	currentTax += taxChange; //  + mPresident->getPatriotismTaxModifier();
+	currentTax += taxChange + mPresident->getPatriotismTaxModifier();
 
 	return currentTax;
 }
 
 int Capitalist::decreaseTaxCost(int currentTax)
 {
-	currentTax -= taxChange; // + mPresident->getPatriotismTaxModifier();
+	currentTax -= taxChange + mPresident->getPatriotismTaxModifier();
 
 	return currentTax;
 }
@@ -61,7 +61,7 @@ int Capitalist::decreaseTaxCost(int currentTax)
 void Capitalist::setPresident(std::shared_ptr<President> president)
 {
 	mPresident = president;
-	
+
 	foodCost	+= president->getFoodPriceModifier();
 	goodsCost	+= president->getGoodsPriceModifier();
 	techCost	+= president->getTechPriceModifier();
@@ -303,78 +303,77 @@ void Capitalist::initializeCapitalistWindow()
 	loadWindowPosition();
 	loadCapitalistMusic();
 
-	mCapitalistMainWindow				= std::make_shared<GUIWindow>(CapitalistWindows["CapitalistInterface"]);
-	mCapitalistPresident				= std::make_shared<GUIButton>(CapitalistButtons["President"], mCapitalistMainWindow);
-	mCapitalistTaxesButton				= std::make_shared<GUIButton>(CapitalistButtons["Taxes"], mCapitalistMainWindow);
-	mCapitalistResourceButton			= std::make_shared<GUIButton>(CapitalistButtons["Resource"], mCapitalistMainWindow);
-	mCapitalistUpgradeButton			= std::make_shared<GUIButton>(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
-	mCapitalistExportButton				= std::make_shared<GUIButton>(CapitalistButtons["Export"], mCapitalistMainWindow);
-	mCapitalistEndTurnButton			= std::make_shared<GUIButton>(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
+	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
+	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
+	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
+	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
+	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
+	mCapitalistExportButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
+	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
-	mNuclearText						= std::make_shared<GUIText>(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
-	mSpaceText							= std::make_shared<GUIText>(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
-	mSpyText							= std::make_shared<GUIText>(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
-	mFoodText							= std::make_shared<GUIText>(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCapitalistMainWindow);
-	mGoodsText							= std::make_shared<GUIText>(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
-	mTechText							= std::make_shared<GUIText>(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCapitalistMainWindow);
 
-	mTaxesWindow						= std::make_shared<GUIWindow>(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
-	mLowerTaxesButton					= std::make_shared<GUIButton>(CapitalistButtons["LowerTaxes"], mTaxesWindow);
-	mRaiseTaxesButton					= std::make_shared<GUIButton>(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
-	mTaxesCloseButton					= std::make_shared<GUIButton>(CapitalistButtons["CloseTaxes"], mTaxesWindow);
+	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
+	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
+	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
+	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
 
-	mResourceWindow						= std::make_shared<GUIWindow>(CapitalistWindows["CapitalistResourceWindow"], mCapitalistMainWindow);
-	mLowerFoodByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerFoodByTen"], mResourceWindow);
-	mLowerFoodByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerFoodByFive"], mResourceWindow);
-	mLowerFoodByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerFoodByOne"], mResourceWindow);
-	mRaiseFoodByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseFoodByOne"], mResourceWindow);
-	mRaiseFoodByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseFoodByFive"], mResourceWindow);
-	mRaiseFoodByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseFoodByTen"], mResourceWindow);
+	mResourceWindow						= GUIWindow::create(CapitalistWindows["CapitalistResourceWindow"], mCapitalistMainWindow);
+	mLowerFoodByTenButton				= GUIButton::create(CapitalistButtons["LowerFoodByTen"], mResourceWindow);
+	mLowerFoodByFiveButton				= GUIButton::create(CapitalistButtons["LowerFoodByFive"], mResourceWindow);
+	mLowerFoodByOneButton				= GUIButton::create(CapitalistButtons["LowerFoodByOne"], mResourceWindow);
+	mRaiseFoodByOneButton				= GUIButton::create(CapitalistButtons["RaiseFoodByOne"], mResourceWindow);
+	mRaiseFoodByFiveButton				= GUIButton::create(CapitalistButtons["RaiseFoodByFive"], mResourceWindow);
+	mRaiseFoodByTenButton				= GUIButton::create(CapitalistButtons["RaiseFoodByTen"], mResourceWindow);
 
-	mLowerGoodsByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerGoodsByTen"], mResourceWindow);
-	mLowerGoodsByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerGoodsByFive"], mResourceWindow);
-	mLowerGoodsByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerGoodsByOne"], mResourceWindow);
-	mRaiseGoodsByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseGoodsByOne"], mResourceWindow);
-	mRaiseGoodsByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseGoodsByFive"], mResourceWindow);
-	mRaiseGoodsByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseGoodsByTen"], mResourceWindow);
+	mLowerGoodsByTenButton				= GUIButton::create(CapitalistButtons["LowerGoodsByTen"], mResourceWindow);
+	mLowerGoodsByFiveButton				= GUIButton::create(CapitalistButtons["LowerGoodsByFive"], mResourceWindow);
+	mLowerGoodsByOneButton				= GUIButton::create(CapitalistButtons["LowerGoodsByOne"], mResourceWindow);
+	mRaiseGoodsByOneButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByOne"], mResourceWindow);
+	mRaiseGoodsByFiveButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByFive"], mResourceWindow);
+	mRaiseGoodsByTenButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByTen"], mResourceWindow);
 
-	mLowerTechByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerTechByTen"], mResourceWindow);
-	mLowerTechByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerTechByFive"], mResourceWindow);
-	mLowerTechByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerTechByOne"], mResourceWindow);
-	mRaiseTechByOneButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseTechByOne"], mResourceWindow);
-	mRaiseTechByFiveButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
-	mRaiseTechByTenButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
-	mResourceCloseButton				= std::make_shared<GUIButton>(CapitalistButtons["CloseResource"], mResourceWindow);
+	mLowerTechByTenButton				= GUIButton::create(CapitalistButtons["LowerTechByTen"], mResourceWindow);
+	mLowerTechByFiveButton				= GUIButton::create(CapitalistButtons["LowerTechByFive"], mResourceWindow);
+	mLowerTechByOneButton				= GUIButton::create(CapitalistButtons["LowerTechByOne"], mResourceWindow);
+	mRaiseTechByOneButton				= GUIButton::create(CapitalistButtons["RaiseTechByOne"], mResourceWindow);
+	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
+	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
+	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
 	mResourceWindow->setVisible(false);
 
-	mUpgradeWindow						= std::make_shared<GUIWindow>(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
-	mUpgradeNuclearWeaponButton		    = std::make_shared<GUIButton>(CapitalistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
-	mUpgradeSpaceProgramButton			= std::make_shared<GUIButton>(CapitalistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
-	mUpgradeSpyNetworkButton			= std::make_shared<GUIButton>(CapitalistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
-	mUpgradeCloseButton					= std::make_shared<GUIButton>(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
+	mUpgradeWindow						= GUIWindow::create(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
+	mUpgradeNuclearWeaponButton		    = GUIButton::create(CapitalistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
+	mUpgradeSpaceProgramButton			= GUIButton::create(CapitalistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
+	mUpgradeSpyNetworkButton			= GUIButton::create(CapitalistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
+	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
-	mExportWindow						= std::make_shared<GUIWindow>(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
-	mExportLowerFoodButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerFood"], mExportWindow); 
-	mExportRaiseFoodButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseFood"], mExportWindow);
-	mExportLowerGoodsButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerGoods"], mExportWindow);
-	mExportRaiseGoodsButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseGoods"], mExportWindow);
-	mExportLowerTechButton				= std::make_shared<GUIButton>(CapitalistButtons["LowerTech"], mExportWindow);
-	mExportRaiseTechButton				= std::make_shared<GUIButton>(CapitalistButtons["RaiseTech"], mExportWindow);
-	mExportCloseButton					= std::make_shared<GUIButton>(CapitalistButtons["CloseExport"], mExportWindow);
+	mExportWindow						= GUIWindow::create(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
+	mExportLowerFoodButton				= GUIButton::create(CapitalistButtons["LowerFood"], mExportWindow); 
+	mExportRaiseFoodButton				= GUIButton::create(CapitalistButtons["RaiseFood"], mExportWindow);
+	mExportLowerGoodsButton				= GUIButton::create(CapitalistButtons["LowerGoods"], mExportWindow);
+	mExportRaiseGoodsButton				= GUIButton::create(CapitalistButtons["RaiseGoods"], mExportWindow);
+	mExportLowerTechButton				= GUIButton::create(CapitalistButtons["LowerTech"], mExportWindow);
+	mExportRaiseTechButton				= GUIButton::create(CapitalistButtons["RaiseTech"], mExportWindow);
+	mExportCloseButton					= GUIButton::create(CapitalistButtons["CloseExport"], mExportWindow);
 	mExportWindow->setVisible(false);
 	
 
-	mChoosePresidentWindow				= std::make_shared<GUIWindow>(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
-	mPickedPresidentWindow				= std::make_shared<GUIWindow>(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
+	mChoosePresidentWindow				= GUIWindow::create(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
+	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
+	mFirstPresidentButton				= GUIButton::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
+	mSecondPresidentButton				= GUIButton::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
+	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
+	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
-	mFirstPresidentButton				= std::make_shared<GUIButton>(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
-	mSecondPresidentButton				= std::make_shared<GUIButton>(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
-	mPickedPresidentButton				= std::make_shared<GUIButton>(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
-	mClosePresidentWindow				= std::make_shared<GUIButton>(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
-	//mChoosePresidentWindow->setVisible(false);
 	
 	chooseLeader();
 
@@ -455,7 +454,7 @@ void Capitalist::initializeGuiFunctions()
 	});
 	/*Stänger ner upgrade fönstret "Okay-knappen"*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
-	{ 
+	{
 		mUpgradeWindow->setVisible(false); 														 
 		mNuclearWeapon = mNuclearWeaponUpdate;														  
 		mSpaceProgram	 = mSpaceProgramUpdate;														  
@@ -470,16 +469,16 @@ void Capitalist::initializeGuiFunctions()
 	/*Val av president bild 1*/
 	mFirstPresidentButton->setOnClickFunction([=]()				
 	{ 
-		mChoosePresidentWindow->setVisible(false); mPickedPresidentWindow->setVisible(true); 
-		mPresident = mFirstPresident; 
+		mChoosePresidentWindow->setVisible(false); //mPickedPresidentWindow->setVisible(true); 
+		setPresident(mFirstPresident); 
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
 	});
 
 	/*Val av president bild 2*/
 	mSecondPresidentButton->setOnClickFunction([=]()			
 	{ 
-		mChoosePresidentWindow->setVisible(false); mPickedPresidentWindow->setVisible(true); 
-		mPresident = mSecondPresident; 
+		mChoosePresidentWindow->setVisible(false); //mPickedPresidentWindow->setVisible(true); 
+		setPresident(mSecondPresident);
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
 	});			
 	

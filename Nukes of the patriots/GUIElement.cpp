@@ -1,4 +1,5 @@
 #include "GUIElement.h"
+#include <iostream>
 
 GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, GUIType guiType) : 
 	mRectangle(rect),
@@ -8,12 +9,6 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mMouseInside(false),
 	mUpdated(false)
 {
-	if(mParent != NULL)
-	{
-		mParent->addChild(getPtr());
-		setX(mRectangle.left += mParent->getX());
-		setY(mRectangle.top += mParent->getY());
-	}
 }
 
 GUIElement::~GUIElement()
@@ -27,10 +22,21 @@ GUIElement::~GUIElement()
 	}
 }
 
+void GUIElement::init()
+{
+	if(mParent != NULL)
+	{
+		mParent->addChild(getPtr());
+		setX(mRectangle.left += mParent->mRectangle.left);
+		setY(mRectangle.top += mParent->mRectangle.top);
+		setVisible(mParent->getVisible());
+	}
+}
+
 std::shared_ptr<GUIElement> GUIElement::getPtr()
 {
-	return std::shared_ptr<GUIElement>(this);
-	//return std::shared_ptr<GUIElement>(shared_from_this());
+	//return std::shared_ptr<GUIElement>(this);
+	return std::shared_ptr<GUIElement>(shared_from_this());
 }
 
 void GUIElement::addChild(std::shared_ptr<GUIElement> guiElement)
@@ -109,9 +115,12 @@ void GUIElement::setHeight(float height)
 void GUIElement::setVisible(bool visible)
 { 
 	mVisible = visible;
-	for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+	if(!mChilds.empty())
 	{
-		mChilds[i]->setVisible(visible);
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->setVisible(visible);
+		}
 	}
 }
 void GUIElement::setAlpha(int alpha)
@@ -122,6 +131,13 @@ void GUIElement::setAlpha(int alpha)
 void GUIElement::setUpdated(bool update)
 {
 	mUpdated = update;
+	if(!mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->setUpdated(update);
+		}
+	}
 }
 
 void GUIElement::update(sf::Event &event)
@@ -145,8 +161,9 @@ void GUIElement::update(sf::Event &event)
 			{
 				if(event.mouseButton.button == sf::Mouse::Left)
 				{
-					if(mOnClickFunction != nullptr)
+					if(mOnClickFunction != nullptr){
 						mOnClickFunction();
+					}
 				}
 			}
 		}

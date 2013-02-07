@@ -21,6 +21,7 @@ public:
 	int				getAlpha()const;
 	bool			getMouseIsInside()const;
 
+	void			init();
 	void			setX(float x);
 	void			setY(float y);
 	void			setWidth(float width);

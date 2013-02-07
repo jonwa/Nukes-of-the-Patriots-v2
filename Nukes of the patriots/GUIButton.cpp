@@ -2,6 +2,13 @@
 #include "ResourceHandler.h"
 #include <iostream>
 
+std::shared_ptr<GUIButton> GUIButton::create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent)
+{
+	std::shared_ptr<GUIButton> ret = std::make_shared<GUIButton>(pair, parent);
+	ret->init();
+	return ret;
+}
+
 GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent) :
 	GUIElement(pair.first, parent, BUTTON)
 {
@@ -28,17 +35,17 @@ void GUIButton::render(sf::RenderWindow &window)
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 		window.draw(rect);
-		//mSprite.setPosition(mSprite.getTextureRect().left, mSprite.getTextureRect().top);
+		mSprite.setPosition(getX(), getY());
 		window.draw(mSprite);
 	}
 
-	/*if(!mChilds.empty())
+	if(!mChilds.empty())
 	{
 		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}
-	}*/
+	}
 }
 
 

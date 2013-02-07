@@ -389,190 +389,190 @@ void Communist::initializeCommunistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 
-	mCommunistMainWindow			= std::make_shared<GUIWindow>(CommunistWindows["CommunistInterface"]);
-	mCommunistGeneralButton			= std::make_shared<GUIButton>(CommunistButtons["General"], mCommunistMainWindow);
-	mCommunistFiveYearPlanButton    = std::make_shared<GUIButton>(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
-	mCommunistPropagandaButton		= std::make_shared<GUIButton>(CommunistButtons["Propaganda"], mCommunistMainWindow);
-	mCommunistUpgradeButton			= std::make_shared<GUIButton>(CommunistButtons["Upgrade"], mCommunistMainWindow);
-	mCommunistExportButton			= std::make_shared<GUIButton>(CommunistButtons["Export"], mCommunistMainWindow);
-	mCommunistEndTurnButton			= std::make_shared<GUIButton>(CommunistButtons["EndTurn"], mCommunistMainWindow);
+	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
+	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
+	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
+	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
+	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
+	mCommunistExportButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
+	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
-	mNuclearText = std::make_shared<GUIText>(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
-	mSpaceText	 = std::make_shared<GUIText>(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
-	mSpyText	 = std::make_shared<GUIText>(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
-	mFoodText	 = std::make_shared<GUIText>(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCommunistMainWindow);
-	mGoodsText   = std::make_shared<GUIText>(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCommunistMainWindow);
-	mTechText	 = std::make_shared<GUIText>(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+	mNuclearText = GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mSpaceText	 = GUIText::create(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpyText	 = GUIText::create(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
+	mFoodText	 = GUIText::create(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCommunistMainWindow);
+	mGoodsText   = GUIText::create(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCommunistMainWindow);
+	mTechText	 = GUIText::create(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
 
 	/*Taxes fönster med knappar*/
-	mTaxesWindow					= std::make_shared<GUIWindow>(CommunistWindows["CommunistTaxesWindow"], mCommunistMainWindow);	
-	mYearOneLowerTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerTaxes"], mTaxesWindow);	
-	mYearOneRaiseTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseTaxes"], mTaxesWindow);	
-	mYearTwoLowerTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerTaxes"], mTaxesWindow);	
-	mYearTwoRaiseTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseTaxes"], mTaxesWindow);	
-	mYearThreeLowerTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerTaxes"], mTaxesWindow);	
-	mYearThreeRaiseTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseTaxes"], mTaxesWindow);	
-	mYearFourLowerTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerTaxes"], mTaxesWindow);	
-	mYearFourRaiseTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseTaxes"], mTaxesWindow);	
-	mYearFiveLowerTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerTaxes"], mTaxesWindow);	
-	mYearFiveRaiseTaxesButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseTaxes"], mTaxesWindow);	
+	mTaxesWindow					= GUIWindow::create(CommunistWindows["CommunistTaxesWindow"], mCommunistMainWindow);	
+	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mTaxesWindow);	
+	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mTaxesWindow);	
+	mYearTwoLowerTaxesButton		= GUIButton::create(CommunistButtons["YearTwoLowerTaxes"], mTaxesWindow);	
+	mYearTwoRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTaxes"], mTaxesWindow);	
+	mYearThreeLowerTaxesButton		= GUIButton::create(CommunistButtons["YearThreeLowerTaxes"], mTaxesWindow);	
+	mYearThreeRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTaxes"], mTaxesWindow);	
+	mYearFourLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFourLowerTaxes"], mTaxesWindow);	
+	mYearFourRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFourRaiseTaxes"], mTaxesWindow);	
+	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mTaxesWindow);	
+	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mTaxesWindow);	
 	mTaxesWindow->setVisible(false);
 
 	/*Resource GUI window med knappar*/
-	mResourcesWindow					= std::make_shared<GUIWindow>(CommunistWindows["CommunistResourcesWindow"], mCommunistMainWindow);	
+	mResourcesWindow					= GUIWindow::create(CommunistWindows["CommunistResourcesWindow"], mCommunistMainWindow);	
 	/*Food*/
-	mYearOneLowerFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerFoodByTen"], mResourcesWindow);	
-	mYearOneLowerFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerFoodByFive"], mResourcesWindow);	
-	mYearOneLowerFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerFoodByOne"], mResourcesWindow);	
-	mYearOneRaiseFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseFoodByOne"], mResourcesWindow);	
-	mYearOneRaiseFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseFoodByFive"], mResourcesWindow);	
-	mYearOneRaiseFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseFoodByTen"], mResourcesWindow);	
+	mYearOneLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByTen"], mResourcesWindow);	
+	mYearOneLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByFive"], mResourcesWindow);	
+	mYearOneLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByOne"], mResourcesWindow);	
+	mYearOneRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByOne"], mResourcesWindow);	
+	mYearOneRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByFive"], mResourcesWindow);	
+	mYearOneRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByTen"], mResourcesWindow);	
 	
-	mYearTwoLowerFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerFoodByTen"], mResourcesWindow);	
-	mYearTwoLowerFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerFoodByFive"], mResourcesWindow);	
-	mYearTwoLowerFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerFoodByOne"], mResourcesWindow);	
-	mYearTwoRaiseFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseFoodByOne"], mResourcesWindow);	
-	mYearTwoRaiseFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseFoodByFive"], mResourcesWindow);	
-	mYearTwoRaiseFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseFoodByTen"], mResourcesWindow);	
+	mYearTwoLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByTen"], mResourcesWindow);	
+	mYearTwoLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByFive"], mResourcesWindow);	
+	mYearTwoLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByOne"], mResourcesWindow);	
+	mYearTwoRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByOne"], mResourcesWindow);	
+	mYearTwoRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByFive"], mResourcesWindow);	
+	mYearTwoRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByTen"], mResourcesWindow);	
 
-	mYearThreeLowerFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerFoodByTen"], mResourcesWindow);	
-	mYearThreeLowerFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerFoodByFive"], mResourcesWindow);	
-	mYearThreeLowerFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerFoodByOne"], mResourcesWindow);	
-	mYearThreeRaiseFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseFoodByOne"], mResourcesWindow);	
-	mYearThreeRaiseFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseFoodByFive"], mResourcesWindow);	
-	mYearThreeRaiseFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseFoodByTen"], mResourcesWindow);	
+	mYearThreeLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByTen"], mResourcesWindow);	
+	mYearThreeLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByFive"], mResourcesWindow);	
+	mYearThreeLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByOne"], mResourcesWindow);	
+	mYearThreeRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByOne"], mResourcesWindow);	
+	mYearThreeRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByFive"], mResourcesWindow);	
+	mYearThreeRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByTen"], mResourcesWindow);	
 	
-	mYearFourLowerFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerFoodByTen"], mResourcesWindow);	
-	mYearFourLowerFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerFoodByFive"], mResourcesWindow);
-	mYearFourLowerFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerFoodByOne"], mResourcesWindow);	
-	mYearFourRaiseFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseFoodByOne"], mResourcesWindow);
-	mYearFourRaiseFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseFoodByFive"], mResourcesWindow);	
-	mYearFourRaiseFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseFoodByTen"], mResourcesWindow);
+	mYearFourLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByTen"], mResourcesWindow);	
+	mYearFourLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByFive"], mResourcesWindow);
+	mYearFourLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByOne"], mResourcesWindow);	
+	mYearFourRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByOne"], mResourcesWindow);
+	mYearFourRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByFive"], mResourcesWindow);	
+	mYearFourRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByTen"], mResourcesWindow);
 		
-	mYearFiveLowerFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerFoodByTen"], mResourcesWindow);	
-	mYearFiveLowerFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerFoodByFive"], mResourcesWindow);
-	mYearFiveLowerFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerFoodByOne"], mResourcesWindow);	
-	mYearFiveRaiseFoodByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseFoodByOne"], mResourcesWindow);
-	mYearFiveRaiseFoodByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseFoodByFive"], mResourcesWindow);	
-	mYearFiveRaiseFoodByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseFoodByTen"], mResourcesWindow);
+	mYearFiveLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByTen"], mResourcesWindow);	
+	mYearFiveLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByFive"], mResourcesWindow);
+	mYearFiveLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByOne"], mResourcesWindow);	
+	mYearFiveRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByOne"], mResourcesWindow);
+	mYearFiveRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByFive"], mResourcesWindow);	
+	mYearFiveRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByTen"], mResourcesWindow);
 	
 	/*Goods*/
-	mYearOneLowerGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerGoodsByTen"], mResourcesWindow);	
-	mYearOneLowerGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerGoodsByFive"], mResourcesWindow);	
-	mYearOneLowerGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerGoodsByOne"], mResourcesWindow);	
-	mYearOneRaiseGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseGoodsByOne"], mResourcesWindow);	
-	mYearOneRaiseGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseGoodsByFive"], mResourcesWindow);	
-	mYearOneRaiseGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseGoodsByTen"], mResourcesWindow);	
+	mYearOneLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByTen"], mResourcesWindow);	
+	mYearOneLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByFive"], mResourcesWindow);	
+	mYearOneLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByOne"], mResourcesWindow);	
+	mYearOneRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByOne"], mResourcesWindow);	
+	mYearOneRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByFive"], mResourcesWindow);	
+	mYearOneRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByTen"], mResourcesWindow);	
 	
-	mYearTwoLowerGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerGoodsByTen"], mResourcesWindow);	
-	mYearTwoLowerGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerGoodsByFive"], mResourcesWindow);	
-	mYearTwoLowerGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerGoodsByOne"], mResourcesWindow);	
-	mYearTwoRaiseGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseGoodsByOne"], mResourcesWindow);	
-	mYearTwoRaiseGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseGoodsByFive"], mResourcesWindow);	
-	mYearTwoRaiseGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseGoodsByTen"], mResourcesWindow);	
+	mYearTwoLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByTen"], mResourcesWindow);	
+	mYearTwoLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByFive"], mResourcesWindow);	
+	mYearTwoLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByOne"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByOne"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByFive"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByTen"], mResourcesWindow);	
 
-	mYearThreeLowerGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerGoodsByTen"], mResourcesWindow);	
-	mYearThreeLowerGoodsByFiveButton	= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerGoodsByFive"], mResourcesWindow);	
-	mYearThreeLowerGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerGoodsByOne"], mResourcesWindow);	
-	mYearThreeRaiseGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseGoodsByOne"], mResourcesWindow);	
-	mYearThreeRaiseGoodsByFiveButton	= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseGoodsByFive"], mResourcesWindow);	
-	mYearThreeRaiseGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseGoodsByTen"], mResourcesWindow);	
+	mYearThreeLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByTen"], mResourcesWindow);	
+	mYearThreeLowerGoodsByFiveButton	= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByFive"], mResourcesWindow);	
+	mYearThreeLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByOne"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByOne"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByFiveButton	= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByFive"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByTen"], mResourcesWindow);	
 	
-	mYearFourLowerGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerGoodsByTen"], mResourcesWindow);	
-	mYearFourLowerGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerGoodsByFive"], mResourcesWindow);
-	mYearFourLowerGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerGoodsByOne"], mResourcesWindow);	
-	mYearFourRaiseGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseGoodsByOne"], mResourcesWindow);
-	mYearFourRaiseGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseGoodsByFive"], mResourcesWindow);	
-	mYearFourRaiseGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseGoodsByTen"], mResourcesWindow);
+	mYearFourLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByTen"], mResourcesWindow);	
+	mYearFourLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByFive"], mResourcesWindow);
+	mYearFourLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByOne"], mResourcesWindow);	
+	mYearFourRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByOne"], mResourcesWindow);
+	mYearFourRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByFive"], mResourcesWindow);	
+	mYearFourRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByTen"], mResourcesWindow);
 	
-	mYearFiveLowerGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerGoodsByTen"], mResourcesWindow);	
-	mYearFiveLowerGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerGoodsByFive"], mResourcesWindow);
-	mYearFiveLowerGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerGoodsByOne"], mResourcesWindow);	
-	mYearFiveRaiseGoodsByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseGoodsByOne"], mResourcesWindow);
-	mYearFiveRaiseGoodsByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseGoodsByFive"], mResourcesWindow);	
-	mYearFiveRaiseGoodsByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseGoodsByTen"], mResourcesWindow);
+	mYearFiveLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByTen"], mResourcesWindow);	
+	mYearFiveLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByFive"], mResourcesWindow);
+	mYearFiveLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByOne"], mResourcesWindow);	
+	mYearFiveRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByOne"], mResourcesWindow);
+	mYearFiveRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByFive"], mResourcesWindow);	
+	mYearFiveRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByTen"], mResourcesWindow);
 	
 	/*Tech*/
-	mYearOneLowerTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerTechByTen"], mResourcesWindow);	
-	mYearOneLowerTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerTechByFive"], mResourcesWindow);	
-	mYearOneLowerTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneLowerTechByOne"], mResourcesWindow);	
-	mYearOneRaiseTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseTechByOne"], mResourcesWindow);	
-	mYearOneRaiseTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseTechByFive"], mResourcesWindow);	
-	mYearOneRaiseTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearOneRaiseTechByTen"], mResourcesWindow);	
+	mYearOneLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByTen"], mResourcesWindow);	
+	mYearOneLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByFive"], mResourcesWindow);	
+	mYearOneLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByOne"], mResourcesWindow);	
+	mYearOneRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByOne"], mResourcesWindow);	
+	mYearOneRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByFive"], mResourcesWindow);	
+	mYearOneRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByTen"], mResourcesWindow);	
 	
-	mYearTwoLowerTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerTechByTen"], mResourcesWindow);	
-	mYearTwoLowerTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerTechByFive"], mResourcesWindow);	
-	mYearTwoLowerTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoLowerTechByOne"], mResourcesWindow);	
-	mYearTwoRaiseTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseTechByOne"], mResourcesWindow);	
-	mYearTwoRaiseTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseTechByFive"], mResourcesWindow);	
-	mYearTwoRaiseTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearTwoRaiseTechByTen"], mResourcesWindow);	
+	mYearTwoLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByTen"], mResourcesWindow);	
+	mYearTwoLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByFive"], mResourcesWindow);	
+	mYearTwoLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByOne"], mResourcesWindow);	
+	mYearTwoRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByOne"], mResourcesWindow);	
+	mYearTwoRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByFive"], mResourcesWindow);	
+	mYearTwoRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByTen"], mResourcesWindow);	
 
-	mYearThreeLowerTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerTechByTen"], mResourcesWindow);	
-	mYearThreeLowerTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerTechByFive"], mResourcesWindow);	
-	mYearThreeLowerTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeLowerTechByOne"], mResourcesWindow);	
-	mYearThreeRaiseTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseTechByOne"], mResourcesWindow);	
-	mYearThreeRaiseTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseTechByFive"], mResourcesWindow);	
-	mYearThreeRaiseTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearThreeRaiseTechByTen"], mResourcesWindow);	
+	mYearThreeLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByTen"], mResourcesWindow);	
+	mYearThreeLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByFive"], mResourcesWindow);	
+	mYearThreeLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByOne"], mResourcesWindow);	
+	mYearThreeRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByOne"], mResourcesWindow);	
+	mYearThreeRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByFive"], mResourcesWindow);	
+	mYearThreeRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByTen"], mResourcesWindow);	
 	
-	mYearFourLowerTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerTechByTen"], mResourcesWindow);	
-	mYearFourLowerTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerTechByFive"], mResourcesWindow);
-	mYearFourLowerTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourLowerTechByOne"], mResourcesWindow);	
-	mYearFourRaiseTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseTechByOne"], mResourcesWindow);
-	mYearFourRaiseTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseTechByFive"], mResourcesWindow);	
-	mYearFourRaiseTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFourRaiseTechByTen"], mResourcesWindow);
+	mYearFourLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByTen"], mResourcesWindow);	
+	mYearFourLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByFive"], mResourcesWindow);
+	mYearFourLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByOne"], mResourcesWindow);	
+	mYearFourRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByOne"], mResourcesWindow);
+	mYearFourRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByFive"], mResourcesWindow);	
+	mYearFourRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByTen"], mResourcesWindow);
 	
-	mYearFiveLowerTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerTechByTen"], mResourcesWindow);	
-	mYearFiveLowerTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerTechByFive"], mResourcesWindow);
-	mYearFiveLowerTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveLowerTechByOne"], mResourcesWindow);	
-	mYearFiveRaiseTechByOneButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseTechByOne"], mResourcesWindow);
-	mYearFiveRaiseTechByFiveButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseTechByFive"], mResourcesWindow);	
-	mYearFiveRaiseTechByTenButton		= std::make_shared<GUIButton>(CommunistButtons["YearFiveRaiseTechByTen"], mResourcesWindow);
+	mYearFiveLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByTen"], mResourcesWindow);	
+	mYearFiveLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByFive"], mResourcesWindow);
+	mYearFiveLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByOne"], mResourcesWindow);	
+	mYearFiveRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByOne"], mResourcesWindow);
+	mYearFiveRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByFive"], mResourcesWindow);	
+	mYearFiveRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByTen"], mResourcesWindow);
 
-	mGoToNextSlideButton				= std::make_shared<GUIButton>(CommunistButtons["GoToNextSlide"], mTaxesWindow);	
-	mTaxesCloseButton					= std::make_shared<GUIButton>(CommunistButtons["CloseTaxesWindow"], mTaxesWindow);	
-	mGoToPreviousSlideButton			= std::make_shared<GUIButton>(CommunistButtons["GoToPreviousSlide"], mResourcesWindow);
-	mResourcesCloseButton				= std::make_shared<GUIButton>(CommunistButtons["CloseResourcesWindow"], mResourcesWindow);	
+	mGoToNextSlideButton				= GUIButton::create(CommunistButtons["GoToNextSlide"], mTaxesWindow);	
+	mTaxesCloseButton					= GUIButton::create(CommunistButtons["CloseTaxesWindow"], mTaxesWindow);	
+	mGoToPreviousSlideButton			= GUIButton::create(CommunistButtons["GoToPreviousSlide"], mResourcesWindow);
+	mResourcesCloseButton				= GUIButton::create(CommunistButtons["CloseResourcesWindow"], mResourcesWindow);	
 	mTaxesWindow->setVisible(false);
 	mResourcesWindow->setVisible(false);
 
 	/*Propaganda GUI window med knappar*/
-	mPropagandaWindowFirst				= std::make_shared<GUIWindow>(CommunistWindows["CommunistPropagandaWindowFirst"], mCommunistMainWindow);
-	mPropagandaWindowSecond				= std::make_shared<GUIWindow>(CommunistWindows["CommunistPropagandaWindowSecond"], mCommunistMainWindow);
-	/*mPropagandaBuyFoodButton			= std::make_shared<GUIButton>(CommunistButtons["PropagandaBuyFood"], mPropagandaWindowFirst);
-	mPropagandaBuyGoodsButton			= std::make_shared<GUIButton>(CommunistButtons["PropagandaBuyGoods"], mPropagandaWindowFirst);
-	mPropagandaBuyTechButton			= std::make_shared<GUIButton>(CommunistButtons["PropagandaBuyTech"], mPropagandaWindowFirst);*/
-	mPropagandaWindowFirstCloseButton	= std::make_shared<GUIButton>(CommunistButtons["PropagandaCloseWindowFirst"], mPropagandaWindowFirst);
-	mPropagandaWindowSecondCloseButton	= std::make_shared<GUIButton>(CommunistButtons["PropagandaCloseWindowSecond"], mPropagandaWindowSecond);
+	mPropagandaWindowFirst				= GUIWindow::create(CommunistWindows["CommunistPropagandaWindowFirst"], mCommunistMainWindow);
+	mPropagandaWindowSecond				= GUIWindow::create(CommunistWindows["CommunistPropagandaWindowSecond"], mCommunistMainWindow);
+	/*mPropagandaBuyFoodButton			= GUIButton::create(CommunistButtons["PropagandaBuyFood"], mPropagandaWindowFirst);
+	mPropagandaBuyGoodsButton			= GUIButton::create(CommunistButtons["PropagandaBuyGoods"], mPropagandaWindowFirst);
+	mPropagandaBuyTechButton			= GUIButton::create(CommunistButtons["PropagandaBuyTech"], mPropagandaWindowFirst);*/
+	mPropagandaWindowFirstCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowFirst"], mPropagandaWindowFirst);
+	mPropagandaWindowSecondCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowSecond"], mPropagandaWindowSecond);
 	mPropagandaWindowFirst->setVisible(false);
 	mPropagandaWindowSecond->setVisible(false);
 
 	/*Upgrade GUI window med knappar*/
-	mUpgradeWindow						= std::make_shared<GUIWindow>(CommunistWindows["CommunistUpgradeWindow"], mCommunistMainWindow);
-	mUpgradeNuclearWeaponButton			= std::make_shared<GUIButton>(CommunistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
-	mUpgradeSpaceProgramButton			= std::make_shared<GUIButton>(CommunistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
-	mUpgradeSpyNetworkButton			= std::make_shared<GUIButton>(CommunistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
-	mUpgradeCloseButton					= std::make_shared<GUIButton>(CommunistButtons["CloseUpgrade"], mUpgradeWindow);
+	mUpgradeWindow						= GUIWindow::create(CommunistWindows["CommunistUpgradeWindow"], mCommunistMainWindow);
+	mUpgradeNuclearWeaponButton			= GUIButton::create(CommunistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
+	mUpgradeSpaceProgramButton			= GUIButton::create(CommunistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
+	mUpgradeSpyNetworkButton			= GUIButton::create(CommunistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
+	mUpgradeCloseButton					= GUIButton::create(CommunistButtons["CloseUpgrade"], mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	/*Export GUI Window med knappar*/
-	mExportWindow						= std::make_shared<GUIWindow>(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
-	mExportLowerFoodButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistLowerFood"], mExportWindow);
-	mExportRaiseFoodButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistRaiseFood"], mExportWindow);
-	mExportLowerGoodsButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistLowerGoods"], mExportWindow);
-	mExportRaiseGoodsButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
-	mExportLowerTechButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistLowerTech"], mExportWindow);
-	mExportRaiseTechButton				= std::make_shared<GUIButton>(CommunistButtons["CommunistRaiseTech"], mExportWindow);
-	mExportCloseButton					= std::make_shared<GUIButton>(CommunistButtons["CloseExport"], mExportWindow);
+	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
+	mExportLowerFoodButton				= GUIButton::create(CommunistButtons["CommunistLowerFood"], mExportWindow);
+	mExportRaiseFoodButton				= GUIButton::create(CommunistButtons["CommunistRaiseFood"], mExportWindow);
+	mExportLowerGoodsButton				= GUIButton::create(CommunistButtons["CommunistLowerGoods"], mExportWindow);
+	mExportRaiseGoodsButton				= GUIButton::create(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
+	mExportLowerTechButton				= GUIButton::create(CommunistButtons["CommunistLowerTech"], mExportWindow);
+	mExportRaiseTechButton				= GUIButton::create(CommunistButtons["CommunistRaiseTech"], mExportWindow);
+	mExportCloseButton					= GUIButton::create(CommunistButtons["CloseExport"], mExportWindow);
 	mExportWindow->setVisible(false);
 
 
-	//mChooseGeneralWindow				= std::make_shared<GUIWindow>(CommunistWindows[""], mCommunistMainWindow);
-	//mPickedGeneralWindow				= std::make_shared<GUIWindow>(CommunistWindows[""], mCommunistMainWindow);
-	//mFirstGeneralChoise					= std::make_shared<GUIButton>(CommunistButtons[""], );
-	//mSecondGeneralChoise				= std::make_shared<GUIButton>(CommunistButtons[""], );
+	//mChooseGeneralWindow				= GUIWindow::create(CommunistWindows[""], mCommunistMainWindow);
+	//mPickedGeneralWindow				= GUIWindow::create(CommunistWindows[""], mCommunistMainWindow);
+	//mFirstGeneralChoise					= GUIButton::create(CommunistButtons[""], );
+	//mSecondGeneralChoise				= GUIButton::create(CommunistButtons[""], );
 
-
+	mCommunistMainWindow->setVisible(false);
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna

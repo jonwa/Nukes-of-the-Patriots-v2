@@ -8,11 +8,15 @@
 class GUIWindow: public GUIElement
 {
 public:
-			GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
+	static std::shared_ptr<GUIWindow> create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
+	
+	GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
 	void	render(sf::RenderWindow &window);
 			~GUIWindow(){}
 
 private:
+	GUIWindow(const GUIWindow &guiWindow);
+	GUIWindow& operator=(const GUIWindow &guiWindow);
 	sf::Sprite mSprite;
 };
 

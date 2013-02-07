@@ -6,7 +6,6 @@
 #include "President.h"
 #include "tinyxml2.h"
 
-static int inc = 0;
 GameManager* GameManager::mInstance = NULL;
 
 GameManager* GameManager::getInstance()

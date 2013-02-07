@@ -2,6 +2,13 @@
 #include <SFML\System\String.hpp>
 #include <iostream>
 
+std::shared_ptr<GUIText> GUIText::create(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent)
+{
+	std::shared_ptr<GUIText> ret = std::make_shared<GUIText>(rect, text, parent);
+	ret->init();
+	return ret;
+}
+
 GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, TEXT),
 	mFont(sf::Font::getDefaultFont())
@@ -49,11 +56,11 @@ void GUIText::render(sf::RenderWindow &window)
 
 	
 
-	/*if(!mChilds.empty())
+	if(!mChilds.empty())
 	{
 		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}
-	}*/
+	}
 }

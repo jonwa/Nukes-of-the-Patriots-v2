@@ -188,40 +188,40 @@ void Menu::initialize()
 	loadMenuMusic();
 
 	/*Förälder-fönstret för alla menyer*/
-	mParentWindow			= std::make_shared<GUIWindow>(WindowPos["MenuInterface"]);
+	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
 
 	/*Fönstret och dess barn för LOGOMENU*/
-	//mLogoMenuWindow		= std::make_shared<GUIWindow>(WindowPos["LogoScreen"], mParentWindow);
+	//mLogoMenuWindow		= GUIWindow::create(WindowPos["LogoScreen"], mParentWindow);
 
 
 	/*Fönstret och dess barn för SPLASHSCREEN*/
-	//mSplashScreenWindow = std::make_shared<GUIWindow>(WindowPos["SplashScreen"], mParentWindow);
+	//mSplashScreenWindow = GUIWindow::create(WindowPos["SplashScreen"], mParentWindow);
 	//mSplashScreenWindow->setVisible(false);
 
 	/*Fönstret och dess barn för MAIN MENU*/
-	mMainMenuWindow			= std::make_shared<GUIWindow>(WindowPos["MainMenu"], mParentWindow);
-	mStartNewGameButton		= std::make_shared<GUIButton>(ButtonPos["StartGame"], mMainMenuWindow);
-	mLoadGameButton			= std::make_shared<GUIButton>(ButtonPos["LoadGame"], mMainMenuWindow);
-	mSettingsButton			= std::make_shared<GUIButton>(ButtonPos["Settings"], mMainMenuWindow);
-	mCreditsButton			= std::make_shared<GUIButton>(ButtonPos["Credits"], mMainMenuWindow);
-	mExitButton				= std::make_shared<GUIButton>(ButtonPos["Exit"], mMainMenuWindow);
+	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
+	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
+	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
+	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
+	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
+	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
 	//mMainMenuWindow->setVisible(true);
 
 	/*Fönstret och dess barn för SETTINGS MENU*/
-	//mSettingsMenuWindow	= std::make_shared<GUIWindow>(WindowPos["SettingsMenu"], mParentWindow);
+	//mSettingsMenuWindow	= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
 	//mSettingsMenuWindow->setVisible(false);
 
 	/*Fönstret och dess barn för CREDITS MENU*/
-	mCreditsMenuWindow		= std::make_shared<GUIWindow>(WindowPos["CreditsMenu"], mParentWindow);
+	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"], mParentWindow);
 	mCreditsMenuWindow->setVisible(false);
 
 	/*Fönstret och dess barn för att välja lag*/
-	mPickTeamWindow			= std::make_shared<GUIWindow>(WindowPos["PickTeam"], mParentWindow);
-	mTeamCapitalistButton	= std::make_shared<GUIButton>(ButtonPos["TeamCapitalist"], mPickTeamWindow);
-	mTeamCommunistButton	= std::make_shared<GUIButton>(ButtonPos["TeamCommunist"], mPickTeamWindow);
+	mPickTeamWindow			= GUIWindow::create(WindowPos["PickTeam"], mParentWindow);
+	mTeamCapitalistButton	= GUIButton::create(ButtonPos["TeamCapitalist"], mPickTeamWindow);
+	mTeamCommunistButton	= GUIButton::create(ButtonPos["TeamCommunist"], mPickTeamWindow);
 	mPickTeamWindow->setVisible(false);
 
-
+	
 	/*Lägger in fönstrerna i vektorn för GUIElement*/
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 }
