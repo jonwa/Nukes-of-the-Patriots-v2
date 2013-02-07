@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tracks directory ="Menu">
+    <music filename="main_theme.ogg"/>
+</tracks>
+<tracks directory ="Capitalist">
+	<music filename="Kommunist.ogg"/>
+</tracks>
