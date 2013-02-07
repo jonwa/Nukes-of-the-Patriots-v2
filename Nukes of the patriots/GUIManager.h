@@ -25,7 +25,6 @@ public:
 private:
 	static GUIManager* mInstance;
 
-	sf::RenderWindow *mWindow;
 	std::vector<std::shared_ptr<GUIElement>> mGuiElements;
 	std::vector<std::function <void (std::shared_ptr<GUIElement>)>> mOnMouseClickFuncs;
 	std::vector<std::function <void (std::shared_ptr<GUIElement>)>> mOnMouseEnterFuncs;

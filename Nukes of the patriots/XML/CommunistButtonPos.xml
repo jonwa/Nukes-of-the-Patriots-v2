@@ -986,18 +986,42 @@
 	</button>
 	<button>
 		<name>FirstGeneral</name>
-		<xPos>63</xPos>
+		<xPos>195</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>220</height>
 		<image></image>
 	</button>
 	<button>
-		<name>SecondGeneral</name>
-		<xPos>327</xPos>
+		<name>GoToNextPortrait</name>
+		<xPos>524</xPos>
+		<yPos>223</yPos>
+		<width>30</width>
+		<height>40</height>
+		<image>Communist/button_ext</image>	
+	</button>
+	<button>
+		<name>GoToPreviousPortrait</name>
+		<xPos>20</xPos>
+		<yPos>223</yPos>
+		<width>30</width>
+		<height>40</height>
+		<image>Communist/button_prev</image>	
+	</button>
+	<button>
+		<name>CloseGeneral</name>
+		<xPos>235</xPos>
+		<yPos>477</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Communist/button_okay</image>	
+	</button>
+	<window>
+		<name>PickedGeneral</name>
+		<xPos>195</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>220</height>
 		<image></image>
-	</button>
+	</window>
 </buttons>

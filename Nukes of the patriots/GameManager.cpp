@@ -70,7 +70,7 @@ void GameManager::loadPresidents()
 			while (childNode != NULL)
 			{
 				std::string filename = childNode->Attribute("filename");
-				std::string key		 = filename.substr(0, filename.length() - 4);
+				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
 				mGeneralVector.push_back(std::make_shared<President>(key));
 				childNode = childNode->NextSiblingElement("image");
 			}
@@ -86,7 +86,7 @@ std::shared_ptr<President> GameManager::getRandomPresident()
 
 std::shared_ptr<President> GameManager::getGeneral(int number)
 {
-	return mGeneralVector[number - 1];
+	return mGeneralVector[number];
 }
 
 void GameManager::addSuperPower(std::shared_ptr<SuperPower> power)
