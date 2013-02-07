@@ -583,7 +583,7 @@ void Communist::initializeCommunistWindow()
 	
 	chooseLeader();
 
-	mCommunistMainWindow->setVisible(false);
+	
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna

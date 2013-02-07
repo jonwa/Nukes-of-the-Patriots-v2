@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Source Files\Assets">
-      <UniqueIdentifier>{49fa451c-c306-4439-9aa4-e2ffe278c661}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Assets">
       <UniqueIdentifier>{37c7a634-044b-423a-9ddf-b27243043f82}</UniqueIdentifier>
     </Filter>
@@ -35,6 +32,9 @@
     </Filter>
     <Filter Include="Source Files\TinyXML">
       <UniqueIdentifier>{8c870fd5-7aaa-4197-b204-dfa28f992423}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI\Assets">
+      <UniqueIdentifier>{49fa451c-c306-4439-9aa4-e2ffe278c661}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,16 +81,16 @@
       <Filter>Source Files\SuperPower</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Source Files\Assets</Filter>
+      <Filter>Source Files\GUI\Assets</Filter>
     </ClCompile>
     <ClCompile Include="EventHandler.cpp">
-      <Filter>Source Files\Assets</Filter>
+      <Filter>Source Files\GUI\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Randomizer.cpp">
-      <Filter>Source Files\Assets</Filter>
+      <Filter>Source Files\GUI\Assets</Filter>
     </ClCompile>
     <ClCompile Include="ResourceHandler.cpp">
-      <Filter>Source Files\Assets</Filter>
+      <Filter>Source Files\GUI\Assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

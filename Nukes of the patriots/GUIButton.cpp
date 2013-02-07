@@ -35,7 +35,7 @@ void GUIButton::render(sf::RenderWindow &window)
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 		window.draw(rect);
-		mSprite.setPosition(getX(), getY());
+		//mSprite.setPosition(getX(), getY());
 		window.draw(mSprite);
 	}
 
