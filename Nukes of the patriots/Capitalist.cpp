@@ -374,6 +374,7 @@ void Capitalist::initializeCapitalistWindow()
 	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
+	mChoosePresidentWindow->setVisible(false);
 	
 	chooseLeader();
 

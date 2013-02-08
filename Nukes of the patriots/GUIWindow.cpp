@@ -13,7 +13,10 @@ GUIWindow::GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 	if (pair.second)
 		mSprite.setTexture(*pair.second);
 	
-	//mSprite.setPosition(pair.first.left, pair.first.top);
+	if(mParent != nullptr)
+		mSprite.setPosition(getX() + parent->getX(), getY() + parent->getY());
+	else
+		mSprite.setPosition(getX(), getY());
 }
 
 void GUIWindow::render(sf::RenderWindow &window)

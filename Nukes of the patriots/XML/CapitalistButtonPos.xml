@@ -14,7 +14,7 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
-		<image>Capitalist/7_kap_tax</image>
+		<image>Capitalist/kap_texture_button_taxes</image>
 	</button>
 	<button>
 		<name>LowerTaxes</name>
@@ -22,7 +22,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_min5</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseTaxes</name>
@@ -30,7 +30,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu5</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>	
 	<button>
 		<name>CloseTaxes</name>
@@ -54,7 +54,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min10</image>		
+		<image>Capitalist/kap_texture_button_minus</image>		
 	</button>
 	<button>
 		<name>LowerFoodByFive</name>
@@ -62,7 +62,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_min5</image>		
+		<image>Capitalist/kap_texture_button_minus</image>		
 	</button>
 	<button>
 		<name>LowerFoodByOne</name>
@@ -70,7 +70,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseFoodByOne</name>
@@ -78,7 +78,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu1</image>		
+		<image>Capitalist/kap_texture_button_plus</image>		
 	</button>
 	<button>
 		<name>RaiseFoodByFive</name>
@@ -86,7 +86,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu5</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>RaiseFoodByTen</name>
@@ -94,7 +94,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu10</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>LowerGoodsByTen</name>
@@ -102,7 +102,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min10</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>LowerGoodsByFive</name>
@@ -110,7 +110,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min5</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>LowerGoodsByOne</name>
@@ -118,7 +118,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseGoodsByOne</name>
@@ -126,7 +126,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu1</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>RaiseGoodsByFive</name>
@@ -134,7 +134,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu5</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>RaiseGoodsByTen</name>
@@ -142,7 +142,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu10</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>LowerTechByTen</name>
@@ -150,7 +150,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min10</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>LowerTechByFive</name>
@@ -158,7 +158,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min5</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>LowerTechByOne</name>
@@ -166,7 +166,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseTechByOne</name>
@@ -174,7 +174,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu1</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>RaiseTechByFive</name>
@@ -182,7 +182,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu5</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>RaiseTechByTen</name>
@@ -190,7 +190,7 @@
 		<yPos>57</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_plu10</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>CloseResource</name>
@@ -206,7 +206,7 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>	
-		<image>Capitalist/7_kap_upg</image>
+		<image>Capitalist/kap_texture_button_upgrade</image>
 	</button>
 	<button>
 		<name>UpgradeNuclearWeapon</name>
@@ -214,7 +214,7 @@
 		<yPos>351</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Capitalist/button_upgrade</image>
+		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
 		<name>UpgradeSpaceProgram</name>
@@ -222,7 +222,7 @@
 		<yPos>313</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Capitalist/button_upgrade</image>
+		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
 		<name>UpgradeSpyNetwork</name>
@@ -230,7 +230,7 @@
 		<yPos>284</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Capitalist/button_upgrade</image>
+		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
 		<name>CloseUpgrade</name>
@@ -254,7 +254,7 @@
 		<yPos>98</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseFood</name>
@@ -262,7 +262,7 @@
 		<yPos>98</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu1</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>LowerGoods</name>
@@ -270,7 +270,7 @@
 		<yPos>241</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseGoods</name>
@@ -278,7 +278,7 @@
 		<yPos>241</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu1</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>LowerTech</name>
@@ -286,7 +286,7 @@
 		<yPos>386</yPos>
 		<width>20</width>
 		<height>40</height>	
-		<image>Capitalist/button_min1</image>
+		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseTech</name>
@@ -294,7 +294,7 @@
 		<yPos>386</yPos>
 		<width>20</width>
 		<height>40</height>
-		<image>Capitalist/button_plu1</image>
+		<image>Capitalist/kap_texture_button_plus</image>
 	</button>
 	<button>
 		<name>CloseExport</name>
@@ -310,7 +310,7 @@
 		<yPos>636</yPos>
 		<width>111</width>
 		<height>40</height>
-		<image>Capitalist/7_kap_end</image>
+		<image>Capitalist/kap_texture_button_endturn</image>
 	</button>
 	<button>
 		<name>FirstPresident</name>

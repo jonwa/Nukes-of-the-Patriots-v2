@@ -14,8 +14,11 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 {
 	if (pair.second)
 		mSprite.setTexture(*pair.second);
-
-	mSprite.setPosition(getX(), getY());
+	
+	if(mParent != nullptr)
+		mSprite.setPosition(getX() + parent->getX(), getY() + parent->getY());
+	else
+		mSprite.setPosition(getX(), getY());
 }
 
 void GUIButton::render(sf::RenderWindow &window)
@@ -35,7 +38,7 @@ void GUIButton::render(sf::RenderWindow &window)
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 		window.draw(rect);
-		//mSprite.setPosition(getX(), getY());
+		
 		window.draw(mSprite);
 	}
 
