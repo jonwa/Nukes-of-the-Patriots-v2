@@ -28,6 +28,8 @@
     <ClCompile Include="Randomizer.cpp" />
     <ClCompile Include="SuperPower.cpp" />
     <ClCompile Include="ResourceHandler.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TimerHandler.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +49,8 @@
     <ClInclude Include="Randomizer.h" />
     <ClInclude Include="SuperPower.h" />
     <ClInclude Include="ResourceHandler.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="TimerHandler.h" />
     <ClInclude Include="tinyxml2.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -19,17 +19,18 @@ GUIWindow::GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 }
 
-void GUIWindow::render(sf::RenderWindow &window)
+bool GUIWindow::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
-	/*std::shared_ptr<GUIElement> parent = getParent();
+	if(!visible)return false;
+	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
 		visible = parent->getVisible();
 		if(!visible)
-			break;
+			return false;
 		parent = parent->getParent();
-	}*/
+	}
 	if(visible)
 	{
 		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
@@ -37,7 +38,7 @@ void GUIWindow::render(sf::RenderWindow &window)
 		rect.setFillColor(sf::Color::Color(255, 0, 0, 100));
 		//window.draw(rect);
 		mSprite.setPosition(getX(), getY());
-		window.draw(mSprite);
+		window->draw(mSprite);
 	}
 
 
@@ -48,4 +49,5 @@ void GUIWindow::render(sf::RenderWindow &window)
 			mChilds[i]->render(window);
 		}
 	}
+	return true;
 }

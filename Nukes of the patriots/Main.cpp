@@ -14,16 +14,17 @@
 #include <functional>
 #include "ResourceHandler.h"
 #include "GameManager.h"
+#include "TimerHandler.h"
 
 using namespace std;
 
-sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!"/*);*/, sf::Style::Fullscreen);
-
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!"/*);*/, sf::Style::Fullscreen);
+	window.setFramerateLimit(60);
+	GUIManager::getInstance()->init(&window);
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
-	GameManager::getInstance()->init(1952);
 	Menu menu(window);
 	
 	
@@ -33,12 +34,16 @@ int main()
         while (window.pollEvent(event))
         {
 			GUIManager::getInstance()->update(event);
+			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
+				GameManager::getInstance()->nextRound();
             if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 window.close();
         }
+		//GUIManager::getInstance()->update();
+		GUIManager::getInstance()->tick();
         window.clear();
-		GUIManager::getInstance()->render(window);
-
+		GUIManager::getInstance()->render();
+		TimerHandler::getInstance()->tick();
         window.display();
     }
     return EXIT_SUCCESS;

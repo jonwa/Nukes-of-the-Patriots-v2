@@ -35,21 +35,21 @@ public:
 	void						setPresident(std::shared_ptr<President>);
 
 
-	void upgradeNuclearWeapon();
-	void upgradeSpaceProgram();
-	void upgradeSpyNetwork();
+	bool upgradeNuclearWeapon();
+	bool upgradeSpaceProgram();
+	bool upgradeSpyNetwork();
 	
 	void chooseLeader();
 
 	void showGUI();
 	void hideGUI();
+	void update();
 
-	int	increaseTaxCost(int currentTax);
-	int	decreaseTaxCost(int currentTax);
+	void setTaxesCost(int tax);
 
-	void setFood(int value);
-	void setGoods(int value);
-	void setTech(int value);
+	bool setFood(int value);
+	bool setGoods(int value);
+	bool setTech(int value);
 
 	void playMusic();
 
@@ -60,6 +60,12 @@ private:
 		converter << i;
 		return converter.str();
 	}
+
+	int stringToInt(std::string str)
+	{
+		return atoi(str.c_str());
+	}
+
 
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
@@ -87,8 +93,16 @@ private:
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
 	std::shared_ptr<GUIText> mFoodText;	
-	std::shared_ptr<GUIText >mGoodsText;  
-	std::shared_ptr<GUIText> mTechText;	  
+	std::shared_ptr<GUIText> mGoodsText;  
+	std::shared_ptr<GUIText> mTechText;
+
+	std::shared_ptr<GUIText> mBuyFoodText;
+	std::shared_ptr<GUIText> mBuyGoodsText;
+	std::shared_ptr<GUIText> mBuyTechText;
+	std::shared_ptr<GUIText> mFoodCost;
+	std::shared_ptr<GUIText> mGoodsCost;
+	std::shared_ptr<GUIText> mTechCost;
+	std::shared_ptr<GUIText> mTotalResourcesCost;
 
 
 	/*GUI-pekare för kapitalisternas interface*/

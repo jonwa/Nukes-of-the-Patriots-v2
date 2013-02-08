@@ -21,15 +21,16 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 }
 
-void GUIButton::render(sf::RenderWindow &window)
+bool GUIButton::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
+	if(!visible)return false;
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
 		visible = parent->getVisible();
 		if(!visible)
-			break;
+			return false;
 		parent = parent->getParent();
 	}
 	if(visible)
@@ -37,9 +38,11 @@ void GUIButton::render(sf::RenderWindow &window)
 		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
+
 		window.draw(rect);
 		
 		window.draw(mSprite);
+
 	}
 
 	if(!mChilds.empty())
@@ -49,6 +52,7 @@ void GUIButton::render(sf::RenderWindow &window)
 			mChilds[i]->render(window);
 		}
 	}
+	return true;
 }
 
 

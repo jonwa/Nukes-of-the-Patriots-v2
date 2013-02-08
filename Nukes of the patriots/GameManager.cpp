@@ -32,13 +32,24 @@ void GameManager::init(int year)
 	loadPresidents();
 	mVecSuperPowers.push_back(std::make_shared<Capitalist>());
 	mVecSuperPowers.push_back(std::make_shared<Communist>());
+	mVecPlayersLeft = mVecSuperPowers;
 
 	
-	//for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
-	//{
-	//	//(*it)->choosePresident();
-	//}
+	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	{
+		(*it)->chooseLeader();
+	}*/
 	mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+	{
+		if((*it) == mCurrentPlayer)
+		{
+			mVecPlayersLeft.erase(it);
+			break;
+		}
+	}
+	mCurrentPlayer->showGUI();
+
 }
 
 void GameManager::loadPresidents()
@@ -109,6 +120,7 @@ void GameManager::startRound()
 	int goodsBought = 0;
 	int techBought = 0;
 	int exports = 0;
+
 	// if nobody bought my exports - then it will be sold internationally
 	//foodBought = moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
 	//goodsBought = moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
@@ -123,7 +135,8 @@ void GameManager::startRound()
 	//mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
 	//mCurrentPlayer->getTaxIncome();
 	//mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
-	getCurrentPlayer()->showGUI();
+	mCurrentPlayer->update();
+	mCurrentPlayer->showGUI();
 }
 
 int GameManager::getYear()const
@@ -144,7 +157,7 @@ std::vector<std::shared_ptr<SuperPower> > GameManager::getPlayers()const
 void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 {
 	mCurrentPlayer = newPlayer;
-	mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
+	//mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
 	mCurrentPlayer->setRound(mCurrentPlayer->getRound() + 1);
 }
 
@@ -175,33 +188,44 @@ void GameManager::nextRound()
 	}
 	mRound++;
 	// Everybody has played once this round, time to decide next player to start by spy network
-	if(mRound%mVecSuperPowers.size() == 0)
+	std::cout<<"players left to play this round: "<<mVecPlayersLeft.size()<<std::endl;
+	if(mVecPlayersLeft.size() == 0)
 	{
+		mVecPlayersLeft = mVecSuperPowers;
 		setYear(getYear() + 1);
 		// Loop all players and put those with highest same spy network in vector to get random
 		std::vector<std::shared_ptr<SuperPower> > nextPlayers;
-		int max = -1;
+		int max = 0;
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
-			if((*it)->getSpyNetwork() > max)
+			if((*it)->getSpyNetwork() >= max)
 				max = (*it)->getSpyNetwork();
 		}
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
 			if((*it)->getSpyNetwork() == max)
-				nextPlayers.push_back((*it));
+				nextPlayers.push_back(*it);
 		}
-
-		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 1);
-		//nextPlayers[randomPlayer - 1]->selectStartingPlayer();
+		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
+		setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+		//std::cout<<"starts this year: "<<mCurrentPlayer->getType()<<std::endl;
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
+		}
+		//nextPlayers[randomPlayer]->selectStartingPlayer();
 	}
 	else
 	{
 		std::vector<std::shared_ptr<SuperPower> > nextPlayers;
-		int max = -1;
+		int max = 0;
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 		{
-			if((*it)->getSpyNetwork() > max)
+			if((*it)->getSpyNetwork() >= max)
 				max = (*it)->getSpyNetwork();
 		}
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
@@ -209,8 +233,8 @@ void GameManager::nextRound()
 			if((*it)->getSpyNetwork() == max)
 				nextPlayers.push_back((*it));
 		}
-		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 1);
-		setCurrentPlayer(nextPlayers[randomPlayer - 1]);
+		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
+		setCurrentPlayer(nextPlayers[randomPlayer]);
 		// Remove current player from players left to play
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 		{

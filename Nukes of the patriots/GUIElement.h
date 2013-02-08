@@ -29,7 +29,6 @@ public:
 	void			setVisible(bool visible);
 	void			setAlpha(int alpha);
 	void			setMouseIsInside(bool inside);
-	void			setUpdated(bool update);
 	sf::FloatRect	getRectangle();
 
 	void			addChild(std::shared_ptr<GUIElement> guiElement);
@@ -37,22 +36,26 @@ public:
 	std::vector<std::shared_ptr<GUIElement>>& getChildVector();
 
 	virtual void	setScale(float width, float height) {}
-	void			setOnClickFunction(std::function<void ()>);
+	void			setOnClickFunction(std::function<void()>);
 	void			setMouseEnterFunction(std::function<void ()>);
 	void			setMouseLeaveFunction(std::function<void ()>);
-	virtual void	update(sf::Event &event);
-	virtual void	render(sf::RenderWindow &window) = 0;
+	//virtual bool	update(sf::RenderWindow &window);
+	bool			onClick(sf::RenderWindow *window);
+	bool			onMove(sf::RenderWindow *window);
+	virtual bool	render(sf::RenderWindow *window) = 0;
+	void			tick();
 	virtual			~GUIElement();
 protected:
 	sf::FloatRect mRectangle;
 	int mAlpha;
-	bool mVisible, mMouseInside, mUpdated;
+	bool mVisible, mMouseInside;
 	std::shared_ptr<GUIElement> mParent;
 	GUIType mGUIType;
 
 	std::function<void ()> mOnClickFunction;
 	std::function<void ()> mMouseEnterFunction;
 	std::function<void ()> mMouseLeaveFunction;
+	bool mCallClickFunc, mCallMouseEnterFunc, mCallMouseLeaveFunc;
 	
 	std::vector<std::shared_ptr<GUIElement>> mChilds;
 

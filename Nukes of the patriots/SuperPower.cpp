@@ -6,21 +6,15 @@ SuperPower::SuperPower() :
 	mPatriotism(20),
 	mCurrency(0), 
 	mTaxes(30),
+	mCurrency(0),
 	mFood(0),
 	mTech(0),
 	mGoods(0),
 	mSpyNetwork(0),
 	mSpaceProgram(0),
-	mNuclearWeapon(10)
+	mNuclearWeapon(10),
+	mTaxDecreased(false)
 {
-	mCurrencyUpdate			= mCurrency;
-	mFoodUpdate				= mFood;
-	mGoodsUpdate			= mGoods;
-	mTechUpdate				= mTech;
-	mTaxesUpdate			= mTaxes;
-	mNuclearWeaponUpdate	= mNuclearWeapon;
-	mSpaceProgramUpdate		= mSpaceProgram;
-	mSpyNetworkUpdate		= mSpyNetwork;
 }
 
 
@@ -38,6 +32,11 @@ int SuperPower::getCurrency()
 int SuperPower::getFood()
 {
 	return mFood;
+}
+
+PoliticalType SuperPower::getType()
+{
+	return mType;
 }
 
 int SuperPower::getGoods()

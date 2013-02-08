@@ -8,7 +8,7 @@
 int Randomizer::randomNr(int Max, int Min)
 {
 	int random = randTimer.getElapsedTime().asMicroseconds()%Max+Min;
-
+	 
 	return random;
 }
 

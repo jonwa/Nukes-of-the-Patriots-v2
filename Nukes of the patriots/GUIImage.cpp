@@ -32,16 +32,17 @@
 // * 
 // *
 // */
-//void GUIImage::render(sf::RenderWindow &window)
+//bool GUIImage::render(sf::RenderWindow &window)
 //{
 //	bool visible = getVisible();
+//	if(!visible)return false;
 //	std::shared_ptr<GUIElement> parent = getParent();
 //	while(parent != NULL)
 //	{
 //		visible = parent->getVisible();
 //		if(!visible)
 //		{
-//			break;
+//			return false;
 //		}
 //		parent = parent->getParent();
 //	}
@@ -49,4 +50,5 @@
 //	{
 //		window.draw(mSprite);
 //	}
+//	return true;
 //}

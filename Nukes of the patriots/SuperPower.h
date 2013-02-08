@@ -36,17 +36,17 @@ public:
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
-	virtual void		upgradeNuclearWeapon() = 0;
-	virtual void		upgradeSpaceProgram() = 0;
-	virtual void		upgradeSpyNetwork() = 0;
-	virtual int			increaseTaxCost(int currentTax) = 0;
-	virtual int			decreaseTaxCost(int currentTax) = 0;
-	virtual void		setFood(int value) = 0;
-	virtual void		setGoods(int value) = 0;
-	virtual void		setTech(int value) = 0;
+	virtual bool		upgradeNuclearWeapon() = 0;
+	virtual bool		upgradeSpaceProgram() = 0;
+	virtual bool		upgradeSpyNetwork() = 0;
+	virtual void		setTaxesCost(int tax) = 0;
+	virtual bool		setFood(int value) = 0;
+	virtual bool		setGoods(int value) = 0;
+	virtual bool		setTech(int value) = 0;
 	virtual void		chooseLeader(){};
 	virtual void		showGUI() = 0;
 	virtual void		hideGUI() = 0;
+	virtual void		update() = 0;
 	virtual void		playMusic() {};
 protected:
 	PoliticalType mType;
@@ -54,16 +54,17 @@ protected:
 	int mRound;
 
 	int	mPatriotism;
-	int	mCurrency, mCurrencyUpdate;
+	int	mCurrency;
 	int	mPopulation;
-	int	mFood, mFoodUpdate;
-	int	mGoods, mGoodsUpdate;
-	int	mTech, mTechUpdate;
-	int	mTaxes, mTaxesUpdate;
-	int	mSpyNetwork, mSpyNetworkUpdate;
-	int	mNuclearWeapon, mNuclearWeaponUpdate;
-	int	mSpaceProgram, mSpaceProgramUpdate;
+	int	mFood;
+	int	mGoods;
+	int	mTech;
+	int	mTaxes;
+	int	mSpyNetwork;
+	int	mNuclearWeapon;
+	int	mSpaceProgram;
 	bool mIncreasePopulation;
+	bool mTaxDecreased;
 };
 
 #endif

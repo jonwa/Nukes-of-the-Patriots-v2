@@ -28,6 +28,21 @@ void GUIText::setText(std::string text)
 	setHeight(boundBox.height);
 }
 
+std::string GUIText::intToString(int i)
+{
+	std::stringstream converter;
+	converter << i;
+	return converter.str();
+}
+
+void GUIText::setText(int value)
+{
+	mText.setString(sf::String(intToString(value).c_str()));
+	sf::FloatRect boundBox = mText.getGlobalBounds();
+	setWidth(boundBox.width);
+	setHeight(boundBox.height);
+}
+
 void GUIText::setScale(float width, float height)
 {
 	mText.setScale(width, height);
@@ -36,22 +51,23 @@ void GUIText::setScale(float width, float height)
 	setHeight(boundBox.height);
 }
 
-void GUIText::render(sf::RenderWindow &window)
+bool GUIText::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
+	if(!visible)return false;
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
 		visible = parent->getVisible();
 		if(!visible)
-			break;
+			return false;
 		parent = parent->getParent();
 	}
 	if(visible)
 	{
 		mText.setColor(sf::Color::Color(0, 255, 255, 255));
 		mText.setPosition((sf::Vector2f(getX(), getY())));
-		window.draw(mText);
+		window->draw(mText);
 	}
 
 	
@@ -63,4 +79,5 @@ void GUIText::render(sf::RenderWindow &window)
 			mChilds[i]->render(window);
 		}
 	}
+	return true;
 }

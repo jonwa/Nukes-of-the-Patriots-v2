@@ -3,6 +3,7 @@
 
 #include "GUIElement.h"
 #include <string>
+#include <sstream>
 
 class GUIText: public GUIElement
 {
@@ -12,8 +13,10 @@ public:
 	GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent = 0);
 	std::string getText()const{ return mText.getString(); }
 	void		setText(std::string text);
+	void		setText(int value);
 	void		setScale(float width, float height);
-	void		render(sf::RenderWindow &window);
+	bool		render(sf::RenderWindow *window);
+	std::string intToString(int i);
 				~GUIText(){}
 private:
 	GUIText(const GUIText &guiText);
