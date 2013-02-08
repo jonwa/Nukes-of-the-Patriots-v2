@@ -11,7 +11,7 @@ public:
 	static std::shared_ptr<GUIWindow> create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
 	
 	GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
-	void	render(sf::RenderWindow &window);
+	bool	render(sf::RenderWindow *window);
 			~GUIWindow(){}
 
 private:

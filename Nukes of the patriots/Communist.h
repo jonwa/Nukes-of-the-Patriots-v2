@@ -35,16 +35,15 @@ public:
 	void		updateFood();
 	bool		enoughFood();
 
-	void		setFood(int value);
-	void		setGoods(int value);
-	void		setTech(int value);
+	bool		setFood(int value);
+	bool		setGoods(int value);
+	bool		setTech(int value);
 
-	void		upgradeNuclearWeapon();
-	void		upgradeSpaceProgram();
-	void		upgradeSpyNetwork();
+	bool		upgradeNuclearWeapon();
+	bool		upgradeSpaceProgram();
+	bool		upgradeSpyNetwork();
 
-	int			increaseTaxCost(int currentTax);
-	int			decreaseTaxCost(int currentTax);
+	void		setTaxesCost(int tax);
 
 	int			getYearlyFood(int round);
 	int			getYearlyGoods(int round);
@@ -59,6 +58,7 @@ public:
 
 	void showGUI();
 	void hideGUI();
+	void update();
 private:
 	std::string intToString(int i)
 	{

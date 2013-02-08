@@ -38,7 +38,7 @@ Capitalist::~Capitalist()
 
 void Capitalist::playMusic()
 {
-	//CapitalistMusic["CapitalistMainTheme"]->play();
+	CapitalistMusic["CapitalistMainTheme"]->play();
 }
 
 std::shared_ptr<President> Capitalist::getPresident()
@@ -46,18 +46,14 @@ std::shared_ptr<President> Capitalist::getPresident()
 	return mPresident;
 }
 
-int Capitalist::increaseTaxCost(int currentTax)
-{						
-	currentTax += taxChange + mPresident->getPatriotismTaxModifier();
-
-	return currentTax;
+void Capitalist::update()
+{
 }
 
-int Capitalist::decreaseTaxCost(int currentTax)
+void Capitalist::setTaxesCost(int tax)
 {
-	currentTax -= taxChange + mPresident->getPatriotismTaxModifier();
-
-	return currentTax;
+	mTaxDecreased = (tax < mTaxes);
+	mTaxes = tax;
 }
 
 void Capitalist::setPresident(std::shared_ptr<President> president)
@@ -69,22 +65,39 @@ void Capitalist::setPresident(std::shared_ptr<President> president)
 	techCost	+= president->getTechPriceModifier();
 }
 
-void Capitalist::setFood(int amount)
-{
-	mFoodUpdate += amount;
-	mCurrencyUpdate -= amount * foodCost;
+//--------------------------------------------
+/*Funktioner som ger medlemsvariabler nya värden*/
+bool Capitalist::setFood(int value)
+{	
+	if(mCurrency >= value * foodCost)
+	{
+ 		mFood		+= value;
+		mCurrency	-= value * foodCost;
+		return true;
+	}
+	return false;
 }
 
-void Capitalist::setGoods(int amount)
+bool Capitalist::setGoods(int value)
 {
-	mGoodsUpdate += amount;
-	mCurrencyUpdate -= amount * goodsCost;
+	if(mCurrency >= value * goodsCost)
+	{
+		mGoods		+= value;
+		mCurrency	-= value * goodsCost;
+		return true;
+	}
+	return false;
 }
 
-void Capitalist::setTech(int amount)
+bool Capitalist::setTech(int value)
 {
-	mTechUpdate += amount;
-	mCurrencyUpdate -= amount * techCost;
+	if(mCurrency >= value * techCost)
+	{
+		mTech		+= value;
+		mCurrency	-= value * techCost;
+		return true;
+	}
+	return false;
 }
 
 //-----------------------------------------------------------
@@ -92,12 +105,18 @@ void Capitalist::setTech(int amount)
 	Uppgraderar mNuclearWeapon med ett
 	Kostar 10 mGoods och 5 mTech
 										*/
-void Capitalist::upgradeNuclearWeapon()
+bool Capitalist::upgradeNuclearWeapon()
 {
-	mGoodsUpdate	-= 10 * mPresident->getNuclearPriceModifier();
-	mTechUpdate		-= 5  * mPresident->getNuclearPriceModifier();
-
-	++mNuclearWeaponUpdate;
+	int goodsNuclearPrice = 10 * mPresident->getNuclearPriceModifier();
+	int techNuclearPrice = 5  * mPresident->getNuclearPriceModifier();
+	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
+	{
+		++mNuclearWeapon;
+		mGoods -= goodsNuclearPrice;
+		mTech -= techNuclearPrice;
+		return true;
+	}
+	return false;
 }
 
 /*	
@@ -105,36 +124,35 @@ void Capitalist::upgradeNuclearWeapon()
 	Kostar 5 mGoods multiplicerat med den nuvarande nivån
 	och 10 mTech multiplicerat med den nuvarande nivån
 															*/
-void Capitalist::upgradeSpaceProgram()
+bool Capitalist::upgradeSpaceProgram()
 {
-	if(mSpaceProgramUpdate > 0)
+	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5 * mPresident->getSpacePriceModifier();
+	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10 * mPresident->getSpacePriceModifier();
+	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
 	{
-		mGoodsUpdate	-= 5 * mSpaceProgramUpdate * mPresident->getSpacePriceModifier();
-		mTechUpdate		-= 10 * mSpaceProgramUpdate * mPresident->getSpacePriceModifier();
+		++mSpaceProgram;
+		mGoods -= goodsSpaceProgramPrice;
+		mTech -= techSpaceProgramPrice;
+		return true;
 	}
-	else
-	{
-		mGoodsUpdate	-= 5;
-		mTechUpdate		-= 10;
-	}
-	++mSpaceProgramUpdate;
+	return false;
 }
 
 /*	
 	Uppgraderar mSpyNetwork med ett
 	Kostar 10 mTech multiplicerat med den nuvarande nivån
 															*/
-void Capitalist::upgradeSpyNetwork()
+bool Capitalist::upgradeSpyNetwork()
 {
-	if(mSpyNetworkUpdate > 0)
+	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10 * mPresident->getSpyPriceModifier();
+
+	if(mTech >= spyNetworkPrice)
 	{
-		mTechUpdate -= 10 * mSpyNetworkUpdate * mPresident->getSpyPriceModifier();
+		++mSpyNetwork;
+		mTech -= spyNetworkPrice;
+		return true;
 	}
-	else
-	{
-		mTechUpdate -= 10;
-	}
-	++mSpyNetworkUpdate;
+	return false;
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -312,6 +330,7 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistExportButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
+	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
 	mNuclearText						= GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
@@ -349,6 +368,15 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
 	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
+
+	
+	mBuyFoodText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0",mResourceWindow);
+	//mBuyGoodsText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	//mBuyTechText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	//mFoodCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	//mGoodsCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	//mTechCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	//mTotalResourcesCost					= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
 	mUpgradeWindow						= GUIWindow::create(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
@@ -406,16 +434,43 @@ void Capitalist::initializeGuiFunctions()
 {
 	/*Taxes GUI-window knapparna*/
 	mCapitalistTaxesButton->setOnClickFunction([=]()			{ mTaxesWindow->setVisible(true); });
-	mLowerTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = decreaseTaxCost(mTaxesUpdate); });
-	mRaiseTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = increaseTaxCost(mTaxesUpdate); });
+	/*mLowerTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = decreaseTaxCost(mTaxesUpdate); });
+	mRaiseTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = increaseTaxCost(mTaxesUpdate); });*/
 
 	mCapitalistResourceButton->setOnClickFunction([=]()			{ mResourceWindow->setVisible(true); });
-	mLowerFoodByTenButton->setOnClickFunction([=]()				{ setFood(-10);});			
-	mLowerFoodByFiveButton->setOnClickFunction([=]()			{ setFood(-5);});				
-	mLowerFoodByOneButton->setOnClickFunction([=]()				{ setFood(-1);});				
-	mRaiseFoodByOneButton->setOnClickFunction([=]()				{ setFood(1);});				
-	mRaiseFoodByFiveButton->setOnClickFunction([=]()			{ setFood(5);});				
-	mRaiseFoodByTenButton->setOnClickFunction([=]()				{ setFood(10);});	
+	mLowerFoodByTenButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) - 10;
+		if(value >= 0)
+			mBuyFoodText->setText(value);
+	});			
+	mLowerFoodByFiveButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) - 5;
+		if(value >= 0)
+			mBuyFoodText->setText(value);
+	});	
+	mLowerFoodByOneButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) - 1;
+		if(value >= 0)
+			mBuyFoodText->setText(value);
+	});				
+	mRaiseFoodByOneButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) + 1;
+		mBuyFoodText->setText(value);
+	});	
+	mRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) + 5;
+		mBuyFoodText->setText(value);
+	});	
+	mRaiseFoodByTenButton->setOnClickFunction([=]()
+	{ 
+		int value = stringToInt(mBuyFoodText->getText()) + 10;
+		mBuyFoodText->setText(value);
+	});	
 
 	mLowerGoodsByTenButton->setOnClickFunction([=]()			{ setGoods(-10);});	
 	mLowerGoodsByFiveButton->setOnClickFunction([=]()			{ setGoods(-5);	});	
@@ -443,30 +498,31 @@ void Capitalist::initializeGuiFunctions()
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	{ GameManager::getInstance()->nextRound();  });
 
 
-	mTaxesCloseButton->setOnClickFunction([=]()					
-	{ 
-		mTaxesWindow->setVisible(false); 
-		mTaxes = mTaxesUpdate; 
-		std::cout << mTaxes << "\nGAY" << std::endl; 
-	});
+	//mTaxesCloseButton->setOnClickFunction([=]()					
+	//{ 
+	//	mTaxesWindow->setVisible(false); 
+	//	mTaxes = mTaxesUpdate; 
+	//	std::cout << mTaxes << "\nGAY" << std::endl; 
+	//});
 
-	/*Stänger ner resources fönstret "Okay-knappen"*/
-	mResourceCloseButton->setOnClickFunction([=]()				
-	{ 
-		mResourceWindow->setVisible(false); 														 
-		mFood = mFoodUpdate;													
-		mGoods = mGoodsUpdate;														 
-		mTech = mTechUpdate; 														
-	});
+	///*Stänger ner resources fönstret "Okay-knappen"*/
+	//mResourceCloseButton->setOnClickFunction([=]()				
+	//{ 
+	//	mResourceWindow->setVisible(false);
+	//	setFood(stringToInt(textField->getValue()));
+	//	mFood = mFoodUpdate;													
+	//	mGoods = mGoodsUpdate;														 
+	//	mTech = mTechUpdate; 														
+	//});
 
-	/*Stänger ner upgrade fönstret "Okay-knappen"*/
-	mUpgradeCloseButton->setOnClickFunction([=]()				
-	{
-		mUpgradeWindow->setVisible(false); 														 
-		mNuclearWeapon = mNuclearWeaponUpdate;														  
-		mSpaceProgram	 = mSpaceProgramUpdate;														  
-		mSpyNetwork	 = mSpyNetworkUpdate;															  
-	});
+	///*Stänger ner upgrade fönstret "Okay-knappen"*/
+	//mUpgradeCloseButton->setOnClickFunction([=]()				
+	//{
+	//	mUpgradeWindow->setVisible(false); 														 
+	//	mNuclearWeapon = mNuclearWeaponUpdate;														  
+	//	mSpaceProgram	 = mSpaceProgramUpdate;														  
+	//	mSpyNetwork	 = mSpyNetworkUpdate;															  
+	//});
 
 	/*Stänger ner Export fönster "Okay-knappen"*/
 	mExportCloseButton->setOnClickFunction([=]()				
@@ -514,10 +570,14 @@ void Capitalist::initializeGuiFunctions()
 
 void Capitalist::showGUI()
 {
+	std::cout << "Capitalist show gui" << std::endl;
 	mCapitalistMainWindow->setVisible(true);
+	mCapitalistEndTurnButton->setVisible(true);
 }
 
 void Capitalist::hideGUI()
 {
+	std::cout << "Capitalist hide gui" << std::endl;
 	mCapitalistMainWindow->setVisible(false);
+	mCapitalistEndTurnButton->setVisible(false);
 }

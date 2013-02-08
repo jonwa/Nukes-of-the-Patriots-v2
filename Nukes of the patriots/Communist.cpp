@@ -111,88 +111,104 @@ int Communist::getYearlyTaxes(int round)
 	return mYearVector[year]["taxes"];
 }
 
-
-
-/*	Uppgraderar mNuclearWeapon med ett
-	Kostar 10 mGoods och 5 mTech*/
-void Communist::upgradeNuclearWeapon()
+void Communist::update()
 {
-	mGoodsUpdate	-= 10;
-	mTechUpdate		-= 5;
-	
-	++mNuclearWeaponUpdate;
-	std::cout << "KLICK" << std::endl;
 }
 
-/*	Uppgraderar mSpaceProgram med ett
-	Kostar 5 mGoods multiplicerat med den nuvarande nivån
-	och 10 mTech multiplicerat med den nuvarande nivån*/
-void Communist::upgradeSpaceProgram()
+/*	
+	Uppgraderar mNuclearWeapon med ett
+	Kostar 10 mGoods och 5 mTech
+										*/
+bool Communist::upgradeNuclearWeapon()
 {
-	if(mSpaceProgramUpdate > 0)
+	int goodsNuclearPrice = 10;
+	int techNuclearPrice = 5;
+	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
 	{
-		mGoodsUpdate	-= 5 * mSpaceProgramUpdate;
-		mTechUpdate		-= 10 * mSpaceProgramUpdate;
+		++mNuclearWeapon;
+		mGoods -= goodsNuclearPrice;
+		mTech -= techNuclearPrice;
+		return true;
 	}
-	else
+	return false;
+}
+
+/*	
+	Uppgraderar mSpaceProgram med ett
+	Kostar 5 mGoods multiplicerat med den nuvarande nivån
+	och 10 mTech multiplicerat med den nuvarande nivån
+															*/
+bool Communist::upgradeSpaceProgram()
+{
+	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5;
+	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10;
+	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
 	{
-		mGoodsUpdate	-= 5;
-		mTechUpdate		-= 10;
+		++mSpaceProgram;
+		mGoods -= goodsSpaceProgramPrice;
+		mTech -= techSpaceProgramPrice;
+		return true;
 	}
-	++mSpaceProgramUpdate;
+	return false;
 }
 
 /*	
 	Uppgraderar mSpyNetwork med ett
 	Kostar 10 mTech multiplicerat med den nuvarande nivån
-															 */
-void Communist::upgradeSpyNetwork()
+															*/
+bool Communist::upgradeSpyNetwork()
 {
-	if(mSpyNetworkUpdate > 0)
+	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10;
+
+	if(mTech >= spyNetworkPrice)
 	{
-		mTechUpdate -= 10 * mSpyNetworkUpdate;
+		++mSpyNetwork;
+		mTech -= spyNetworkPrice;
+		return true;
 	}
-	else
-	{
-		mTechUpdate -= 10;
-	}
-	++mSpyNetworkUpdate;
-} 
+	return false;
+}
 
 //--------------------------------------------
 /*Funktioner som ger medlemsvariabler nya värden*/
-void Communist::setFood(int value)
-{
- 	mFoodUpdate		+= value;
-	mCurrencyUpdate -= value * foodCost;
+bool Communist::setFood(int value)
+{	
+	if(mCurrency >= value * foodCost)
+	{
+ 		mFood		+= value;
+		mCurrency	-= value * foodCost;
+		return true;
+	}
+	return false;
 }
 
-void Communist::setGoods(int value)
+bool Communist::setGoods(int value)
 {
-	mGoodsUpdate	+= value;
-	mCurrencyUpdate -= value * goodsCost;
+	if(mCurrency >= value * goodsCost)
+	{
+		mGoods		+= value;
+		mCurrency	-= value * goodsCost;
+		return true;
+	}
+	return false;
 }
 
-void Communist::setTech(int value)
+bool Communist::setTech(int value)
 {
-	mTechUpdate		+= value;
-	mCurrencyUpdate -= value * techCost;
+	if(mCurrency >= value * techCost)
+	{
+		mTech		+= value;
+		mCurrency	-= value * techCost;
+		return true;
+	}
+	return false;
 }
 
-int Communist::increaseTaxCost(int currentTax)
+void Communist::setTaxesCost(int tax)
 {
-	currentTax += taxChange;
-	
-	return currentTax;
+	mTaxDecreased = (tax < mTaxes);
+	mTaxes = tax;
 }
-  
-int Communist::decreaseTaxCost(int currentTax)
-{
-	currentTax -= taxChange;
-	
-	return currentTax;
-}
-
 /*  Köper en dos propaganda för 100 kr/dos som kan ge upp till 10 av en resurs, 
 	antalet man får är ==  10 rolls med en %chans baserat på resursens andel av 
 	det årets planerade totala mängd resurser. (Därav måste 5-årsplanen komma före)
@@ -400,6 +416,7 @@ void Communist::initializeCommunistWindow()
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistExportButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
+	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
 	mNuclearText = GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
@@ -614,6 +631,7 @@ void Communist::initializeGuiFunctions()
 	mGoToPreviousSlideButton->setOnClickFunction([=]()			{ mResourcesWindow->setVisible(false); mTaxesWindow->setVisible(true); });
 	mCommunistExportButton->setOnClickFunction([=]()			{ mExportWindow->setVisible(true); });
 
+
 	mTaxesCloseButton->setOnClickFunction([=]()					{ mTaxesWindow->setVisible(false); std::cout << "taxes" << std::endl;});
 	mResourcesCloseButton->setOnClickFunction([=]()				{ mResourcesWindow->setVisible(false); });
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	{ mPropagandaWindowFirst->setVisible(false); std::cout << "Propaganda" << std::endl;});
@@ -623,16 +641,16 @@ void Communist::initializeGuiFunctions()
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{ 
 		mUpgradeWindow->setVisible(false); 
-		mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
+		/*mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
 		mSpaceProgram = mSpaceProgramUpdate; mSpaceText->setText(intToString(getSpaceProgram()));
-		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;
+		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;*/
 	});
 
 	mExportCloseButton->setOnClickFunction([=]() { mExportWindow->setVisible(false); });
 
-	mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
+	/*mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
 	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
-	mUpgradeSpyNetworkButton->setOnClickFunction(std::bind(&Communist::upgradeSpyNetwork, this));
+	mUpgradeSpyNetworkButton->setOnClickFunction(std::bind(&Communist::upgradeSpyNetwork, this));*/
 
 
 	/*GUI hantering för valet av general*/
@@ -677,14 +695,21 @@ void Communist::initializeGuiFunctions()
 		Timer::setTimer([=](){_test->setVisible(false);}, 5000, 1);
 	});
 
+	mCommunistEndTurnButton->setOnClickFunction([=]()	
+	{
+		GameManager::getInstance()->nextRound();
+	});
+
 }
 
 void Communist::showGUI()
 {
+	std::cout << "Communist show gui" << std::endl;
 	mCommunistMainWindow->setVisible(true);
 }
 
 void Communist::hideGUI()
 {
+	std::cout << "Communist hide gui" << std::endl;
 	mCommunistMainWindow->setVisible(false);
 }

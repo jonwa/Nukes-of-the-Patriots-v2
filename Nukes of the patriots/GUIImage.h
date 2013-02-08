@@ -24,7 +24,7 @@
 //	sf::Sprite getImage() const;
 //
 //	void setImage(std::string &string);
-//	void render (sf::RenderWindow &window);
+//	bool render (sf::RenderWindow &window);
 //	
 //private:
 //	sf::Texture mTexture;

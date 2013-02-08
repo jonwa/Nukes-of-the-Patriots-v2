@@ -7,7 +7,9 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mParent(parent),
 	mGUIType(guiType),
 	mMouseInside(false),
-	mUpdated(false)
+	mCallClickFunc(false), 
+	mCallMouseEnterFunc(false),
+	mCallMouseLeaveFunc(false)
 {
 }
 
@@ -29,7 +31,7 @@ void GUIElement::init()
 		mParent->addChild(getPtr());
 		setX(mRectangle.left += mParent->mRectangle.left);
 		setY(mRectangle.top += mParent->mRectangle.top);
-		setVisible(mParent->getVisible());
+		//setVisible(mParent->getVisible());
 	}
 }
 
@@ -115,6 +117,7 @@ void GUIElement::setHeight(float height)
 void GUIElement::setVisible(bool visible)
 { 
 	mVisible = visible;
+	/*
 	if(!mChilds.empty())
 	{
 		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
@@ -122,69 +125,89 @@ void GUIElement::setVisible(bool visible)
 			mChilds[i]->setVisible(visible);
 		}
 	}
+	*/
 }
 void GUIElement::setAlpha(int alpha)
 {
 	mAlpha = alpha; 
 }
 
-void GUIElement::setUpdated(bool update)
+bool GUIElement::onClick(sf::RenderWindow *window)
 {
-	mUpdated = update;
+	bool visible = mVisible;
+	if(!visible)return false;
+	std::shared_ptr<GUIElement> parent = getParent();
+	while(parent != NULL)
+	{
+		visible = parent->getVisible();
+		if(!visible)
+			return false;
+		parent = parent->getParent();
+	}
+	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
+
+	// Check if mouse is colliding with gui element
+	if(mRectangle.contains(mousePos.x, mousePos.y))
+	{
+		if(mOnClickFunction != nullptr)
+			mCallClickFunc = true;
+	}
+
 	if(!mChilds.empty())
 	{
 		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->setUpdated(update);
+			mChilds[i]->onClick(window);
 		}
 	}
+	return true;
 }
 
-void GUIElement::update(sf::Event &event)
+bool GUIElement::onMove(sf::RenderWindow *window)
 {
-	if(mVisible && !mUpdated)
+	bool visible = mVisible;
+	if(!visible)return false;
+	std::shared_ptr<GUIElement> parent = getParent();
+	while(parent != NULL)
 	{
-		mUpdated = true;
-		sf::Vector2i mousePos = sf::Mouse::getPosition();
+		visible = parent->getVisible();
+		if(!visible)
+			return false;
+		parent = parent->getParent();
+	}
+	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
-		bool isMouseInside = getMouseIsInside();
-		// Check if mouse is colliding with gui element
-		if(mRectangle.contains(mousePos.x, mousePos.y))
+	bool isMouseInside = getMouseIsInside();
+	// Check if mouse is colliding with gui element
+	if(mRectangle.contains(mousePos.x, mousePos.y))
+	{
+		if(!isMouseInside)
 		{
-			if(!isMouseInside)
+			setMouseIsInside(true);
+			if(mMouseEnterFunction != nullptr)
 			{
-				setMouseIsInside(true);
-				if(mMouseEnterFunction != nullptr)
-					mMouseEnterFunction();
-			}
-			if(event.type == sf::Event::MouseButtonPressed)
-			{
-				if(event.mouseButton.button == sf::Mouse::Left)
-				{
-					if(mOnClickFunction != nullptr){
-						mOnClickFunction();
-					}
-				}
-			}
-		}
-		else
-		{
-			if(isMouseInside)
-			{
-				setMouseIsInside(false);
-				if(mMouseLeaveFunction != nullptr)
-					mMouseLeaveFunction();
-			}
-		}
-
-		if(!mChilds.empty())
-		{
-			for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
-			{
-				mChilds[i]->update(event);
+				mCallMouseEnterFunc = true;
 			}
 		}
 	}
+	else
+	{
+		if(isMouseInside)
+		{
+			setMouseIsInside(false);
+			if(mMouseLeaveFunction != nullptr)
+				mCallMouseLeaveFunc = true;
+		}
+	}
+
+	if(!mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->onMove(window);
+		}
+	}
+	return true;
 }
 
 void GUIElement::setOnClickFunction(std::function <void ()> func)
@@ -200,4 +223,30 @@ void GUIElement::setMouseEnterFunction(std::function <void()> func)
 void GUIElement::setMouseLeaveFunction(std::function <void()> func)
 {
 	mMouseLeaveFunction = func;
+}
+
+void GUIElement::tick()
+{
+	if(mCallClickFunc && mOnClickFunction != nullptr)
+	{
+		mCallClickFunc = false;
+		mOnClickFunction();
+	}
+	if(mCallMouseEnterFunc && mMouseEnterFunction != nullptr)
+	{
+		mCallMouseEnterFunc = false;
+		mMouseEnterFunction();
+	}
+	if(mCallMouseLeaveFunc && mMouseLeaveFunction != nullptr)
+	{
+		mCallMouseLeaveFunc = false;
+		mMouseLeaveFunction();
+	}
+	if(!mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->tick();
+		}
+	}
 }

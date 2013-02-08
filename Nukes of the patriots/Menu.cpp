@@ -256,11 +256,14 @@ void Menu::initializeGuiFuctions()
 
 	/*när spelaren väljer att spela kapitalist */
 	mTeamCapitalistButton->setOnClickFunction([=]()		{ mParentWindow->setVisible(false); MenuMusic["MainMenuTrack"]->stop(); 
-														  GameManager::getInstance()->setCurrentPlayer(std::make_shared<Capitalist>()); });
+														  GameManager::getInstance()->init(1952); });
 
 	/*när spelaren väljer att spela kommunist*/
-	mTeamCommunistButton->setOnClickFunction([=]()		{ mParentWindow->setVisible(false); MenuMusic["MainMenuTrack"]->stop(); 
-														  GameManager::getInstance()->setCurrentPlayer(std::make_shared<Communist>()); });
+	mTeamCommunistButton->setOnClickFunction([=]()		
+	{ 
+		mParentWindow->setVisible(false); MenuMusic["MainMenuTrack"]->stop();
+		GameManager::getInstance()->init(1952);
+	});
 
 
 
