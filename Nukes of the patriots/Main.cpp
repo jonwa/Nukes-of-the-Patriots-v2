@@ -14,6 +14,7 @@
 #include <functional>
 #include "ResourceHandler.h"
 #include "GameManager.h"
+#include "TimerHandler.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!"/*);*/, sf::S
 
 int main()
 {
+	window.setFramerateLimit(60);
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	GameManager::getInstance()->init(1952);
@@ -38,7 +40,7 @@ int main()
         }
         window.clear();
 		GUIManager::getInstance()->render(window);
-
+		TimerHandler::getInstance()->tick();
         window.display();
     }
     return EXIT_SUCCESS;

@@ -11,6 +11,8 @@
 #include <iostream>
 #include <functional>
 #include "GameManager.h"
+#include "Timer.h"
+#include "TimerHandler.h"
 #include <SFML\Window\Mouse.hpp>
 
 static int foodCost		= 10;
@@ -497,12 +499,17 @@ void Capitalist::initializeGuiFunctions()
 			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
 	});			
 	
-
 	mClosePresidentWindow->setOnClickFunction([=]()				
 	{ 
 		mChoosePresidentWindow->setVisible(false);
 		mPickedPresidentWindow->setVisible(true);
+		//std::vector<std::shared_ptr<void> > args;
+		//args.push_back(mPickedPresidentWindow);
+		std::shared_ptr<GUIElement> _test = mPickedPresidentWindow;
+		Timer::setTimer([=](){_test->setVisible(false);}, 5000, 1);
 	});
+
+	
 }
 
 void Capitalist::showGUI()

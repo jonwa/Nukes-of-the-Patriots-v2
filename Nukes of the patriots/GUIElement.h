@@ -37,7 +37,7 @@ public:
 	std::vector<std::shared_ptr<GUIElement>>& getChildVector();
 
 	virtual void	setScale(float width, float height) {}
-	void			setOnClickFunction(std::function<void ()>);
+	void			setOnClickFunction(std::function<void()>);
 	void			setMouseEnterFunction(std::function<void ()>);
 	void			setMouseLeaveFunction(std::function<void ()>);
 	virtual void	update(sf::Event &event);

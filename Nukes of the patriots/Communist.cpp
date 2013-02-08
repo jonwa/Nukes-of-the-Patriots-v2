@@ -9,6 +9,7 @@
 #include "President.h"
 #include "GameManager.h"
 #include <sstream>
+#include "Timer.h"
 
 static int foodCost		= 10;
 static int goodsCost	= 20;
@@ -670,6 +671,10 @@ void Communist::initializeGuiFunctions()
 
 		mPickedGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture())); 
+
+		/**/
+		std::shared_ptr<GUIElement> _test = mPickedGeneralWindow;
+		Timer::setTimer([=](){_test->setVisible(false);}, 5000, 1);
 	});
 
 }

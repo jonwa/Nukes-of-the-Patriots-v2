@@ -33,7 +33,13 @@
     <Filter Include="Source Files\TinyXML">
       <UniqueIdentifier>{8c870fd5-7aaa-4197-b204-dfa28f992423}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GUI\Assets">
+    <Filter Include="Header Files\Timer">
+      <UniqueIdentifier>{d03d59b8-535a-491c-b1b5-17d57d015bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Timer">
+      <UniqueIdentifier>{5891f394-86fa-4636-9550-6e59b4919eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Assets">
       <UniqueIdentifier>{49fa451c-c306-4439-9aa4-e2ffe278c661}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -81,16 +87,22 @@
       <Filter>Source Files\SuperPower</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
-      <Filter>Source Files\GUI\Assets</Filter>
+      <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="EventHandler.cpp">
-      <Filter>Source Files\GUI\Assets</Filter>
+      <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Randomizer.cpp">
-      <Filter>Source Files\GUI\Assets</Filter>
+      <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="ResourceHandler.cpp">
-      <Filter>Source Files\GUI\Assets</Filter>
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerHandler.cpp">
+      <Filter>Source Files\Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +156,12 @@
     </ClInclude>
     <ClInclude Include="ResourceHandler.h">
       <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerHandler.h">
+      <Filter>Header Files\Timer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
