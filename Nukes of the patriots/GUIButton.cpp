@@ -39,9 +39,9 @@ bool GUIButton::render(sf::RenderWindow *window)
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
-		window.draw(rect);
+		window->draw(rect);
 		
-		window.draw(mSprite);
+		window->draw(mSprite);
 
 	}
 

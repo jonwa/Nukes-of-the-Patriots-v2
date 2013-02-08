@@ -6,7 +6,6 @@ SuperPower::SuperPower() :
 	mPatriotism(20),
 	mCurrency(0), 
 	mTaxes(30),
-	mCurrency(0),
 	mFood(0),
 	mTech(0),
 	mGoods(0),
