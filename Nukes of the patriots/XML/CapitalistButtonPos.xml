@@ -4,13 +4,13 @@
 		<name>President</name>
 		<xPos>0</xPos>
 		<yPos>636</yPos>
-		<width>111</width>
+		<width>112</width>
 		<height>132</height>
 		<image>Capitalist/7_kom_pres</image>
 	</button>
 	<button>
 		<name>Taxes</name>
-		<xPos>111</xPos>
+		<xPos>112</xPos>
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
@@ -42,7 +42,7 @@
 	</button>
 	<button>
 		<name>Resource</name>
-		<xPos>311</xPos>
+		<xPos>312</xPos>
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>	
@@ -202,7 +202,7 @@
 	</button>
 	<button>
 		<name>Upgrade</name>
-		<xPos>511</xPos>
+		<xPos>512</xPos>
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>	
@@ -211,15 +211,15 @@
 	<button>
 		<name>UpgradeNuclearWeapon</name>
 		<xPos>58</xPos>
-		<yPos>351</yPos>
+		<yPos>352</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
 		<name>UpgradeSpaceProgram</name>
-		<xPos>236</xPos>
-		<yPos>313</yPos>
+		<xPos>237</xPos>
+		<yPos>314</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
@@ -227,7 +227,7 @@
 	<button>
 		<name>UpgradeSpyNetwork</name>
 		<xPos>416</xPos>
-		<yPos>284</yPos>
+		<yPos>285</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
@@ -242,7 +242,7 @@
 	</button>
 	<button>
 		<name>Export</name>
-		<xPos>711</xPos>
+		<xPos>712</xPos>
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
@@ -258,7 +258,7 @@
 	</button>
 	<button>
 		<name>RaiseFood</name>
-		<xPos>182</xPos>
+		<xPos>183</xPos>
 		<yPos>98</yPos>
 		<width>20</width>
 		<height>40</height>
@@ -267,15 +267,15 @@
 	<button>
 		<name>LowerGoods</name>
 		<xPos>73</xPos>
-		<yPos>241</yPos>
+		<yPos>242</yPos>
 		<width>20</width>
 		<height>40</height>	
 		<image>Capitalist/kap_texture_button_minus</image>
 	</button>
 	<button>
 		<name>RaiseGoods</name>
-		<xPos>182</xPos>
-		<yPos>241</yPos>
+		<xPos>183</xPos>
+		<yPos>242</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_plus</image>
@@ -290,7 +290,7 @@
 	</button>
 	<button>
 		<name>RaiseTech</name>
-		<xPos>182</xPos>
+		<xPos>183</xPos>
 		<yPos>386</yPos>
 		<width>20</width>
 		<height>40</height>
@@ -306,10 +306,10 @@
 	</button>
 	<button>
 		<name>EndTurn</name>
-		<xPos>911</xPos>
+		<xPos>912</xPos>
 		<yPos>636</yPos>
-		<width>111</width>
-		<height>40</height>
+		<width>112</width>
+		<height>132</height>
 		<image>Capitalist/kap_texture_button_endturn</image>
 	</button>
 	<button>
