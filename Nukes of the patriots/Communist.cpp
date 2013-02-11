@@ -15,6 +15,7 @@ static int foodCost		= 10;
 static int goodsCost	= 20;
 static int techCost		= 30;
 static int taxChange	= 5;
+static bool activateWindow = false;
 
 static int generalCount = 0;
 
@@ -119,7 +120,7 @@ void Communist::update()
 	Uppgraderar mNuclearWeapon med ett
 	Kostar 10 mGoods och 5 mTech
 										*/
-bool Communist::upgradeNuclearWeapon()
+bool Communist::upgradeNuclearWeapon(int value)
 {
 	int goodsNuclearPrice = 10;
 	int techNuclearPrice = 5;
@@ -138,7 +139,7 @@ bool Communist::upgradeNuclearWeapon()
 	Kostar 5 mGoods multiplicerat med den nuvarande nivån
 	och 10 mTech multiplicerat med den nuvarande nivån
 															*/
-bool Communist::upgradeSpaceProgram()
+bool Communist::upgradeSpaceProgram(int value)
 {
 	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5;
 	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10;
@@ -156,7 +157,7 @@ bool Communist::upgradeSpaceProgram()
 	Uppgraderar mSpyNetwork med ett
 	Kostar 10 mTech multiplicerat med den nuvarande nivån
 															*/
-bool Communist::upgradeSpyNetwork()
+bool Communist::upgradeSpyNetwork(int value)
 {
 	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10;
 
@@ -419,12 +420,12 @@ void Communist::initializeCommunistWindow()
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
-	mNuclearText = GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
-	mSpaceText	 = GUIText::create(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
-	mSpyText	 = GUIText::create(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
-	mFoodText	 = GUIText::create(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCommunistMainWindow);
-	mGoodsText   = GUIText::create(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCommunistMainWindow);
-	mTechText	 = GUIText::create(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+	mNuclearText = GUIText::create(sf::FloatRect(815, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mSpaceText	 = GUIText::create(sf::FloatRect(815, 228, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpyText	 = GUIText::create(sf::FloatRect(815, 440, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
+	mFoodText	 = GUIText::create(sf::FloatRect(10, 16, 40, 40), intToString(getFood()), mCommunistMainWindow);
+	mGoodsText   = GUIText::create(sf::FloatRect(10, 228, 40, 40), intToString(getGoods()), mCommunistMainWindow);
+	mTechText	 = GUIText::create(sf::FloatRect(10, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
 
 	/*Taxes fönster med knappar*/
 	mTaxesWindow					= GUIWindow::create(CommunistWindows["CommunistTaxesWindow"], mCommunistMainWindow);	
@@ -623,30 +624,104 @@ void Communist::chooseLeader()
  /**/
 void Communist::initializeGuiFunctions()
 {
+	/*Fem års plan knappen på interface  */
+	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
 
-	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		{ mTaxesWindow->setVisible(true); });
-	mCommunistPropagandaButton->setOnClickFunction([=]()		{ mPropagandaWindowFirst->setVisible(true); });
-	mCommunistUpgradeButton->setOnClickFunction([=]()			{ mUpgradeWindow->setVisible(true); });
-	mGoToNextSlideButton->setOnClickFunction([=]()				{ mTaxesWindow->setVisible(false); mResourcesWindow->setVisible(true); });
-	mGoToPreviousSlideButton->setOnClickFunction([=]()			{ mResourcesWindow->setVisible(false); mTaxesWindow->setVisible(true); });
-	mCommunistExportButton->setOnClickFunction([=]()			{ mExportWindow->setVisible(true); });
+			mTaxesWindow->setVisible(true); 
+			mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+		}
+	});
+	/*Propaganda knappen på interface*/
+	mCommunistPropagandaButton->setOnClickFunction([=]()		
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+			mPropagandaWindowFirst->setVisible(true); 
+			mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
+		}
+	});
+	/*Upgrade knappen på interface*/
+	mCommunistUpgradeButton->setOnClickFunction([=]()			
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+			mUpgradeWindow->setVisible(true); 
+			mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
+		}
+	});
+	/*Gå till nästa slide*/
+	mGoToNextSlideButton->setOnClickFunction([=]()				
+	{ 
+		mTaxesWindow->setVisible(false); mResourcesWindow->setVisible(true); 
+	});
+	/*Gå till föregående slide*/
+	mGoToPreviousSlideButton->setOnClickFunction([=]()			
+	{ 
+		mResourcesWindow->setVisible(false); mTaxesWindow->setVisible(true); 
+	});
+	
+	/*Export knappen på interface*/
+	mCommunistExportButton->setOnClickFunction([=]()			
+	{ 	
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+			mExportWindow->setVisible(true); 
+			mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
+		}
+	});
 
 
-	mTaxesCloseButton->setOnClickFunction([=]()					{ mTaxesWindow->setVisible(false); std::cout << "taxes" << std::endl;});
-	mResourcesCloseButton->setOnClickFunction([=]()				{ mResourcesWindow->setVisible(false); });
-	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	{ mPropagandaWindowFirst->setVisible(false); std::cout << "Propaganda" << std::endl;});
+	mTaxesCloseButton->setOnClickFunction([=]()					
+	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
 
-	//Vad som skall hända då spelaren väljer att uppgradera
-	//antingen nuclear, space eller spy
+		mTaxesWindow->setVisible(false); 
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
+	});
+	
+	mResourcesCloseButton->setOnClickFunction([=]()				
+	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
+		mResourcesWindow->setVisible(false); 
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
+	});
+
+	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
+	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
+		mPropagandaWindowFirst->setVisible(false);
+		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
+	});
+
+	/*Stänger ned Upgradefönstret*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
 		mUpgradeWindow->setVisible(false); 
+		mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
 		/*mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
 		mSpaceProgram = mSpaceProgramUpdate; mSpaceText->setText(intToString(getSpaceProgram()));
 		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;*/
 	});
 
-	mExportCloseButton->setOnClickFunction([=]() { mExportWindow->setVisible(false); });
+	/*Stänger ned exportfönstret*/
+	mExportCloseButton->setOnClickFunction([=]() 
+	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
+		mExportWindow->setVisible(false); 
+		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
+	});
 
 	/*mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
 	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
@@ -676,7 +751,7 @@ void Communist::initializeGuiFunctions()
 			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));	
 	});
 
-
+	/*När en general har blivit vald*/
 	mCloseGeneralWindow->setOnClickFunction([=]()
 	{
 		mChooseGeneralWindow->setVisible(false);
@@ -689,7 +764,17 @@ void Communist::initializeGuiFunctions()
 
 		/**/
 		std::shared_ptr<GUIElement> _test = mPickedGeneralWindow;
-		Timer::setTimer([=](){_test->setVisible(false);}, 5000, 1);
+		std::shared_ptr<GUIButton> _generalButton = mCommunistGeneralButton;
+		std::shared_ptr<President> _general = mGeneral;
+		Timer::setTimer([=]()
+		{
+			_test->setVisible(false);
+
+				_generalButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_generalButton->getRectangle(), _general->getTexture()));
+				_generalButton->setScale(0.53, 0.53);
+		
+		}, 
+			5000, 1);//antal millisekunder fönstret visas
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	

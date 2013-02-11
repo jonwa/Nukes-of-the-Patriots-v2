@@ -16,8 +16,8 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	//MenuMusic["MainMenuTrack"]->play();
-	//MenuMusic["MainMenuTrack"]->setLoop(true);
+	MenuMusic["MainMenuTrack"]->play();
+	MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
 
@@ -248,6 +248,7 @@ void Menu::initializeGuiFuctions()
 
 	mCreditsButton->setMouseEnterFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
 	mCreditsButton->setMouseLeaveFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
+	
 	mCreditsButton->setOnClickFunction([=]()			{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
 	
 	mExitButton->setMouseEnterFunction([=]()			{ mExitButton->setTexture(ButtonPos["ExitHover"]); });

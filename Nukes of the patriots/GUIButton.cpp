@@ -39,7 +39,7 @@ bool GUIButton::render(sf::RenderWindow *window)
 		rect.setPosition(getX(), getY());
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
-		window->draw(rect);
+		//window->draw(rect);
 		
 		window->draw(mSprite);
 
@@ -60,5 +60,13 @@ void GUIButton::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 {
 	mSprite.setTexture(*pair.second);
 	mSprite.setPosition(pair.first.left, pair.first.top);
-	mSprite.setTextureRect(sf::IntRect(0, 0, pair.first.width, pair.first.height));
+	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
+}
+
+void GUIButton::setScale(float width, float height)
+{
+	/*mSprite.setTextureRect(sf::IntRect(0, 0, mRectangle.width, mRectangle.height));*/
+	mSprite.setScale(width, height);
+
+	std::cout << mSprite.getScale().x << " " << mSprite.getScale().y  << " " << mSprite.getTextureRect().width << " " << mSprite.getTextureRect().height << std::endl;
 }

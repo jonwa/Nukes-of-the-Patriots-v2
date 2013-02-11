@@ -3,10 +3,14 @@
     <image filename="ref.png"/>
 	<image filename="7_kom_pres.png"/>
 	<image filename="kap_texture_button_taxes.png"/>
-	<image filename="7_kap_res.png"/>
+	<image filename="kap_texture_button_invert_taxes.png"/>
+	<image filename="kap_texture_button_resources.png"/>
+	<image filename="kap_texture_button_invert_resources.png"/>
 	<image filename="kap_texture_button_upgrade.png"/>
-	<image filename="7_kap_exp.png"/>
-	<image filename="button_okay.png"/>	
+	<image filename="kap_texture_button_invert_upgrade.png"/>
+	<image filename="kap_texture_button_export.png"/>
+	<image filename="kap_texture_button_invert_export.png"/>
+	<image filename="kap_texture_button_ok.png"/>	
 	<image filename="7_kap_window_tax.png"/>
 	<image filename="7_kap_window_res.png"/>
 	<image filename="7_kap_window_upg.png"/>
@@ -22,18 +26,23 @@
 	<image filename="7_pr1.png"/>
 	<image filename="7_pr2.png"/>
 	<image filename="7_pr3.png"/>
+	<image filename="kap_texture_button_elect.png"/>
 </images>
 <images directory ="Communist">
     <image filename="7_kom_bg.png"/>
-	<image filename="7_kom_plan.png"/>
+	<image filename="kom_texture_button_plan.png"/>
+	<image filename="kom_texture_button_invert_plan.png"/>
 	<image filename="kom_texture_button_propaganda.png"/>
+	<image filename="kom_texture_button_invert_propaganda.png"/>
 	<image filename="kom_texture_button_upgrade.png"/>
-	<image filename="7_kom_exp.png"/>
+	<image filename="kom_texture_button_invert_upgrade.png"/>
+	<image filename="kom_texture_button_export.png"/>
+	<image filename="kom_texture_button_invert_export.png"/>
 	<image filename="7_kom_window_tax.png"/>
 	<image filename="7_kom_window_res.png"/>
 	<image filename="7_kom_window_upg.png"/>
 	<image filename="7_kom_window_exp.png"/>
-	<image filename="button_okay.png"/>	
+	<image filename="kom_texture_button_ok.png"/>	
 	<image filename="kom_texture_button_plus.png"/>
 	<image filename="button_plu5.png"/>
 	<image filename="button_plu10.png"/>
@@ -61,8 +70,8 @@
 	<image filename="3_3settings.png"/>
 	<image filename="3_4credits.png"/>
 	<image filename="3_5exit.png"/>
-	<image filename="6_team_kap.png"/>
-	<image filename="6_team_kom.png"/>
+	<image filename="Team-Flagga-Communist.png"/>
+	<image filename="Team-Flagga-Kapitalist.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

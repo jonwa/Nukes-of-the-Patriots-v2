@@ -36,9 +36,9 @@ public:
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
-	virtual bool		upgradeNuclearWeapon() = 0;
-	virtual bool		upgradeSpaceProgram() = 0;
-	virtual bool		upgradeSpyNetwork() = 0;
+	virtual bool		upgradeNuclearWeapon(int value) = 0;
+	virtual bool		upgradeSpaceProgram(int value) = 0;
+	virtual bool		upgradeSpyNetwork(int value) = 0;
 	virtual void		setTaxesCost(int tax) = 0;
 	virtual bool		setFood(int value) = 0;
 	virtual bool		setGoods(int value) = 0;

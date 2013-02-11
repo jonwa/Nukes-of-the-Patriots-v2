@@ -35,9 +35,9 @@ public:
 	void						setPresident(std::shared_ptr<President>);
 
 
-	bool upgradeNuclearWeapon();
-	bool upgradeSpaceProgram();
-	bool upgradeSpyNetwork();
+	bool upgradeNuclearWeapon(int value);
+	bool upgradeSpaceProgram(int value);
+	bool upgradeSpyNetwork(int value);
 	
 	void chooseLeader();
 
@@ -52,6 +52,8 @@ public:
 	bool setTech(int value);
 
 	void playMusic();
+
+	void resetResourcesValues();
 
 private:
 	std::string intToString(int i)
@@ -104,11 +106,15 @@ private:
 	std::shared_ptr<GUIText> mTechCost;
 	std::shared_ptr<GUIText> mTotalResourcesCost;
 
+	std::shared_ptr<GUIText> mBuyNuclearText;
+	std::shared_ptr<GUIText> mBuySpaceProgramText;
+	std::shared_ptr<GUIText> mBuySpyNetworkText;
 
 	/*GUI-pekare för kapitalisternas interface*/
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
-	std::shared_ptr<GUIButton> mCapitalistTaxesButton;		
+	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
+	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
 	std::shared_ptr<GUIButton> mCapitalistResourceButton;	
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCapitalistExportButton;	

@@ -39,9 +39,9 @@ public:
 	bool		setGoods(int value);
 	bool		setTech(int value);
 
-	bool		upgradeNuclearWeapon();
-	bool		upgradeSpaceProgram();
-	bool		upgradeSpyNetwork();
+	bool		upgradeNuclearWeapon(int value);
+	bool		upgradeSpaceProgram(int value);
+	bool		upgradeSpyNetwork(int value);
 
 	void		setTaxesCost(int tax);
 

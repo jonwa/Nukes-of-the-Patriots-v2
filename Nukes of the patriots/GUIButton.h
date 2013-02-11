@@ -15,6 +15,7 @@ public:
 	GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
 	bool	render(sf::RenderWindow *window);
 	void    setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
+	void	setScale(float width, float height);
 
 	~GUIButton(){}
 

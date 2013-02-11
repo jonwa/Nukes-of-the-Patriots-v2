@@ -2,9 +2,12 @@
 #define _GAME_MANAGER_H
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 class SuperPower;
 class President;
+class GUIText;
 
 class GameManager
 {
@@ -33,10 +36,19 @@ private:
 	GameManager(const GameManager&){}
 	GameManager operator=(const GameManager&){}
 
+	std::string intToString(int i)
+	{
+		std::stringstream converter;
+		converter << i;
+		return converter.str();
+	}
+
 	void loadPresidents();
 
 	int mYear;
 	int mRound;
+
+	std::shared_ptr<GUIText> mYearText;
 	// Theoretically you should be able to play with x amount of players - instead of only 2
 	std::vector<std::shared_ptr<SuperPower> > mVecSuperPowers;
 	std::vector<std::shared_ptr<SuperPower> > mVecPlayersLeft;

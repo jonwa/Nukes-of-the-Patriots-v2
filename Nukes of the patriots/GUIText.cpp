@@ -13,8 +13,10 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	GUIElement(rect, parent, TEXT),
 	mFont(sf::Font::getDefaultFont())
 {
+	mFont.loadFromFile("Font/courbd.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
+	mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height/2);
 	sf::FloatRect boundBox = mText.getGlobalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
@@ -65,7 +67,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
-		mText.setColor(sf::Color::Color(0, 255, 255, 255));
+		mText.setColor(sf::Color::Color(0, 0, 0, 255));
 		mText.setPosition((sf::Vector2f(getX(), getY())));
 		window->draw(mText);
 	}

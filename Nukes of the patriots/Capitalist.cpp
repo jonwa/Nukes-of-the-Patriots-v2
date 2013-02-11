@@ -19,6 +19,7 @@ static int foodCost		= 10;
 static int goodsCost	= 20;
 static int techCost		= 30;
 static int taxChange	= 5;
+static bool activateWindow = false;
 
 Capitalist::Capitalist() :
 	mPresident(nullptr)
@@ -73,6 +74,7 @@ bool Capitalist::setFood(int value)
 	{
  		mFood		+= value;
 		mCurrency	-= value * foodCost;
+		mFoodText->setText(intToString(mFood));
 		return true;
 	}
 	return false;
@@ -84,6 +86,7 @@ bool Capitalist::setGoods(int value)
 	{
 		mGoods		+= value;
 		mCurrency	-= value * goodsCost;
+		mGoodsText->setText(intToString(mGoods));
 		return true;
 	}
 	return false;
@@ -95,6 +98,7 @@ bool Capitalist::setTech(int value)
 	{
 		mTech		+= value;
 		mCurrency	-= value * techCost;
+		mTechText->setText(intToString(mTech));
 		return true;
 	}
 	return false;
@@ -105,15 +109,16 @@ bool Capitalist::setTech(int value)
 	Uppgraderar mNuclearWeapon med ett
 	Kostar 10 mGoods och 5 mTech
 										*/
-bool Capitalist::upgradeNuclearWeapon()
+bool Capitalist::upgradeNuclearWeapon(int value)
 {
-	int goodsNuclearPrice = 10 * mPresident->getNuclearPriceModifier();
-	int techNuclearPrice = 5  * mPresident->getNuclearPriceModifier();
+	int goodsNuclearPrice = 10 * mPresident->getNuclearPriceModifier() * value;
+	int techNuclearPrice = 5  * mPresident->getNuclearPriceModifier() * value;
 	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
 	{
-		++mNuclearWeapon;
+		mNuclearWeapon += value;
 		mGoods -= goodsNuclearPrice;
 		mTech -= techNuclearPrice;
+		mNuclearText->setText(mNuclearWeapon);
 		return true;
 	}
 	return false;
@@ -124,15 +129,16 @@ bool Capitalist::upgradeNuclearWeapon()
 	Kostar 5 mGoods multiplicerat med den nuvarande nivån
 	och 10 mTech multiplicerat med den nuvarande nivån
 															*/
-bool Capitalist::upgradeSpaceProgram()
+bool Capitalist::upgradeSpaceProgram(int value)
 {
-	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5 * mPresident->getSpacePriceModifier();
-	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10 * mPresident->getSpacePriceModifier();
+	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5 * mPresident->getSpacePriceModifier() * value;
+	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10 * mPresident->getSpacePriceModifier() * value;
 	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
 	{
-		++mSpaceProgram;
+		mSpaceProgram += value;
 		mGoods -= goodsSpaceProgramPrice;
 		mTech -= techSpaceProgramPrice;
+		mSpaceText->setText(mSpaceProgram);
 		return true;
 	}
 	return false;
@@ -142,17 +148,29 @@ bool Capitalist::upgradeSpaceProgram()
 	Uppgraderar mSpyNetwork med ett
 	Kostar 10 mTech multiplicerat med den nuvarande nivån
 															*/
-bool Capitalist::upgradeSpyNetwork()
+bool Capitalist::upgradeSpyNetwork(int value)
 {
-	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10 * mPresident->getSpyPriceModifier();
+	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10 * mPresident->getSpyPriceModifier() * value;
 
 	if(mTech >= spyNetworkPrice)
 	{
-		++mSpyNetwork;
+		mSpyNetwork += value;
 		mTech -= spyNetworkPrice;
+		mSpyText->setText(mSpyNetwork);
 		return true;
 	}
 	return false;
+}
+
+
+void Capitalist::resetResourcesValues()
+{
+	mFoodCost->setText(0);
+	mGoodsCost->setText(0);
+	mTechCost->setText(0);
+	mBuyFoodText->setText(0);
+	mBuyGoodsText->setText(0);
+	mBuyTechText->setText(0);
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -322,6 +340,7 @@ void Capitalist::initializeCapitalistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCapitalistMusic();
+	playMusic();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
@@ -333,12 +352,12 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
-	mNuclearText						= GUIText::create(sf::FloatRect(962, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
-	mSpaceText							= GUIText::create(sf::FloatRect(962, 228, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
-	mSpyText							= GUIText::create(sf::FloatRect(962, 440, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
-	mFoodText							= GUIText::create(sf::FloatRect(160, 16, 40, 40), intToString(getFood()), mCapitalistMainWindow);
-	mGoodsText							= GUIText::create(sf::FloatRect(160, 228, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
-	mTechText							= GUIText::create(sf::FloatRect(160, 440, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(815, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(815, 228, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(815, 440, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(10, 16, 40, 40), intToString(getFood()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(10, 228, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(10, 440, 40, 40), intToString(getTech()), mCapitalistMainWindow);
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
@@ -384,6 +403,10 @@ void Capitalist::initializeCapitalistWindow()
 	mUpgradeSpaceProgramButton			= GUIButton::create(CapitalistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
 	mUpgradeSpyNetworkButton			= GUIButton::create(CapitalistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
+
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	mExportWindow						= GUIWindow::create(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
@@ -404,7 +427,6 @@ void Capitalist::initializeCapitalistWindow()
 	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
-	//mChoosePresidentWindow->setVisible(false);
 	
 	chooseLeader();
 
@@ -434,11 +456,29 @@ void Capitalist::chooseLeader()
 void Capitalist::initializeGuiFunctions()
 {
 	/*Taxes GUI-window knapparna*/
-	mCapitalistTaxesButton->setOnClickFunction([=]()			{ mTaxesWindow->setVisible(true); });
-	/*mLowerTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = decreaseTaxCost(mTaxesUpdate); });
-	mRaiseTaxesButton->setOnClickFunction([=]()					{ mTaxesUpdate = increaseTaxCost(mTaxesUpdate); });*/
+	mCapitalistTaxesButton->setOnClickFunction([=]()			
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
 
-	mCapitalistResourceButton->setOnClickFunction([=]()			{ mResourceWindow->setVisible(true); });
+			mTaxesWindow->setVisible(true); 
+			mCapitalistTaxesButton->setTexture(CapitalistButtons["TaxesIsPressed"]);
+		}
+	});
+
+	/*Resources GUI-Window knappar*/
+	mCapitalistResourceButton->setOnClickFunction([=]()			
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+
+			mResourceWindow->setVisible(true); 
+			mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
+		}
+	});
+
 	mLowerFoodByTenButton->setOnClickFunction([=]()
 	{ 
 		int amount = stringToInt(mBuyFoodText->getText()) - 10;
@@ -595,51 +635,128 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText(cost);
 	});
 
-	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() { upgradeNuclearWeapon(); });		
-	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  { upgradeSpaceProgram();  });		
-	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	  { upgradeSpyNetwork();    });		
+	/*Upgrade GUI-Window med knappar*/
+	mCapitalistUpgradeButton->setOnClickFunction([=]()	
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
 
-	/**/
-	mCapitalistUpgradeButton->setOnClickFunction([=]()	{ mUpgradeWindow->setVisible(true); });
+			mUpgradeWindow->setVisible(true);
+			mCapitalistUpgradeButton->setTexture(CapitalistButtons["UpgradeIsPressed"]);
+			mBuyNuclearText->setText(mNuclearText->getText());
+			mBuySpaceProgramText->setText(mSpaceText->getText());
+			mBuySpyNetworkText->setText(mSpyText->getText());
+		}
+	});
 
-	mCapitalistExportButton->setOnClickFunction([=]()	{ mExportWindow->setVisible(true); });
+	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
+	{ 
+		int amount = stringToInt(mBuyNuclearText->getText());
+		++amount;
+		mBuyNuclearText->setText(amount);
+	});		
 
-	mCapitalistEndTurnButton->setOnClickFunction([=]()	{ GameManager::getInstance()->nextRound();  });
+	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
+	{
+		int amount = stringToInt(mBuySpaceProgramText->getText());
+		++amount;
+		mBuySpaceProgramText->setText(amount);
+	});		
 
+	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	 
+	{
+		int amount = stringToInt(mBuySpyNetworkText->getText());
+		++amount;
+		mBuySpyNetworkText->setText(amount);
+		
+	});		
 
+	/*Export GUI-Window med knapapr*/
+	mCapitalistExportButton->setOnClickFunction([=]()	
+	{ 
+		if(!activateWindow)
+		{
+			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+			mExportWindow->setVisible(true); 
+			mCapitalistExportButton->setTexture(CapitalistButtons["ExportIsPressed"]);
+		}
+	});
+
+	/*nästa runda*/
+	mCapitalistEndTurnButton->setOnClickFunction([=]()	
+	{ 
+		GameManager::getInstance()->nextRound();  
+	});
+
+	/*Stänger ner Taxes fönstret*/
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
 		mTaxesWindow->setVisible(false); 
-	//	mTaxes = mTaxesUpdate; 
-	//	std::cout << mTaxes << "\nGAY" << std::endl; 
+		//ändrar textur till orginal
+		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
 	});
 
-	///*Stänger ner resources fönstret "Okay-knappen"*/
+	/*Stänger ner resources fönstret "Okay-knappen"*/
 	mResourceCloseButton->setOnClickFunction([=]()				
 	{ 
-		mResourceWindow->setVisible(false);
-	//	setFood(stringToInt(textField->getValue()));
-	//	mFood = mFoodUpdate;													
-	//	mGoods = mGoodsUpdate;														 
-	//	mTech = mTechUpdate; 														
+		int food = stringToInt(mFoodCost->getText());
+		int goods = stringToInt(mGoodsCost->getText());
+		int tech = stringToInt(mTechCost->getText());
+		int totalCost = (food + goods + tech);
+		if(mCurrency >= totalCost)
+		{
+			activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
+			mResourceWindow->setVisible(false);
+			//ändrar textur till orginal
+			mCapitalistResourceButton->setTexture(CapitalistButtons["Resource"]);
+			setFood(stringToInt(mBuyFoodText->getText()));
+			setGoods(stringToInt(mBuyGoodsText->getText()));
+			setTech(stringToInt(mBuyTechText->getText()));
+			resetResourcesValues();
+		}
+		else
+		{
+			//Spela FAILSOUND!
+		}		
 	});
 
-	///*Stänger ner upgrade fönstret "Okay-knappen"*/
+	/*Stänger ner upgrade fönstret "Okay-knappen"*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{
-		mUpgradeWindow->setVisible(false); 														 
-	//	mNuclearWeapon = mNuclearWeaponUpdate;														  
-	//	mSpaceProgram	 = mSpaceProgramUpdate;														  
-	//	mSpyNetwork	 = mSpyNetworkUpdate;															  
+		int nuclearDiff = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText()); 
+		int spaceDiff = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
+		int spyDiff = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
+		if(upgradeNuclearWeapon(nuclearDiff) && upgradeSpaceProgram(spaceDiff) && upgradeSpyNetwork(spyDiff))
+		{
+			activateWindow = false; // = okej att klicka på nästa interfaceknapp
+
+			mUpgradeWindow->setVisible(false); 	
+			upgradeNuclearWeapon(nuclearDiff); 
+			upgradeSpaceProgram(spaceDiff); 
+			upgradeSpyNetwork(spyDiff);
+			//ändrar textur till orginal
+			mCapitalistUpgradeButton->setTexture(CapitalistButtons["Upgrade"]);
+		}
+		else
+		{
+			//Spela bajsfailljud 
+		}
 	});
 
 	/*Stänger ner Export fönster "Okay-knappen"*/
 	mExportCloseButton->setOnClickFunction([=]()				
 	{ 
+		activateWindow = false; // = okej att klicka på nästa interfaceknapp
 		mExportWindow->setVisible(false); 
+		//ändrar textur till orginal
+		mCapitalistExportButton->setTexture(CapitalistButtons["Export"]);
 	});
 
-	mCapitalistPresident->setOnClickFunction([=](){});
+	
 	
 	/*Val av president bild 1*/
 	mFirstPresidentButton->setOnClickFunction([=]()				
@@ -662,16 +779,35 @@ void Capitalist::initializeGuiFunctions()
 		
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
-	});			
-	
+	});		
+
+	/*När en president har blivit vald*/
 	mClosePresidentWindow->setOnClickFunction([=]()				
 	{ 
-		mChoosePresidentWindow->setVisible(false);
-		mPickedPresidentWindow->setVisible(true);
-		//std::vector<std::shared_ptr<void> > args;
-		//args.push_back(mPickedPresidentWindow);
-		std::shared_ptr<GUIElement> _test = mPickedPresidentWindow;
-		Timer::setTimer([=](){_test->setVisible(false);}, 5000, 1);
+		/*om ingen president blivit vald går det inte att stänga fönstret*/
+		if(mPresident != 0) 
+		{
+			mChoosePresidentWindow->setVisible(false);
+			mPickedPresidentWindow->setVisible(true);
+			//std::vector<std::shared_ptr<void> > args;
+			//args.push_back(mPickedPresidentWindow);
+
+			std::shared_ptr<GUIElement> _test = mPickedPresidentWindow;
+			std::shared_ptr<GUIButton> _presidentButton = mCapitalistPresident;
+			std::shared_ptr<President> _president = mPresident;
+			//timer för hur länge presidentval skall visas
+			//när det är klart hamnar bilden i vänstra nedre hörn
+			Timer::setTimer([=]()
+			{
+				_test->setVisible(false);
+
+				std::cout << _president->getTexture()->getSize().x << " " << _president->getTexture()->getSize().y << std::endl;
+				
+				_presidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_presidentButton->getRectangle(), _president->getTexture()));
+				_presidentButton->setScale(0.53, 0.53);
+			}, 
+				5000, 1);//antal millisekunder
+		}
 	});
 
 	

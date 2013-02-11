@@ -1,10 +1,12 @@
 #include "GameManager.h"
+#include "GUIManager.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
 #include "Communist.h"
 #include "SuperPower.h"
 #include "President.h"
 #include "tinyxml2.h"
+#include "GUIText.h"
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -34,6 +36,10 @@ void GameManager::init(int year)
 	mVecSuperPowers.push_back(std::make_shared<Communist>());
 	mVecPlayersLeft = mVecSuperPowers;
 
+	/*Skriver ut året på interface*/
+	mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
+	mYearText->setScale(0.5, 0.5);
+	GUIManager::getInstance()->addGUIElement(mYearText);
 	
 	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
@@ -245,6 +251,9 @@ void GameManager::nextRound()
 			}
 		}
 	}
+	/*Ökar år med ett när rundan är slut*/
+	mYearText->setText(mYear);
+
 	startRound();
 }
 

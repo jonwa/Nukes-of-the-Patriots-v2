@@ -2,8 +2,8 @@
 <buttons>
 	<button>
 		<name>General</name>
-		<xPos>0</xPos>
-		<yPos>636</yPos>
+		<xPos>8</xPos>
+		<yPos>644</yPos>
 		<width>112</width>
 		<height>132</height>
 		<image>Communist/7_kom_plan</image>
@@ -14,7 +14,15 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
-		<image>Communist/7_kom_plan</image>
+		<image>Communist/kom_texture_button_plan</image>
+	</button>
+	<button>
+		<name>FiveYearPlanIsPressed</name>
+		<xPos>112</xPos>
+		<yPos>636</yPos>
+		<width>200</width>
+		<height>132</height>
+		<image>Communist/kom_texture_button_invert_plan</image>
 	</button>
 	<button>
 		<name>YearOneLowerTaxes</name>
@@ -821,7 +829,7 @@
 		<xPos>520</xPos>
 		<yPos>477</yPos>
 		<width>30</width>
-		<height>40</height>
+		<height>70</height>
 		<image>Communist/button_ext</image>	
 	</button>	
 	<button>
@@ -829,24 +837,24 @@
 		<xPos>19</xPos>
 		<yPos>477</yPos>
 		<width>30</width>
-		<height>40</height>	
+		<height>70</height>	
 		<image>Communist/button_prev</image>	
 	</button>
 	<button>
 		<name>CloseTaxesWindow</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Communist/button_okay</image>	
+		<image>Communist/kom_texture_button_ok</image>	
 	</button>
 	<button>
 		<name>CloseResourcesWindow</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Communist/button_okay</image>	
+		<image>Communist/kom_texture_button_ok</image>	
 	</button>
 	<button>
 		<name>Propaganda</name>
@@ -857,12 +865,20 @@
 		<image>Communist/kom_texture_button_propaganda</image>
 	</button>
 	<button>
+		<name>PropagandaIsPressed</name>
+		<xPos>312</xPos>
+		<yPos>636</yPos>
+		<width>200</width>
+		<height>132</height>
+		<image>Communist/kom_texture_button_invert_propaganda</image>
+	</button>
+	<button>
 		<name>PropagandaCloseWindowFirst</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Communist/button_okay</image>
+		<image>Communist/kom_texture_button_ok</image>
 	</button>
 	<button>
 		<name>PropagandaCloseWindowSecond</name>
@@ -879,6 +895,14 @@
 		<width>200</width>
 		<height>132</height>	
 		<image>Communist/kom_texture_button_upgrade</image>		
+	</button>
+	<button>
+		<name>UpgradeIsPressed</name>
+		<xPos>512</xPos>
+		<yPos>636</yPos>
+		<width>200</width>
+		<height>132</height>	
+		<image>Communist/kom_texture_button_invert_upgrade</image>		
 	</button>
 	<button>
 		<name>UpgradeNuclearWeapon</name>
@@ -907,10 +931,10 @@
 	<button>
 		<name>CloseUpgrade</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>	
-		<image>Communist/button_okay</image>
+		<image>Communist/kom_texture_button_ok</image>
 	</button>
 	<button>
 		<name>Export</name>
@@ -918,7 +942,15 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
-		<image>Communist/7_kom_exp</image>
+		<image>Communist/kom_texture_button_export</image>
+	</button>
+	<button>
+		<name>ExportIsPressed</name>
+		<xPos>712</xPos>
+		<yPos>636</yPos>
+		<width>200</width>
+		<height>132</height>	
+		<image>Communist/kom_texture_button_invert_export</image>		
 	</button>
 	<button>
 		<name>CommunistLowerFood</name>
@@ -971,10 +1003,10 @@
 	<button>
 		<name>CloseExport</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Communist/button_okay</image>
+		<image>Communist/kom_texture_button_ok</image>
 	</button>
 	<button>
 		<name>EndTurn</name>
@@ -997,7 +1029,7 @@
 		<xPos>524</xPos>
 		<yPos>223</yPos>
 		<width>30</width>
-		<height>40</height>
+		<height>70</height>
 		<image>Communist/button_ext</image>	
 	</button>
 	<button>
@@ -1005,13 +1037,13 @@
 		<xPos>20</xPos>
 		<yPos>223</yPos>
 		<width>30</width>
-		<height>40</height>
+		<height>70</height>
 		<image>Communist/button_prev</image>	
 	</button>
 	<button>
 		<name>CloseGeneral</name>
 		<xPos>235</xPos>
-		<yPos>477</yPos>
+		<yPos>478</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_elect</image>	
