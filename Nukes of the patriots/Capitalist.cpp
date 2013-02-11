@@ -499,31 +499,31 @@ void Capitalist::initializeGuiFunctions()
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	{ GameManager::getInstance()->nextRound();  });
 
 
-	//mTaxesCloseButton->setOnClickFunction([=]()					
-	//{ 
-	//	mTaxesWindow->setVisible(false); 
+	mTaxesCloseButton->setOnClickFunction([=]()					
+	{ 
+		mTaxesWindow->setVisible(false); 
 	//	mTaxes = mTaxesUpdate; 
 	//	std::cout << mTaxes << "\nGAY" << std::endl; 
-	//});
+	});
 
 	///*Stänger ner resources fönstret "Okay-knappen"*/
-	//mResourceCloseButton->setOnClickFunction([=]()				
-	//{ 
-	//	mResourceWindow->setVisible(false);
+	mResourceCloseButton->setOnClickFunction([=]()				
+	{ 
+		mResourceWindow->setVisible(false);
 	//	setFood(stringToInt(textField->getValue()));
 	//	mFood = mFoodUpdate;													
 	//	mGoods = mGoodsUpdate;														 
 	//	mTech = mTechUpdate; 														
-	//});
+	});
 
 	///*Stänger ner upgrade fönstret "Okay-knappen"*/
-	//mUpgradeCloseButton->setOnClickFunction([=]()				
-	//{
-	//	mUpgradeWindow->setVisible(false); 														 
+	mUpgradeCloseButton->setOnClickFunction([=]()				
+	{
+		mUpgradeWindow->setVisible(false); 														 
 	//	mNuclearWeapon = mNuclearWeaponUpdate;														  
 	//	mSpaceProgram	 = mSpaceProgramUpdate;														  
 	//	mSpyNetwork	 = mSpyNetworkUpdate;															  
-	//});
+	});
 
 	/*Stänger ner Export fönster "Okay-knappen"*/
 	mExportCloseButton->setOnClickFunction([=]()				

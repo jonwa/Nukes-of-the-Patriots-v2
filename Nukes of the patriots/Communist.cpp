@@ -665,8 +665,6 @@ void Communist::initializeGuiFunctions()
 			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
 	});
 
-	
-
 	mGoToPreviousPortraitButton->setOnClickFunction([=]()		
 	{	
 		generalCount--;
@@ -675,8 +673,7 @@ void Communist::initializeGuiFunctions()
 		std::cout<<generalCount<<std::endl;
 
 		mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
-			
+			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));	
 	});
 
 
@@ -699,7 +696,6 @@ void Communist::initializeGuiFunctions()
 	{
 		GameManager::getInstance()->nextRound();
 	});
-
 }
 
 void Communist::showGUI()
