@@ -370,12 +370,12 @@ void Capitalist::initializeCapitalistWindow()
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
 
 	
-	mBuyFoodText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0",mResourceWindow);
-	//mBuyGoodsText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
-	//mBuyTechText						= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
-	//mFoodCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
-	//mGoodsCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
-	//mTechCost							= GUIText::create(sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
+	mBuyFoodText						= GUIText::create(sf::FloatRect(89, 57, 40, 40), "0",mResourceWindow);
+	mBuyGoodsText						= GUIText::create(sf::FloatRect(269, 57, 40, 40), "0", mResourceWindow);
+	mBuyTechText						= GUIText::create(sf::FloatRect(449, 57, 40, 40), "0", mResourceWindow);
+	mFoodCost							= GUIText::create(sf::FloatRect(30, 20, 40, 40), "0", mResourceWindow);
+	mGoodsCost							= GUIText::create(sf::FloatRect(210, 20, 40, 40), "0", mResourceWindow);
+	mTechCost							= GUIText::create(sf::FloatRect(390, 20, 40, 40), "0", mResourceWindow);
 	//mTotalResourcesCost					= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
@@ -441,51 +441,159 @@ void Capitalist::initializeGuiFunctions()
 	mCapitalistResourceButton->setOnClickFunction([=]()			{ mResourceWindow->setVisible(true); });
 	mLowerFoodByTenButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) - 10;
-		if(value >= 0)
-			mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) - 10;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * -10;
+		if(amount >= 0)
+		{
+			mBuyFoodText->setText(amount);
+			mFoodCost->setText(cost);
+		}
 	});			
 	mLowerFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) - 5;
-		if(value >= 0)
-			mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) - 5;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * -5;
+		if(amount >= 0)
+		{
+			mBuyFoodText->setText(amount);
+			mFoodCost->setText(cost);
+		}
 	});	
 	mLowerFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) - 1;
-		if(value >= 0)
-			mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) - 1;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * -1;
+		if(amount >= 0)
+		{
+			mBuyFoodText->setText(amount);
+			mFoodCost->setText(cost);
+		}
 	});				
 	mRaiseFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) + 1;
-		mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) + 1;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * 1;
+		mBuyFoodText->setText(amount);
+		mFoodCost->setText(cost);
 	});	
 	mRaiseFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) + 5;
-		mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) + 5;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * 5;
+		mBuyFoodText->setText(amount);
+		mFoodCost->setText(cost);
 	});	
 	mRaiseFoodByTenButton->setOnClickFunction([=]()
 	{ 
-		int value = stringToInt(mBuyFoodText->getText()) + 10;
-		mBuyFoodText->setText(value);
+		int amount = stringToInt(mBuyFoodText->getText()) + 10;
+		int cost = stringToInt(mFoodCost->getText()) + foodCost * 10;
+		mBuyFoodText->setText(amount);
+		mFoodCost->setText(cost);
 	});	
 
-	mLowerGoodsByTenButton->setOnClickFunction([=]()			{ setGoods(-10);});	
-	mLowerGoodsByFiveButton->setOnClickFunction([=]()			{ setGoods(-5);	});	
-	mLowerGoodsByOneButton->setOnClickFunction([=]()			{ setGoods(-1);	});	
-	mRaiseGoodsByOneButton->setOnClickFunction([=]()			{ setGoods(1);}	);	
-	mRaiseGoodsByFiveButton->setOnClickFunction([=]()			{ setGoods(5);}	);		
-	mRaiseGoodsByTenButton->setOnClickFunction([=]()			{ setGoods(10);	});
+	mLowerGoodsByTenButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) - 10;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -10;
+		if(amount >= 0)
+		{
+			mBuyGoodsText->setText(amount);
+			mGoodsCost->setText(cost);
+		}
+	});	
+	mLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) - 5;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -5;
+		if(amount >= 0)
+		{
+			mBuyGoodsText->setText(amount);
+			mGoodsCost->setText(cost);
+		}
+	});	
+	mLowerGoodsByOneButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) - 1;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -1;
+		if(amount >= 0)
+		{
+			mBuyGoodsText->setText(amount);
+			mGoodsCost->setText(cost);
+		}
+	});	
+	mRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) + 1;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 1;
+		mBuyGoodsText->setText(amount);
+		mGoodsCost->setText(cost);
+	});	
+	mRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) + 5;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 5;
+		mBuyGoodsText->setText(amount);
+		mGoodsCost->setText(cost);
+	});	
+	mRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{ 
+		int amount = stringToInt(mBuyGoodsText->getText()) + 10;
+		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 10;
+		mBuyGoodsText->setText(amount);
+		mGoodsCost->setText(cost);
+	});	
 
-	mLowerTechByTenButton->setOnClickFunction([=]()				{ setTech(-10);	});	
-	mLowerTechByFiveButton->setOnClickFunction([=]()			{ setTech(-5);	});	
-	mLowerTechByOneButton->setOnClickFunction([=]()				{ setTech(-1);	});	
-	mRaiseTechByOneButton->setOnClickFunction([=]()				{ setTech(1);	});		
-	mRaiseTechByFiveButton->setOnClickFunction([=]()			{ setTech(5);	});		
-	mRaiseTechByTenButton->setOnClickFunction([=]()				{ setTech(10);	});	
+	mLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) - 10;
+		int cost = stringToInt(mTechCost->getText()) + techCost * -10;
+		if(amount >= 0)
+		{
+			mBuyTechText->setText(amount);
+			mTechCost->setText(cost);
+		}
+	});
+	mLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) - 5;
+		int cost = stringToInt(mTechCost->getText()) + techCost * -5;
+		if(amount >= 0)
+		{
+			mBuyTechText->setText(amount);
+			mTechCost->setText(cost);
+		}
+	});
+	mLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) - 1;
+		int cost = stringToInt(mTechCost->getText()) + techCost * -1;
+		if(amount >= 0)
+		{
+			mBuyTechText->setText(amount);
+			mTechCost->setText(cost);
+		}
+	});
+	mRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) + 1;
+		int cost = stringToInt(mTechCost->getText()) + techCost * 1;
+		mBuyTechText->setText(amount);
+		mTechCost->setText(cost);
+	});
+	mRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) + 5;
+		int cost = stringToInt(mTechCost->getText()) + techCost * 5;
+		mBuyTechText->setText(amount);
+		mTechCost->setText(cost);
+	});
+	mRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mBuyTechText->getText()) + 10;
+		int cost = stringToInt(mTechCost->getText()) + techCost * 10;
+		mBuyTechText->setText(amount);
+		mTechCost->setText(cost);
+	});
 
 	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() { upgradeNuclearWeapon(); });		
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  { upgradeSpaceProgram();  });		
