@@ -889,6 +889,30 @@
 		<image>Communist/button_okay</image>
 	</button>
 	<button>
+		<name>PropagandaBuyFood</name>
+		<xPos>20</xPos>
+		<yPos>21</yPos>
+		<width>170</width>
+		<height>270</height>
+		<image>Communist/button_okay</image>
+	</button>
+	<button>
+		<name>PropagandaBuyGoods</name>
+		<xPos>200</xPos>
+		<yPos>21</yPos>
+		<width>170</width>
+		<height>270</height>
+		<image>Communist/button_okay</image>
+	</button>
+	<button>
+		<name>PropagandaBuyTech</name>
+		<xPos>380</xPos>
+		<yPos>21</yPos>
+		<width>170</width>
+		<height>270</height>
+		<image>Communist/button_okay</image>
+	</button>
+	<button>
 		<name>Upgrade</name>
 		<xPos>512</xPos>
 		<yPos>636</yPos>

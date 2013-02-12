@@ -66,6 +66,11 @@ private:
 		converter << i;
 		return converter.str();
 	}
+
+	int stringToInt(std::string str)
+	{
+		return atoi(str.c_str());
+	}
 	
 
 	std::shared_ptr<President> mGeneral;
@@ -79,6 +84,8 @@ private:
 
 	void fiveYearInitialize();
 	void setYearlyResources(int round, std::string, int value);
+	void fiveYearGuiFunctions();
+	void openFiveYearPlan();
 
 	/*Skapar två std::map. En dit alla knappar för kommunisterna läggs in i samt 
 	  en dit alla kommunisternas fönster läggs in i. Detta sker via hämtade värden
@@ -113,17 +120,23 @@ private:
 	std::shared_ptr<GUIButton> mCommunistEndTurnButton;
 
 	/*GUI-pekare för fem års planen*/
-	std::shared_ptr<GUIWindow> mTaxesWindow;
-	std::shared_ptr<GUIButton> mYearOneLowerTaxesButton;
-	std::shared_ptr<GUIButton> mYearOneRaiseTaxesButton;
-	std::shared_ptr<GUIButton> mYearTwoLowerTaxesButton;
-	std::shared_ptr<GUIButton> mYearTwoRaiseTaxesButton;
-	std::shared_ptr<GUIButton> mYearThreeLowerTaxesButton;
-	std::shared_ptr<GUIButton> mYearThreeRaiseTaxesButton;
-	std::shared_ptr<GUIButton> mYearFourLowerTaxesButton;
-	std::shared_ptr<GUIButton> mYearFourRaiseTaxesButton;
-	std::shared_ptr<GUIButton> mYearFiveLowerTaxesButton;
-	std::shared_ptr<GUIButton> mYearFiveRaiseTaxesButton;
+	std::shared_ptr<GUIWindow>	mTaxesWindow;
+	std::shared_ptr<GUIButton>	mYearOneLowerTaxesButton;
+	std::shared_ptr<GUIButton>	mYearOneRaiseTaxesButton;
+	std::shared_ptr<GUIButton>	mYearTwoLowerTaxesButton;
+	std::shared_ptr<GUIButton>	mYearTwoRaiseTaxesButton;
+	std::shared_ptr<GUIButton>	mYearThreeLowerTaxesButton;
+	std::shared_ptr<GUIButton>	mYearThreeRaiseTaxesButton;
+	std::shared_ptr<GUIButton>	mYearFourLowerTaxesButton;
+	std::shared_ptr<GUIButton>	mYearFourRaiseTaxesButton;
+	std::shared_ptr<GUIButton>	mYearFiveLowerTaxesButton;
+	std::shared_ptr<GUIButton>	mYearFiveRaiseTaxesButton;
+
+	std::shared_ptr<GUIText>	mYearOneTaxesText;
+	std::shared_ptr<GUIText>	mYearTwoTaxesText;
+	std::shared_ptr<GUIText>	mYearThreeTaxesText;
+	std::shared_ptr<GUIText>	mYearFourTaxesText;
+	std::shared_ptr<GUIText>	mYearFiveTaxesText;
 	/*fem år för mat*/
 	std::shared_ptr<GUIWindow> mResourcesWindow;
 	std::shared_ptr<GUIButton> mYearOneLowerFoodByTenButton;
@@ -132,6 +145,7 @@ private:
 	std::shared_ptr<GUIButton> mYearOneRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseFoodByTenButton;
+	std::shared_ptr<GUIText>   mYearOneFoodText;
 
 	std::shared_ptr<GUIButton> mYearTwoLowerFoodByTenButton;
 	std::shared_ptr<GUIButton> mYearTwoLowerFoodByFiveButton;
@@ -139,6 +153,7 @@ private:
 	std::shared_ptr<GUIButton> mYearTwoRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseFoodByTenButton;
+	std::shared_ptr<GUIText>   mYearTwoFoodText;
 
 	std::shared_ptr<GUIButton> mYearThreeLowerFoodByTenButton;
 	std::shared_ptr<GUIButton> mYearThreeLowerFoodByFiveButton;
@@ -146,6 +161,7 @@ private:
 	std::shared_ptr<GUIButton> mYearThreeRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseFoodByTenButton;
+	std::shared_ptr<GUIText>   mYearThreeFoodText;
 
 	std::shared_ptr<GUIButton> mYearFourLowerFoodByTenButton;
 	std::shared_ptr<GUIButton> mYearFourLowerFoodByFiveButton;
@@ -153,6 +169,7 @@ private:
 	std::shared_ptr<GUIButton> mYearFourRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseFoodByTenButton;
+	std::shared_ptr<GUIText>   mYearFourFoodText;
 
 	std::shared_ptr<GUIButton> mYearFiveLowerFoodByTenButton;
 	std::shared_ptr<GUIButton> mYearFiveLowerFoodByFiveButton;
@@ -160,6 +177,7 @@ private:
 	std::shared_ptr<GUIButton> mYearFiveRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseFoodByTenButton;
+	std::shared_ptr<GUIText>   mYearFiveFoodText;
 	/*Fem år för varor*/
 	std::shared_ptr<GUIButton> mYearOneLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mYearOneLowerGoodsByFiveButton;
@@ -167,6 +185,7 @@ private:
 	std::shared_ptr<GUIButton> mYearOneRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText>   mYearOneGoodsText;
 
 	std::shared_ptr<GUIButton> mYearTwoLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mYearTwoLowerGoodsByFiveButton;
@@ -174,6 +193,7 @@ private:
 	std::shared_ptr<GUIButton> mYearTwoRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText>   mYearTwoGoodsText;
 
 	std::shared_ptr<GUIButton> mYearThreeLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mYearThreeLowerGoodsByFiveButton;
@@ -181,6 +201,7 @@ private:
 	std::shared_ptr<GUIButton> mYearThreeRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText>   mYearThreeGoodsText;
 
 	std::shared_ptr<GUIButton> mYearFourLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mYearFourLowerGoodsByFiveButton;
@@ -188,6 +209,7 @@ private:
 	std::shared_ptr<GUIButton> mYearFourRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText>   mYearFourGoodsText;
 
 	std::shared_ptr<GUIButton> mYearFiveLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mYearFiveLowerGoodsByFiveButton;
@@ -195,6 +217,7 @@ private:
 	std::shared_ptr<GUIButton> mYearFiveRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText>   mYearFiveGoodsText;
 	/*Fem år för teknologi*/
 	std::shared_ptr<GUIButton> mYearOneLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mYearOneLowerTechByFiveButton;
@@ -202,6 +225,7 @@ private:
 	std::shared_ptr<GUIButton> mYearOneRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseTechByFiveButton;
 	std::shared_ptr<GUIButton> mYearOneRaiseTechByTenButton;
+	std::shared_ptr<GUIText>   mYearOneTechText;
 
 	std::shared_ptr<GUIButton> mYearTwoLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mYearTwoLowerTechByFiveButton;
@@ -209,6 +233,7 @@ private:
 	std::shared_ptr<GUIButton> mYearTwoRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseTechByFiveButton;
 	std::shared_ptr<GUIButton> mYearTwoRaiseTechByTenButton;
+	std::shared_ptr<GUIText>   mYearTwoTechText;
 
 	std::shared_ptr<GUIButton> mYearThreeLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mYearThreeLowerTechByFiveButton;
@@ -216,6 +241,7 @@ private:
 	std::shared_ptr<GUIButton> mYearThreeRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseTechByFiveButton;
 	std::shared_ptr<GUIButton> mYearThreeRaiseTechByTenButton;
+	std::shared_ptr<GUIText>   mYearThreeTechText;
 
 	std::shared_ptr<GUIButton> mYearFourLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mYearFourLowerTechByFiveButton;
@@ -223,13 +249,15 @@ private:
 	std::shared_ptr<GUIButton> mYearFourRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseTechByFiveButton;
 	std::shared_ptr<GUIButton> mYearFourRaiseTechByTenButton;
+	std::shared_ptr<GUIText>   mYearFourTechText;
 
 	std::shared_ptr<GUIButton> mYearFiveLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mYearFiveLowerTechByFiveButton;
 	std::shared_ptr<GUIButton> mYearFiveLowerTechByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseTechByFiveButton;
-	std::shared_ptr<GUIButton> mYearFiveRaiseTechByTenButton;
+	std::shared_ptr<GUIButton> mYearFiveRaiseTechByTenButton;   
+	std::shared_ptr<GUIText>   mYearFiveTechText;
 
 	std::shared_ptr<GUIButton> mGoToNextSlideButton;
 	std::shared_ptr<GUIButton> mGoToPreviousSlideButton;
@@ -239,7 +267,10 @@ private:
 	/*GUI-pekare för propaganda*/
 	std::shared_ptr<GUIWindow> mPropagandaWindowFirst;
 	std::shared_ptr<GUIWindow> mPropagandaWindowSecond;
-
+	
+	std::shared_ptr<GUIButton> mPropagandaBuyFoodButton;
+	std::shared_ptr<GUIButton> mPropagandaBuyGoodsButton;
+	std::shared_ptr<GUIButton> mPropagandaBuyTechButton;
 	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFirstYearButton;
 	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFirstYearButton;
 	//std::shared_ptr<GUIButton> mPropagandaBuyTechFristYearButton;
