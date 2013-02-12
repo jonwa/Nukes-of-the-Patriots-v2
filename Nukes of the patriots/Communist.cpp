@@ -617,7 +617,8 @@ void Communist::initializeCommunistWindow()
 void Communist::chooseLeader()
 {
 	GameManager* manager = GameManager::getInstance();
-	
+	mCommunistMainWindow->setEnabled(false, true);
+	mChooseGeneralWindow->setEnabled(true, true);
 	mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstGeneralButton->getRectangle(), manager->getGeneral(generalCount)->getTexture())); 
 }
 
@@ -626,34 +627,30 @@ void Communist::initializeGuiFunctions()
 {
 	/*Fem års plan knappen på interface  */
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
-	{ 
-		if(!activateWindow)
-		{
-			activateWindow = true; // != okej att klicka på nästa interfaceknapp
+	{
+		mCommunistMainWindow->setEnabled(false, true);
+		mTaxesWindow->setEnabled(true, true);
 
-			mTaxesWindow->setVisible(true); 
-			mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
-		}
+		mTaxesWindow->setVisible(true); 
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 	});
 	/*Propaganda knappen på interface*/
 	mCommunistPropagandaButton->setOnClickFunction([=]()		
 	{ 
-		if(!activateWindow)
-		{
-			activateWindow = true; // != okej att klicka på nästa interfaceknapp
-			mPropagandaWindowFirst->setVisible(true); 
-			mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
-		}
+		mCommunistMainWindow->setEnabled(false, true);
+		mPropagandaWindowFirst->setEnabled(true, true);
+
+		mPropagandaWindowFirst->setVisible(true); 
+		mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
 	});
 	/*Upgrade knappen på interface*/
 	mCommunistUpgradeButton->setOnClickFunction([=]()			
 	{ 
-		if(!activateWindow)
-		{
-			activateWindow = true; // != okej att klicka på nästa interfaceknapp
-			mUpgradeWindow->setVisible(true); 
-			mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
-		}
+		mCommunistMainWindow->setEnabled(false, true);
+		mUpgradeWindow->setEnabled(true, true);
+
+		mUpgradeWindow->setVisible(true); 
+		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
 	});
 	/*Gå till nästa slide*/
 	mGoToNextSlideButton->setOnClickFunction([=]()				
@@ -669,18 +666,16 @@ void Communist::initializeGuiFunctions()
 	/*Export knappen på interface*/
 	mCommunistExportButton->setOnClickFunction([=]()			
 	{ 	
-		if(!activateWindow)
-		{
-			activateWindow = true; // != okej att klicka på nästa interfaceknapp
-			mExportWindow->setVisible(true); 
-			mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
-		}
+		mCommunistMainWindow->setEnabled(false, true);
+		mExportWindow->setEnabled(true, true);
+		mExportWindow->setVisible(true); 
+		mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
 	});
 
 
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
-		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+		mCommunistMainWindow->setEnabled(true, true);
 
 		mTaxesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
@@ -688,7 +683,7 @@ void Communist::initializeGuiFunctions()
 	
 	mResourcesCloseButton->setOnClickFunction([=]()				
 	{ 
-		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+		mCommunistMainWindow->setEnabled(true, true);
 
 		mResourcesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
@@ -696,7 +691,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
 	{ 
-		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+		mCommunistMainWindow->setEnabled(true, true);
 
 		mPropagandaWindowFirst->setVisible(false);
 		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
@@ -705,7 +700,7 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ned Upgradefönstret*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{ 
-		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+		mCommunistMainWindow->setEnabled(true, true);
 
 		mUpgradeWindow->setVisible(false); 
 		mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
@@ -717,7 +712,7 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ned exportfönstret*/
 	mExportCloseButton->setOnClickFunction([=]() 
 	{ 
-		activateWindow = false; // = okej att klicka på nästa interfaceknapp
+		mCommunistMainWindow->setEnabled(true, true);
 
 		mExportWindow->setVisible(false); 
 		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
@@ -766,12 +761,14 @@ void Communist::initializeGuiFunctions()
 		std::shared_ptr<GUIElement> _test = mPickedGeneralWindow;
 		std::shared_ptr<GUIButton> _generalButton = mCommunistGeneralButton;
 		std::shared_ptr<President> _general = mGeneral;
+		std::shared_ptr<GUIWindow> _mainWindow = mCommunistMainWindow;
 		Timer::setTimer([=]()
 		{
 			_test->setVisible(false);
 
 				_generalButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_generalButton->getRectangle(), _general->getTexture()));
 				_generalButton->setScale(0.53, 0.53);
+				_mainWindow->setEnabled(true, true);
 		
 		}, 
 			5000, 1);//antal millisekunder fönstret visas
@@ -785,12 +782,12 @@ void Communist::initializeGuiFunctions()
 
 void Communist::showGUI()
 {
-	std::cout << "Communist show gui" << std::endl;
+	//std::cout << "Communist show gui" << std::endl;
 	mCommunistMainWindow->setVisible(true);
 }
 
 void Communist::hideGUI()
 {
-	std::cout << "Communist hide gui" << std::endl;
+	//std::cout << "Communist hide gui" << std::endl;
 	mCommunistMainWindow->setVisible(false);
 }

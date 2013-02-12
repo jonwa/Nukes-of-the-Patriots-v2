@@ -72,6 +72,7 @@
 	<image filename="3_5exit.png"/>
 	<image filename="Team-Flagga-Communist.png"/>
 	<image filename="Team-Flagga-Kapitalist.png"/>
+	<image filename="Team-background-screen.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

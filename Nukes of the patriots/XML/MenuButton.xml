@@ -42,16 +42,16 @@
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
-		<xPos>140</xPos>
-		<yPos>50</yPos>
+		<xPos>200</xPos>
+		<yPos>100</yPos>
 		<width>256</width>
 		<height>400</height>	
 		<image>Menu/Team-Flagga-Kapitalist</image>
 	</button>
 	<button>
 		<name>TeamCommunist</name>
-		<xPos>583</xPos>
-		<yPos>50</yPos>
+		<xPos>650</xPos>
+		<yPos>100</yPos>
 		<width>256</width>
 		<height>400</height>	
 		<image>Menu/Team-Flagga-Communist</image>

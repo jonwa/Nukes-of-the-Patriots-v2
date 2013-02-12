@@ -13,7 +13,7 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	GUIElement(rect, parent, TEXT),
 	mFont(sf::Font::getDefaultFont())
 {
-	mFont.loadFromFile("Font/courbd.ttf");
+	mFont.loadFromFile("Font/Moire-Regular.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height/2);

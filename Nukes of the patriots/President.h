@@ -32,9 +32,11 @@ public:
 	float getPatriotismTaxModifier();
 	float getPopEatsMore();
 
-
+	int getYearsElected() { return mYearsElected; }
+	void setYearsElected(int years) { mYearsElected = years; }
 private:
 	void randomStatFunc();
+	int mYearsElected;
 	sf::Sprite mPortrait;
 	sf::Texture* mTexture;
 	std::map <std::string,float> mValues;

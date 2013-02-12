@@ -9,7 +9,8 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mMouseInside(false),
 	mCallClickFunc(false), 
 	mCallMouseEnterFunc(false),
-	mCallMouseLeaveFunc(false)
+	mCallMouseLeaveFunc(false),
+	mEnabled(true)
 {
 }
 
@@ -93,6 +94,11 @@ bool GUIElement::getMouseIsInside()const
 	return mMouseInside;
 }
 
+bool GUIElement::isEnabled()const
+{
+	return mEnabled;
+}
+
 sf::FloatRect GUIElement::getRectangle()
 {
 	return mRectangle;
@@ -127,6 +133,19 @@ void GUIElement::setVisible(bool visible)
 	}
 	*/
 }
+
+void GUIElement::setEnabled(bool enabled, bool effectChildren)
+{
+	mEnabled = enabled;
+	if(effectChildren && !mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->setEnabled(enabled, effectChildren);
+		}
+	}
+}
+
 void GUIElement::setAlpha(int alpha)
 {
 	mAlpha = alpha; 
@@ -147,7 +166,7 @@ bool GUIElement::onClick(sf::RenderWindow *window)
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
 	// Check if mouse is colliding with gui element
-	if(mRectangle.contains(mousePos.x, mousePos.y))
+	if(mEnabled && mRectangle.contains(mousePos.x, mousePos.y))
 	{
 		if(mOnClickFunction != nullptr)
 			mCallClickFunc = true;
@@ -177,26 +196,29 @@ bool GUIElement::onMove(sf::RenderWindow *window)
 	}
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 
-	bool isMouseInside = getMouseIsInside();
-	// Check if mouse is colliding with gui element
-	if(mRectangle.contains(mousePos.x, mousePos.y))
+	if(mEnabled)
 	{
-		if(!isMouseInside)
+		bool isMouseInside = getMouseIsInside();
+		// Check if mouse is colliding with gui element
+		if(mRectangle.contains(mousePos.x, mousePos.y))
 		{
-			setMouseIsInside(true);
-			if(mMouseEnterFunction != nullptr)
+			if(!isMouseInside)
 			{
-				mCallMouseEnterFunc = true;
+				setMouseIsInside(true);
+				if(mMouseEnterFunction != nullptr)
+				{
+					mCallMouseEnterFunc = true;
+				}
 			}
 		}
-	}
-	else
-	{
-		if(isMouseInside)
+		else
 		{
-			setMouseIsInside(false);
-			if(mMouseLeaveFunction != nullptr)
-				mCallMouseLeaveFunc = true;
+			if(isMouseInside)
+			{
+				setMouseIsInside(false);
+				if(mMouseLeaveFunction != nullptr)
+					mCallMouseLeaveFunc = true;
+			}
 		}
 	}
 
@@ -227,20 +249,23 @@ void GUIElement::setMouseLeaveFunction(std::function <void()> func)
 
 void GUIElement::tick()
 {
-	if(mCallClickFunc && mOnClickFunction != nullptr)
+	if(mCallClickFunc)
 	{
 		mCallClickFunc = false;
-		mOnClickFunction();
+		if(mOnClickFunction != nullptr)
+			mOnClickFunction();
 	}
-	if(mCallMouseEnterFunc && mMouseEnterFunction != nullptr)
+	if(mCallMouseEnterFunc)
 	{
 		mCallMouseEnterFunc = false;
-		mMouseEnterFunction();
+		if(mMouseEnterFunction != nullptr)
+			mMouseEnterFunction();
 	}
-	if(mCallMouseLeaveFunc && mMouseLeaveFunction != nullptr)
+	if(mCallMouseLeaveFunc)
 	{
 		mCallMouseLeaveFunc = false;
-		mMouseLeaveFunction();
+		if(mMouseLeaveFunction != nullptr)
+			mMouseLeaveFunction();
 	}
 	if(!mChilds.empty())
 	{

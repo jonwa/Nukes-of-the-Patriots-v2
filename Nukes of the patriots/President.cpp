@@ -2,9 +2,8 @@
 #include "ResourceHandler.h"
 #include <iostream>
 
-President::President(std::string &filename)
-	
-	
+President::President(std::string &filename):
+	mYearsElected(0)
 {
 	
 	initializeImages(filename);

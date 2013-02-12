@@ -97,7 +97,10 @@ void GameManager::loadPresidents()
 
 std::shared_ptr<President> GameManager::getRandomPresident()
 {
-	return mPresidentVector[Randomizer::getInstance()->randomNr(mPresidentVector.size(), 0)];
+	int random = Randomizer::getInstance()->randomNr(mPresidentVector.size(), 0);
+	std::shared_ptr<President> result = mPresidentVector[random];
+	mPresidentVector.erase(mPresidentVector.begin() + random);
+	return result;
 }
 
 std::shared_ptr<President> GameManager::getGeneral(int number)
@@ -194,7 +197,7 @@ void GameManager::nextRound()
 	}
 	mRound++;
 	// Everybody has played once this round, time to decide next player to start by spy network
-	std::cout<<"players left to play this round: "<<mVecPlayersLeft.size()<<std::endl;
+	//std::cout<<"players left to play this round: "<<mVecPlayersLeft.size()<<std::endl;
 	if(mVecPlayersLeft.size() == 0)
 	{
 		mVecPlayersLeft = mVecSuperPowers;

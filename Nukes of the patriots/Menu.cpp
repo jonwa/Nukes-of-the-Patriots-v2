@@ -256,13 +256,18 @@ void Menu::initializeGuiFuctions()
 	mExitButton->setOnClickFunction([=]()				{ mWindow.close(); });
 
 	/*när spelaren väljer att spela kapitalist */
-	mTeamCapitalistButton->setOnClickFunction([=]()		{ mParentWindow->setVisible(false); MenuMusic["MainMenuTrack"]->stop(); 
-														  GameManager::getInstance()->init(1952); });
+	mTeamCapitalistButton->setOnClickFunction([=]()		
+	{ 
+		mParentWindow->setVisible(false); 
+		MenuMusic["MainMenuTrack"]->stop(); 
+		GameManager::getInstance()->init(1952); // initierar första året
+	});
 
 	/*när spelaren väljer att spela kommunist*/
 	mTeamCommunistButton->setOnClickFunction([=]()		
 	{ 
-		mParentWindow->setVisible(false); MenuMusic["MainMenuTrack"]->stop();
+		mParentWindow->setVisible(false); 
+		MenuMusic["MainMenuTrack"]->stop();
 		GameManager::getInstance()->init(1952);
 	});
 
