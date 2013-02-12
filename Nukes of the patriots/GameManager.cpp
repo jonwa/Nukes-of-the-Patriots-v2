@@ -54,6 +54,7 @@ void GameManager::init(int year)
 			break;
 		}
 	}
+	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
 	mCurrentPlayer->setRound(1);
 }

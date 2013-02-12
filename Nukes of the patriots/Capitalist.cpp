@@ -52,6 +52,7 @@ std::shared_ptr<President> Capitalist::getPresident()
 
 void Capitalist::update()
 {
+
 	if( (mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
