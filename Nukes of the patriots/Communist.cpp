@@ -1204,8 +1204,8 @@ void Communist::fiveYearGuiFunctions()
 	});
 	mYearTwoRaiseTaxesButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mYearThreeTaxesText->getText()) + taxChange;
-		mYearThreeTaxesText->setText(amount);
+		int amount = stringToInt(mYearTwoTaxesText->getText()) + taxChange;
+		mYearTwoTaxesText->setText(amount);
 	});
 	mYearThreeLowerTaxesButton->setOnClickFunction([=]()
 	{
@@ -1215,12 +1215,12 @@ void Communist::fiveYearGuiFunctions()
 	});
 	mYearThreeRaiseTaxesButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mYearOneTaxesText->getText()) + taxChange;
+		int amount = stringToInt(mYearThreeTaxesText->getText()) + taxChange;
 		mYearThreeTaxesText->setText(amount);
 	});
 	mYearFourLowerTaxesButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mYearOneTaxesText->getText()) - taxChange;
+		int amount = stringToInt(mYearFourTaxesText->getText()) - taxChange;
 		if(amount >= 0)
 			mYearFourTaxesText->setText(amount);
 	});
