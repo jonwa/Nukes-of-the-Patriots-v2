@@ -21,8 +21,11 @@ static int techCost		= 30;
 static int taxChange	= 5;
 static bool activateWindow = false;
 
+
+
 Capitalist::Capitalist() :
-	mPresident(nullptr)
+	mPresident(nullptr),
+	mMaxTax(0)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -49,20 +52,23 @@ std::shared_ptr<President> Capitalist::getPresident()
 
 void Capitalist::update()
 {
-	if( mRound % 4 == 0 ) 
+	if( (mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
 	}
+	mCurrentTax = mTaxes;
+	mMaxTax = mCurrentTax + 5;
+	mMinTax = mCurrentTax - 5;
 }
 
 void Capitalist::setTaxesCost(int tax)
 {
-	mTaxDecreased = (tax < mTaxes);
 	mTaxes = tax;
 }
 
 void Capitalist::setPresident(std::shared_ptr<President> president)
 {
+
 	mPresident = president;
 
 	foodCost	+= president->getFoodPriceModifier();
@@ -368,7 +374,11 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
-
+	/*Text för skatten*/
+	mTaxesText							= GUIText::create(sf::FloatRect(300, 50, 40, 40), intToString(mTaxes), mCapitalistMainWindow);
+	mChangeTaxesText					= GUIText::create(sf::FloatRect(93, 70, 40, 40), intToString(getTaxes()), mTaxesWindow);
+	
+	/*Resursfönster med knappar*/
 	mResourceWindow						= GUIWindow::create(CapitalistWindows["CapitalistResourceWindow"], mCapitalistMainWindow);
 	mLowerFoodByTenButton				= GUIButton::create(CapitalistButtons["LowerFoodByTen"], mResourceWindow);
 	mLowerFoodByFiveButton				= GUIButton::create(CapitalistButtons["LowerFoodByFive"], mResourceWindow);
@@ -391,8 +401,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
 	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
-
-	
+	/*Text för resurser*/
 	mBuyFoodText						= GUIText::create(sf::FloatRect(89, 57, 40, 40), "0",mResourceWindow);
 	mBuyGoodsText						= GUIText::create(sf::FloatRect(269, 57, 40, 40), "0", mResourceWindow);
 	mBuyTechText						= GUIText::create(sf::FloatRect(449, 57, 40, 40), "0", mResourceWindow);
@@ -402,12 +411,13 @@ void Capitalist::initializeCapitalistWindow()
 	//mTotalResourcesCost					= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
+	/*Uppgraderingsfönster med knappar*/
 	mUpgradeWindow						= GUIWindow::create(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
 	mUpgradeNuclearWeaponButton		    = GUIButton::create(CapitalistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
 	mUpgradeSpaceProgramButton			= GUIButton::create(CapitalistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
 	mUpgradeSpyNetworkButton			= GUIButton::create(CapitalistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
-
+	/*Text för uppgradering*/
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
 	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
 	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
@@ -477,6 +487,29 @@ void Capitalist::initializeGuiFunctions()
 		mTaxesWindow->setEnabled(true, true);
 		mTaxesWindow->setVisible(true); 
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["TaxesIsPressed"]);
+	});
+	/*Sänker skatten med fem*/
+	mLowerTaxesButton->setOnClickFunction([=]()
+	{
+		mTaxes -= 5;
+		if(mTaxes <= mMinTax)
+			mTaxes = mMinTax;
+		if(mTaxes < 5)
+			mTaxes = 5;
+		mChangeTaxesText->setText(intToString(mTaxes));
+		
+	});
+	/*Höjer skatten med fem*/
+	mRaiseTaxesButton->setOnClickFunction([=]()
+	{
+		std::cout<<"mTaxes before: "<<mTaxes<<std::endl;
+		mTaxes += 5;
+		if(mTaxes >= mMaxTax)
+			mTaxes = mMaxTax;
+		if(mTaxes > 95)
+			mTaxes = 95;
+		std::cout<<"mTaxes: "<<mTaxes<<" max tax: "<<mMaxTax<<std::endl;
+		mChangeTaxesText->setText(intToString(mTaxes));
 	});
 
 	/*Resources GUI-Window knappar*/
@@ -691,17 +724,10 @@ void Capitalist::initializeGuiFunctions()
 
 	});
 
-	/*nästa runda*/
-	mCapitalistEndTurnButton->setOnClickFunction([=]()	
-	{ 
-		GameManager::getInstance()->nextRound();  
-	});
-
 	/*Stänger ner Taxes fönstret*/
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
-
 		mTaxesWindow->setVisible(false); 
 		//ändrar textur till orginal
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
@@ -820,6 +846,19 @@ void Capitalist::initializeGuiFunctions()
 			}, 
 				5000, 1);//antal millisekunder
 		}
+	});
+
+	/*nästa runda*/
+	mCapitalistEndTurnButton->setOnClickFunction([=]()	
+	{ 
+		if(mTaxes < mCurrentTax)
+			setPatriotism(getPatriotism() + 2);
+		else if(mTaxes > mCurrentTax)
+			setPatriotism(getPatriotism() - 3);
+		
+		
+		mTaxes = mCurrentTax;
+		GameManager::getInstance()->nextRound();  
 	});
 }
 

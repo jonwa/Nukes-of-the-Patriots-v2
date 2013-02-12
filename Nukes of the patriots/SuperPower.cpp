@@ -53,6 +53,11 @@ int SuperPower::getTaxes()
 	return mTaxes;
 }
 
+int SuperPower::getPatriotism()
+{
+	return mPatriotism;
+}
+
 int SuperPower::getTech()
 {
 	return mTech;
@@ -81,6 +86,11 @@ int SuperPower::getRound()
 void SuperPower::setRound(int round)
 {
 	mRound = round;
+}
+
+void SuperPower::setPatriotism(int patriotism)
+{
+	mPatriotism = patriotism;
 }
 //-----------------------------------------------------------
 

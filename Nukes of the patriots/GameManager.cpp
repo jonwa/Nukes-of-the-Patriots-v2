@@ -55,7 +55,7 @@ void GameManager::init(int year)
 		}
 	}
 	mCurrentPlayer->showGUI();
-
+	mCurrentPlayer->setRound(1);
 }
 
 void GameManager::loadPresidents()
