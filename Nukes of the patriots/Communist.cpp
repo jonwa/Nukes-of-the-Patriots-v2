@@ -431,7 +431,7 @@ void Communist::loadCommunistMusic()
 	const char* temp;
 	while (music != 0)
 	{
-		std::string tempName;
+		std::string tempName; 
 		if (temp = music->FirstChildElement("name")->GetText())
 		{
 			tempName = temp;
