@@ -93,6 +93,7 @@ private:
 	void initializeCapitalistWindow();
 
 	
+	
 	//President	*mPresident;
 	
 	/*Interface text för resurser och upgradering*/

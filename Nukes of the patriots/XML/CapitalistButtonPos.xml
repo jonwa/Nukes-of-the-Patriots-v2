@@ -345,6 +345,14 @@
 		<image>Capitalist/kap_texture_button_endturn</image>
 	</button>
 	<button>
+		<name>EndTurnIsPressed</name>
+		<xPos>912</xPos>
+		<yPos>636</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Capitalist/kap_texture_button_invert_endturn</image>
+	</button>
+	<button>
 		<name>FirstPresident</name>
 		<xPos>63</xPos>
 		<yPos>22</yPos>

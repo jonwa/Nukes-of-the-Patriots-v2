@@ -15,6 +15,7 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Audio\Music.hpp>
 
 
 class President;
@@ -55,6 +56,7 @@ public:
 	void		buyPropagandaTech(int round);
 
 	void		chooseLeader();
+	void		playMusic();
 
 	void showGUI();
 	void hideGUI();
@@ -94,11 +96,13 @@ private:
 																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
+	std::map<std::string, std::shared_ptr<sf::Music> > CommunistMusic;
 	
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void initializeGuiFunctions();
 	void initializeCommunistWindow();
+	void loadCommunistMusic();
  
 	//President	*mPresident;
 

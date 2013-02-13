@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tracks>
+	<music>
+		<name>CommunistMainTheme</name>
+		<file>Communist/Kommunist</file>
+	</music>
+</tracks>

@@ -3,5 +3,8 @@
     <music filename="main_theme.ogg"/>
 </tracks>
 <tracks directory ="Capitalist">
+	<music filename="Kapitalist.ogg"/>
+</tracks>
+<tracks directory ="Communist">
 	<music filename="Kommunist.ogg"/>
 </tracks>

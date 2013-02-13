@@ -119,7 +119,7 @@ void ResourceHandler::load()
 	doc.LoadFile("XML/Music.xml");
 
 	if(doc.Error())
-		std::cout << "Fel! inhämtning av alla bilder";
+		std::cout << "Fel! inhämtning av musik";
 	
 	tinyxml2::XMLElement *element = doc.FirstChildElement("tracks");
 	while (element != 0)

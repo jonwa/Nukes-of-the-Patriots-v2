@@ -313,7 +313,7 @@ void Capitalist::loadWindowPosition()
 void Capitalist::loadCapitalistMusic()
 {
 	tinyxml2::XMLDocument doc;
-	doc.LoadFile("XML/CapitalistMusic.xml");
+	doc.LoadFile("XML/CapitalistSounds.xml");
 
 	if(doc.Error())
 		std::cout << "Fel! Capitalist::loadCapitalistMusic";
@@ -842,8 +842,6 @@ void Capitalist::initializeGuiFunctions()
 			Timer::setTimer([=]()
 			{
 				_test->setVisible(false);
-
-				//std::cout << _president->getTexture()->getSize().x << " " << _president->getTexture()->getSize().y << std::endl;
 				
 				_presidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_presidentButton->getRectangle(), _president->getTexture()));
 				_presidentButton->setScale(0.53, 0.53);
@@ -861,7 +859,7 @@ void Capitalist::initializeGuiFunctions()
 		else if(mTaxes > mCurrentTax)
 			setPatriotism(getPatriotism() - 3);
 		
-		
+		//mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
 		mTaxes = mCurrentTax;
 		GameManager::getInstance()->nextRound();  
 	});
