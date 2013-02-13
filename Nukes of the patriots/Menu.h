@@ -47,6 +47,8 @@ private:
 
 	std::shared_ptr<GUIButton> mTeamCapitalistButton;
 	std::shared_ptr<GUIButton> mTeamCommunistButton;
+	std::shared_ptr<GUIButton> mCapitalistOkayButton;
+	std::shared_ptr<GUIButton> mCommunistOkayButton;
 
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIButton> mFirstPresidentButton;

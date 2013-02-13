@@ -219,6 +219,8 @@ void Menu::initialize()
 	mPickTeamWindow			= GUIWindow::create(WindowPos["PickTeam"], mParentWindow);
 	mTeamCapitalistButton	= GUIButton::create(ButtonPos["TeamCapitalist"], mPickTeamWindow);
 	mTeamCommunistButton	= GUIButton::create(ButtonPos["TeamCommunist"], mPickTeamWindow);
+	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mPickTeamWindow);
+	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mPickTeamWindow);
 	mPickTeamWindow->setVisible(false);
 
 	

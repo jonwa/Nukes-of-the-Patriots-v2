@@ -56,6 +56,10 @@ public:
 	void resetResourcesValues();
 
 private:
+	int mCurrentTax;
+	int mMaxTax;
+	int mMinTax;
+
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -89,15 +93,20 @@ private:
 	void initializeCapitalistWindow();
 
 	
+	
 	//President	*mPresident;
 	
+	/*Interface text för resurser och upgradering*/
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
 	std::shared_ptr<GUIText> mFoodText;	
 	std::shared_ptr<GUIText> mGoodsText;  
 	std::shared_ptr<GUIText> mTechText;
-
+	/*Text för Taxes*/
+	std::shared_ptr<GUIText> mTaxesText;
+	std::shared_ptr<GUIText> mChangeTaxesText;
+	/*Text för resources*/
 	std::shared_ptr<GUIText> mBuyFoodText;
 	std::shared_ptr<GUIText> mBuyGoodsText;
 	std::shared_ptr<GUIText> mBuyTechText;
@@ -105,7 +114,7 @@ private:
 	std::shared_ptr<GUIText> mGoodsCost;
 	std::shared_ptr<GUIText> mTechCost;
 	std::shared_ptr<GUIText> mTotalResourcesCost;
-
+	/*Text för upgradering*/
 	std::shared_ptr<GUIText> mBuyNuclearText;
 	std::shared_ptr<GUIText> mBuySpaceProgramText;
 	std::shared_ptr<GUIText> mBuySpyNetworkText;
@@ -114,7 +123,6 @@ private:
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
-	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
 	std::shared_ptr<GUIButton> mCapitalistResourceButton;	
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCapitalistExportButton;	

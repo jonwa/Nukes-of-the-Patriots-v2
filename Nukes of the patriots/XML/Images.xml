@@ -21,6 +21,7 @@
 	<image filename="kap_texture_button_smallupgrade.png"/>
 	<image filename="button_yes.png"/>
 	<image filename="kap_texture_button_endturn.png"/>
+	<image filename="kap_texture_button_invert_endturn.png"/>
 	<image filename="7_kap_window_president1.png"/>
 	<image filename="7_kap_window_president2.png"/>
 	<image filename="7_pr1.png"/>
@@ -70,9 +71,11 @@
 	<image filename="3_3settings.png"/>
 	<image filename="3_4credits.png"/>
 	<image filename="3_5exit.png"/>
-	<image filename="Team-Flagga-Communist.png"/>
-	<image filename="Team-Flagga-Kapitalist.png"/>
+	<image filename="Team-Flagga-Communist-up.png"/>
+	<image filename="Team-Flagga-Kapitalist-up.png"/>
 	<image filename="Team-background-screen.png"/>
+	<image filename="Ok-knapp-aktiv.png"/>
+	<image filename="Namnruta-aktiv.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

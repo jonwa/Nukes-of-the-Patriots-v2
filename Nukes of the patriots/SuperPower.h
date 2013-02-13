@@ -24,6 +24,7 @@ public:
 	int			getSpyNetwork();
 	int			getCurrency();
 	int			getRound();
+	int			getPatriotism();
 
 	PoliticalType getType();
 
@@ -32,7 +33,7 @@ public:
 	void		getTaxIncome();
 	void		updateFood();
 	bool		enoughFood();
-
+	void		setPatriotism(int patriotism); 
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
@@ -43,6 +44,7 @@ public:
 	virtual bool		setFood(int value) = 0;
 	virtual bool		setGoods(int value) = 0;
 	virtual bool		setTech(int value) = 0;
+ 
 	virtual void		chooseLeader(){};
 	virtual void		showGUI() = 0;
 	virtual void		hideGUI() = 0;

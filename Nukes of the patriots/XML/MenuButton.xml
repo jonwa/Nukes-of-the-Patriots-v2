@@ -42,19 +42,51 @@
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
-		<xPos>200</xPos>
-		<yPos>100</yPos>
+		<xPos>106</xPos>
+		<yPos>52</yPos>
 		<width>256</width>
 		<height>400</height>	
-		<image>Menu/Team-Flagga-Kapitalist</image>
+		<image>Menu/Team-Flagga-Kapitalist-up</image>
 	</button>
 	<button>
 		<name>TeamCommunist</name>
-		<xPos>650</xPos>
-		<yPos>100</yPos>
+		<xPos>628</xPos>
+		<yPos>52</yPos>
 		<width>256</width>
 		<height>400</height>	
-		<image>Menu/Team-Flagga-Communist</image>
+		<image>Menu/Team-Flagga-Communist-up</image>
+	</button>
+	<button>
+		<name>CapitalistName</name>
+		<xPos>106</xPos>
+		<yPos>474</yPos>
+		<width>256</width>
+		<height>256</height>	
+		<image></image>
+	</button>	
+	<button>
+		<name>CapitalistOkay</name>
+		<xPos>194</xPos>
+		<yPos>590</yPos>
+		<width>256</width>
+		<height>256</height>	
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
+	<button>
+		<name>CommunistName</name>
+		<xPos>628</xPos>
+		<yPos>474</yPos>
+		<width>256</width>
+		<height>256</height>	
+		<image></image>
+	</button>	
+	<button>
+		<name>CommunistOkay</name>
+		<xPos>720</xPos>
+		<yPos>590</yPos>
+		<width>256</width>
+		<height>256</height>	
+		<image>Menu/Ok-knapp-aktiv</image>
 	</button>
 	<button>
 		<name>StartGameHover</name>
