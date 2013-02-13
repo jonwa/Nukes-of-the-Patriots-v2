@@ -25,7 +25,9 @@ static bool activateWindow = false;
 
 Capitalist::Capitalist() :
 	mPresident(nullptr),
-	mMaxTax(0)
+	mCurrentTax(mTaxes),
+	mMinTax(mTaxes-5),
+	mMaxTax(mTaxes+5)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -825,7 +827,9 @@ void Capitalist::initializeGuiFunctions()
 		{
 			mChoosePresidentWindow->setVisible(false);
 			mPickedPresidentWindow->setVisible(true);
-			mPresident->setYearsElected(mPresident->getYearsElected() + 1);
+			int yearsElected = mPresident->getYearsElected();
+			//std::cout<<"years elected: "<<yearsElected<<std::endl;
+			mPresident->setYearsElected(yearsElected + 1);
 			//std::vector<std::shared_ptr<void> > args;
 			//args.push_back(mPickedPresidentWindow);
 
