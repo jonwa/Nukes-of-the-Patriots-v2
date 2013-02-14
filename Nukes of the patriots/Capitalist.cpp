@@ -467,7 +467,7 @@ void Capitalist::chooseLeader()
 	mCapitalistMainWindow->setEnabled(false, true);
 	mChoosePresidentWindow->setEnabled(true, true);
 	mChoosePresidentWindow->setVisible(true);
-	if(mFirstPresident == NULL)
+	if(mPresident == NULL)
 		mFirstPresident = GameManager::getInstance()->getRandomPresident();
 	else
 	{

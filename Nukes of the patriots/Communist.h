@@ -75,7 +75,6 @@ private:
 	}
 	
 
-	std::vector<std::map<std::string, int>> mYearVector;
 	
 	std::vector<sf::Texture*> PropagandaFood;
 	std::vector<sf::Texture*> PropagandaGoods;
@@ -90,8 +89,23 @@ private:
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
 	std::map<std::string, std::shared_ptr<sf::Music> >			   CommunistMusic;
 
+	std::shared_ptr<President> mGeneral;
+	std::shared_ptr<President> mFirstGeneral;
+	std::shared_ptr<President> mSecondGeneral;
+	std::shared_ptr<President> mThirdGeneral;
+	std::shared_ptr<President> mFourthGeneral;
+	std::shared_ptr<President> mFifthGeneral;
+
+	std::vector<std::map<std::string, int> > mYearVector;
+	std::vector<std::shared_ptr<GUIButton> > mResourcesFoodButtons;
+	std::vector<std::shared_ptr<GUIButton> > mResourcesGoodsButtons;
+	std::vector<std::shared_ptr<GUIButton> > mResourcesTechButtons;
+
+
+
 	void fiveYearInitialize();
-	void setYearlyResources(int round, std::string, int value);
+	void setYearlyResources(int year, std::string, int value);
+	void updateAllResources();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
 
@@ -271,7 +285,7 @@ private:
 	std::shared_ptr<GUIButton> mYearFiveLowerTechByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mYearFiveRaiseTechByFiveButton;
-	std::shared_ptr<GUIButton> mYearFiveRaiseTechByTenButton;   
+	std::shared_ptr<GUIButton> mYearFiveRaiseTechByTenButton;          
 	std::shared_ptr<GUIText>   mYearFiveTechText;
 
 	std::shared_ptr<GUIButton> mGoToNextSlideButton;

@@ -86,7 +86,7 @@ void Communist::propagandaInitialize()
 
 void Communist::setYearlyResources(int year, std::string key, int value)
 {
-	mYearVector[year-1][key] += value;
+	mYearVector[year-1][key] = value;
 }
 
 int Communist::getYearlyFood(int round)
@@ -445,7 +445,7 @@ void Communist::loadCommunistMusic()
 	const char* temp;
 	while (music != 0)
 	{
-		std::string tempName;
+		std::string tempName; 
 		if (temp = music->FirstChildElement("name")->GetText())
 		{
 			tempName = temp;
@@ -720,530 +720,187 @@ void Communist::chooseLeader()
 /*Initierar funktionerna för femårsplansknapparna. Egen funktion för att inte göra allting så grötigt.*/
 void Communist::fiveYearGuiFunctions()
 {
-	/*Food, år ett*/
-	mYearOneLowerFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) - 10;
-		if(amount >= 0)
-			mYearOneFoodText->setText(amount);
-	});
-	mYearOneLowerFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) - 5;
-		if(amount >= 0)
-			mYearOneFoodText->setText(amount);
-	});
-	mYearOneLowerFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) - 1;
-		if(amount >= 0)
-			mYearOneFoodText->setText(amount);
-	});
-	mYearOneRaiseFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) + 1;
-		mYearOneFoodText->setText(amount);
-	});
-	mYearOneRaiseFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) + 5;
-		mYearOneFoodText->setText(amount);
-	});
-	mYearOneRaiseFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneFoodText->getText()) + 10;
-		mYearOneFoodText->setText(amount);
-	});
+	mResourcesFoodButtons.push_back(mYearOneLowerFoodByTenButton);
+	mResourcesFoodButtons.push_back(mYearOneLowerFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearOneLowerFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearOneRaiseFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearOneRaiseFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearOneRaiseFoodByTenButton);
 
-	/*Food, år två*/
-	mYearTwoLowerFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) - 10;
-		if(amount >= 0)
-			mYearTwoFoodText->setText(amount);
-	});
-	mYearTwoLowerFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) - 5;
-		if(amount >= 0)
-			mYearTwoFoodText->setText(amount);
-	});
-	mYearTwoLowerFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) - 1;
-		if(amount >= 0)
-			mYearTwoFoodText->setText(amount);
-	});
-	mYearTwoRaiseFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) + 1;
-		mYearTwoFoodText->setText(amount);
-	});
-	mYearTwoRaiseFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) + 5;
-		mYearTwoFoodText->setText(amount);
-	});
-	mYearTwoRaiseFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoFoodText->getText()) + 10;
-		mYearTwoFoodText->setText(amount);
-	});
+	mResourcesFoodButtons.push_back(mYearTwoLowerFoodByTenButton);
+	mResourcesFoodButtons.push_back(mYearTwoLowerFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearTwoLowerFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearTwoRaiseFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearTwoRaiseFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearTwoRaiseFoodByTenButton);
 
-	/*Food, år tre*/
-	mYearThreeLowerFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) - 10;
-		if(amount >= 0)
-			mYearThreeFoodText->setText(amount);
-	});
-	mYearThreeLowerFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) - 5;
-		if(amount >= 0)
-			mYearThreeFoodText->setText(amount);
-	});
-	mYearThreeLowerFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) - 1;
-		if(amount >= 0)
-			mYearThreeFoodText->setText(amount);
-	});
-	mYearThreeRaiseFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) + 1;
-		mYearThreeFoodText->setText(amount);
-	});
-	mYearThreeRaiseFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) + 5;
-		mYearThreeFoodText->setText(amount);
-	});
-	mYearThreeRaiseFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeFoodText->getText()) + 10;
-		mYearThreeFoodText->setText(amount);
-	});
+	mResourcesFoodButtons.push_back(mYearThreeLowerFoodByTenButton);
+	mResourcesFoodButtons.push_back(mYearThreeLowerFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearThreeLowerFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearThreeRaiseFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearThreeRaiseFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearThreeRaiseFoodByTenButton);
+
+	mResourcesFoodButtons.push_back(mYearFourLowerFoodByTenButton);
+	mResourcesFoodButtons.push_back(mYearFourLowerFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearFourLowerFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearFourRaiseFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearFourRaiseFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearFourRaiseFoodByTenButton);
 	
-	/*Food, år fyra*/
-	mYearFourLowerFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) - 10;
-		if(amount >= 0)
-			mYearFourFoodText->setText(amount);
-	});
-	mYearFourLowerFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) - 5;
-		if(amount >= 0)
-			mYearFourFoodText->setText(amount);
-	});
-	mYearFourLowerFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) - 1;
-		if(amount >= 0)
-			mYearFourFoodText->setText(amount);
-	});
-	mYearFourRaiseFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) + 1;
-		mYearFourFoodText->setText(amount);
-	});
-	mYearFourRaiseFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) + 5;
-		mYearFourFoodText->setText(amount);
-	});
-	mYearFourRaiseFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourFoodText->getText()) + 10;
-		mYearFourFoodText->setText(amount);
-	});
+	mResourcesFoodButtons.push_back(mYearFiveLowerFoodByTenButton);
+	mResourcesFoodButtons.push_back(mYearFiveLowerFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearFiveLowerFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearFiveRaiseFoodByOneButton);
+	mResourcesFoodButtons.push_back(mYearFiveRaiseFoodByFiveButton);
+	mResourcesFoodButtons.push_back(mYearFiveRaiseFoodByTenButton);
 	
-	/*Food, år fem*/
-	mYearFiveLowerFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) - 10;
-		if(amount >= 0)
-			mYearFiveFoodText->setText(amount);
-	});
-	mYearFiveLowerFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) - 5;
-		if(amount >= 0)
-			mYearFiveFoodText->setText(amount);
-	});
-	mYearFiveLowerFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) - 1;
-		if(amount >= 0)
-			mYearFiveFoodText->setText(amount);
-	});
-	mYearFiveRaiseFoodByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) + 1;
-		mYearFiveFoodText->setText(amount);
-	});
-	mYearFiveRaiseFoodByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) + 5;
-		mYearFiveFoodText->setText(amount);
-	});
-	mYearFiveRaiseFoodByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveFoodText->getText()) + 10;
-		mYearFiveFoodText->setText(amount);
-	});
-	//-------------------------------------------------------------------------------
-	/*Goods, år ett*/
-	mYearOneLowerGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) - 10;
-		if(amount >= 0)
-			mYearOneGoodsText->setText(amount);
-	});
-	mYearOneLowerGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) - 5;
-		if(amount >= 0)
-			mYearOneGoodsText->setText(amount);
-	});
-	mYearOneLowerGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) - 1;
-		if(amount >= 0)
-			mYearOneGoodsText->setText(amount);
-	});
-	mYearOneRaiseGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) + 1;
-		mYearOneGoodsText->setText(amount);
-	});
-	mYearOneRaiseGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) + 5;
-		mYearOneGoodsText->setText(amount);
-	});
-	mYearOneRaiseGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneGoodsText->getText()) + 10;
-		mYearOneGoodsText->setText(amount);
-	});
+	mResourcesGoodsButtons.push_back(mYearOneLowerGoodsByTenButton);
+	mResourcesGoodsButtons.push_back(mYearOneLowerGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearOneLowerGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearOneRaiseGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearOneRaiseGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearOneRaiseGoodsByTenButton);
+
+	mResourcesGoodsButtons.push_back(mYearTwoLowerGoodsByTenButton);
+	mResourcesGoodsButtons.push_back(mYearTwoLowerGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearTwoLowerGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearTwoRaiseGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearTwoRaiseGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearTwoRaiseGoodsByTenButton);
 	
-	/*Goods, år två*/
-	mYearTwoLowerGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) - 10;
-		if(amount >= 0)
-			mYearTwoGoodsText->setText(amount);
-	});
-	mYearTwoLowerGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) - 5;
-		if(amount >= 0)
-			mYearTwoGoodsText->setText(amount);
-	});
-	mYearTwoLowerGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) - 1;
-		if(amount >= 0)
-			mYearTwoGoodsText->setText(amount);
-	});
-	mYearTwoRaiseGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) + 1;
-		mYearTwoGoodsText->setText(amount);
-	});
-	mYearTwoRaiseGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) + 5;
-		mYearTwoGoodsText->setText(amount);
-	});
-	mYearTwoRaiseGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoGoodsText->getText()) + 10;
-		mYearTwoGoodsText->setText(amount);
-	});
+	mResourcesGoodsButtons.push_back(mYearThreeLowerGoodsByTenButton);
+	mResourcesGoodsButtons.push_back(mYearThreeLowerGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearThreeLowerGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearThreeRaiseGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearThreeRaiseGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearThreeRaiseGoodsByTenButton);
+
+	mResourcesGoodsButtons.push_back(mYearFourLowerGoodsByTenButton);
+	mResourcesGoodsButtons.push_back(mYearFourLowerGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearFourLowerGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearFourRaiseGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearFourRaiseGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearFourRaiseGoodsByTenButton);
+
+	mResourcesGoodsButtons.push_back(mYearFiveLowerGoodsByTenButton);
+	mResourcesGoodsButtons.push_back(mYearFiveLowerGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearFiveLowerGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearFiveRaiseGoodsByOneButton);
+	mResourcesGoodsButtons.push_back(mYearFiveRaiseGoodsByFiveButton);
+	mResourcesGoodsButtons.push_back(mYearFiveRaiseGoodsByTenButton);
 	
-	/*Goods, år tre*/
-	mYearThreeLowerGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) - 10;
-		if(amount >= 0)
-			mYearThreeGoodsText->setText(amount);
-	});
-	mYearThreeLowerGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) - 5;
-		if(amount >= 0)
-			mYearThreeGoodsText->setText(amount);
-	});
-	mYearThreeLowerGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) - 1;
-		if(amount >= 0)
-			mYearThreeGoodsText->setText(amount);
-	});
-	mYearThreeRaiseGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) + 1;
-		mYearThreeGoodsText->setText(amount);
-	});
-	mYearThreeRaiseGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) + 5;
-		mYearThreeGoodsText->setText(amount);
-	});
-	mYearThreeRaiseGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeGoodsText->getText()) + 10;
-		mYearThreeGoodsText->setText(amount);
-	});
+	mResourcesTechButtons.push_back(mYearOneLowerTechByTenButton);
+	mResourcesTechButtons.push_back(mYearOneLowerTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearOneLowerTechByOneButton);
+	mResourcesTechButtons.push_back(mYearOneRaiseTechByOneButton);
+	mResourcesTechButtons.push_back(mYearOneRaiseTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearOneRaiseTechByTenButton);
 	
-	/*Goods, år fyra*/
-	mYearFourLowerGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) - 10;
-		if(amount >= 0)
-			mYearFourGoodsText->setText(amount);
-	});
-	mYearFourLowerGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) - 5;
-		if(amount >= 0)
-			mYearFourGoodsText->setText(amount);
-	});
-	mYearFourLowerGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) - 1;
-		if(amount >= 0)
-			mYearFourGoodsText->setText(amount);
-	});
-	mYearFourRaiseGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) + 1;
-		mYearFourGoodsText->setText(amount);
-	});
-	mYearFourRaiseGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) + 5;
-		mYearFourGoodsText->setText(amount);
-	});
-	mYearFourRaiseGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourGoodsText->getText()) + 10;
-		mYearFourGoodsText->setText(amount);
-	});
+	mResourcesTechButtons.push_back(mYearTwoLowerTechByTenButton);
+	mResourcesTechButtons.push_back(mYearTwoLowerTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearTwoLowerTechByOneButton);
+	mResourcesTechButtons.push_back(mYearTwoRaiseTechByOneButton);
+	mResourcesTechButtons.push_back(mYearTwoRaiseTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearTwoRaiseTechByTenButton);
 	
-	/*Goods, år fem*/
-	mYearFiveLowerGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) - 10;
-		if(amount >= 0)
-			mYearFiveGoodsText->setText(amount);
-	});
-	mYearFiveLowerGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) - 5;
-		if(amount >= 0)
-			mYearFiveGoodsText->setText(amount);
-	});
-	mYearFiveLowerGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) - 1;
-		if(amount >= 0)
-			mYearFiveGoodsText->setText(amount);
-	});
-	mYearFiveRaiseGoodsByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) + 1;
-		mYearFiveGoodsText->setText(amount);
-	});
-	mYearFiveRaiseGoodsByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) + 5;
-		mYearFiveGoodsText->setText(amount);
-	});
-	mYearFiveRaiseGoodsByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveGoodsText->getText()) + 10;
-		mYearFiveGoodsText->setText(amount);
-	});
-	//--------------------------------------------------------------------------------------
-	/*Tech, år ett*/
-	mYearOneLowerTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) - 10;
-		if(amount >= 0)
-			mYearOneTechText->setText(amount);
-	});
-	mYearOneLowerTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) - 5;
-		if(amount >= 0)
-			mYearOneTechText->setText(amount);
-	});
-	mYearOneLowerTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) - 1;
-		if(amount >= 0)
-			mYearOneTechText->setText(amount);
-	});
-	mYearOneRaiseTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) + 1;
-		mYearOneTechText->setText(amount);
-	});
-	mYearOneRaiseTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) + 5;
-		mYearOneTechText->setText(amount);
-	});
-	mYearOneRaiseTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearOneTechText->getText()) + 10;
-		mYearOneTechText->setText(amount);
-	});
+	mResourcesTechButtons.push_back(mYearThreeLowerTechByTenButton);
+	mResourcesTechButtons.push_back(mYearThreeLowerTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearThreeLowerTechByOneButton);
+	mResourcesTechButtons.push_back(mYearThreeRaiseTechByOneButton);
+	mResourcesTechButtons.push_back(mYearThreeRaiseTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearThreeRaiseTechByTenButton);
 	
-	/*Tech, år två*/
-	mYearTwoLowerTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) - 10;
-		if(amount >= 0)
-			mYearTwoTechText->setText(amount);
-	});
-	mYearTwoLowerTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) - 5;
-		if(amount >= 0)
-			mYearTwoTechText->setText(amount);
-	});
-	mYearTwoLowerTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) - 1;
-		if(amount >= 0)
-			mYearTwoTechText->setText(amount);
-	});
-	mYearTwoRaiseTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) + 1;
-		mYearTwoTechText->setText(amount);
-	});
-	mYearTwoRaiseTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) + 5;
-		mYearTwoTechText->setText(amount);
-	});
-	mYearTwoRaiseTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearTwoTechText->getText()) + 10;
-		mYearTwoTechText->setText(amount);
-	});
+	mResourcesTechButtons.push_back(mYearFourLowerTechByTenButton);
+	mResourcesTechButtons.push_back(mYearFourLowerTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearFourLowerTechByOneButton);
+	mResourcesTechButtons.push_back(mYearFourRaiseTechByOneButton);
+	mResourcesTechButtons.push_back(mYearFourRaiseTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearFourRaiseTechByTenButton);
 	
-	/*Tech, år tre*/
-	mYearThreeLowerTechByTenButton->setOnClickFunction([=]()
+	mResourcesTechButtons.push_back(mYearFiveLowerTechByTenButton);
+	mResourcesTechButtons.push_back(mYearFiveLowerTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearFiveLowerTechByOneButton);
+	mResourcesTechButtons.push_back(mYearFiveRaiseTechByOneButton);
+	mResourcesTechButtons.push_back(mYearFiveRaiseTechByFiveButton);
+	mResourcesTechButtons.push_back(mYearFiveRaiseTechByTenButton);
+
+	std::vector<std::shared_ptr<GUIText> > foodText;
+	std::vector<std::shared_ptr<GUIText> > goodsText;
+	std::vector<std::shared_ptr<GUIText> > techText;
+	foodText.push_back(mYearOneFoodText);
+	foodText.push_back(mYearTwoFoodText);
+	foodText.push_back(mYearThreeFoodText);
+	foodText.push_back(mYearFourFoodText);
+	foodText.push_back(mYearFiveFoodText);
+	goodsText.push_back(mYearOneGoodsText);
+	goodsText.push_back(mYearTwoGoodsText);
+	goodsText.push_back(mYearThreeGoodsText);
+	goodsText.push_back(mYearFourGoodsText);
+	goodsText.push_back(mYearFiveGoodsText);
+	techText.push_back(mYearOneTechText);
+	techText.push_back(mYearTwoTechText);
+	techText.push_back(mYearThreeTechText);
+	techText.push_back(mYearFourTechText);
+	techText.push_back(mYearFiveTechText);
+	for(int i = 0; i < 5; ++i)
 	{
-		int amount = stringToInt(mYearThreeTechText->getText()) - 10;
-		if(amount >= 0)
-			mYearThreeTechText->setText(amount);
-	});
-	mYearThreeLowerTechByFiveButton->setOnClickFunction([=]()
+		int amount = -10;
+		for(int j = 0; j < 6; ++j)
+		{
+			mResourcesFoodButtons[j + i*6]->setOnClickFunction([=]()
+			{
+				foodText[i]->setText(stringToInt(foodText[i]->getText()) + amount);
+				if(stringToInt(foodText[i]->getText()) < 0)
+					foodText[i]->setText(0);
+			});
+			if(j == 0 || j == 4)
+				amount += 5;
+			else if(j == 1 || j == 3)
+				amount += 4;
+			else
+				amount += 2;
+		}
+	}
+	for(int i = 0; i < 5; ++i)
 	{
-		int amount = stringToInt(mYearThreeTechText->getText()) - 5;
-		if(amount >= 0)
-			mYearThreeTechText->setText(amount);
-	});
-	mYearThreeLowerTechByOneButton->setOnClickFunction([=]()
+		int amount = -10;
+		for(int j = 0; j < 6; ++j)
+		{
+			mResourcesGoodsButtons[j + i*6]->setOnClickFunction([=]()
+			{
+				goodsText[i]->setText(stringToInt(goodsText[i]->getText()) + amount);
+				if(stringToInt(goodsText[i]->getText()) < 0)
+					goodsText[i]->setText(0);
+			});
+			if(j == 0 || j == 4)
+				amount += 5;
+			else if(j == 1 || j == 3)
+				amount += 4;
+			else
+				amount += 2;
+		}
+	}
+	for(int i = 0; i < 5; ++i)
 	{
-		int amount = stringToInt(mYearThreeTechText->getText()) - 1;
-		if(amount >= 0)
-			mYearThreeTechText->setText(amount);
-	});
-	mYearThreeRaiseTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeTechText->getText()) + 1;
-		mYearThreeTechText->setText(amount);
-	});
-	mYearThreeRaiseTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeTechText->getText()) + 5;
-		mYearThreeTechText->setText(amount);
-	});
-	mYearThreeRaiseTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearThreeTechText->getText()) + 10;
-		mYearThreeTechText->setText(amount);
-	});
-	
-	/*Tech, år fyra*/
-	mYearFourLowerTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) - 10;
-		if(amount >= 0)
-			mYearFourTechText->setText(amount);
-	});
-	mYearFourLowerTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) - 5;
-		if(amount >= 0)
-			mYearFourTechText->setText(amount);
-	});
-	mYearFourLowerTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) - 1;
-		if(amount >= 0)
-			mYearFourTechText->setText(amount);
-	});
-	mYearFourRaiseTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) + 1;
-		mYearFourTechText->setText(amount);
-	});
-	mYearFourRaiseTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) + 5;
-		mYearFourTechText->setText(amount);
-	});
-	mYearFourRaiseTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFourTechText->getText()) + 10;
-		mYearFourTechText->setText(amount);
-	});
-	
-	/*Tech, år fem*/
-	mYearFiveLowerTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) - 10;
-		if(amount >= 0)
-			mYearFiveTechText->setText(amount);
-	});
-	mYearFiveLowerTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) - 5;
-		if(amount >= 0)
-			mYearFiveTechText->setText(amount);
-	});
-	mYearFiveLowerTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) - 1;
-		if(amount >= 0)
-			mYearFiveTechText->setText(amount);
-	});
-	mYearFiveRaiseTechByOneButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) + 1;
-		mYearFiveTechText->setText(amount);
-	});
-	mYearFiveRaiseTechByFiveButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) + 5;
-		mYearFiveTechText->setText(amount);
-	});
-	mYearFiveRaiseTechByTenButton->setOnClickFunction([=]()
-	{
-		int amount = stringToInt(mYearFiveTechText->getText()) + 10;
-		mYearFiveTechText->setText(amount);
-	});
+		int amount = -10;
+		for(int j = 0; j < 6; ++j)
+		{
+			mResourcesTechButtons[j + i*6]->setOnClickFunction([=]()
+			{
+				techText[i]->setText(stringToInt(techText[i]->getText()) + amount);
+				if(stringToInt(techText[i]->getText()) < 0)
+					techText[i]->setText(0);
+			});
+			if(j == 0 || j == 4)
+				amount += 5;
+			else if(j == 1 || j == 3)
+				amount += 4;
+			else
+				amount += 2;
+		}
+	}
+
 	//--------------------------------------------------------------------------
 	/*Taxes, år ett*/
 	mYearOneLowerTaxesButton->setOnClickFunction([=]()
@@ -1371,7 +1028,7 @@ void Communist::initializeGuiFunctions()
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
-
+		updateAllResources();
 		mTaxesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 	});
@@ -1379,7 +1036,7 @@ void Communist::initializeGuiFunctions()
 	mResourcesCloseButton->setOnClickFunction([=]()				
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
-
+		updateAllResources();
 		mResourcesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 	});
@@ -1542,18 +1199,63 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
+<<<<<<< HEAD
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
 		mCommunistGeneralButton->setScale(0.53, 0.53);
 		mTaxesWindow->setVisible(true);
 		mTaxesWindow->setEnabled(true, true);
 		mCommunistFiveYearPlanButton->setEnabled(true, true);
+=======
+		buyPropagandaFood(getRound());
+		std::cout << "Food: " << getYearlyFood(mRound) << std::endl;
+	});
+	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
+	{
+		buyPropagandaGoods(getRound());
+		std::cout << "Goods: " << getYearlyGoods(mRound) << std::endl;
+	});
+	mPropagandaBuyTechButton->setOnClickFunction([=]()
+	{
+		buyPropagandaTech(getRound());
+		std::cout << "Tech: " << getYearlyTech(mRound) << std::endl;
+>>>>>>> 8866ca310d1d365c894982de22b613116b8930e6
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
 	{
 		GameManager::getInstance()->nextRound();
 	});
+}
+
+void Communist::updateAllResources()
+{
+	/*År ett*/
+	setYearlyResources(1, "food", stringToInt(mYearOneFoodText->getText()));
+	setYearlyResources(1, "goods", stringToInt(mYearOneGoodsText->getText()));
+	setYearlyResources(1, "tech", stringToInt(mYearOneTechText->getText()));
+	setYearlyResources(1, "taxes", stringToInt(mYearOneTaxesText->getText()));
+	/*År två*/
+	setYearlyResources(2, "food", stringToInt(mYearTwoFoodText->getText()));
+	setYearlyResources(2, "goods", stringToInt(mYearTwoGoodsText->getText()));
+	setYearlyResources(2, "tech", stringToInt(mYearTwoTechText->getText()));
+	setYearlyResources(2, "taxes", stringToInt(mYearTwoTaxesText->getText()));
+	/*År tre*/
+	setYearlyResources(3, "food", stringToInt(mYearThreeFoodText->getText()));
+	setYearlyResources(3, "goods", stringToInt(mYearThreeGoodsText->getText()));
+	setYearlyResources(3, "tech", stringToInt(mYearThreeTechText->getText()));
+	setYearlyResources(3, "taxes", stringToInt(mYearThreeTaxesText->getText()));
+	/*År fyra*/
+	setYearlyResources(4, "food", stringToInt(mYearFourFoodText->getText()));
+	setYearlyResources(4, "goods", stringToInt(mYearFourGoodsText->getText()));
+	setYearlyResources(4, "tech", stringToInt(mYearFourTechText->getText()));
+	setYearlyResources(4, "taxes", stringToInt(mYearFourTaxesText->getText()));
+	/*År fem*/
+	setYearlyResources(5, "food", stringToInt(mYearFiveFoodText->getText()));
+	setYearlyResources(5, "goods", stringToInt(mYearFiveGoodsText->getText()));
+	setYearlyResources(5, "tech", stringToInt(mYearFiveTechText->getText()));
+	setYearlyResources(5, "taxes", stringToInt(mYearFiveTaxesText->getText()));
+	
 }
 
 void Communist::showGUI()
