@@ -75,40 +75,51 @@ private:
 	}
 	
 
-	std::shared_ptr<President> mGeneral;
-	std::shared_ptr<President> mFirstGeneral;
-	std::shared_ptr<President> mSecondGeneral;
-	std::shared_ptr<President> mThirdGeneral;
-	std::shared_ptr<President> mFourthGeneral;
-	std::shared_ptr<President> mFifthGeneral;
-
 	std::vector<std::map<std::string, int>> mYearVector;
+	
+	std::vector<sf::Texture*> PropagandaFood;
+	std::vector<sf::Texture*> PropagandaGoods;
+	std::vector<sf::Texture*> PropagandaTech;
+
+	// Skapar två std::map. En dit alla knappar för kommunisterna läggs in i samt 
+	// en dit alla kommunisternas fönster läggs in i. Detta sker via hämtade värden
+	// från XML dokument samt genom ResourceHandler  
+	//  Av: Jon Wahlström 2013-01-31
+																		
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistButtons;
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
+	std::map<std::string, std::shared_ptr<sf::Music> >			   CommunistMusic;
 
 	void fiveYearInitialize();
 	void setYearlyResources(int round, std::string, int value);
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
 
-	/*Skapar två std::map. En dit alla knappar för kommunisterna läggs in i samt 
-	  en dit alla kommunisternas fönster läggs in i. Detta sker via hämtade värden
-	  från XML dokument samt genom ResourceHandler  
-	  Av: Jon Wahlström 2013-01-31
-																				*/
-	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistButtons;
-	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
-	std::map<std::string, std::shared_ptr<sf::Music> > CommunistMusic;
-	
+	void propagandaInitialize();
+
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void initializeGuiFunctions();
 	void initializeCommunistWindow();
 	void loadCommunistMusic();
+
+
+	std::shared_ptr<President> mGeneral;
+	std::shared_ptr<President> mFirstGeneral;
+	std::shared_ptr<President> mSecondGeneral;
+	std::shared_ptr<President> mThirdGeneral;
+	std::shared_ptr<President> mFourthGeneral;
+	std::shared_ptr<President> mFifthGeneral;
  
 	//President	*mPresident;
 
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
+	std::shared_ptr<GUIText> mBuyNuclearText;
+	std::shared_ptr<GUIText> mBuySpaceProgramText;
+	std::shared_ptr<GUIText> mBuySpyNetworkText;
+
 	std::shared_ptr<GUIText> mFoodText;	
 	std::shared_ptr<GUIText >mGoodsText;  
 	std::shared_ptr<GUIText> mTechText;	
@@ -275,6 +286,7 @@ private:
 	std::shared_ptr<GUIButton> mPropagandaBuyFoodButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyGoodsButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyTechButton;
+	std::shared_ptr<GUIButton> mShowBoughtPropaganda;
 	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFirstYearButton;
 	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFirstYearButton;
 	//std::shared_ptr<GUIButton> mPropagandaBuyTechFristYearButton;
@@ -304,6 +316,10 @@ private:
 	std::shared_ptr<GUIButton> mUpgradeSpaceProgramButton;
 	std::shared_ptr<GUIButton> mUpgradeSpyNetworkButton;
 	std::shared_ptr<GUIButton> mUpgradeCloseButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeNuclearWeaponButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeSpaceProgramButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeSpyNetworkButton;   
+
 
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
@@ -325,6 +341,7 @@ private:
 	std::shared_ptr<GUIButton> mGoToNextPortraitButton;
 	std::shared_ptr<GUIButton> mGoToPreviousPortraitButton;
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
+	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
 
 

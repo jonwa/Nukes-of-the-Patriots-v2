@@ -16,8 +16,8 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	MenuMusic["MainMenuTrack"]->play();
-	MenuMusic["MainMenuTrack"]->setLoop(true);
+	//MenuMusic["MainMenuTrack"]->play();
+	//MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
 
@@ -260,6 +260,7 @@ void Menu::initializeGuiFuctions()
 	/*när spelaren väljer att spela kapitalist */
 	mTeamCapitalistButton->setOnClickFunction([=]()		
 	{ 
+		//mTeamCapitalistButton->setTexture(ButtonPos["TeamCapitalistIsPressed"]);
 		mParentWindow->setVisible(false); 
 		MenuMusic["MainMenuTrack"]->stop(); 
 		GameManager::getInstance()->init(1952); // initierar första året
@@ -268,9 +269,18 @@ void Menu::initializeGuiFuctions()
 	/*när spelaren väljer att spela kommunist*/
 	mTeamCommunistButton->setOnClickFunction([=]()		
 	{ 
+		//mTeamCommunistButton->setTexture(ButtonPos["TeamCommunistIsPressed"]);
 		mParentWindow->setVisible(false); 
 		MenuMusic["MainMenuTrack"]->stop();
 		GameManager::getInstance()->init(1952);
+	});
+	mCapitalistOkayButton->setOnClickFunction([=]()
+	{
+		
+	});
+	mCommunistOkayButton->setOnClickFunction([=]()
+	{
+		
 	});
 
 

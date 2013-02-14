@@ -39,6 +39,7 @@ Communist::Communist()
 	initializeGuiFunctions();
 	
 	fiveYearInitialize();
+	propagandaInitialize();
 }
 
 
@@ -68,6 +69,19 @@ void Communist::openFiveYearPlan()
 		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 		mTaxesWindow->setVisible(true);
 	}
+}
+
+void Communist::propagandaInitialize()
+{
+	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodOne")));
+	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodTwo")));
+	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodThree")));
+	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsOne")));
+	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsTwo")));
+	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsThree")));
+	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechOne")));
+	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechTwo")));
+	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechThree")));
 }
 
 void Communist::setYearlyResources(int year, std::string key, int value)
@@ -236,7 +250,7 @@ void Communist::buyPropagandaFood(int round)
 	resourcesTotal += getYearlyGoods(round);
 	resourcesTotal += getYearlyTech(round);
 
-	int percent = mFood/resourcesTotal;
+	float percent = mFood/resourcesTotal;
 	percent*=100;
 
 	for(int i=0;i<10;i++)
@@ -639,6 +653,7 @@ void Communist::initializeCommunistWindow()
 	mPropagandaBuyTechButton			= GUIButton::create(CommunistButtons["PropagandaBuyTech"], mPropagandaWindowFirst);
 	mPropagandaWindowFirstCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowFirst"], mPropagandaWindowFirst);
 	mPropagandaWindowSecondCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowSecond"], mPropagandaWindowSecond);
+	mShowBoughtPropaganda				= GUIButton::create(CommunistButtons["ShowPropaganda"], mPropagandaWindowSecond);
 	mPropagandaWindowFirst->setVisible(false);
 	mPropagandaWindowSecond->setVisible(false);
 
@@ -648,6 +663,12 @@ void Communist::initializeCommunistWindow()
 	mUpgradeSpaceProgramButton			= GUIButton::create(CommunistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
 	mUpgradeSpyNetworkButton			= GUIButton::create(CommunistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CommunistButtons["CloseUpgrade"], mUpgradeWindow);
+	mCancelUpgradeNuclearWeaponButton	= GUIButton::create(CommunistButtons["CancelUpgradeNuclearWeapon"], mUpgradeWindow);
+	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
+	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	/*Export GUI Window med knappar*/
@@ -671,6 +692,7 @@ void Communist::initializeCommunistWindow()
 	mGoToNextPortraitButton				= GUIButton::create(CommunistButtons["GoToNextPortrait"], mChooseGeneralWindow);
 	mGoToPreviousPortraitButton			= GUIButton::create(CommunistButtons["GoToPreviousPortrait"], mChooseGeneralWindow);
 	mCloseGeneralWindow					= GUIButton::create(CommunistButtons["CloseGeneral"], mChooseGeneralWindow);
+	mClosePickedGeneralWindow			= GUIButton::create(CommunistButtons["ClosePickedGeneral"], mPickedGeneralWindow);
 	//mChooseGeneralWindow->setVisible(false);
 	
 	chooseLeader();
@@ -1300,6 +1322,13 @@ void Communist::initializeGuiFunctions()
 		mCommunistMainWindow->setEnabled(false, true);
 		mPropagandaWindowFirst->setEnabled(true, true);
 
+		mPropagandaBuyFoodButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPropagandaBuyFoodButton->getRectangle(), PropagandaFood[Randomizer::getInstance()->randomNr(PropagandaFood.size(), 0)]));
+		mPropagandaBuyGoodsButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPropagandaBuyGoodsButton->getRectangle(), PropagandaGoods[Randomizer::getInstance()->randomNr(PropagandaGoods.size(), 0)]));
+		mPropagandaBuyTechButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPropagandaBuyTechButton->getRectangle(), PropagandaTech[Randomizer::getInstance()->randomNr(PropagandaTech.size(), 0)]));
+
 		mPropagandaWindowFirst->setVisible(true); 
 		mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
 	});
@@ -1354,13 +1383,99 @@ void Communist::initializeGuiFunctions()
 		mResourcesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 	});
-
+	/*Stänger propagandafönster nummer ett*/
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
 
 		mPropagandaWindowFirst->setVisible(false);
 		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
+	});
+	/*Stänger propagandafönster nummer två*/
+	mPropagandaWindowSecondCloseButton->setOnClickFunction([=]()
+	{
+		
+		mPropagandaWindowFirst->setEnabled(true, true);
+		mPropagandaWindowSecond->setVisible(false);
+		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
+	});
+
+	mPropagandaBuyFoodButton->setOnClickFunction([=]()
+	{
+		mPropagandaWindowSecond->setEnabled(true, true);
+		//buyPropagandaFood(getRound());
+
+		mPropagandaWindowFirst->setEnabled(false, true);
+		mPropagandaWindowSecond->setVisible(true);
+
+		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyFoodButton->getTexture()));
+		mShowBoughtPropaganda->setScale(0.7, 0.7);
+
+		//std::cout << "Food: " << mFood << std::endl;
+	});
+	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
+	{
+		mPropagandaWindowSecond->setEnabled(true, true);
+		//buyPropagandaGoods(getRound());
+
+		mPropagandaWindowFirst->setEnabled(false, true);
+		mPropagandaWindowSecond->setVisible(true);
+
+		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyGoodsButton->getTexture()));
+		mShowBoughtPropaganda->setScale(0.7, 0.7);
+		//std::cout << "Goods: " << mGoods << std::endl;
+	});
+	mPropagandaBuyTechButton->setOnClickFunction([=]()
+	{
+		mPropagandaWindowSecond->setEnabled(true, true);
+		//buyPropagandaTech(getRound());
+
+		mPropagandaWindowFirst->setEnabled(false, true);
+		mPropagandaWindowSecond->setVisible(true);
+
+		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyTechButton->getTexture()));
+		mShowBoughtPropaganda->setScale(0.7, 0.7);
+		//std::cout << "Tech: " << mTech << std::endl;
+	});
+
+	/*Upgrade och cancel knappar för nuclear*/
+	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
+	{ 
+		int amount = stringToInt(mBuyNuclearText->getText());
+		++amount;
+		mBuyNuclearText->setText(amount);
+	});		
+	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
+	{
+		mBuyNuclearText->setText(mNuclearText->getText());
+	});
+			
+	/*Upgrade och cancel knappar för spaceprogram*/
+	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
+	{
+		int amount = stringToInt(mBuySpaceProgramText->getText());
+		++amount;
+		mBuySpaceProgramText->setText(amount);
+	});		
+	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
+	{
+		mBuySpaceProgramText->setText(mSpaceText->getText());
+	});
+
+	/*Upgrade och cancel knappar för spynetwork*/
+	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	 
+	{
+		int amount = stringToInt(mBuySpyNetworkText->getText());
+		++amount;
+		mBuySpyNetworkText->setText(amount);
+		
+	});		
+	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
+	{
+		mBuySpyNetworkText->setText(mSpyText->getText());
 	});
 
 	/*Stänger ned Upgradefönstret*/
@@ -1416,46 +1531,23 @@ void Communist::initializeGuiFunctions()
 	{
 		mChooseGeneralWindow->setVisible(false);
 		mPickedGeneralWindow->setVisible(true);
+		mPickedGeneralWindow->setEnabled(true, true);
 
 		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
 
 		mPickedGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture())); 
 
-		/**/
-		std::shared_ptr<GUIElement> _test = mPickedGeneralWindow;
-		std::shared_ptr<GUIButton> _generalButton = mCommunistGeneralButton;
-		std::shared_ptr<President> _general = mGeneral;
-		std::shared_ptr<GUIWindow> _fiveYearPlan = mTaxesWindow;
-		std::shared_ptr<GUIButton> _fiveYearPlanButton = mCommunistFiveYearPlanButton;
-		
-		Timer::setTimer([=]()
-		{
-			_test->setVisible(false);
-			//_fiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
-			_generalButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_generalButton->getRectangle(), _general->getTexture()));
-			_generalButton->setScale(0.53, 0.53);
-			_fiveYearPlan->setVisible(true);
-			_fiveYearPlan->setEnabled(true, true);
-				
-		}, 
-			5000, 1);//antal millisekunder fönstret visas
 	});
-
-	mPropagandaBuyFoodButton->setOnClickFunction([=]()
+	/*Stänger ner fönster som visar vilken general som blivit vald*/
+	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
-		buyPropagandaFood(getRound());
-		std::cout << "Food: " << mFood << std::endl;
-	});
-	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
-	{
-		buyPropagandaGoods(getRound());
-		std::cout << "Goods: " << mGoods << std::endl;
-	});
-	mPropagandaBuyTechButton->setOnClickFunction([=]()
-	{
-		buyPropagandaTech(getRound());
-		std::cout << "Tech: " << mTech << std::endl;
+		mPickedGeneralWindow->setVisible(false);
+		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
+		mCommunistGeneralButton->setScale(0.53, 0.53);
+		mTaxesWindow->setVisible(true);
+		mTaxesWindow->setEnabled(true, true);
+		mCommunistFiveYearPlanButton->setEnabled(true, true);
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	

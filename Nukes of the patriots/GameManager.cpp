@@ -260,3 +260,18 @@ void GameManager::nextRound()
 	startRound();
 }
 
+
+void GameManager::loadWindowPosition()
+{
+	
+}
+
+void GameManager::loadButtonPosition()
+{
+
+}
+
+void GameManager::initializeGuiFunctions()
+{
+
+}
