@@ -21,6 +21,7 @@ public:
 	int				getAlpha()const;
 	bool			getMouseIsInside()const;
 	bool			isEnabled()const;
+	bool			isSelected()const;
 
 	void			init();
 	void			setX(float x);
@@ -31,6 +32,7 @@ public:
 	void			setAlpha(int alpha);
 	void			setMouseIsInside(bool inside);
 	void			setEnabled(bool enabled, bool effectChildren = false);
+	void			setSelected(bool selected);
 	sf::FloatRect	getRectangle();
 
 	void			addChild(std::shared_ptr<GUIElement> guiElement);
@@ -41,16 +43,17 @@ public:
 	void			setOnClickFunction(std::function<void()>);
 	void			setMouseEnterFunction(std::function<void ()>);
 	void			setMouseLeaveFunction(std::function<void ()>);
-	//virtual bool	update(sf::RenderWindow &window);
+	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	bool			onClick(sf::RenderWindow *window);
 	bool			onMove(sf::RenderWindow *window);
 	virtual bool	render(sf::RenderWindow *window) = 0;
+	virtual void	onGUIClick(int mouseX, int mouseY){};
 	void			tick();
 	virtual			~GUIElement();
 protected:
 	sf::FloatRect mRectangle;
 	int mAlpha;
-	bool mVisible, mMouseInside, mEnabled;
+	bool mVisible, mMouseInside, mEnabled, mSelected;
 	std::shared_ptr<GUIElement> mParent;
 	GUIType mGUIType;
 

@@ -69,6 +69,8 @@ private:
 
 	int stringToInt(std::string str)
 	{
+		if(str.size() == 0)
+			return 0;
 		return atoi(str.c_str());
 	}
 

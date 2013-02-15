@@ -10,7 +10,8 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mCallClickFunc(false), 
 	mCallMouseEnterFunc(false),
 	mCallMouseLeaveFunc(false),
-	mEnabled(true)
+	mEnabled(true),
+	mSelected(false)
 {
 }
 
@@ -32,7 +33,6 @@ void GUIElement::init()
 		mParent->addChild(getPtr());
 		setX(mRectangle.left += mParent->mRectangle.left);
 		setY(mRectangle.top += mParent->mRectangle.top);
-		//setVisible(mParent->getVisible());
 	}
 }
 
@@ -99,6 +99,11 @@ bool GUIElement::isEnabled()const
 	return mEnabled;
 }
 
+bool GUIElement::isSelected()const
+{
+	return mSelected;
+}
+
 sf::FloatRect GUIElement::getRectangle()
 {
 	return mRectangle;
@@ -151,6 +156,11 @@ void GUIElement::setAlpha(int alpha)
 	mAlpha = alpha; 
 }
 
+void GUIElement::setSelected(bool selected)
+{
+	mSelected = selected;
+}
+
 bool GUIElement::onClick(sf::RenderWindow *window)
 {
 	bool visible = mVisible;
@@ -168,9 +178,13 @@ bool GUIElement::onClick(sf::RenderWindow *window)
 	// Check if mouse is colliding with gui element
 	if(mEnabled && mRectangle.contains(mousePos.x, mousePos.y))
 	{
+		mSelected = true;
+		onGUIClick(mousePos.x, mousePos.y);
 		if(mOnClickFunction != nullptr)
 			mCallClickFunc = true;
 	}
+	else
+		mSelected = false;
 
 	if(!mChilds.empty())
 	{
@@ -227,6 +241,18 @@ bool GUIElement::onMove(sf::RenderWindow *window)
 		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->onMove(window);
+		}
+	}
+	return true;
+}
+
+bool GUIElement::update(sf::RenderWindow *window, sf::Event event)
+{
+	if(!mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->update(window, event);
 		}
 	}
 	return true;
