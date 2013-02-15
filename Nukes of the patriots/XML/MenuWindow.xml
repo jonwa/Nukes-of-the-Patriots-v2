@@ -25,12 +25,12 @@
 		<image>Menu/5_bg</image>
 	</window>
 	<window>
-		<name>PickTeam</name>
-		<xPos>0</xPos>
+		<name>ChooseTeam</name>
+		<xPos>162</xPos>
 		<yPos>0</yPos>
-		<width>0</width>
-		<height>0</height>
-		<image>Menu/Team-background-screen</image>
+		<width>700</width>
+		<height>456</height>
+		<image>Menu/choose_team</image>
 	</window>
 	<window>
 		<name>ChoosePresident</name>

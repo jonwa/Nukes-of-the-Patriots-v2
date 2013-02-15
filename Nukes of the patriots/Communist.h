@@ -15,7 +15,6 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
-#include <SFML\Audio\Music.hpp>
 
 
 class President;
@@ -23,6 +22,7 @@ class GUIElement;
 class GUIButton;
 class GUIWindow;
 class GUIText;
+class GUIEditField;
 class Randomizer;
 
 
@@ -56,7 +56,6 @@ public:
 	void		buyPropagandaTech(int round);
 
 	void		chooseLeader();
-	void		playMusic();
 
 	void showGUI();
 	void hideGUI();
@@ -96,13 +95,11 @@ private:
 																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
-	std::map<std::string, std::shared_ptr<sf::Music> > CommunistMusic;
 	
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void initializeGuiFunctions();
 	void initializeCommunistWindow();
-	void loadCommunistMusic();
  
 	//President	*mPresident;
 
@@ -313,6 +310,9 @@ private:
 	std::shared_ptr<GUIButton> mExportRaiseGoodsButton;
 	std::shared_ptr<GUIButton> mExportLowerTechButton;
 	std::shared_ptr<GUIButton> mExportRaiseTechButton;
+	std::shared_ptr<GUIEditField> mExportFoodPrice;
+	std::shared_ptr<GUIEditField> mExportGoodsPrice;
+	std::shared_ptr<GUIEditField> mExportTechPrice;
 	std::shared_ptr<GUIButton> mExportCloseButton;
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;

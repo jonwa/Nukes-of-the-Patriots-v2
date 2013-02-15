@@ -79,6 +79,7 @@ void GUIManager::update(sf::Event event)
 			mGuiElements[i]->onClick(mWindow);
 		if(moved)
 			mGuiElements[i]->onMove(mWindow);
+		mGuiElements[i]->update(mWindow, event);
 	}
 }
 

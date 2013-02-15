@@ -29,6 +29,8 @@ public:
 	
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
+	std::shared_ptr<SuperPower>					getCapitalist();
+	std::shared_ptr<SuperPower>					getCommunist();
 	void										init(int year);
 private:
 	static GameManager* mInstance;

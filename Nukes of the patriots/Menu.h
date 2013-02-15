@@ -4,6 +4,8 @@
 #include "GUIElement.h"
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include "GUIEditField.h"
+#include "GUIText.h"
 #include <memory>
 #include <map>
 
@@ -21,6 +23,7 @@ public:
 	~Menu();
 
 private:
+	bool mCapitalistTeamChosen, mCommunistTeamChosen;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > WindowPos;
 	std::map<std::string, std::shared_ptr<sf::Music> > MenuMusic;
@@ -37,7 +40,7 @@ private:
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
 	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
 	//std::shared_ptr<GUIWindow> mSplashScreenWindow;
-	std::shared_ptr<GUIWindow> mPickTeamWindow;
+	std::shared_ptr<GUIWindow> mChooseTeamWindow;
 
 	std::shared_ptr<GUIButton> mStartNewGameButton;
 	std::shared_ptr<GUIButton> mLoadGameButton;
@@ -45,8 +48,8 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
-	std::shared_ptr<GUIButton> mTeamCapitalistButton;
-	std::shared_ptr<GUIButton> mTeamCommunistButton;
+	std::shared_ptr<GUIEditField> mCapitalistNameField;
+	std::shared_ptr<GUIEditField> mCommunistNameField;
 	std::shared_ptr<GUIButton> mCapitalistOkayButton;
 	std::shared_ptr<GUIButton> mCommunistOkayButton;
 

@@ -10,7 +10,8 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mCallClickFunc(false), 
 	mCallMouseEnterFunc(false),
 	mCallMouseLeaveFunc(false),
-	mEnabled(true)
+	mEnabled(true),
+	mSelected(false)
 {
 }
 
@@ -32,7 +33,6 @@ void GUIElement::init()
 		mParent->addChild(getPtr());
 		setX(mRectangle.left += mParent->mRectangle.left);
 		setY(mRectangle.top += mParent->mRectangle.top);
-		//setVisible(mParent->getVisible());
 	}
 }
 
@@ -61,10 +61,28 @@ float	GUIElement::getX()const
 { 
 	return mRectangle.left; 
 }
+
 float	GUIElement::getY()const
 { 
 	return mRectangle.top; 
 }
+
+float GUIElement::getLocalX()const
+{ 
+	float x = mRectangle.left;
+	if(mParent != NULL)
+		x -= mParent->getX();
+	return x; 
+}
+
+float GUIElement::getLocalY()const
+{ 
+	float y = mRectangle.top;
+	if(mParent != NULL)
+		y -= mParent->getY();
+	return y; 
+}
+
 float	GUIElement::getWidth()const
 { 
 	return mRectangle.width; 
@@ -97,6 +115,11 @@ bool GUIElement::getMouseIsInside()const
 bool GUIElement::isEnabled()const
 {
 	return mEnabled;
+}
+
+bool GUIElement::isSelected()const
+{
+	return mSelected;
 }
 
 sf::FloatRect GUIElement::getRectangle()
@@ -151,6 +174,11 @@ void GUIElement::setAlpha(int alpha)
 	mAlpha = alpha; 
 }
 
+void GUIElement::setSelected(bool selected)
+{
+	mSelected = selected;
+}
+
 bool GUIElement::onClick(sf::RenderWindow *window)
 {
 	bool visible = mVisible;
@@ -164,13 +192,16 @@ bool GUIElement::onClick(sf::RenderWindow *window)
 		parent = parent->getParent();
 	}
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
-
 	// Check if mouse is colliding with gui element
 	if(mEnabled && mRectangle.contains(mousePos.x, mousePos.y))
 	{
+		mSelected = true;
+		onGUIClick(mousePos.x, mousePos.y);
 		if(mOnClickFunction != nullptr)
 			mCallClickFunc = true;
 	}
+	else
+		mSelected = false;
 
 	if(!mChilds.empty())
 	{
@@ -227,6 +258,18 @@ bool GUIElement::onMove(sf::RenderWindow *window)
 		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->onMove(window);
+		}
+	}
+	return true;
+}
+
+bool GUIElement::update(sf::RenderWindow *window, sf::Event event)
+{
+	if(!mChilds.empty())
+	{
+		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
+		{
+			mChilds[i]->update(window, event);
 		}
 	}
 	return true;

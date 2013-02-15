@@ -4,6 +4,8 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIText.h"
+#include "GUIEditField.h"
+#include "GUIImage.h"
 #include "tinyxml2.h"
 #include "President.h"
 #include "ResourceHandler.h"
@@ -13,6 +15,7 @@
 #include "GameManager.h"
 #include "Timer.h"
 #include "TimerHandler.h"
+#include "Communist.h"
 #include <SFML\Window\Mouse.hpp>
 
 static int foodCost		= 10;
@@ -21,13 +24,8 @@ static int techCost		= 30;
 static int taxChange	= 5;
 static bool activateWindow = false;
 
-
-
 Capitalist::Capitalist() :
-	mPresident(nullptr),
-	mCurrentTax(mTaxes),
-	mMinTax(mTaxes-5),
-	mMaxTax(mTaxes+5)
+	mPresident(nullptr)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -54,24 +52,20 @@ std::shared_ptr<President> Capitalist::getPresident()
 
 void Capitalist::update()
 {
-
-	if( (mRound-1) % 4 == 0 ) 
+	if((mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
 	}
-	mCurrentTax = mTaxes;
-	mMaxTax = mCurrentTax + 5;
-	mMinTax = mCurrentTax - 5;
 }
 
 void Capitalist::setTaxesCost(int tax)
 {
+	mTaxDecreased = (tax < mTaxes);
 	mTaxes = tax;
 }
 
 void Capitalist::setPresident(std::shared_ptr<President> president)
 {
-
 	mPresident = president;
 
 	foodCost	+= president->getFoodPriceModifier();
@@ -313,7 +307,7 @@ void Capitalist::loadWindowPosition()
 void Capitalist::loadCapitalistMusic()
 {
 	tinyxml2::XMLDocument doc;
-	doc.LoadFile("XML/CapitalistSounds.xml");
+	doc.LoadFile("XML/CapitalistMusic.xml");
 
 	if(doc.Error())
 		std::cout << "Fel! Capitalist::loadCapitalistMusic";
@@ -360,7 +354,7 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
-	mCapitalistExportButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
+	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
 	mCapitalistMainWindow->setVisible(false);
 
@@ -377,11 +371,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
-	/*Text för skatten*/
-	mTaxesText							= GUIText::create(sf::FloatRect(300, 50, 40, 40), intToString(mTaxes), mCapitalistMainWindow);
-	mChangeTaxesText					= GUIText::create(sf::FloatRect(93, 70, 40, 40), intToString(getTaxes()), mTaxesWindow);
-	
-	/*Resursfönster med knappar*/
+
 	mResourceWindow						= GUIWindow::create(CapitalistWindows["CapitalistResourceWindow"], mCapitalistMainWindow);
 	mLowerFoodByTenButton				= GUIButton::create(CapitalistButtons["LowerFoodByTen"], mResourceWindow);
 	mLowerFoodByFiveButton				= GUIButton::create(CapitalistButtons["LowerFoodByFive"], mResourceWindow);
@@ -404,7 +394,8 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
 	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
-	/*Text för resurser*/
+
+	
 	mBuyFoodText						= GUIText::create(sf::FloatRect(89, 57, 40, 40), "0",mResourceWindow);
 	mBuyGoodsText						= GUIText::create(sf::FloatRect(269, 57, 40, 40), "0", mResourceWindow);
 	mBuyTechText						= GUIText::create(sf::FloatRect(449, 57, 40, 40), "0", mResourceWindow);
@@ -414,13 +405,12 @@ void Capitalist::initializeCapitalistWindow()
 	//mTotalResourcesCost					= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
-	/*Uppgraderingsfönster med knappar*/
 	mUpgradeWindow						= GUIWindow::create(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
 	mUpgradeNuclearWeaponButton		    = GUIButton::create(CapitalistButtons["UpgradeNuclearWeapon"], mUpgradeWindow);
 	mUpgradeSpaceProgramButton			= GUIButton::create(CapitalistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
 	mUpgradeSpyNetworkButton			= GUIButton::create(CapitalistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
-	/*Text för uppgradering*/
+
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
 	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
 	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
@@ -434,8 +424,45 @@ void Capitalist::initializeCapitalistWindow()
 	mExportLowerTechButton				= GUIButton::create(CapitalistButtons["LowerTech"], mExportWindow);
 	mExportRaiseTechButton				= GUIButton::create(CapitalistButtons["RaiseTech"], mExportWindow);
 	mExportCloseButton					= GUIButton::create(CapitalistButtons["CloseExport"], mExportWindow);
+
+	mExportFoodPriceEditField			= GUIEditField::create(sf::FloatRect(509, 51, 100, 50), "0", true, mExportWindow);
+	mExportGoodsPriceEditField			= GUIEditField::create(sf::FloatRect(509, 110, 100, 50), "0", true, mExportWindow);
+	mExportTechPriceEditField			= GUIEditField::create(sf::FloatRect(509, 169, 100, 50), "0", true, mExportWindow);
+
 	mExportWindow->setVisible(false);
 	
+	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
+	
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "50", mImportWindow);
+
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
+
+	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 169, 56, 31), buyField), mImportWindow);
+	
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		mImportBuyQuantityText[i] = GUIText::create(
+			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
+			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mImportWindow);
+
+	}
+
+	mImportCostText[0]					= GUIText::create(sf::FloatRect(509, 51, 100, 50), "0", mImportWindow);
+	mImportCostText[1]					= GUIText::create(sf::FloatRect(509, 110, 100, 50), "0", mImportWindow);
+	mImportCostText[2]					= GUIText::create(sf::FloatRect(509, 169, 100, 50), "0", mImportWindow);
+
+	mImportGotoExportButton				= GUIButton::create(CapitalistButtons["ImportGotoExport"], mImportWindow);
+	mImportGotoExportButton->setSize(CapitalistButtons["ImportGotoExport"].first.width, CapitalistButtons["ImportGotoExport"].first.height);
+	mImportWindow->setVisible(false);
 
 	mChoosePresidentWindow				= GUIWindow::create(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
 	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
@@ -463,7 +490,7 @@ void Capitalist::chooseLeader()
 	mCapitalistMainWindow->setEnabled(false, true);
 	mChoosePresidentWindow->setEnabled(true, true);
 	mChoosePresidentWindow->setVisible(true);
-	if(mFirstPresident == NULL)
+	if(mPresident == NULL)
 		mFirstPresident = GameManager::getInstance()->getRandomPresident();
 	else
 	{
@@ -490,29 +517,6 @@ void Capitalist::initializeGuiFunctions()
 		mTaxesWindow->setEnabled(true, true);
 		mTaxesWindow->setVisible(true); 
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["TaxesIsPressed"]);
-	});
-	/*Sänker skatten med fem*/
-	mLowerTaxesButton->setOnClickFunction([=]()
-	{
-		mTaxes -= 5;
-		if(mTaxes <= mMinTax)
-			mTaxes = mMinTax;
-		if(mTaxes < 5)
-			mTaxes = 5;
-		mChangeTaxesText->setText(intToString(mTaxes));
-		
-	});
-	/*Höjer skatten med fem*/
-	mRaiseTaxesButton->setOnClickFunction([=]()
-	{
-		std::cout<<"mTaxes before: "<<mTaxes<<std::endl;
-		mTaxes += 5;
-		if(mTaxes >= mMaxTax)
-			mTaxes = mMaxTax;
-		if(mTaxes > 95)
-			mTaxes = 95;
-		std::cout<<"mTaxes: "<<mTaxes<<" max tax: "<<mMaxTax<<std::endl;
-		mChangeTaxesText->setText(intToString(mTaxes));
 	});
 
 	/*Resources GUI-Window knappar*/
@@ -717,20 +721,70 @@ void Capitalist::initializeGuiFunctions()
 	});		
 
 	/*Export GUI-Window med knapapr*/
-	mCapitalistExportButton->setOnClickFunction([=]()	
+	mCapitalistTradeButton->setOnClickFunction([=]()	
 	{ 
 		mCapitalistMainWindow->setEnabled(false, true);
-		mExportWindow->setEnabled(true, true);
+		mImportWindow->setEnabled(true, true);
 
-		mExportWindow->setVisible(true); 
-		mCapitalistExportButton->setTexture(CapitalistButtons["ExportIsPressed"]);
+		mImportWindow->setVisible(true); 
+		mCapitalistTradeButton->setTexture(CapitalistButtons["ExportIsPressed"]);
 
+	});
+
+	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus"));
+	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus"));
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mImportBuyButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mImportWindow);
+			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity -= (5 * (h+1));
+				if(quantity < 0)
+					quantity = 0;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mImportBuyButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mImportWindow);
+			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity += (5 * (h+1));
+				if(quantity > foodAvailable)
+					quantity = foodAvailable;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	/*nästa runda*/
+	mCapitalistEndTurnButton->setOnClickFunction([=]()	
+	{ 
+		GameManager::getInstance()->nextRound();  
 	});
 
 	/*Stänger ner Taxes fönstret*/
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
+
 		mTaxesWindow->setVisible(false); 
 		//ändrar textur till orginal
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
@@ -791,7 +845,7 @@ void Capitalist::initializeGuiFunctions()
 
 		mExportWindow->setVisible(false); 
 		//ändrar textur till orginal
-		mCapitalistExportButton->setTexture(CapitalistButtons["Export"]);
+		mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
 	});
 
 	
@@ -827,9 +881,7 @@ void Capitalist::initializeGuiFunctions()
 		{
 			mChoosePresidentWindow->setVisible(false);
 			mPickedPresidentWindow->setVisible(true);
-			int yearsElected = mPresident->getYearsElected();
-			//std::cout<<"years elected: "<<yearsElected<<std::endl;
-			mPresident->setYearsElected(yearsElected + 1);
+			mPresident->setYearsElected(mPresident->getYearsElected() + 1);
 			//std::vector<std::shared_ptr<void> > args;
 			//args.push_back(mPickedPresidentWindow);
 
@@ -842,6 +894,8 @@ void Capitalist::initializeGuiFunctions()
 			Timer::setTimer([=]()
 			{
 				_test->setVisible(false);
+
+				//std::cout << _president->getTexture()->getSize().x << " " << _president->getTexture()->getSize().y << std::endl;
 				
 				_presidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_presidentButton->getRectangle(), _president->getTexture()));
 				_presidentButton->setScale(0.53, 0.53);
@@ -849,19 +903,6 @@ void Capitalist::initializeGuiFunctions()
 			}, 
 				5000, 1);//antal millisekunder
 		}
-	});
-
-	/*nästa runda*/
-	mCapitalistEndTurnButton->setOnClickFunction([=]()	
-	{ 
-		if(mTaxes < mCurrentTax)
-			setPatriotism(getPatriotism() + 2);
-		else if(mTaxes > mCurrentTax)
-			setPatriotism(getPatriotism() - 3);
-		
-		//mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
-		mTaxes = mCurrentTax;
-		GameManager::getInstance()->nextRound();  
 	});
 }
 

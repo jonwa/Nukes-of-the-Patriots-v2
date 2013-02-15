@@ -4,8 +4,6 @@
 #include "GUIElement.h"
 #include <SFML\Graphics\Sprite.hpp>
 
-#include <map>
-
 class GUIButton: public GUIElement
 {
 public:
@@ -16,6 +14,7 @@ public:
 	bool	render(sf::RenderWindow *window);
 	void    setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 	void	setScale(float width, float height);
+	void	setSize(float width, float height);
 
 	~GUIButton(){}
 

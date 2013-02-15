@@ -7,8 +7,14 @@ SuperPower::SuperPower() :
 	mCurrency(500), 
 	mTaxes(30),
 	mFood(0),
+	mExportedFood(0),
+	mExportedFoodPrice(0),
 	mTech(0),
+	mExportedTech(0),
+	mExportedTechPrice(0),
 	mGoods(0),
+	mExportedGoods(0),
+	mExportedGoodsPrice(0),
 	mSpyNetwork(0),
 	mSpaceProgram(0),
 	mNuclearWeapon(10),
@@ -21,6 +27,35 @@ SuperPower::~SuperPower()
 {
 }
 
+int SuperPower::getExportedFood()
+{
+	return mExportedFood;
+}
+
+int SuperPower::getExportedFoodPrice()
+{
+	return mExportedFoodPrice;
+}
+
+int SuperPower::getExportedGoods()
+{
+	return mExportedGoods;
+}
+
+int SuperPower::getExportedGoodsPrice()
+{
+	return mExportedGoodsPrice;
+}
+
+int SuperPower::getExportedTech()
+{
+	return mExportedTech;
+}
+
+int SuperPower::getExportedTechPrice()
+{
+	return mExportedTechPrice;
+}
 
 /*Funktioner som returnerar medlemsvariablernas värden*/
 int SuperPower::getCurrency()
@@ -53,11 +88,6 @@ int SuperPower::getTaxes()
 	return mTaxes;
 }
 
-int SuperPower::getPatriotism()
-{
-	return mPatriotism;
-}
-
 int SuperPower::getTech()
 {
 	return mTech;
@@ -86,11 +116,6 @@ int SuperPower::getRound()
 void SuperPower::setRound(int round)
 {
 	mRound = round;
-}
-
-void SuperPower::setPatriotism(int patriotism)
-{
-	mPatriotism = patriotism;
 }
 //-----------------------------------------------------------
 

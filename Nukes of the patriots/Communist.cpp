@@ -2,6 +2,7 @@
 #include "GUIManager.h"
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include "GUIEditField.h"
 #include "GUIText.h"
 #include "tinyxml2.h"
 #include "ResourceHandler.h"
@@ -65,7 +66,7 @@ void Communist::openFiveYearPlan()
 	{
 		mCommunistMainWindow->setEnabled(false, true);
 		mTaxesWindow->setEnabled(true, true);
-		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+
 		mTaxesWindow->setVisible(true);
 	}
 }
@@ -417,50 +418,11 @@ void Communist::loadWindowPosition()
 	}	
 }
 
-void Communist::loadCommunistMusic()
-{
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile("XML/CommunistSounds.xml");
-
-	if(doc.Error())
-		std::cout << "Fel! Communist::loadCommunistMusic";
-	
-	tinyxml2::XMLElement *element = doc.FirstChildElement("tracks");
-	tinyxml2::XMLElement *music = element->FirstChildElement("music");
-	
-	const char* temp;
-	while (music != 0)
-	{
-		std::string tempName;
-		if (temp = music->FirstChildElement("name")->GetText())
-		{
-			tempName = temp;
-		}
-		
-		temp	 = music->FirstChildElement("file")->GetText();
-		std::string name;
-		if (temp)
-			name = temp;
-				
-		CommunistMusic[tempName] = ResourceHandler::getInstance()->getMusic(name);
-	
-		music = music->NextSiblingElement();	
-	}
-}
-
- /*Används för att spela upp kommunisternas themesong*/
-void Communist::playMusic()
-{
-	CommunistMusic["CommunistMainTheme"]->play();
-}
-
- /*initierar kommunisternas fönster respektive fönster/knappar etc.*/
+ /**/
 void Communist::initializeCommunistWindow()
 {
 	loadButtonPosition();
 	loadWindowPosition();
-	loadCommunistMusic();
-	//playMusic();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
@@ -658,6 +620,11 @@ void Communist::initializeCommunistWindow()
 	mExportRaiseGoodsButton				= GUIButton::create(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
 	mExportLowerTechButton				= GUIButton::create(CommunistButtons["CommunistLowerTech"], mExportWindow);
 	mExportRaiseTechButton				= GUIButton::create(CommunistButtons["CommunistRaiseTech"], mExportWindow);
+
+	mExportFoodPrice					= GUIEditField::create(sf::FloatRect(260, 100, 265, 40), "50", true, mExportWindow); 
+	mExportGoodsPrice					= GUIEditField::create(sf::FloatRect(260, 242, 265, 40), "50", true, mExportWindow); 
+	mExportTechPrice					= GUIEditField::create(sf::FloatRect(260, 387, 265, 40), "50", true, mExportWindow); 
+
 	mExportCloseButton					= GUIButton::create(CommunistButtons["CloseExport"], mExportWindow);
 	mExportWindow->setVisible(false);
 
@@ -1427,17 +1394,15 @@ void Communist::initializeGuiFunctions()
 		std::shared_ptr<GUIButton> _generalButton = mCommunistGeneralButton;
 		std::shared_ptr<President> _general = mGeneral;
 		std::shared_ptr<GUIWindow> _fiveYearPlan = mTaxesWindow;
-		std::shared_ptr<GUIButton> _fiveYearPlanButton = mCommunistFiveYearPlanButton;
-		
 		Timer::setTimer([=]()
 		{
 			_test->setVisible(false);
-			//_fiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+
 			_generalButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_generalButton->getRectangle(), _general->getTexture()));
 			_generalButton->setScale(0.53, 0.53);
 			_fiveYearPlan->setVisible(true);
 			_fiveYearPlan->setEnabled(true, true);
-				
+		
 		}, 
 			5000, 1);//antal millisekunder fönstret visas
 	});
