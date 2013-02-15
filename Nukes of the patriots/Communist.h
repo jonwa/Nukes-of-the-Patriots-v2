@@ -117,13 +117,6 @@ private:
 	void initializeCommunistWindow();
 	void loadCommunistMusic();
 
-
-	std::shared_ptr<President> mGeneral;
-	std::shared_ptr<President> mFirstGeneral;
-	std::shared_ptr<President> mSecondGeneral;
-	std::shared_ptr<President> mThirdGeneral;
-	std::shared_ptr<President> mFourthGeneral;
-	std::shared_ptr<President> mFifthGeneral;
  
 	//President	*mPresident;
 

@@ -1199,14 +1199,15 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
-<<<<<<< HEAD
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
 		mCommunistGeneralButton->setScale(0.53, 0.53);
 		mTaxesWindow->setVisible(true);
 		mTaxesWindow->setEnabled(true, true);
 		mCommunistFiveYearPlanButton->setEnabled(true, true);
-=======
+	});
+	mPropagandaBuyFoodButton->setOnClickFunction([=]()
+	{
 		buyPropagandaFood(getRound());
 		std::cout << "Food: " << getYearlyFood(mRound) << std::endl;
 	});
@@ -1219,7 +1220,7 @@ void Communist::initializeGuiFunctions()
 	{
 		buyPropagandaTech(getRound());
 		std::cout << "Tech: " << getYearlyTech(mRound) << std::endl;
->>>>>>> 8866ca310d1d365c894982de22b613116b8930e6
+
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
