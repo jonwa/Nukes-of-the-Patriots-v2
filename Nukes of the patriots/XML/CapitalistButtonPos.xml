@@ -2,8 +2,8 @@
 <buttons>
 	<button>
 		<name>President</name>
-		<xPos>8</xPos>
-		<yPos>644</yPos>
+		<xPos>0</xPos>
+		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
 		<image></image>
@@ -381,7 +381,7 @@
 		<xPos>63</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>
@@ -389,7 +389,7 @@
 		<xPos>327</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>	
+		<height>194</height>	
 		<image></image>
 	</button>
 	<button>
@@ -397,7 +397,7 @@
 		<xPos>195</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>
@@ -409,11 +409,19 @@
 		<image>Capitalist/kap_texture_button_elect</image>
 	</button>
 	<button>
-		<name>ClosePickedPresident</name>
-		<xPos>235</xPos>
-		<yPos>478</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Capitalist/kap_texture_button_ok</image>
+		<name>ImportGotoExport</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Capitalist/button_ext</image>	
+	</button>
+	<button>
+		<name>ExportGoToPreviousSlide</name>
+		<xPos>200</xPos>
+		<yPos>477</yPos>
+		<width>30</width>
+		<height>70</height>
+		<image>Capitalist/button_prev</image>	
 	</button>
 </buttons>

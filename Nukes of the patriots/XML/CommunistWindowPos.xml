@@ -25,12 +25,12 @@
 		<image>Communist/7_kom_window_president2</image>	
 	</window>
 	<window>
-		<name>CommunistTaxesWindow</name>
+		<name>FiveYearPlanWindow</name>
 		<xPos>227</xPos>
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Communist/7_kom_window_tax</image>
+		<image>Communist/7_kom_fiveYearPlan</image>
 	</window>
 	<window>
 		<name>CommunistResourcesWindow</name>

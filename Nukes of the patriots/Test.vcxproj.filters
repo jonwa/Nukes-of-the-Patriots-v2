@@ -104,6 +104,9 @@
     <ClCompile Include="TimerHandler.cpp">
       <Filter>Source Files\Timer</Filter>
     </ClCompile>
+    <ClCompile Include="GUIEditField.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUIButton.h">
@@ -162,6 +165,9 @@
     </ClInclude>
     <ClInclude Include="TimerHandler.h">
       <Filter>Header Files\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="GUIEditField.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

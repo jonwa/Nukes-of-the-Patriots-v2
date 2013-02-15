@@ -14,6 +14,12 @@ public:
 	SuperPower();
 	~SuperPower();
 
+	int			getExportedFood();
+	int			getExportedFoodPrice();
+	int			getExportedGoods();
+	int			getExportedGoodsPrice();
+	int			getExportedTech();
+	int			getExportedTechPrice();
 	int			getFood();
 	int			getGoods();
 	int			getTech();
@@ -24,7 +30,6 @@ public:
 	int			getSpyNetwork();
 	int			getCurrency();
 	int			getRound();
-	int			getPatriotism();
 
 	PoliticalType getType();
 
@@ -33,7 +38,7 @@ public:
 	void		getTaxIncome();
 	void		updateFood();
 	bool		enoughFood();
-	void		setPatriotism(int patriotism); 
+
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
@@ -44,7 +49,6 @@ public:
 	virtual bool		setFood(int value) = 0;
 	virtual bool		setGoods(int value) = 0;
 	virtual bool		setTech(int value) = 0;
- 
 	virtual void		chooseLeader(){};
 	virtual void		showGUI() = 0;
 	virtual void		hideGUI() = 0;
@@ -58,9 +62,9 @@ protected:
 	int	mPatriotism;
 	int	mCurrency;
 	int	mPopulation;
-	int	mFood;
-	int	mGoods;
-	int	mTech;
+	int	mFood, mExportedFood, mExportedFoodPrice;
+	int	mGoods, mExportedGoods, mExportedGoodsPrice;
+	int	mTech, mExportedTech, mExportedTechPrice;
 	int	mTaxes;
 	int	mSpyNetwork;
 	int	mNuclearWeapon;

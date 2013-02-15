@@ -35,10 +35,14 @@ public:
 	
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
-	void										init(int year);
 
-	std::shared_ptr<SuperPower> getCapitalist();
-	std::shared_ptr<SuperPower> getCommunist();
+	sf::Texture&								getPresidentPlaque(std::shared_ptr<President> president);
+	sf::Texture&								getGeneralPlaque(std::shared_ptr<President> general);
+
+	std::shared_ptr<SuperPower>					getCapitalist();
+	std::shared_ptr<SuperPower>					getCommunist();
+
+	void										init(int year);
 private:
 	static GameManager* mInstance;
 	GameManager();
@@ -68,8 +72,13 @@ private:
 	std::vector<std::shared_ptr<SuperPower> > mVecPlayersLeft;
 	std::vector<std::shared_ptr<President> > mPresidentVector;
 	std::vector<std::shared_ptr<President> > mGeneralVector;
+
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsWindow;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsButton;
+
+	std::map<std::shared_ptr<President>, sf::Texture*> mPresidentPlaqueMap;
+	std::map<std::shared_ptr<President>, sf::Texture*> mGeneralPlaqueMap;
+
 	std::shared_ptr<SuperPower> mCurrentPlayer;
 
 	std::shared_ptr<GUIWindow> mStatsWindow;

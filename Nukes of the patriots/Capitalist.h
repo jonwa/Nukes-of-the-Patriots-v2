@@ -8,14 +8,16 @@
 #ifndef CAPITALIST_H
 #define CAPITALIST_H
 
-//class President;
 class GUIManager;
 class GUIElement;
 class GUIButton;
 class GUIText;
+class GUIEditField;
 class GUIWindow;
+class GUIImage;
 class President;
 class Randomizer;
+class Communist;
 
 #include "SuperPower.h"
 #include <vector>
@@ -56,10 +58,6 @@ public:
 	void resetResourcesValues();
 
 private:
-	int mCurrentTax;
-	int mMaxTax;
-	int mMinTax;
-
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -69,6 +67,8 @@ private:
 
 	int stringToInt(std::string str)
 	{
+		if(str.size() == 0)
+			return 0;
 		return atoi(str.c_str());
 	}
 
@@ -93,20 +93,15 @@ private:
 	void initializeCapitalistWindow();
 
 	
-	
 	//President	*mPresident;
 	
-	/*Interface text för resurser och upgradering*/
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
 	std::shared_ptr<GUIText> mFoodText;	
 	std::shared_ptr<GUIText> mGoodsText;  
 	std::shared_ptr<GUIText> mTechText;
-	/*Text för Taxes*/
-	std::shared_ptr<GUIText> mTaxesText;
-	std::shared_ptr<GUIText> mChangeTaxesText;
-	/*Text för resources*/
+
 	std::shared_ptr<GUIText> mBuyFoodText;
 	std::shared_ptr<GUIText> mBuyGoodsText;
 	std::shared_ptr<GUIText> mBuyTechText;
@@ -114,7 +109,7 @@ private:
 	std::shared_ptr<GUIText> mGoodsCost;
 	std::shared_ptr<GUIText> mTechCost;
 	std::shared_ptr<GUIText> mTotalResourcesCost;
-	/*Text för upgradering*/
+
 	std::shared_ptr<GUIText> mBuyNuclearText;
 	std::shared_ptr<GUIText> mBuySpaceProgramText;
 	std::shared_ptr<GUIText> mBuySpyNetworkText;
@@ -123,9 +118,10 @@ private:
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
+	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
 	std::shared_ptr<GUIButton> mCapitalistResourceButton;	
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
-	std::shared_ptr<GUIButton> mCapitalistExportButton;	
+	std::shared_ptr<GUIButton> mCapitalistTradeButton;	
 	/*GUI-pekare för end turn*/
 	std::shared_ptr<GUIButton> mCapitalistEndTurnButton;
 
@@ -172,13 +168,35 @@ private:
 	std::shared_ptr<GUIButton> mExportRaiseGoodsButton;
 	std::shared_ptr<GUIButton> mExportLowerTechButton;
 	std::shared_ptr<GUIButton> mExportRaiseTechButton;
+	std::shared_ptr<GUIEditField> mExportFoodQuantity;
+	std::shared_ptr<GUIEditField> mExportGoodsQuantity;
+	std::shared_ptr<GUIEditField> mExportTechQuantity;
+	std::shared_ptr<GUIEditField> mExportFoodPrice;
+	std::shared_ptr<GUIEditField> mExportGoodsPrice;
+	std::shared_ptr<GUIEditField> mExportTechPrice;
+	std::shared_ptr<GUIEditField> mExportFoodPriceEditField;
+	std::shared_ptr<GUIEditField> mExportGoodsPriceEditField;
+	std::shared_ptr<GUIEditField> mExportTechPriceEditField;
 	std::shared_ptr<GUIButton> mExportCloseButton;
+
+	std::shared_ptr<GUIWindow> mImportWindow;
+	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
+	std::shared_ptr<GUIText> mImportPriceText[3];
+	std::shared_ptr<GUIText> mImportBuyQuantityText[3];
+	std::shared_ptr<GUIImage> mImportBuyQuantityBackground[3];
+	std::shared_ptr<GUIText> mImportCostText[3];
+	std::shared_ptr<GUIButton> mImportBuyButtonMinus[3][3];
+	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
+	std::shared_ptr<GUIButton> mImportGotoExportButton;
 
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
 	std::shared_ptr<GUIButton> mFirstPresidentButton;
+	std::shared_ptr<GUIImage>  mFirstPresidentPlaque;
 	std::shared_ptr<GUIButton> mSecondPresidentButton;
+	std::shared_ptr<GUIImage>  mSecondPresidentPlaque;
 	std::shared_ptr<GUIButton> mPickedPresidentButton;
+	std::shared_ptr<GUIImage>  mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 };

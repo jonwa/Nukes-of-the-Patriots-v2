@@ -82,10 +82,10 @@
 	</button>	
 	<button>
 		<name>CapitalistOkay</name>
-		<xPos>194</xPos>
-		<yPos>590</yPos>
-		<width>256</width>
-		<height>256</height>	
+		<xPos>91</xPos>
+		<yPos>352</yPos>
+		<width>133</width>
+		<height>40</height>	
 		<image>Menu/Ok-knapp-aktiv</image>
 	</button>
 	<button>
@@ -98,10 +98,10 @@
 	</button>	
 	<button>
 		<name>CommunistOkay</name>
-		<xPos>720</xPos>
-		<yPos>590</yPos>
-		<width>256</width>
-		<height>256</height>	
+		<xPos>477</xPos>
+		<yPos>352</yPos>
+		<width>133</width>
+		<height>40</height>		
 		<image>Menu/Ok-knapp-aktiv</image>
 	</button>
 	<button>
