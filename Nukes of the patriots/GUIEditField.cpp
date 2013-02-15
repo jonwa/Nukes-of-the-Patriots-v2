@@ -16,8 +16,11 @@ GUIEditField::GUIEditField(sf::FloatRect rect, std::string text, bool onlyNumber
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
 {
+<<<<<<< HEAD
+=======
 	mFont.loadFromFile("Font/Moire-Regular.ttf");
 	mText.setFont(mFont);
+>>>>>>> changes
 	sf::Texture *texture = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 	mSprite.setTexture(*texture);
 	
@@ -208,6 +211,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						mCaretIndex -= std::abs(characters);
 				}
 				mText.setString(str);
+				mOnGuiChange();
+
 				mSelectedCaret = -1;
 				if(mCaretIndex < 0)
 					mCaretIndex = 0;
@@ -231,6 +236,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						mCaretIndex -= std::abs(characters);
 				}
 				mText.setString(str);
+				mOnGuiChange();
+
 				mSelectedCaret = -1;
 			}
 		}
@@ -259,6 +266,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 					mCaretIndex++;
 					mText.setString(str);
 					mSelectedCaret = -1;
+					mOnGuiChange();
+
 				}
 			}
 		}
@@ -292,6 +301,12 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 	}
 	GUIElement::update(window, event);
 	return true;
+}
+
+
+void GUIEditField::setOnGuiChangeFunction(std::function<void()> function)
+{
+	mOnGuiChange = function;
 }
 
 void GUIEditField::onGUIClick(int mouseX, int mouseY)
@@ -329,4 +344,5 @@ void GUIEditField::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 	mSprite.setTexture(*pair.second);
 	//mSprite.setPosition(pair.first.left, pair.first.top);
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
+
 }

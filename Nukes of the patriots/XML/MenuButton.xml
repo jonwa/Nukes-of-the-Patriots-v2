@@ -49,12 +49,28 @@
 		<image>Menu/Team-Flagga-Kapitalist-up</image>
 	</button>
 	<button>
+		<name>TeamCapitalistIsPressed</name>
+		<xPos>106</xPos>
+		<yPos>52</yPos>
+		<width>256</width>
+		<height>400</height>	
+		<image>Menu/Team-Flagga-Kapitalist-down</image>
+	</button>
+	<button>
 		<name>TeamCommunist</name>
 		<xPos>628</xPos>
 		<yPos>52</yPos>
 		<width>256</width>
 		<height>400</height>	
 		<image>Menu/Team-Flagga-Communist-up</image>
+	</button>
+	<button>
+		<name>TeamCommunistIsPressed</name>
+		<xPos>628</xPos>
+		<yPos>52</yPos>
+		<width>256</width>
+		<height>400</height>	
+		<image>Menu/Team-Flagga-Communist-down</image>
 	</button>
 	<button>
 		<name>CapitalistName</name>

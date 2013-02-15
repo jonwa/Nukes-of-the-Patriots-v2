@@ -157,6 +157,9 @@ private:
 	std::shared_ptr<GUIButton> mUpgradeNuclearWeaponButton;
 	std::shared_ptr<GUIButton> mUpgradeSpaceProgramButton;
 	std::shared_ptr<GUIButton> mUpgradeSpyNetworkButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeNuclearWeaponButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeSpaceProgramButton;
+	std::shared_ptr<GUIButton> mCancelUpgradeSpyNetworkButton;   
 	std::shared_ptr<GUIButton> mUpgradeCloseButton;
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
@@ -193,6 +196,7 @@ private:
 	std::shared_ptr<GUIButton> mSecondPresidentButton;
 	std::shared_ptr<GUIButton> mPickedPresidentButton;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
+	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 };
 
 

@@ -19,8 +19,8 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	MenuMusic["MainMenuTrack"]->play();
-	MenuMusic["MainMenuTrack"]->setLoop(true);
+	//MenuMusic["MainMenuTrack"]->play();
+	//MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
 
@@ -264,6 +264,7 @@ void Menu::initializeGuiFuctions()
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
 	{ 
+<<<<<<< HEAD
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -280,10 +281,17 @@ void Menu::initializeGuiFuctions()
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}
+=======
+		//mTeamCapitalistButton->setTexture(ButtonPos["TeamCapitalistIsPressed"]);
+		mParentWindow->setVisible(false); 
+		MenuMusic["MainMenuTrack"]->stop(); 
+		GameManager::getInstance()->init(1952); // initierar första året
+>>>>>>> 30e9d31f0bf79b52f1d6c7ddbab59ecbf126a429
 	});
 
 	mCommunistOkayButton->setOnClickFunction([=]()		
 	{ 
+<<<<<<< HEAD
 		mCommunistTeamChosen = true;
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -300,6 +308,20 @@ void Menu::initializeGuiFuctions()
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}
+=======
+		//mTeamCommunistButton->setTexture(ButtonPos["TeamCommunistIsPressed"]);
+		mParentWindow->setVisible(false); 
+		MenuMusic["MainMenuTrack"]->stop();
+		GameManager::getInstance()->init(1952);
+>>>>>>> 30e9d31f0bf79b52f1d6c7ddbab59ecbf126a429
+	});
+	mCapitalistOkayButton->setOnClickFunction([=]()
+	{
+		
+	});
+	mCommunistOkayButton->setOnClickFunction([=]()
+	{
+		
 	});
 
 
