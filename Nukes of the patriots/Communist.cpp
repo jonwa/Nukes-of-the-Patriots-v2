@@ -2,6 +2,7 @@
 #include "GUIManager.h"
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include "GUIEditField.h"
 #include "GUIText.h"
 #include "GUIImage.h"
 #include "tinyxml2.h"
@@ -471,12 +472,11 @@ void Communist::playMusic()
 }
 
  /*initierar kommunisternas fönster respektive fönster/knappar etc.*/
+
 void Communist::initializeCommunistWindow()
 {
 	loadButtonPosition();
 	loadWindowPosition();
-	loadCommunistMusic();
-	//playMusic();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
@@ -587,6 +587,11 @@ void Communist::initializeCommunistWindow()
 	mExportRaiseGoodsButton				= GUIButton::create(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
 	mExportLowerTechButton				= GUIButton::create(CommunistButtons["CommunistLowerTech"], mExportWindow);
 	mExportRaiseTechButton				= GUIButton::create(CommunistButtons["CommunistRaiseTech"], mExportWindow);
+
+	mExportFoodPrice					= GUIEditField::create(sf::FloatRect(260, 100, 265, 40), "50", true, mExportWindow); 
+	mExportGoodsPrice					= GUIEditField::create(sf::FloatRect(260, 242, 265, 40), "50", true, mExportWindow); 
+	mExportTechPrice					= GUIEditField::create(sf::FloatRect(260, 387, 265, 40), "50", true, mExportWindow); 
+
 	mExportCloseButton					= GUIButton::create(CommunistButtons["CloseExport"], mExportWindow);
 	mExportWindow->setVisible(false);
 

@@ -19,6 +19,7 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX() + parent->getX(), getY() + parent->getY());
 	else
 		mSprite.setPosition(getX(), getY());
+	//setSize((pair.first.width == 0) ? pair.second->getSize().x : pair.first.width, (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height);
 }
 
 bool GUIButton::render(sf::RenderWindow *window)
@@ -74,5 +75,14 @@ void GUIButton::setScale(float width, float height)
 	/*mSprite.setTextureRect(sf::IntRect(0, 0, mRectangle.width, mRectangle.height));*/
 	mSprite.setScale(width, height);
 
-	std::cout << mSprite.getScale().x << " " << mSprite.getScale().y  << " " << mSprite.getTextureRect().width << " " << mSprite.getTextureRect().height << std::endl;
+	//std::cout << mSprite.getScale().x << " " << mSprite.getScale().y  << " " << mSprite.getTextureRect().width << " " << mSprite.getTextureRect().height << std::endl;
+}
+
+void GUIButton::setSize(float width, float height)
+{
+	float scaleX = width / mSprite.getTexture()->getSize().x;
+	float scaleY = height / mSprite.getTexture()->getSize().y;
+	mSprite.setScale(scaleX, scaleY); 
+	setWidth(width);
+	setHeight(height);
 }

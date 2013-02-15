@@ -6,8 +6,6 @@
 
 std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent)
 {
-	/*rect.width -= 14;
-	rect.height -= 16;*/
 	std::shared_ptr<GUIEditField> ret = std::make_shared<GUIEditField>(rect, text, onlyNumbers, parent);
 	ret->init();
 	return ret;
@@ -18,6 +16,11 @@ GUIEditField::GUIEditField(sf::FloatRect rect, std::string text, bool onlyNumber
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
 {
+<<<<<<< HEAD
+=======
+	mFont.loadFromFile("Font/Moire-Regular.ttf");
+	mText.setFont(mFont);
+>>>>>>> changes
 	sf::Texture *texture = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 	mSprite.setTexture(*texture);
 	
@@ -209,6 +212,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				}
 				mText.setString(str);
 				mOnGuiChange();
+
 				mSelectedCaret = -1;
 				if(mCaretIndex < 0)
 					mCaretIndex = 0;
@@ -233,6 +237,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				}
 				mText.setString(str);
 				mOnGuiChange();
+
 				mSelectedCaret = -1;
 			}
 		}
@@ -262,6 +267,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 					mText.setString(str);
 					mSelectedCaret = -1;
 					mOnGuiChange();
+
 				}
 			}
 		}
@@ -297,6 +303,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 	return true;
 }
 
+
 void GUIEditField::setOnGuiChangeFunction(std::function<void()> function)
 {
 	mOnGuiChange = function;
@@ -330,4 +337,12 @@ void GUIEditField::onGUIClick(int mouseX, int mouseY)
 	}
 	mCaretIndex = newCaret;
 	//std::cout<<"on gui click!"<<std::endl;
+}
+
+void GUIEditField::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
+{
+	mSprite.setTexture(*pair.second);
+	//mSprite.setPosition(pair.first.left, pair.first.top);
+	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
+
 }

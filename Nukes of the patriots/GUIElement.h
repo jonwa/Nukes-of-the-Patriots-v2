@@ -13,6 +13,8 @@ public:
 	GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, GUIType guiType);
 	float			getX()const;
 	float			getY()const;
+	float			getLocalX()const;
+	float			getLocalY()const;
 	float			getWidth()const;
 	float			getHeight()const;
 	bool			getVisible()const;

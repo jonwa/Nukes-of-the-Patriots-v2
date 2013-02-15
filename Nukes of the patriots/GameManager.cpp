@@ -57,6 +57,17 @@ void GameManager::init(int year)
 	}
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
+
+}
+
+std::shared_ptr<SuperPower> GameManager::getCapitalist()
+{
+	return mVecSuperPowers[0];
+}
+
+std::shared_ptr<SuperPower> GameManager::getCommunist()
+{
+	return mVecSuperPowers[1];
 }
 
 void GameManager::loadPresidents()

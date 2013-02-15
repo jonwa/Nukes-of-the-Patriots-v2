@@ -61,10 +61,28 @@ float	GUIElement::getX()const
 { 
 	return mRectangle.left; 
 }
+
 float	GUIElement::getY()const
 { 
 	return mRectangle.top; 
 }
+
+float GUIElement::getLocalX()const
+{ 
+	float x = mRectangle.left;
+	if(mParent != NULL)
+		x -= mParent->getX();
+	return x; 
+}
+
+float GUIElement::getLocalY()const
+{ 
+	float y = mRectangle.top;
+	if(mParent != NULL)
+		y -= mParent->getY();
+	return y; 
+}
+
 float	GUIElement::getWidth()const
 { 
 	return mRectangle.width; 
@@ -174,7 +192,6 @@ bool GUIElement::onClick(sf::RenderWindow *window)
 		parent = parent->getParent();
 	}
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
-
 	// Check if mouse is colliding with gui element
 	if(mEnabled && mRectangle.contains(mousePos.x, mousePos.y))
 	{

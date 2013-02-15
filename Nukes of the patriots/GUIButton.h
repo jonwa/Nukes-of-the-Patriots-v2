@@ -16,6 +16,7 @@ public:
 	void    setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 	sf::Texture*	getTexture();
 	void	setScale(float width, float height);
+	void	setSize(float width, float height);
 
 	~GUIButton(){}
 

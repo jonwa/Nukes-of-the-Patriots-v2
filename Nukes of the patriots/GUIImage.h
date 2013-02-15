@@ -28,6 +28,7 @@ public:
 	bool		 render (sf::RenderWindow *window);
 	void		 setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 	sf::Texture* getTexture();
+
 private:
 	GUIImage(const GUIImage &guiImage);
 	GUIImage& operator=(const GUIImage &guiImage);

@@ -8,11 +8,14 @@
 #include <iostream>
 #include <SFML\Window\Mouse.hpp>
 #include "GameManager.h"
+#include "Timer.h"
 
 
  /*Konstruktorn kör initialize-funktionen*/
 Menu::Menu(sf::RenderWindow &window) : 
-	mWindow(window)
+	mWindow(window),
+	mCapitalistTeamChosen(false),
+	mCommunistTeamChosen(false)
 { 
 	initialize(); 
 	initializeGuiFuctions();
@@ -216,12 +219,14 @@ void Menu::initialize()
 	mCreditsMenuWindow->setVisible(false);
 
 	/*Fönstret och dess barn för att välja lag*/
-	mPickTeamWindow			= GUIWindow::create(WindowPos["PickTeam"], mParentWindow);
-	mTeamCapitalistButton	= GUIButton::create(ButtonPos["TeamCapitalist"], mPickTeamWindow);
-	mTeamCommunistButton	= GUIButton::create(ButtonPos["TeamCommunist"], mPickTeamWindow);
-	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mPickTeamWindow);
-	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mPickTeamWindow);
-	mPickTeamWindow->setVisible(false);
+	mChooseTeamWindow		= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
+	mCapitalistNameField	= GUIEditField::create(sf::FloatRect(46 + 8, 269, 218, 41), "'merica", false, mChooseTeamWindow);
+	mCommunistNameField		= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), "Soviet Union", false, mChooseTeamWindow);
+	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
+	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkay"].first.width, ButtonPos["CapitalistOkay"].first.height);
+	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
+	mCommunistOkayButton->setSize(ButtonPos["CommunistOkay"].first.width, ButtonPos["CommunistOkay"].first.height);
+	mChooseTeamWindow->setVisible(false);
 
 	
 	/*Lägger in fönstrerna i vektorn för GUIElement*/
@@ -238,7 +243,7 @@ void Menu::initializeGuiFuctions()
 {
 	mStartNewGameButton->setMouseEnterFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGameHover"]); });
 	mStartNewGameButton->setMouseLeaveFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGame"]); });
-	mStartNewGameButton->setOnClickFunction([=]()		{ mMainMenuWindow->setVisible(false); mPickTeamWindow->setVisible(true); });
+	mStartNewGameButton->setOnClickFunction([=]()		{ mMainMenuWindow->setVisible(false); mChooseTeamWindow->setVisible(true); });
 
 	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
 	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
@@ -257,22 +262,58 @@ void Menu::initializeGuiFuctions()
 	mExitButton->setMouseLeaveFunction([=]()			{ mExitButton->setTexture(ButtonPos["Exit"]); });
 	mExitButton->setOnClickFunction([=]()				{ mWindow.close(); });
 
-	/*när spelaren väljer att spela kapitalist */
-	mTeamCapitalistButton->setOnClickFunction([=]()		
+	mCapitalistOkayButton->setOnClickFunction([=]()		
 	{ 
+<<<<<<< HEAD
+		mCapitalistTeamChosen = true;
+		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
+		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
+		mCapitalistOkayButton->setEnabled(false);
+		mCapitalistNameField->setEnabled(false);
+		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
+		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
+		if(mCommunistTeamChosen && mCapitalistTeamChosen)
+		{
+			Timer::setTimer([=]()
+			{
+				_parentWindow->setVisible(false); 
+				_music.at("MainMenuTrack")->stop(); 
+				GameManager::getInstance()->init(1952); // initierar första året
+			}, 100, 1);
+		}
+=======
 		//mTeamCapitalistButton->setTexture(ButtonPos["TeamCapitalistIsPressed"]);
 		mParentWindow->setVisible(false); 
 		MenuMusic["MainMenuTrack"]->stop(); 
 		GameManager::getInstance()->init(1952); // initierar första året
+>>>>>>> 30e9d31f0bf79b52f1d6c7ddbab59ecbf126a429
 	});
 
-	/*när spelaren väljer att spela kommunist*/
-	mTeamCommunistButton->setOnClickFunction([=]()		
+	mCommunistOkayButton->setOnClickFunction([=]()		
 	{ 
+<<<<<<< HEAD
+		mCommunistTeamChosen = true;
+		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
+		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
+		mCommunistOkayButton->setEnabled(false);
+		mCommunistNameField->setEnabled(false);
+		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
+		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
+		if(mCommunistTeamChosen && mCapitalistTeamChosen)
+		{
+			Timer::setTimer([=]()
+			{
+				_parentWindow->setVisible(false);
+				 _music.at("MainMenuTrack")->stop(); 
+				GameManager::getInstance()->init(1952); // initierar första året
+			}, 100, 1);
+		}
+=======
 		//mTeamCommunistButton->setTexture(ButtonPos["TeamCommunistIsPressed"]);
 		mParentWindow->setVisible(false); 
 		MenuMusic["MainMenuTrack"]->stop();
 		GameManager::getInstance()->init(1952);
+>>>>>>> 30e9d31f0bf79b52f1d6c7ddbab59ecbf126a429
 	});
 	mCapitalistOkayButton->setOnClickFunction([=]()
 	{

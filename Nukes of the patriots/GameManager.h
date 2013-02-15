@@ -31,8 +31,13 @@ public:
 	
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
+
 	sf::Texture&								getPresidentPlaque(std::shared_ptr<President> president);
 	sf::Texture&								getGeneralPlaque(std::shared_ptr<President> general);
+
+	std::shared_ptr<SuperPower>					getCapitalist();
+	std::shared_ptr<SuperPower>					getCommunist();
+
 	void										init(int year);
 private:
 	static GameManager* mInstance;

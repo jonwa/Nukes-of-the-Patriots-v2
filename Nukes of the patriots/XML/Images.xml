@@ -29,6 +29,9 @@
 	<image filename="7_pr2.png"/>
 	<image filename="7_pr3.png"/>
 	<image filename="kap_texture_button_elect.png"/>
+	<image filename="button_ext.png" />
+	<image filename="button_prev.png" />
+	<image filename="7_kap_window_imp.png" />
 </images>
 <images directory ="Communist">
     <image filename="7_kom_bg.png"/>
@@ -88,7 +91,10 @@
 	<image filename="Team-Flagga-Kapitalist-down.png"/>
 	<image filename="Team-background-screen.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>
+	<image filename="Ok-knapp-inaktiv.png"/>
 	<image filename="Namnruta-aktiv.png"/>
+	<image filename="Namnruta-inaktiv.png" />
+	<image filename="choose_team.png" />
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>
