@@ -8,11 +8,11 @@
 #ifndef CAPITALIST_H
 #define CAPITALIST_H
 
-//class President;
 class GUIManager;
 class GUIElement;
 class GUIButton;
 class GUIText;
+class GUIImage;
 class GUIWindow;
 class President;
 class Randomizer;
@@ -179,8 +179,11 @@ private:
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
 	std::shared_ptr<GUIButton> mFirstPresidentButton;
+	std::shared_ptr<GUIImage>  mFirstPresidentPlaque;
 	std::shared_ptr<GUIButton> mSecondPresidentButton;
+	std::shared_ptr<GUIImage>  mSecondPresidentPlaque;
 	std::shared_ptr<GUIButton> mPickedPresidentButton;
+	std::shared_ptr<GUIImage>  mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 };

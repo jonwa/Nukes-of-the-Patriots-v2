@@ -31,6 +31,8 @@ public:
 	
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
+	sf::Texture&								getPresidentPlaque(std::shared_ptr<President> president);
+	sf::Texture&								getGeneralPlaque(std::shared_ptr<President> general);
 	void										init(int year);
 private:
 	static GameManager* mInstance;
@@ -59,6 +61,8 @@ private:
 	std::vector<std::shared_ptr<SuperPower> > mVecPlayersLeft;
 	std::vector<std::shared_ptr<President> > mPresidentVector;
 	std::vector<std::shared_ptr<President> > mGeneralVector;
+	std::map<std::shared_ptr<President>, sf::Texture*> mPresidentPlaqueMap;
+	std::map<std::shared_ptr<President>, sf::Texture*> mGeneralPlaqueMap;
 	std::shared_ptr<SuperPower> mCurrentPlayer;
 
 	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy

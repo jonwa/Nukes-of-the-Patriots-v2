@@ -4,7 +4,6 @@
 #include "GUIElement.h"
 #include <SFML\Graphics\Sprite.hpp>
 
-#include <map>
 
 class GUIButton: public GUIElement
 {

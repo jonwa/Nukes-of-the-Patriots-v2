@@ -4,6 +4,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIText.h"
+#include "GUIImage.h"
 #include "tinyxml2.h"
 #include "President.h"
 #include "ResourceHandler.h"
@@ -439,12 +440,27 @@ void Capitalist::initializeCapitalistWindow()
 	mExportCloseButton					= GUIButton::create(CapitalistButtons["CloseExport"], mExportWindow);
 	mExportWindow->setVisible(false);
 	
+	sf::FloatRect firstPresRect			= CapitalistButtons["FirstPresident"].first;
+	sf::FloatRect secondPresRect		= CapitalistButtons["SecondPresident"].first;
+	sf::FloatRect pickedPresRect		= CapitalistButtons["PickedPresident"].first;
 
 	mChoosePresidentWindow				= GUIWindow::create(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
 	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
 	mFirstPresidentButton				= GUIButton::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
+	mFirstPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, firstPresRect.width, firstPresRect.height),
+		&GameManager::getInstance()->getPresidentPlaque(mFirstPresident)), mChoosePresidentWindow);
+
 	mSecondPresidentButton				= GUIButton::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
+	mSecondPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, secondPresRect.width, secondPresRect.height),
+		&GameManager::getInstance()->getPresidentPlaque(mSecondPresident)), mChoosePresidentWindow);
+
 	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
+	mPickedPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(pickedPresRect.left, pickedPresRect.top + pickedPresRect.height - 5, pickedPresRect.width, pickedPresRect.height),
+		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
+
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
 	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePickedPresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
@@ -479,7 +495,12 @@ void Capitalist::chooseLeader()
 	mSecondPresident = GameManager::getInstance()->getRandomPresident();
 
 	mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+	mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+		(mFirstPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
+
 	mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+	mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+		(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
 }
 
 
@@ -811,7 +832,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	
 	/*Val av president bild 1*/
-	mFirstPresidentButton->setOnClickFunction([=]()				
+	mFirstPresidentPlaque->setOnClickFunction([=]()				
 	{ 
 
 		//mChoosePresidentWindow->setVisible(false); 
@@ -819,18 +840,24 @@ void Capitalist::initializeGuiFunctions()
 		setPresident(mFirstPresident);
 
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
+			(mPickedPresidentButton->getRectangle(), mPresident->getTexture()));
+
+		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
 	});
 
 	/*Val av president bild 2*/
-	mSecondPresidentButton->setOnClickFunction([=]()			
+	mSecondPresidentPlaque->setOnClickFunction([=]()			
 	{ 
 		//mChoosePresidentWindow->setVisible(false); 
 		//mPickedPresidentWindow->setVisible(true); 
 		setPresident(mSecondPresident);
 		
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentButton->getRectangle(), mPresident->getTexture())); 
+			(mPickedPresidentButton->getRectangle(), mPresident->getTexture()));
+
+		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
 	});		
 
 	/*När en president har blivit vald*/
@@ -854,7 +881,7 @@ void Capitalist::initializeGuiFunctions()
 		mPickedPresidentWindow->setVisible(false);
 				
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
-		mCapitalistPresident->setScale(0.53, 0.53);
+		mCapitalistPresident->setScale(0.63, 0.68);
 		mCapitalistMainWindow->setEnabled(true, true);
 
 	});

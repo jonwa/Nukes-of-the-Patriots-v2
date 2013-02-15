@@ -3,6 +3,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIText.h"
+#include "GUIImage.h"
 #include "tinyxml2.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
@@ -593,14 +594,24 @@ void Communist::initializeCommunistWindow()
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
 	mPickedGeneralWindow				= GUIWindow::create(CommunistWindows["PickedGeneral"], mCommunistMainWindow);
 	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
+	sf::FloatRect pickedRect			= CommunistButtons["PickedGeneral"].first;
+	mPickedGeneralPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, pickedRect.width, pickedRect.height),
+		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mPickedGeneralWindow);
+
 	mPickedGeneralWindow->setVisible(false);
+
 	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
+	sf::FloatRect generalRect			= CommunistButtons["FirstGeneral"].first;
+	mFirstGeneralPlaque					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, generalRect.width, generalRect.height),
+		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mChooseGeneralWindow);
+
 	
 	mGoToNextPortraitButton				= GUIButton::create(CommunistButtons["GoToNextPortrait"], mChooseGeneralWindow);
 	mGoToPreviousPortraitButton			= GUIButton::create(CommunistButtons["GoToPreviousPortrait"], mChooseGeneralWindow);
 	mCloseGeneralWindow					= GUIButton::create(CommunistButtons["CloseGeneral"], mChooseGeneralWindow);
 	mClosePickedGeneralWindow			= GUIButton::create(CommunistButtons["ClosePickedGeneral"], mPickedGeneralWindow);
-	//mChooseGeneralWindow->setVisible(false);
 	
 	chooseLeader();
 
@@ -988,6 +999,9 @@ void Communist::initializeGuiFunctions()
 
 		mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
+
+		mFirstGeneralPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstGeneralPlaque->getRectangle(), &GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))));
 	});
 
 	mGoToPreviousPortraitButton->setOnClickFunction([=]()		
@@ -997,7 +1011,10 @@ void Communist::initializeGuiFunctions()
 			generalCount = 4;
 
 		mFirstGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));	
+			(mFirstGeneralButton->getRectangle(), GameManager::getInstance()->getGeneral(generalCount)->getTexture()));
+
+		mFirstGeneralPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstGeneralPlaque->getRectangle(), &GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))));
 	});
 
 	/*När en general har blivit vald*/
@@ -1005,12 +1022,16 @@ void Communist::initializeGuiFunctions()
 	{
 		mChooseGeneralWindow->setVisible(false);
 		mPickedGeneralWindow->setVisible(true);
+		
 		mPickedGeneralWindow->setEnabled(true, true);
 
 		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
 
 		mPickedGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture())); 
+			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture()));
+
+		mPickedGeneralPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
@@ -1019,7 +1040,7 @@ void Communist::initializeGuiFunctions()
 
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
-		mCommunistGeneralButton->setScale(0.53, 0.53);
+		mCommunistGeneralButton->setScale(0.63, 0.68);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
 	});

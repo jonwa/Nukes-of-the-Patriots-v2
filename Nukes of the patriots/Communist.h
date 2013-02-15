@@ -23,6 +23,7 @@ class GUIElement;
 class GUIButton;
 class GUIWindow;
 class GUIText;
+class GUIImage;
 class GUIEditField;
 class Randomizer;
 
@@ -77,8 +78,6 @@ private:
 		return atoi(str.c_str());
 	}
 	
-
-	
 	std::vector<sf::Texture*> PropagandaFood;
 	std::vector<sf::Texture*> PropagandaGoods;
 	std::vector<sf::Texture*> PropagandaTech;
@@ -91,13 +90,6 @@ private:
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CommunistWindows;
 	std::map<std::string, std::shared_ptr<sf::Music> >			   CommunistMusic;
-
-	std::shared_ptr<President> mGeneral;
-	std::shared_ptr<President> mFirstGeneral;
-	std::shared_ptr<President> mSecondGeneral;
-	std::shared_ptr<President> mThirdGeneral;
-	std::shared_ptr<President> mFourthGeneral;
-	std::shared_ptr<President> mFifthGeneral;
 
 	std::vector<std::map<std::string, int> > mYearVector;
 	std::vector<std::shared_ptr<GUIButton> > mResourcesFoodButtons;
@@ -123,13 +115,7 @@ private:
 
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
-	std::shared_ptr<President> mSecondGeneral;
-	std::shared_ptr<President> mThirdGeneral;
-	std::shared_ptr<President> mFourthGeneral;
-	std::shared_ptr<President> mFifthGeneral;
  
-	//President	*mPresident;
-
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
@@ -280,7 +266,8 @@ private:
 	std::shared_ptr<GUIButton> mPickedGeneralButton;
 
 	std::shared_ptr<GUIButton> mFirstGeneralButton;
-	std::shared_ptr<GUIButton> mSecondGeneralButton;
+	std::shared_ptr<GUIImage>  mFirstGeneralPlaque;
+	std::shared_ptr<GUIImage>  mPickedGeneralPlaque;
 
 	std::shared_ptr<GUIButton> mGoToNextPortraitButton;
 	std::shared_ptr<GUIButton> mGoToPreviousPortraitButton;

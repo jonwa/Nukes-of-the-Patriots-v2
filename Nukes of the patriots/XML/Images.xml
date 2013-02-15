@@ -110,7 +110,7 @@
 	<image filename="president-Sarah.png"/>
 	<image filename="president-Stieg.png"/>
 	<image filename="president-Sture.png"/>
-	<image filename="president-Will.png"/>	
+	<image filename="president-Will.png"/>
 </images>
 <images directory="Generals">
 	<image filename="president-Alva.png"/>
@@ -118,4 +118,31 @@
 	<image filename="president-Gustav.png"/>
 	<image filename="president-Olga.png"/>
 	<image filename="president-SiB.png"/>
+</images>
+<images directory="Plaques">
+	<image filename="president-Blingfaster-plaque.png"/>
+	<image filename="president-Bob-plaque.png"/>
+	<image filename="president-Burt-plaque.png"/>
+	<image filename="president-Carl-plaque.png"/>
+	<image filename="president-Dhelma-plaque.png"/>
+	<image filename="president-Flaire-plaque.png"/>
+	<image filename="president-Frank-plaque.png"/>
+	<image filename="president-Frankie-plaque.png"/>
+	<image filename="president-Gramma-plaque.png"/>
+	<image filename="president-Hans-plaque.png"/>
+	<image filename="president-Henrich-plaque.png"/>
+	<image filename="president-Hugo-plaque.png"/>
+	<image filename="president-Ludo-plaque.png"/>
+	<image filename="president-Nojiko-plaque.png"/>
+	<image filename="president-no-nose-plaque.png"/>
+	<image filename="president-Sam-plaque.png"/>
+	<image filename="president-Sarah-plaque.png"/>
+	<image filename="president-Stieg-plaque.png"/>
+	<image filename="president-Sture-plaque.png"/>
+	<image filename="president-Will-plaque.png"/>
+	<image filename="president-Alva-plaque.png"/>
+	<image filename="president-Boris-plaque.png"/>
+	<image filename="president-Gustav-plaque.png"/>
+	<image filename="president-Olga-plaque.png"/>
+	<image filename="president-SiB-plaque.png"/>
 </images>

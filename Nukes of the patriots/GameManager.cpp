@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GUIManager.h"
+#include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
 #include "Communist.h"
@@ -76,10 +77,14 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "President/" + filename.substr(0, filename.length() - 4);
-				mPresidentVector.push_back(std::make_shared<President>(key));
+				std::shared_ptr<President> president = std::make_shared<President>(key);
+				mPresidentVector.push_back(president);
+				std::string mapKey = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
+				mPresidentPlaqueMap[president] = &ResourceHandler::getInstance()->getTexture(mapKey);
 				childNode = childNode->NextSiblingElement("image");
 			}
 		}
+
 		if(strcmp(images->Attribute("directory"), "Generals") == 0)
 		{
 			tinyxml2::XMLElement *childNode = images->FirstChildElement("image");
@@ -87,7 +92,10 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
-				mGeneralVector.push_back(std::make_shared<President>(key));
+				std::shared_ptr<President> general = std::make_shared<President>(key);
+				mGeneralVector.push_back(general);	
+				std::string mapKey		 = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
+				mGeneralPlaqueMap[general] = &ResourceHandler::getInstance()->getTexture(mapKey);
 				childNode = childNode->NextSiblingElement("image");
 			}
 		}
@@ -106,6 +114,16 @@ std::shared_ptr<President> GameManager::getRandomPresident()
 std::shared_ptr<President> GameManager::getGeneral(int number)
 {
 	return mGeneralVector[number];
+}
+
+sf::Texture& GameManager::getPresidentPlaque(std::shared_ptr<President> president)
+{
+	return *mPresidentPlaqueMap[president];
+}
+
+sf::Texture& GameManager::getGeneralPlaque(std::shared_ptr<President> general)
+{
+	return *mGeneralPlaqueMap[general];
 }
 
 void GameManager::addSuperPower(std::shared_ptr<SuperPower> power)
