@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include "GUIWindow.h"
+#include "GUIButton.h"
 
 class SuperPower;
 class President;
@@ -44,6 +46,9 @@ private:
 	}
 
 	void loadPresidents();
+	void loadWindowPosition();
+	void loadButtonPosition();
+	void initializeGuiFunctions();
 
 	int mYear;
 	int mRound;
@@ -55,6 +60,10 @@ private:
 	std::vector<std::shared_ptr<President> > mPresidentVector;
 	std::vector<std::shared_ptr<President> > mGeneralVector;
 	std::shared_ptr<SuperPower> mCurrentPlayer;
+
+	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy
+	std::shared_ptr<GUIWindow> mSecondDecideWhoStartWindow; //Om den ena har högre spy än den andra
 };
+
 
 #endif

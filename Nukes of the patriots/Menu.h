@@ -54,7 +54,6 @@ private:
 	std::shared_ptr<GUIButton> mFirstPresidentButton;
 	std::shared_ptr<GUIButton> mSecondPresidentButton;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
-
 	sf::RenderWindow &mWindow;
 };
 

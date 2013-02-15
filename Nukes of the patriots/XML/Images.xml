@@ -12,6 +12,7 @@
 	<image filename="kap_texture_button_invert_export.png"/>
 	<image filename="kap_texture_button_ok.png"/>	
 	<image filename="7_kap_window_tax.png"/>
+	<image filename="kap_texture_button_cancel.png"/>
 	<image filename="7_kap_window_res.png"/>
 	<image filename="7_kap_window_upg.png"/>
 	<image filename="7_kap_window_exp.png"/>
@@ -43,6 +44,7 @@
 	<image filename="7_kom_window_res.png"/>
 	<image filename="7_kom_window_upg.png"/>
 	<image filename="7_kom_window_exp.png"/>
+	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
 	<image filename="kom_texture_button_plus.png"/>
 	<image filename="button_plu5.png"/>
@@ -61,6 +63,15 @@
 	<image filename="7_kom_window_president1.png"/>
 	<image filename="7_kom_window_president2.png"/>
 	<image filename="kom_texture_button_elect.png"/>
+	<image filename="PropagandaFoodOne.png"/>
+	<image filename="PropagandaFoodTwo.png"/>
+	<image filename="PropagandaFoodThree.png"/>
+	<image filename="PropagandaGoodsOne.png"/>
+	<image filename="PropagandaGoodsTwo.png"/>
+	<image filename="PropagandaGoodsThree.png"/>
+	<image filename="PropagandaTechOne.png"/>
+	<image filename="PropagandaTechTwo.png"/>
+	<image filename="PropagandaTechThree.png"/>	
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -72,7 +83,9 @@
 	<image filename="3_4credits.png"/>
 	<image filename="3_5exit.png"/>
 	<image filename="Team-Flagga-Communist-up.png"/>
+	<image filename="Team-Flagga-Communist-down.png"/>
 	<image filename="Team-Flagga-Kapitalist-up.png"/>
+	<image filename="Team-Flagga-Kapitalist-down.png"/>
 	<image filename="Team-background-screen.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>
 	<image filename="Namnruta-aktiv.png"/>
