@@ -29,6 +29,7 @@ public:
 	void										setCurrentPlayer(std::shared_ptr<SuperPower> nextPlayer);
 	void										setYear(int year);
 	void										startRound();
+	void										updateStatsWindow();
 	void										nextRound();
 	void										addSuperPower(std::shared_ptr<SuperPower> power);
 	//void										setVector(std::vector<std::shared_ptr<SuperPower> > SuperPowerVec);
@@ -62,7 +63,6 @@ private:
 	void initializeGuiElement();
 	void initializeGuiFunctions();
 
-
 	int mYear;
 	int mRound;
 
@@ -83,6 +83,19 @@ private:
 
 	std::shared_ptr<GUIWindow> mStatsWindow;
 	std::shared_ptr<GUIButton> mCloseStatsWindow;
+	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mCurrencyChange;
+	std::shared_ptr<GUIText>   mPopulationChange;
+	std::shared_ptr<GUIText>   mFoodChange;
+	std::shared_ptr<GUIText>   mGoodsChange;
+	std::shared_ptr<GUIText>   mTechChange;
+	std::shared_ptr<GUIText>   mExportedFoodChange;
+	std::shared_ptr<GUIText>   mExportedGoodsChange;
+	std::shared_ptr<GUIText>   mExportedTechChange;
+	std::shared_ptr<GUIText>   mTaxChange;
+	std::shared_ptr<GUIText>   mSpyNetworkChange;
+	std::shared_ptr<GUIText>   mNuclearWeaponChange;
+	std::shared_ptr<GUIText>   mSpaceProgramChange;
 
 	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy
 	std::shared_ptr<GUIWindow> mSecondDecideWhoStartWindow; //Om den ena har högre spy än den andra
@@ -90,10 +103,12 @@ private:
 	std::shared_ptr<GUIButton> mCommunistButton;
 	std::shared_ptr<GUIButton> mCloseFirstWindow;
 
+	// Texter för de två fönster som finns för att visa lagens spionnätverk för rundan som varit
 	std::shared_ptr<GUIText>   mFirstCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
+
 };
 
 

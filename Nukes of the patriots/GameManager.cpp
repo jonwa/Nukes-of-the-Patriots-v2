@@ -61,6 +61,7 @@ void GameManager::init(int year)
 	}
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
+	//startRound();
 
 }
 
@@ -227,6 +228,11 @@ void GameManager::setYear(int year)
 	mYear = year; 
 }
 
+void GameManager::updateStatsWindow()
+{
+	
+}
+
 void GameManager::nextRound()
 {
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
@@ -253,6 +259,11 @@ void GameManager::nextRound()
 				nextPlayers.push_back(*it);
 		}
 		// Sätter statsfönstret till true när ett år har gått
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+		{
+			(*it)->newYearStart();
+		}
+		updateStatsWindow();
 		mStatsWindow->setVisible(true); 
 
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
@@ -434,6 +445,20 @@ void GameManager::initializeGuiElement()
 
 	mStatsWindow						= GUIWindow::create(BetweenTurnsWindow["Stats"]);
 	mCloseStatsWindow					= GUIButton::create(BetweenTurnsButton["CloseStats"], mStatsWindow);
+	mPatriotismChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mCurrencyChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mPopulationChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mFoodChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mGoodsChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mTechChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedFoodChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedGoodsChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedTechChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mTaxChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mSpyNetworkChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mSpaceProgramChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+
 	mStatsWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);

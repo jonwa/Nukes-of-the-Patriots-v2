@@ -3,21 +3,21 @@
 
 SuperPower::SuperPower() : 
 	mPopulation(50),			//Befolkning i miljoner
-	mPatriotism(20),
-	mCurrency(500), 
-	mTaxes(30),
-	mFood(0),
-	mExportedFood(0),
+	mPatriotism(20),mPatriotismPreviousRound(mPatriotism),
+	mCurrency(500),mCurrencyPreviousRound(mCurrency),
+	mTaxes(30),mTaxesPreviousRound(mTaxes),
+	mFood(0),mFoodPreviousRound(mFood),
+	mExportedFood(0),mExportedFoodPreviousRound(mExportedFood),
 	mExportedFoodPrice(0),
-	mTech(0),
-	mExportedTech(0),
+	mTech(0),mTechPreviousRound(mTech),
+	mExportedTech(0),mExportedTechPreviousRound(mExportedTech),
 	mExportedTechPrice(0),
-	mGoods(0),
-	mExportedGoods(0),
+	mGoods(0),mGoodsPreviousRound(mGoods),
+	mExportedGoods(0),mExportedGoodsPreviousRound(mExportedGoods),
 	mExportedGoodsPrice(0),
-	mSpyNetwork(0),
-	mSpaceProgram(0),
-	mNuclearWeapon(10),
+	mSpyNetwork(0),mSpyNetworkPreviousRound(mSpyNetwork),
+	mSpaceProgram(0),mSpaceProgramPreviousRound(mSpaceProgram),
+	mNuclearWeapon(10),mNuclearWeaponPreviousRound(mNuclearWeapon),
 	mTaxDecreased(false)
 {
 }

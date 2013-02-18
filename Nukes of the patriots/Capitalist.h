@@ -46,6 +46,7 @@ public:
 	void showGUI();
 	void hideGUI();
 	void update();
+	void newYearStart();
 
 	void setTaxesCost(int tax);
 
@@ -54,6 +55,7 @@ public:
 	bool setTech(int value);
 
 	void playMusic();
+	void stopMusic();
 
 	void resetResourcesValues();
 
@@ -94,6 +96,10 @@ private:
 
 	
 	//President	*mPresident;
+
+	std::shared_ptr<GUIWindow> mIncreasedResourcesWindow;
+	std::shared_ptr<GUIButton> mCloseIncreasedResourcesWindow;
+
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -199,6 +205,25 @@ private:
 	std::shared_ptr<GUIImage>  mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
+
+	std::shared_ptr<GUIButton> mLeftPanel;
+	std::shared_ptr<GUIButton> mRightPanel;
+
+
+	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mCurrencyChange;
+	std::shared_ptr<GUIText>   mPopulationChange;
+	std::shared_ptr<GUIText>   mFoodChange;
+	std::shared_ptr<GUIText>   mGoodsChange;
+	std::shared_ptr<GUIText>   mTechChange;
+	std::shared_ptr<GUIText>   mExportedFoodChange;
+	std::shared_ptr<GUIText>   mExportedGoodsChange;
+	std::shared_ptr<GUIText>   mExportedTechChange;
+	std::shared_ptr<GUIText>   mTaxChange;
+	std::shared_ptr<GUIText>   mSpyNetworkChange;
+	std::shared_ptr<GUIText>   mNuclearWeaponChange;
+	std::shared_ptr<GUIText>   mSpaceProgramChange;
+
 };
 
 

@@ -45,13 +45,86 @@ void Capitalist::playMusic()
 	CapitalistMusic["CapitalistMainTheme"]->play();
 }
 
+void Capitalist::stopMusic()
+{
+	CapitalistMusic["CapitalistMainTheme"]->stop();
+}
+
 std::shared_ptr<President> Capitalist::getPresident()
 {
 	return mPresident;
 }
 
+void Capitalist::newYearStart()
+{
+	int foodPatriotismChange = 0;
+	if(mFood == 0)
+		foodPatriotismChange = -4;
+	else if(mFood > 0 && mFood <= mPopulation/2)
+		foodPatriotismChange = -2;
+
+	mFood -= mPopulation;
+	if(mFood < 0) mFood = 0;
+	int taxPatriotismChange = 0;
+	int taxChange = mTaxes - mTaxesPreviousRound;
+	if(taxChange > 0)
+		taxPatriotismChange = -3;
+	else if(taxChange < 0)
+		taxPatriotismChange = 2;
+
+	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
+
+	int enemyNuclearWeapon = enemy->getNuclearWeapon();
+	int enemySpaceProgram = enemy->getSpaceProgram();
+
+	int nuclearDifference = mNuclearWeapon - enemyNuclearWeapon;
+	int spaceProgramDifference = mSpaceProgram - enemySpaceProgram;
+
+	int nuclearWeaponChange = 0;
+	int spaceProgramChange = 0;
+	int exportedChange = 0;
+	if(nuclearDifference > 0)
+		nuclearWeaponChange = (nuclearDifference > enemyNuclearWeapon*2) ? 2 : 1;
+	if(spaceProgramDifference > enemySpaceProgram)
+		spaceProgramChange += 1;
+	
+	// My exported resources
+	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
+	int exportedGoodsChange = mExportedGoods - (mExportedGoods - mExportedGoodsPreviousRound);
+	int exportedTechChange = mExportedTech - (mExportedTech - mExportedTechPreviousRound);
+	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
+
+	// Enemy exported resources
+	int enemyFoodExported = enemy->getExportedFood() - (enemy->getExportedFood() - enemy->getExportedFoodPreviousRound());
+	int enemyGoodsExported = enemy->getExportedFood() - (enemy->getExportedGoods() - enemy->getExportedGoodsPreviousRound());
+	int enemyTechExported = enemy->getExportedFood() - (enemy->getExportedTech() - enemy->getExportedTechPreviousRound());
+	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
+
+	if(exportedTotal > enemyExportedTotal)
+		exportedChange += 1;
+
+	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange;
+
+}
+
 void Capitalist::update()
 {
+	// Set previous round values as current round values so we can get the difference at the start of the next round
+	// Would've been better to use a vector
+	mPatriotismPreviousRound = mPatriotism;
+	mCurrencyPreviousRound = mCurrency;
+	mPopulationPreviousRound = mPopulation;
+	mFoodPreviousRound = mFood;
+	mGoodsPreviousRound = mGoods;
+	mTechPreviousRound = mTech;
+	mExportedFoodPreviousRound = mExportedFood;
+	mExportedGoodsPreviousRound = mExportedGoods;
+	mExportedTechPreviousRound = mExportedTech;
+	mTaxesPreviousRound = mTaxes;
+	mSpyNetworkPreviousRound = mSpyNetwork;
+	mNuclearWeaponPreviousRound = mNuclearWeapon;
+	mSpaceProgramPreviousRound = mSpaceProgram;
+
 	if((mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
@@ -60,7 +133,7 @@ void Capitalist::update()
 
 void Capitalist::setTaxesCost(int tax)
 {
-	mTaxDecreased = (tax < mTaxes);
+	//mTaxDecreased = (tax < mTaxes);
 	mTaxes = tax;
 }
 
@@ -347,7 +420,6 @@ void Capitalist::initializeCapitalistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCapitalistMusic();
-	//playMusic();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
@@ -356,15 +428,17 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
+	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
+	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
-	mNuclearText						= GUIText::create(sf::FloatRect(815, 16, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
-	mSpaceText							= GUIText::create(sf::FloatRect(815, 228, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
-	mSpyText							= GUIText::create(sf::FloatRect(815, 440, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
-	mFoodText							= GUIText::create(sf::FloatRect(10, 16, 40, 40), intToString(getFood()), mCapitalistMainWindow);
-	mGoodsText							= GUIText::create(sf::FloatRect(10, 228, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
-	mTechText							= GUIText::create(sf::FloatRect(10, 440, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCapitalistMainWindow);
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
@@ -396,9 +470,9 @@ void Capitalist::initializeCapitalistWindow()
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
 
 	
-	mBuyFoodText						= GUIText::create(sf::FloatRect(89, 57, 40, 40), "0",mResourceWindow);
-	mBuyGoodsText						= GUIText::create(sf::FloatRect(269, 57, 40, 40), "0", mResourceWindow);
-	mBuyTechText						= GUIText::create(sf::FloatRect(449, 57, 40, 40), "0", mResourceWindow);
+	mBuyFoodText						= GUIText::create(sf::FloatRect(93, 70, 40, 40), "0",mResourceWindow);
+	mBuyGoodsText						= GUIText::create(sf::FloatRect(273, 70, 40, 40), "0", mResourceWindow);
+	mBuyTechText						= GUIText::create(sf::FloatRect(453, 70, 40, 40), "0", mResourceWindow);
 	mFoodCost							= GUIText::create(sf::FloatRect(30, 20, 40, 40), "0", mResourceWindow);
 	mGoodsCost							= GUIText::create(sf::FloatRect(210, 20, 40, 40), "0", mResourceWindow);
 	mTechCost							= GUIText::create(sf::FloatRect(390, 20, 40, 40), "0", mResourceWindow);
@@ -493,6 +567,10 @@ void Capitalist::initializeCapitalistWindow()
 	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
 	
+	//används för att i början av varje kapitalistrunda visa om någon av resurserna har ökat i pris
+	mIncreasedResourcesWindow			= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
+	mCloseIncreasedResourcesWindow		= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesWindow);
+	mIncreasedResourcesWindow->setVisible(false);
 	chooseLeader();
 
 	/*
@@ -954,19 +1032,20 @@ void Capitalist::initializeGuiFunctions()
 		//mTaxes = mCurrentTax;
 		GameManager::getInstance()->nextRound();  
 	});
+
+	mCloseIncreasedResourcesWindow->setOnClickFunction([=]()
+	{
+		mIncreasedResourcesWindow->setVisible(false);
+	});
 }
 
 void Capitalist::showGUI()
 {
-	//std::cout << "Capitalist show gui" << std::endl;
 	mCapitalistMainWindow->setVisible(true);
-	//mCapitalistEndTurnButton->setVisible(true);
 }
 
 void Capitalist::hideGUI()
 {
-	//std::cout << "Capitalist hide gui" << std::endl;
 	mCapitalistMainWindow->setVisible(false);
-	//mCapitalistEndTurnButton->setVisible(false);
 }
 

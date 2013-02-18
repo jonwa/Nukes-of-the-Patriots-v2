@@ -49,6 +49,16 @@ Communist::Communist()
 Communist::~Communist()
 {
 }
+//spelar upp musiken samt loopar den
+void Communist::playMusic()
+{
+	//CommunistMusic["CommunistMainTheme"]->play();
+}
+//Stoppar musiken
+void Communist::stopMusic()
+{
+	CommunistMusic["CommunistMainTheme"]->stop();
+}
 
 void Communist::fiveYearInitialize()
 {
@@ -141,8 +151,76 @@ int Communist::getYearlyTaxes(int round)
 	return mYearVector[year]["taxes"];
 }
 
+void Communist::newYearStart()
+{
+	int foodPatriotismChange = 0;
+	if(mFood == 0)
+		foodPatriotismChange = -4;
+	else if(mFood > 0 && mFood <= mPopulation/2)
+		foodPatriotismChange = -2;
+
+	mFood -= mPopulation;
+	if(mFood < 0) mFood = 0;
+	int taxPatriotismChange = 0;
+	int taxChange = mTaxes - mTaxesPreviousRound;
+	if(taxChange > 0)
+		taxPatriotismChange = -2;
+	else if(taxChange < 0)
+		taxPatriotismChange = 1;
+
+	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
+
+	int enemyNuclearWeapon = enemy->getNuclearWeapon();
+	int enemySpaceProgram = enemy->getSpaceProgram();
+
+	int nuclearDifference = mNuclearWeapon - enemyNuclearWeapon;
+	int spaceProgramDifference = mSpaceProgram - enemySpaceProgram;
+
+	int nuclearWeaponChange = 0;
+	int spaceProgramChange = 0;
+	int exportedChange = 0;
+	if(nuclearDifference > 0)
+		nuclearWeaponChange = (nuclearDifference > enemyNuclearWeapon*2) ? 2 : 1;
+	if(spaceProgramDifference > enemySpaceProgram)
+		spaceProgramChange += 1;
+	
+	// My exported resources
+	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
+	int exportedGoodsChange = mExportedGoods - (mExportedGoods - mExportedGoodsPreviousRound);
+	int exportedTechChange = mExportedTech - (mExportedTech - mExportedTechPreviousRound);
+	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
+
+	// Enemy exported resources
+	int enemyFoodExported = enemy->getExportedFood() - (enemy->getExportedFood() - enemy->getExportedFoodPreviousRound());
+	int enemyGoodsExported = enemy->getExportedFood() - (enemy->getExportedGoods() - enemy->getExportedGoodsPreviousRound());
+	int enemyTechExported = enemy->getExportedFood() - (enemy->getExportedTech() - enemy->getExportedTechPreviousRound());
+	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
+
+	if(exportedTotal > enemyExportedTotal)
+		exportedChange += 1;
+
+	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange;
+}
+
 void Communist::update()
 {
+
+	// Set previous round values as current round values so we can get the difference at the start of the next round
+	// Would've been better to use a vector
+	mPatriotismPreviousRound = mPatriotism;
+	mCurrencyPreviousRound = mCurrency;
+	mPopulationPreviousRound = mPopulation;
+	mFoodPreviousRound = mFood;
+	mGoodsPreviousRound = mGoods;
+	mTechPreviousRound = mTech;
+	mExportedFoodPreviousRound = mExportedFood;
+	mExportedGoodsPreviousRound = mExportedGoods;
+	mExportedTechPreviousRound = mExportedTech;
+	mTaxesPreviousRound = mTaxes;
+	mSpyNetworkPreviousRound = mSpyNetwork;
+	mNuclearWeaponPreviousRound = mNuclearWeapon;
+	mSpaceProgramPreviousRound = mSpaceProgram;
+
 	openFiveYearPlan();
 }
 
@@ -237,7 +315,7 @@ bool Communist::setTech(int value)
 
 void Communist::setTaxesCost(int tax)
 {
-	mTaxDecreased = (tax < mTaxes);
+	//mTaxDecreased = (tax < mTaxes);
 	mTaxes = tax;
 }
 /*  Köper en dos propaganda för 100 kr/dos som kan ge upp till 10 av en resurs, 
@@ -274,8 +352,8 @@ void Communist::buyPropagandaGoods(int round)
 	resourcesTotal += getYearlyFood(round);
 	resourcesTotal += getYearlyGoods(round);
 	resourcesTotal += getYearlyTech(round);
-
-	int percent = mGoods/resourcesTotal;
+	std::cout<<"Resources total: "<<(float)resourcesTotal<<std::endl;
+	float percent = mGoods/resourcesTotal;
 	percent*=100;
 
 	for(int i=0;i<10;i++)
@@ -297,7 +375,7 @@ void Communist::buyPropagandaTech(int round)
 	resourcesTotal += getYearlyGoods(round);
 	resourcesTotal += getYearlyTech(round);
 	
-	int percent = mTech/resourcesTotal;
+	float percent = mTech/resourcesTotal;
 	percent*=100;
 
 	for(int i=0;i<10;i++)
@@ -465,11 +543,6 @@ void Communist::loadCommunistMusic()
 	}
 }
 
- /*Används för att spela upp kommunisternas themesong*/
-//void Communist::playMusic()
-//{
-//	CommunistMusic["CommunistMainTheme"]->play();
-//}
 
  /*initierar kommunisternas fönster respektive fönster/knappar etc.*/
 
@@ -485,15 +558,17 @@ void Communist::initializeCommunistWindow()
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistExportButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
+	mLeftPanel						= GUIButton::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
+	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
-	mNuclearText = GUIText::create(sf::FloatRect(815, 16, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
-	mSpaceText	 = GUIText::create(sf::FloatRect(815, 228, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
-	mSpyText	 = GUIText::create(sf::FloatRect(815, 440, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
-	mFoodText	 = GUIText::create(sf::FloatRect(10, 16, 40, 40), intToString(getFood()), mCommunistMainWindow);
-	mGoodsText   = GUIText::create(sf::FloatRect(10, 228, 40, 40), intToString(getGoods()), mCommunistMainWindow);
-	mTechText	 = GUIText::create(sf::FloatRect(10, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+	mNuclearText = GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mSpaceText	 = GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpyText	 = GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
+	mFoodText	 = GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCommunistMainWindow);
+	mGoodsText   = GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCommunistMainWindow);
+	mTechText	 = GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCommunistMainWindow);	
 
 	/*Taxes fönster med knappar*/
 	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	
@@ -617,6 +692,7 @@ void Communist::initializeCommunistWindow()
 	mGoToPreviousPortraitButton			= GUIButton::create(CommunistButtons["GoToPreviousPortrait"], mChooseGeneralWindow);
 	mCloseGeneralWindow					= GUIButton::create(CommunistButtons["CloseGeneral"], mChooseGeneralWindow);
 	mClosePickedGeneralWindow			= GUIButton::create(CommunistButtons["ClosePickedGeneral"], mPickedGeneralWindow);
+
 	
 	chooseLeader();
 
@@ -881,6 +957,7 @@ void Communist::initializeGuiFunctions()
 		mPropagandaWindowFirst->setVisible(false);
 		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
 	});
+
 	/*Stänger propagandafönster nummer två*/
 	mPropagandaWindowSecondCloseButton->setOnClickFunction([=]()
 	{
@@ -901,9 +978,8 @@ void Communist::initializeGuiFunctions()
 		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyFoodButton->getTexture()));
 		mShowBoughtPropaganda->setScale(0.7, 0.7);
-
-		//std::cout << "Food: " << mFood << std::endl;
 	});
+
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
 	{
 		mPropagandaWindowSecond->setEnabled(true, true);
@@ -1047,18 +1123,6 @@ void Communist::initializeGuiFunctions()
 		mCommunistGeneralButton->setScale(0.63, 0.68);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
-	});
-	mPropagandaBuyFoodButton->setOnClickFunction([=]()
-	{
-		buyPropagandaFood(getRound());
-	});
-	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
-	{
-		buyPropagandaGoods(getRound());
-	});
-	mPropagandaBuyTechButton->setOnClickFunction([=]()
-	{
-		buyPropagandaTech(getRound());
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
