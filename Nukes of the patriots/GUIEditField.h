@@ -23,6 +23,7 @@ public:
 	void				setOnGuiChangeFunction(std::function<void()>);
 	virtual bool		update(sf::RenderWindow *window, sf::Event event);
 	virtual void		onGUIClick(int mouseX, int mouseY);
+
 	void				setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 				~GUIEditField(){}
 private:

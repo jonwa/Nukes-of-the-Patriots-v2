@@ -16,7 +16,6 @@ GUIEditField::GUIEditField(sf::FloatRect rect, std::string text, bool onlyNumber
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
 {
-
 	mFont.loadFromFile("Font/Moire-Regular.ttf");
 	mText.setFont(mFont);
 
@@ -210,7 +209,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						mCaretIndex -= std::abs(characters);
 				}
 				mText.setString(str);
-				if(mOnGuiChange != 0)
+				if(mOnGuiChange != NULL)
 					mOnGuiChange();
 
 				mSelectedCaret = -1;
@@ -236,9 +235,11 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						mCaretIndex -= std::abs(characters);
 				}
 				mText.setString(str);
-				mSelectedCaret = -1;
-				if(mOnGuiChange != 0)
+
+				if(mOnGuiChange != NULL)
 					mOnGuiChange();
+
+				mSelectedCaret = -1;
 			}
 		}
 		if(event.type == sf::Event::TextEntered)
@@ -265,7 +266,9 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						str.insert(mCaretIndex, key);
 					mCaretIndex++;
 					mText.setString(str);
-					if(mOnGuiChange != 0)
+
+					mSelectedCaret = -1;
+					if(mOnGuiChange != NULL)
 						mOnGuiChange();
 
 					mSelectedCaret = -1;

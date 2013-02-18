@@ -928,6 +928,9 @@ void Communist::initializeGuiFunctions()
 		mCommunistMainWindow->setEnabled(false, true);
 		mUpgradeWindow->setEnabled(true, true);
 
+		mBuySpaceProgramText->setText(mSpaceText->getText());
+		mBuyNuclearText->setText(mNuclearText->getText());
+		mBuySpyNetworkText->setText(mSpyText->getText());
 		mUpgradeWindow->setVisible(true); 
 		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
 	});
@@ -1064,11 +1067,6 @@ void Communist::initializeGuiFunctions()
 		mExportWindow->setVisible(false); 
 		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
 	});
-
-	/*mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
-	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
-	mUpgradeSpyNetworkButton->setOnClickFunction(std::bind(&Communist::upgradeSpyNetwork, this));*/
-
 
 	/*GUI hantering för valet av general*/
 	/*Bläddra mellan generalerna för att välja mellan de fem som finns*/
