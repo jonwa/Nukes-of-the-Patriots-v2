@@ -15,6 +15,7 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Audio\Music.hpp>
 
 
 class President;

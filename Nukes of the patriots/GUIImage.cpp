@@ -22,7 +22,7 @@ GUIImage::GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr
 	else
 		mSprite.setPosition(getX(), getY());
 
-	setSize(pair.first.width, pair.first.height);
+	//setSize(pair.first.width, pair.first.height);
 
 }
 

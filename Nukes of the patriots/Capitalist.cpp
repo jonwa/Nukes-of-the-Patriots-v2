@@ -945,13 +945,13 @@ void Capitalist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{ 
-		if(mTaxes < mCurrentTax)
+		/*if(mTaxes < mCurrentTax)
 			setPatriotism(getPatriotism() + 2);
 		else if(mTaxes > mCurrentTax)
-			setPatriotism(getPatriotism() - 3);
+			setPatriotism(getPatriotism() - 3);*/
 		
 		//mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
-		mTaxes = mCurrentTax;
+		//mTaxes = mCurrentTax;
 		GameManager::getInstance()->nextRound();  
 	});
 }

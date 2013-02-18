@@ -466,10 +466,10 @@ void Communist::loadCommunistMusic()
 }
 
  /*Används för att spela upp kommunisternas themesong*/
-void Communist::playMusic()
-{
-	CommunistMusic["CommunistMainTheme"]->play();
-}
+//void Communist::playMusic()
+//{
+//	CommunistMusic["CommunistMainTheme"]->play();
+//}
 
  /*initierar kommunisternas fönster respektive fönster/knappar etc.*/
 
