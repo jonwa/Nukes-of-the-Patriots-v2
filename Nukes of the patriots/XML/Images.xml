@@ -125,6 +125,14 @@
 	<image filename="president-Olga.png"/>
 	<image filename="president-SiB.png"/>
 </images>
+<images directory="BetweenTurns">
+	<image filename="Stats.png"/>
+	<image filename="BetweenTurns.png"/>
+	<image filename="BetweenTurns1.png"/>
+	<image filename="yes.png"/>
+	<image filename="no.png"/>
+	<image filename="Ok-knapp-aktiv.png"/>
+</images>
 <images directory="Plaques">
 	<image filename="president-Blingfaster-plaque.png"/>
 	<image filename="president-Bob-plaque.png"/>

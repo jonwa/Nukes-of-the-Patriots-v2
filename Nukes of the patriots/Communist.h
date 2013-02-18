@@ -114,6 +114,7 @@ private:
 	void loadCommunistMusic();
 
 
+
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
 

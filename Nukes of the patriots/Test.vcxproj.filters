@@ -1,22 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Header Files\Assets">
       <UniqueIdentifier>{37c7a634-044b-423a-9ddf-b27243043f82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Menu">
-      <UniqueIdentifier>{287aeafe-eb10-4f49-bcc9-951f1ada1f29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\SuperPower">
-      <UniqueIdentifier>{9b61ce66-0a9d-4eed-b60f-cd395d0bedff}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\SuperPower">
       <UniqueIdentifier>{4003ba4b-cccb-4bcd-81f1-d672ff8f8627}</UniqueIdentifier>
@@ -27,14 +17,24 @@
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{d810664e-f535-4514-bd84-69d8e1a518be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Timer">
+      <UniqueIdentifier>{d03d59b8-535a-491c-b1b5-17d57d015bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{287aeafe-eb10-4f49-bcc9-951f1ada1f29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SuperPower">
+      <UniqueIdentifier>{9b61ce66-0a9d-4eed-b60f-cd395d0bedff}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\GUI">
       <UniqueIdentifier>{fa2912ef-2a8a-4f7c-b82c-4d605b850a95}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\TinyXML">
       <UniqueIdentifier>{8c870fd5-7aaa-4197-b204-dfa28f992423}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Timer">
-      <UniqueIdentifier>{d03d59b8-535a-491c-b1b5-17d57d015bc3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Timer">
       <UniqueIdentifier>{5891f394-86fa-4636-9550-6e59b4919eda}</UniqueIdentifier>

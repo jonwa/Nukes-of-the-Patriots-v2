@@ -852,6 +852,9 @@ void Communist::initializeGuiFunctions()
 		mCommunistMainWindow->setEnabled(false, true);
 		mUpgradeWindow->setEnabled(true, true);
 
+		mBuySpaceProgramText->setText(mSpaceText->getText());
+		mBuyNuclearText->setText(mNuclearText->getText());
+		mBuySpyNetworkText->setText(mSpyText->getText());
 		mUpgradeWindow->setVisible(true); 
 		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
 	});
@@ -989,11 +992,6 @@ void Communist::initializeGuiFunctions()
 		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
 	});
 
-	/*mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
-	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
-	mUpgradeSpyNetworkButton->setOnClickFunction(std::bind(&Communist::upgradeSpyNetwork, this));*/
-
-
 	/*GUI hantering för valet av general*/
 	/*Bläddra mellan generalerna för att välja mellan de fem som finns*/
 	mGoToNextPortraitButton->setOnClickFunction([=]()			
@@ -1042,24 +1040,11 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
-
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
 		mCommunistGeneralButton->setScale(0.63, 0.68);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
-	});
-	mPropagandaBuyFoodButton->setOnClickFunction([=]()
-	{
-		buyPropagandaFood(getRound());
-	});
-	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
-	{
-		buyPropagandaGoods(getRound());
-	});
-	mPropagandaBuyTechButton->setOnClickFunction([=]()
-	{
-		buyPropagandaTech(getRound());
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	

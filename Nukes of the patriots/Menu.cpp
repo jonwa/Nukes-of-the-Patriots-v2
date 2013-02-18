@@ -302,6 +302,4 @@ void Menu::initializeGuiFuctions()
 		}
 	});
 
-
-
 }	

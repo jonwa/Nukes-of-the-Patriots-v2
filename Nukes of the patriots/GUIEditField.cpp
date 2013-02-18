@@ -235,6 +235,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						mCaretIndex -= std::abs(characters);
 				}
 				mText.setString(str);
+
 				if(mOnGuiChange != NULL)
 					mOnGuiChange();
 
@@ -265,10 +266,12 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 						str.insert(mCaretIndex, key);
 					mCaretIndex++;
 					mText.setString(str);
+
 					mSelectedCaret = -1;
 					if(mOnGuiChange != NULL)
 						mOnGuiChange();
 
+					mSelectedCaret = -1;
 				}
 			}
 		}

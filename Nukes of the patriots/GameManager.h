@@ -2,12 +2,16 @@
 #define _GAME_MANAGER_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include <sstream>
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include <SFML\Graphics\Texture.hpp>
 
 class SuperPower;
+class Communist;
+class Capitalist;
 class President;
 class GUIText;
 
@@ -55,7 +59,9 @@ private:
 	void loadPresidents();
 	void loadWindowPosition();
 	void loadButtonPosition();
+	void initializeGuiElement();
 	void initializeGuiFunctions();
+
 
 	int mYear;
 	int mRound;
@@ -66,12 +72,28 @@ private:
 	std::vector<std::shared_ptr<SuperPower> > mVecPlayersLeft;
 	std::vector<std::shared_ptr<President> > mPresidentVector;
 	std::vector<std::shared_ptr<President> > mGeneralVector;
+
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsWindow;
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsButton;
+
 	std::map<std::shared_ptr<President>, sf::Texture*> mPresidentPlaqueMap;
 	std::map<std::shared_ptr<President>, sf::Texture*> mGeneralPlaqueMap;
+
 	std::shared_ptr<SuperPower> mCurrentPlayer;
+
+	std::shared_ptr<GUIWindow> mStatsWindow;
+	std::shared_ptr<GUIButton> mCloseStatsWindow;
 
 	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy
 	std::shared_ptr<GUIWindow> mSecondDecideWhoStartWindow; //Om den ena har högre spy än den andra
+	std::shared_ptr<GUIButton> mCapitalistButton;
+	std::shared_ptr<GUIButton> mCommunistButton;
+	std::shared_ptr<GUIButton> mCloseFirstWindow;
+
+	std::shared_ptr<GUIText>   mFirstCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 };
 
 

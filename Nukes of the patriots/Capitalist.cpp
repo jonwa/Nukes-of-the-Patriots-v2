@@ -490,7 +490,7 @@ void Capitalist::initializeCapitalistWindow()
 		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
 
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
-	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePickedPresident"], mPickedPresidentWindow);
+	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
 	
 	chooseLeader();

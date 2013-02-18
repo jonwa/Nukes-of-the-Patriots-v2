@@ -20,7 +20,7 @@ public:
 	void		setScale(float width, float height);
 	bool		render(sf::RenderWindow *window);
 
-	void		setOnGuiChangeFunction(std::function<void()>);
+	void				setOnGuiChangeFunction(std::function<void()>);
 	virtual bool		update(sf::RenderWindow *window, sf::Event event);
 	virtual void		onGUIClick(int mouseX, int mouseY);
 
