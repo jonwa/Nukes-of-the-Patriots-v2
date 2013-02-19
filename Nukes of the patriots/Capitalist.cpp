@@ -22,6 +22,8 @@ static int foodCost		= 10;
 static int goodsCost	= 20;
 static int techCost		= 30;
 static int taxChange	= 5;
+static int currentGoods = 0;
+static int currentTech  = 0;
 static bool activateWindow = false;
 
 Capitalist::Capitalist() :
@@ -192,7 +194,8 @@ bool Capitalist::setTech(int value)
 bool Capitalist::upgradeNuclearWeapon(int value)
 {
 	int goodsNuclearPrice = 10 * mPresident->getNuclearPriceModifier() * value;
-	int techNuclearPrice = 5  * mPresident->getNuclearPriceModifier() * value;
+	int techNuclearPrice = 5 * mPresident->getNuclearPriceModifier() * value;
+	
 	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
 	{
 		mNuclearWeapon += value;
@@ -211,8 +214,13 @@ bool Capitalist::upgradeNuclearWeapon(int value)
 															*/
 bool Capitalist::upgradeSpaceProgram(int value)
 {
-	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5 * mPresident->getSpacePriceModifier() * value;
-	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10 * mPresident->getSpacePriceModifier() * value;
+	int goodsSpaceProgramPrice = 0;
+	int techSpaceProgramPrice = 0;
+	for(int i = 0; i < value; ++i)
+	{
+		goodsSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 5 * mPresident->getSpacePriceModifier();
+		techSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 10 * mPresident->getSpacePriceModifier();
+	}
 	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
 	{
 		mSpaceProgram += value;
@@ -230,7 +238,11 @@ bool Capitalist::upgradeSpaceProgram(int value)
 															*/
 bool Capitalist::upgradeSpyNetwork(int value)
 {
-	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10 * mPresident->getSpyPriceModifier() * value;
+	int spyNetworkPrice = 0;
+	for(int i = 0; i < value; ++i)
+	{
+		spyNetworkPrice = (stringToInt(mSpyText->getText()) + i + 1) * 10 * mPresident->getSpyPriceModifier();
+	}
 
 	if(mTech >= spyNetworkPrice)
 	{
@@ -489,8 +501,13 @@ void Capitalist::initializeCapitalistWindow()
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
 
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
+	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 70, 20, 20), "0", mUpgradeWindow);
+	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 105, 20, 20), "0", mUpgradeWindow);
 	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
+	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 35, 20, 20), "0", mUpgradeWindow);
+	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 70, 20, 20), "0", mUpgradeWindow);
 	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
+	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 20, 20, 20), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	mExportWindow						= GUIWindow::create(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
@@ -790,7 +807,10 @@ void Capitalist::initializeGuiFunctions()
 
 	/*Upgrade GUI-Window med knappar*/
 	mCapitalistUpgradeButton->setOnClickFunction([=]()	
-	{ 
+	{
+		currentGoods				= mGoods;
+		currentTech					= mTech;
+
 		mCapitalistMainWindow->setEnabled(false, true);
 		mUpgradeWindow->setEnabled(true, true);
 
@@ -800,41 +820,84 @@ void Capitalist::initializeGuiFunctions()
 		mBuySpaceProgramText->setText(mSpaceText->getText());
 		mBuySpyNetworkText->setText(mSpyText->getText());
 
+		upgradeWindowText();
+
 	});
 
 	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
-	{ 
+	{
+		int nuclearGoodsPrice	= 10 * mPresident->getNuclearPriceModifier();
+		int nuclearTechPrice	= 5  * mPresident->getNuclearPriceModifier();
 		int amount = stringToInt(mBuyNuclearText->getText());
-		++amount;
-		mBuyNuclearText->setText(amount);
+		
+		if(currentGoods >= nuclearGoodsPrice && currentTech >= nuclearTechPrice)
+		{
+			++amount;
+			mBuyNuclearText->setText(amount);
+			upgradeWindowText();
+			currentGoods -= nuclearGoodsPrice;
+			currentTech  -= nuclearTechPrice;
+		}
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText());
+		currentGoods += stringToInt(mNuclearGoodsCost->getText()) * difference;
+		currentTech	 += stringToInt(mNuclearTechCost->getText()) * difference;
 		mBuyNuclearText->setText(mNuclearText->getText());
+		upgradeWindowText();
+		
 	});
 			
 
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
 	{
+		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
 		int amount = stringToInt(mBuySpaceProgramText->getText());
-		++amount;
-		mBuySpaceProgramText->setText(amount);
-	});		
+		if(currentGoods >= spaceProgramGoodsPrice && currentTech >= spaceProgramTechPrice)
+		{
+			++amount;
+			mBuySpaceProgramText->setText(amount);
+			upgradeWindowText();
+			currentGoods -= spaceProgramGoodsPrice;
+			currentTech -= spaceProgramTechPrice;
+		}
+	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
+		for(int i = 0; i < difference; ++i)
+		{
+			currentGoods += (stringToInt(mSpaceText->getText()) + i + 1) * 5 * mPresident->getSpacePriceModifier();
+			currentTech += (stringToInt(mSpaceText->getText()) + i + 1) * 10 * mPresident->getSpacePriceModifier();
+		}
 		mBuySpaceProgramText->setText(mSpaceText->getText());
+		upgradeWindowText();
 	});
 
 	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	 
 	{
+		int spyNetworkTechPrice = (stringToInt(mBuySpyNetworkText->getText()) + 1) * 10 * mPresident->getSpyPriceModifier();
 		int amount = stringToInt(mBuySpyNetworkText->getText());
-		++amount;
-		mBuySpyNetworkText->setText(amount);
+		if(currentTech >= spyNetworkTechPrice)
+		{
+			++amount;
+			currentTech -= spyNetworkTechPrice;
+			mBuySpyNetworkText->setText(amount);
+			upgradeWindowText();
+		}
 		
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
+		for(int i = 0; i < difference; ++i)
+		{
+			currentTech += (stringToInt(mSpyText->getText()) + i + 1) * 10 * mPresident->getSpyPriceModifier();
+		}
 		mBuySpyNetworkText->setText(mSpyText->getText());
+		upgradeWindowText();
 	});
 
 	/*Export GUI-Window med knapapr*/
@@ -936,20 +999,14 @@ void Capitalist::initializeGuiFunctions()
 		int nuclearDiff = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText()); 
 		int spaceDiff = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
 		int spyDiff = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
-		//if(upgradeNuclearWeapon(nuclearDiff) && upgradeSpaceProgram(spaceDiff) && upgradeSpyNetwork(spyDiff))
-		//{
-			mCapitalistMainWindow->setEnabled(true, true);
 
-			mUpgradeWindow->setVisible(false); 	
-			upgradeNuclearWeapon(nuclearDiff); 
-			upgradeSpaceProgram(spaceDiff); 
-			upgradeSpyNetwork(spyDiff);
-			mCapitalistUpgradeButton->setTexture(CapitalistButtons["Upgrade"]);//ändrar textur till orginal
-		//}
-		//else
-		//{
-		//	//Spela bajsfailljud 
-		//}
+		mCapitalistMainWindow->setEnabled(true, true);
+		
+		mUpgradeWindow->setVisible(false); 	
+		upgradeNuclearWeapon(nuclearDiff); 
+		upgradeSpaceProgram(spaceDiff); 
+		upgradeSpyNetwork(spyDiff);
+		mCapitalistUpgradeButton->setTexture(CapitalistButtons["Upgrade"]);//ändrar textur till orginal
 	});
 
 	/*Stänger ner Export fönster "Okay-knappen"*/
@@ -1037,6 +1094,24 @@ void Capitalist::initializeGuiFunctions()
 	{
 		mIncreasedResourcesWindow->setVisible(false);
 	});
+}
+
+void Capitalist::upgradeWindowText()
+{
+	int spaceProgram			= stringToInt(mBuySpaceProgramText->getText());
+	int spyNetwork				= stringToInt(mBuySpyNetworkText->getText());
+	int nuclearGoodsPrice		= 10 * mPresident->getNuclearPriceModifier();
+	int nuclearTechPrice		= 5  * mPresident->getNuclearPriceModifier();
+	int spaceProgramGoodsPrice  = (spaceProgram + 1) * 5 * mPresident->getSpacePriceModifier();
+	int spaceProgramTechPrice	= (spaceProgram + 1) * 10 * mPresident->getSpacePriceModifier();
+	int spyNetworkTechPrice		= (spyNetwork + 1) * 10 * mPresident->getSpyPriceModifier();
+
+	mNuclearGoodsCost->setText(nuclearGoodsPrice);
+	mNuclearTechCost->setText(nuclearTechPrice);
+	mSpaceProgramGoodsCost->setText(spaceProgramGoodsPrice);
+	mSpaceProgramTechCost->setText(spaceProgramTechPrice);
+	mSpyNetworkTechCost->setText(spyNetworkTechPrice);
+	
 }
 
 void Capitalist::showGUI()

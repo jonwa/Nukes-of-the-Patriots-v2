@@ -19,21 +19,14 @@ static int goodsCost		= 20;
 static int techCost			= 30;
 static int propagandaCost	= 100;
 static int taxChange		= 5;
+static int currentGoods		= 0;
+static int currentTech		= 0;
 static bool activateWindow	= false;
 
 static int generalCount = 0;
 
 Communist::Communist()
 {
-	mPopulation			= 50;			//Befolkning i miljoner
-	mPatriotism			= 20;
-	mTaxes				= 30;
-	mFood				= 0;
-	mTech				= 0;
-	mGoods				= 0;
-	mSpyNetwork			= 0;
-	mSpaceProgram		= 0;
-	mNuclearWeapon		= 10;
 	mRound				= 0;
 	mIncreasePopulation = false;
 	mType				= COMMUNIST;
@@ -225,19 +218,22 @@ void Communist::update()
 	openFiveYearPlan();
 }
 
+//-----------------------------------------------------------
 /*	
 	Uppgraderar mNuclearWeapon med ett
 	Kostar 10 mGoods och 5 mTech
 										*/
 bool Communist::upgradeNuclearWeapon(int value)
 {
-	int goodsNuclearPrice = 10;
-	int techNuclearPrice = 5;
+	int goodsNuclearPrice = 10 * value;
+	int techNuclearPrice = 5 * value;
+	
 	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
 	{
-		++mNuclearWeapon;
+		mNuclearWeapon += value;
 		mGoods -= goodsNuclearPrice;
 		mTech -= techNuclearPrice;
+		mNuclearText->setText(mNuclearWeapon);
 		return true;
 	}
 	return false;
@@ -250,13 +246,19 @@ bool Communist::upgradeNuclearWeapon(int value)
 															*/
 bool Communist::upgradeSpaceProgram(int value)
 {
-	int goodsSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 5;
-	int techSpaceProgramPrice = (mSpaceProgram == 0) ? 1 : mSpaceProgram * 10;
+	int goodsSpaceProgramPrice = 0;
+	int techSpaceProgramPrice = 0;
+	for(int i = 0; i < value; ++i)
+	{
+		goodsSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 5;
+		techSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 10;
+	}
 	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
 	{
-		++mSpaceProgram;
+		mSpaceProgram += value;
 		mGoods -= goodsSpaceProgramPrice;
 		mTech -= techSpaceProgramPrice;
+		mSpaceText->setText(mSpaceProgram);
 		return true;
 	}
 	return false;
@@ -268,12 +270,17 @@ bool Communist::upgradeSpaceProgram(int value)
 															*/
 bool Communist::upgradeSpyNetwork(int value)
 {
-	int spyNetworkPrice = (mSpyNetwork == 0) ? 1 : mSpyNetwork * 10;
+	int spyNetworkPrice = 0;
+	for(int i = 0; i < value; ++i)
+	{
+		spyNetworkPrice = (stringToInt(mSpyText->getText()) + i + 1) * 10;
+	}
 
 	if(mTech >= spyNetworkPrice)
 	{
-		++mSpyNetwork;
+		mSpyNetwork += value;
 		mTech -= spyNetworkPrice;
+		mSpyText->setText(mSpyNetwork);
 		return true;
 	}
 	return false;
@@ -651,9 +658,15 @@ void Communist::initializeCommunistWindow()
 	mCancelUpgradeNuclearWeaponButton	= GUIButton::create(CommunistButtons["CancelUpgradeNuclearWeapon"], mUpgradeWindow);
 	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
+	
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
+	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 70, 20, 20), "0", mUpgradeWindow);
+	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 105, 20, 20), "0", mUpgradeWindow);
 	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
+	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 35, 20, 20), "0", mUpgradeWindow);
+	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 70, 20, 20), "0", mUpgradeWindow);
 	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
+	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 20, 20, 20), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	/*Export GUI Window med knappar*/
@@ -708,6 +721,7 @@ void Communist::initializeCommunistWindow()
 
 	GUIManager::getInstance()->addGUIElement(mCommunistMainWindow);
 }
+
 
 void Communist::initializeCityImages()
 {
@@ -935,7 +949,10 @@ void Communist::initializeGuiFunctions()
 	});
 	/*Upgrade knappen på interface*/
 	mCommunistUpgradeButton->setOnClickFunction([=]()			
-	{ 
+	{
+		currentGoods				= mGoods;
+		currentTech					= mTech;
+
 		mCommunistMainWindow->setEnabled(false, true);
 		mUpgradeWindow->setEnabled(true, true);
 
@@ -944,6 +961,8 @@ void Communist::initializeGuiFunctions()
 		mBuySpyNetworkText->setText(mSpyText->getText());
 		mUpgradeWindow->setVisible(true); 
 		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
+
+		upgradeWindowText();
 	});
 	
 	/*Export knappen på interface*/
@@ -959,7 +978,7 @@ void Communist::initializeGuiFunctions()
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
-		updateAllResources();
+		//updateAllResources();
 		mFiveYearPlanWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 	});
@@ -1021,53 +1040,98 @@ void Communist::initializeGuiFunctions()
 		//std::cout << "Tech: " << mTech << std::endl;
 	});
 
-	/*Upgrade och cancel knappar för nuclear*/
+	/*Upgrade och cancel för NuclearWeapon*/
 	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
-	{ 
+	{
+		int nuclearGoodsPrice	= 10;
+		int nuclearTechPrice	= 5;
 		int amount = stringToInt(mBuyNuclearText->getText());
-		++amount;
-		mBuyNuclearText->setText(amount);
+		
+		if(currentGoods >= nuclearGoodsPrice && currentTech >= nuclearTechPrice)
+		{
+			++amount;
+			mBuyNuclearText->setText(amount);
+			upgradeWindowText();
+			currentGoods -= nuclearGoodsPrice;
+			currentTech  -= nuclearTechPrice;
+		}
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText());
+		currentGoods += stringToInt(mNuclearGoodsCost->getText()) * difference;
+		currentTech	 += stringToInt(mNuclearTechCost->getText()) * difference;
 		mBuyNuclearText->setText(mNuclearText->getText());
+		upgradeWindowText();
+		
 	});
 			
-	/*Upgrade och cancel knappar för spaceprogram*/
+	/*Upgrade och cancel för SpaceProgram*/
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
 	{
+		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5;
+		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10;
 		int amount = stringToInt(mBuySpaceProgramText->getText());
-		++amount;
-		mBuySpaceProgramText->setText(amount);
-	});		
+		if(currentGoods >= spaceProgramGoodsPrice && currentTech >= spaceProgramTechPrice)
+		{
+			++amount;
+			mBuySpaceProgramText->setText(amount);
+			upgradeWindowText();
+			currentGoods -= spaceProgramGoodsPrice;
+			currentTech -= spaceProgramTechPrice;
+		}
+	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
+		for(int i = 0; i < difference; ++i)
+		{
+			currentGoods += (stringToInt(mSpaceText->getText()) + i + 1) * 5;
+			currentTech += (stringToInt(mSpaceText->getText()) + i + 1) * 10;
+		}
 		mBuySpaceProgramText->setText(mSpaceText->getText());
+		upgradeWindowText();
 	});
 
-	/*Upgrade och cancel knappar för spynetwork*/
+	/*Upgrade och cancel för SpyNetwork*/
 	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	 
 	{
+		int spyNetworkTechPrice = (stringToInt(mBuySpyNetworkText->getText()) + 1) * 10;
 		int amount = stringToInt(mBuySpyNetworkText->getText());
-		++amount;
-		mBuySpyNetworkText->setText(amount);
+		if(currentTech >= spyNetworkTechPrice)
+		{
+			++amount;
+			currentTech -= spyNetworkTechPrice;
+			mBuySpyNetworkText->setText(amount);
+			upgradeWindowText();
+		}
 		
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
+		int difference = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
+		for(int i = 0; i < difference; ++i)
+		{
+			currentTech += (stringToInt(mSpyText->getText()) + i + 1) * 10;
+		}
 		mBuySpyNetworkText->setText(mSpyText->getText());
+		upgradeWindowText();
 	});
 
 	/*Stänger ned Upgradefönstret*/
 	mUpgradeCloseButton->setOnClickFunction([=]()				
 	{ 
+		int nuclearDiff = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText()); 
+		int spaceDiff = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
+		int spyDiff = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
+
 		mCommunistMainWindow->setEnabled(true, true);
 
-		mUpgradeWindow->setVisible(false); 
+		mUpgradeWindow->setVisible(false);
+		upgradeNuclearWeapon(nuclearDiff); 
+		upgradeSpaceProgram(spaceDiff); 
+		upgradeSpyNetwork(spyDiff);
 		mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
-		/*mNuclearWeapon = mNuclearWeaponUpdate; mNuclearText->setText(intToString(getNuclearWeapon()));
-		mSpaceProgram = mSpaceProgramUpdate; mSpaceText->setText(intToString(getSpaceProgram()));
-		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;*/
 	});
 
 	/*Stänger ned exportfönstret*/
@@ -1138,6 +1202,23 @@ void Communist::initializeGuiFunctions()
 	{
 		GameManager::getInstance()->nextRound();
 	});
+}
+
+void Communist::upgradeWindowText()
+{
+	int spaceProgram			= stringToInt(mBuySpaceProgramText->getText());
+	int spyNetwork				= stringToInt(mBuySpyNetworkText->getText());
+	int nuclearGoodsPrice		= 10;
+	int nuclearTechPrice		= 5;
+	int spaceProgramGoodsPrice  = (spaceProgram + 1) * 5;
+	int spaceProgramTechPrice	= (spaceProgram + 1) * 10;
+	int spyNetworkTechPrice		= (spyNetwork + 1) * 10;
+
+	mNuclearGoodsCost->setText(nuclearGoodsPrice);
+	mNuclearTechCost->setText(nuclearTechPrice);
+	mSpaceProgramGoodsCost->setText(spaceProgramGoodsPrice);
+	mSpaceProgramTechCost->setText(spaceProgramTechPrice);
+	mSpyNetworkTechCost->setText(spyNetworkTechPrice);
 }
 
 void Communist::updateAllResources()

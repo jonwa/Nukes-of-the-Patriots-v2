@@ -106,7 +106,11 @@ private:
 	void updateAllResources();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
+
 	void initializeCityImages();
+
+	void upgradeWindowText();
+
 	void propagandaInitialize();
 
 	void loadButtonPosition();
@@ -252,12 +256,18 @@ private:
 	/*GUI-pekare för upgrade*/
 	std::shared_ptr<GUIWindow> mUpgradeWindow;
 	std::shared_ptr<GUIButton> mUpgradeNuclearWeaponButton;
+	std::shared_ptr<GUIText>   mNuclearGoodsCost;
+	std::shared_ptr<GUIText>   mNuclearTechCost;
 	std::shared_ptr<GUIButton> mUpgradeSpaceProgramButton;
+	std::shared_ptr<GUIText>   mSpaceProgramGoodsCost;
+	std::shared_ptr<GUIText>   mSpaceProgramTechCost;
 	std::shared_ptr<GUIButton> mUpgradeSpyNetworkButton;
-	std::shared_ptr<GUIButton> mUpgradeCloseButton;
+	std::shared_ptr<GUIText>   mSpyNetworkGoodsCost;
+	std::shared_ptr<GUIText>   mSpyNetworkTechCost;
 	std::shared_ptr<GUIButton> mCancelUpgradeNuclearWeaponButton;
 	std::shared_ptr<GUIButton> mCancelUpgradeSpaceProgramButton;
 	std::shared_ptr<GUIButton> mCancelUpgradeSpyNetworkButton;   
+	std::shared_ptr<GUIButton> mUpgradeCloseButton; 
 
 
 	/*GUI-pekare för export*/
