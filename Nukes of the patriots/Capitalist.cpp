@@ -649,160 +649,333 @@ void Capitalist::initializeGuiFunctions()
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
 	});
 
+	mLowerTaxesButton->setOnClickFunction([=]()
+	{
+		int newTax = stringToInt(mTaxValueText->getText()) - 5;
+//		if(newTax < mTaxesPreviousRound - 5)
+	//		newTax = mTaxesPreviousRound - 5;
+		if(newTax < 0)
+			newTax = 0;
+		mTaxValueText->setText(newTax);
+	});
+
+	mRaiseTaxesButton->setOnClickFunction([=]()
+	{
+		int newTax = stringToInt(mTaxValueText->getText()) + 5;
+		//if(newTax > mTaxesPreviousRound + 5)
+		//	newTax = mTaxesPreviousRound + 5;
+		if(newTax > 95)
+			newTax = 95;
+		mTaxValueText->setText(newTax);
+	});
+
 	mLowerFoodByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 10;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -10;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 10;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});			
 	mLowerFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 5;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 5;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 1;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 1;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});				
 	mRaiseFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 1;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 1;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 1;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 5;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 5;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 5;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 10;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 10;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 10;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 
 	mLowerGoodsByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 10;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -10;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 10;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 5;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 5;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 1;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 1;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 1;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 1;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 1;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 5;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 5;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 5;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 10;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 10;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 10;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 
 	mLowerTechByTenButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 10;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -10;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 10;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByFiveButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 5;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 5;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByOneButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 1;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 1;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByOneButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 1;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 1;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 1;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByFiveButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 5;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 5;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 5;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByTenButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 10;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 10;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 10;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 
 	/*Upgrade GUI-Window med knappar*/
