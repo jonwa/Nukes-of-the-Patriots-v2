@@ -241,6 +241,14 @@
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
+		<name>CancelUpgradeNuclearWeapon</name>
+		<xPos>58</xPos>
+		<yPos>392</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_cancel</image>		
+	</button>
+	<button>
 		<name>UpgradeSpaceProgram</name>
 		<xPos>237</xPos>
 		<yPos>314</yPos>
@@ -249,12 +257,28 @@
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
+		<name>CancelUpgradeSpaceProgram</name>
+		<xPos>237</xPos>
+		<yPos>354</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_cancel</image>		
+	</button>
+	<button>
 		<name>UpgradeSpyNetwork</name>
 		<xPos>416</xPos>
 		<yPos>285</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
+	</button>
+	<button>
+		<name>CancelUpgradeSpyNetwork</name>
+		<xPos>416</xPos>
+		<yPos>325</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_cancel</image>	
 	</button>
 	<button>
 		<name>CloseUpgrade</name>
@@ -409,11 +433,35 @@
 		<image>Capitalist/button_ext</image>	
 	</button>
 	<button>
+		<name>LeftPanel</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Capitalist/kap_panel_left</image>	
+	</button>
+	<button>
+		<name>RightPanel</name>
+		<xPos>812</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Capitalist/kap_panel_right</image>	
+	</button>
+	<button>
 		<name>CloseIncreasedResources</name>
 		<xPos>235</xPos>
 		<yPos>110</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>
+	</button>
+	<button>
+		<name>CityImages</name>
+		<xPos>253</xPos>
+		<yPos>78</yPos>
+		<width>512</width>
+		<height>512</height>
+		<image></image>
 	</button>
 </buttons>

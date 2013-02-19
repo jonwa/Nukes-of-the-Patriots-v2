@@ -735,7 +735,7 @@ void Communist::initializeCommunistWindow()
 	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
 	sf::FloatRect pickedRect			= CommunistButtons["PickedGeneral"].first;
 	mPickedGeneralPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, pickedRect.width, pickedRect.height),
+		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mPickedGeneralWindow);
 
 	mPickedGeneralWindow->setVisible(false);
@@ -743,7 +743,7 @@ void Communist::initializeCommunistWindow()
 	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
 	sf::FloatRect generalRect			= CommunistButtons["FirstGeneral"].first;
 	mFirstGeneralPlaque					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, generalRect.width, generalRect.height),
+		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mChooseGeneralWindow);
 
 	

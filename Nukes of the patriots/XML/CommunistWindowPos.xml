@@ -25,7 +25,7 @@
 		<image>Communist/Communist_Window_big</image>	
 	</window>
 	<window>
-		<name>CommunistTaxesWindow</name>
+		<name>FiveYearPlanWindow</name>
 		<xPos>227</xPos>
 		<yPos>79</yPos>
 		<width>570</width>
