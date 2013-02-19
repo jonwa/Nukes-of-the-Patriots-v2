@@ -4,6 +4,11 @@
 
 std::shared_ptr<GUIImage> GUIImage::create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent)
 {
+	if(pair.second != nullptr)
+	{
+		pair.first.width = (pair.first.width == 0) ? pair.second->getSize().x : pair.first.width;
+		pair.first.height = (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height;
+	}
 	std::shared_ptr<GUIImage> ret = std::make_shared<GUIImage>(pair, parent);
 	ret->init();
 	return ret;
@@ -14,15 +19,17 @@ GUIImage::GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr
 	GUIElement(pair.first, parent, IMAGE)
 
 {
-	if (pair.second)
+	if(pair.second != nullptr)
+	{
 		mSprite.setTexture(*pair.second);
+		setSize(pair.first.width, pair.first.height);
+	}
 	
 	if(mParent != nullptr)
 		mSprite.setPosition(getX() + parent->getX(), getY() + parent->getY());
 	else
 		mSprite.setPosition(getX(), getY());
-
-	//setSize(pair.first.width, pair.first.height);
+		
 
 }
 
@@ -60,6 +67,13 @@ void GUIImage::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 	mSprite.setTexture(*pair.second);
 	mSprite.setPosition(pair.first.left, pair.first.top);
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
+	if(pair.second != nullptr)
+	{
+		pair.first.width = (pair.first.width == 0) ? pair.second->getSize().x : pair.first.width;
+		pair.first.height = (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height;
+		setWidth(pair.first.width);
+		setHeight(pair.first.height);
+	}
 }
 
 sf::Texture* GUIImage::getTexture()  

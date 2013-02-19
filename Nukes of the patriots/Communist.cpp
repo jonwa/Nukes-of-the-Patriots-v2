@@ -37,7 +37,6 @@ Communist::Communist() :
 	
 	fiveYearInitialize();
 	propagandaInitialize();
-	initializeCityImages();
 }
 
 
@@ -573,12 +572,11 @@ void Communist::initializeCommunistWindow()
 	loadWindowPosition();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
-	mChangeCityImage				= GUIImage::create(CommunistButtons["CityImages"], mCommunistMainWindow); 
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
-	mCommunistExportButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
+	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 	mLeftPanel						= GUIButton::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
 	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
@@ -605,17 +603,17 @@ void Communist::initializeCommunistWindow()
 	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mFiveYearPlanWindow);	
 	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mFiveYearPlanWindow);
 
-	mYearOneTaxesText				= GUIText::create(sf::FloatRect(505, 55, 20, 20), "30", mFiveYearPlanWindow);
-	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(505, 143, 20, 20), "30", mFiveYearPlanWindow);
-	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(505, 231, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFourTaxesText				= GUIText::create(sf::FloatRect(505, 319, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(505, 407, 20, 20), "30", mFiveYearPlanWindow);
+	mYearOneTaxesText				= GUIText::create(sf::FloatRect(515, 55, 20, 20), "30", mFiveYearPlanWindow);
+	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(515, 143, 20, 20), "30", mFiveYearPlanWindow);
+	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(515, 231, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFourTaxesText				= GUIText::create(sf::FloatRect(515, 319, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(515, 407, 20, 20), "30", mFiveYearPlanWindow);
 
-	mIncomeYearOne					= GUIText::create(sf::FloatRect(395, 55, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearTwo					= GUIText::create(sf::FloatRect(395, 143, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearThree				= GUIText::create(sf::FloatRect(395, 231, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFour					= GUIText::create(sf::FloatRect(395, 319, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFive					= GUIText::create(sf::FloatRect(395, 407, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearOne					= GUIText::create(sf::FloatRect(435, 55, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearTwo					= GUIText::create(sf::FloatRect(435, 143, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearThree				= GUIText::create(sf::FloatRect(435, 231, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFour					= GUIText::create(sf::FloatRect(435, 319, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFive					= GUIText::create(sf::FloatRect(435, 407, 20, 20), "0", mFiveYearPlanWindow);
 
 	mIncomeYearOne->setText(stringToInt(mYearOneTaxesText->getText()) * mPopulation);
 	mIncomeYearTwo->setText(stringToInt(mYearTwoTaxesText->getText()) * mPopulation);
@@ -684,19 +682,65 @@ void Communist::initializeCommunistWindow()
 
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
-	mExportLowerFoodButton				= GUIButton::create(CommunistButtons["CommunistLowerFood"], mExportWindow);
-	mExportRaiseFoodButton				= GUIButton::create(CommunistButtons["CommunistRaiseFood"], mExportWindow);
-	mExportLowerGoodsButton				= GUIButton::create(CommunistButtons["CommunistLowerGoods"], mExportWindow);
-	mExportRaiseGoodsButton				= GUIButton::create(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
-	mExportLowerTechButton				= GUIButton::create(CommunistButtons["CommunistLowerTech"], mExportWindow);
-	mExportRaiseTechButton				= GUIButton::create(CommunistButtons["CommunistRaiseTech"], mExportWindow);
 
-	mExportFoodPrice					= GUIEditField::create(sf::FloatRect(260, 100, 265, 40), "50", true, mExportWindow); 
-	mExportGoodsPrice					= GUIEditField::create(sf::FloatRect(260, 242, 265, 40), "50", true, mExportWindow); 
-	mExportTechPrice					= GUIEditField::create(sf::FloatRect(260, 387, 265, 40), "50", true, mExportWindow); 
+	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 
-	mExportCloseButton					= GUIButton::create(CommunistButtons["CloseExport"], mExportWindow);
+	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
+
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), "0", true, mExportWindow);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		mExportQuantityText[i] = GUIText::create(
+			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
+			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mExportWindow);
+
+	}
+
+
+	mExportConfirmButton				= GUIButton::create(CommunistButtons["ExportConfirm"], mExportWindow);
+	mExportConfirmButton->setSize(CommunistButtons["ExportConfirm"].first.width, CommunistButtons["ExportConfirm"].first.height);
 	mExportWindow->setVisible(false);
+	
+	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
+	
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "50", mImportWindow);
+
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+
+	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 169, 56, 31), buyField), mImportWindow);
+	
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		mImportBuyQuantityText[i] = GUIText::create(
+			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
+			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mImportWindow);
+
+	}
+
+	mImportCostText[0]					= GUIText::create(sf::FloatRect(509, 51, 100, 50), "0", mImportWindow);
+	mImportCostText[1]					= GUIText::create(sf::FloatRect(509, 110, 100, 50), "0", mImportWindow);
+	mImportCostText[2]					= GUIText::create(sf::FloatRect(509, 169, 100, 50), "0", mImportWindow);
+
+	mImportGotoExportButton				= GUIButton::create(CommunistButtons["ImportGotoExport"], mImportWindow);
+	mImportGotoExportButton->setSize(CommunistButtons["ImportGotoExport"].first.width, CommunistButtons["ImportGotoExport"].first.height);
+	mImportWindow->setVisible(false);
 
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
@@ -704,7 +748,7 @@ void Communist::initializeCommunistWindow()
 	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
 	sf::FloatRect pickedRect			= CommunistButtons["PickedGeneral"].first;
 	mPickedGeneralPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, pickedRect.width, pickedRect.height),
+		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mPickedGeneralWindow);
 
 	mPickedGeneralWindow->setVisible(false);
@@ -712,7 +756,7 @@ void Communist::initializeCommunistWindow()
 	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
 	sf::FloatRect generalRect			= CommunistButtons["FirstGeneral"].first;
 	mFirstGeneralPlaque					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, generalRect.width, generalRect.height),
+		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getGeneralPlaque(GameManager::getInstance()->getGeneral(generalCount))), mChooseGeneralWindow);
 
 	
@@ -736,6 +780,7 @@ void Communist::initializeCommunistWindow()
 }
 
 
+
 void Communist::initializeCityImages()
 {
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city2")));
@@ -744,7 +789,6 @@ void Communist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city5")));
 	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
-
 
 void Communist::chooseLeader()
 {
@@ -978,16 +1022,6 @@ void Communist::initializeGuiFunctions()
 		upgradeWindowText();
 	});
 	
-	/*Export knappen på interface*/
-	mCommunistExportButton->setOnClickFunction([=]()			
-	{ 	
-		mCommunistMainWindow->setEnabled(false, true);
-		mExportWindow->setEnabled(true, true);
-		mExportWindow->setVisible(true); 
-		mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
-	});
-
-
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
@@ -1147,15 +1181,6 @@ void Communist::initializeGuiFunctions()
 		mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
 	});
 
-	/*Stänger ned exportfönstret*/
-	mExportCloseButton->setOnClickFunction([=]() 
-	{ 
-		mCommunistMainWindow->setEnabled(true, true);
-
-		mExportWindow->setVisible(false); 
-		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
-	});
-
 	/*GUI hantering för valet av general*/
 	/*Bläddra mellan generalerna för att välja mellan de fem som finns*/
 	mGoToNextPortraitButton->setOnClickFunction([=]()			
@@ -1209,6 +1234,128 @@ void Communist::initializeGuiFunctions()
 		mCommunistGeneralButton->setScale(0.63, 0.68);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
+	});
+
+	/*Export knappen på interface*/
+	mCommunistTradeButton->setOnClickFunction([=]()
+	{ 
+		mCommunistMainWindow->setEnabled(false, true);
+		mImportWindow->setEnabled(true, true);
+
+		mImportWindow->setVisible(true); 
+		mCommunistTradeButton->setTexture(CommunistButtons["ExportIsPressed"]);
+
+	});
+
+	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus"));
+	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus"));
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mImportBuyButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mImportWindow);
+			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity -= (h == 0) ? 1 : (h*5);
+				if(quantity < 0)
+					quantity = 0;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mImportBuyButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mImportWindow);
+			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity += (h == 0) ? 1 : (h*5);
+				if(quantity > foodAvailable)
+					quantity = foodAvailable;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	mImportGotoExportButton->setOnClickFunction(
+		[=]()
+	{
+		mImportWindow->setVisible(false);
+		mExportWindow->setVisible(true);
+		mExportWindow->setEnabled(true, true);
+	});
+
+	std::vector<int*> resourcesAvailable;
+	resourcesAvailable.push_back(&mFood);
+	resourcesAvailable.push_back(&mGoods);
+	resourcesAvailable.push_back(&mTech);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		float x = mExportQuantityBackground[i]->getLocalX(), y = mExportQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mExportButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mExportWindow);
+			mExportButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity -= (h == 0) ? 1 : (h*5);
+				if(quantity < 0)
+					quantity = 0;
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mExportButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mExportWindow);
+			mExportButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = mFood;
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity += (h == 0) ? 1 : (h*5);
+				if(quantity > *resourcesAvailable[i])
+					quantity = *resourcesAvailable[i];
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	mExportConfirmButton->setOnClickFunction(
+		[=]()
+	{
+		mExportWindow->setVisible(false);
+		mCommunistMainWindow->setEnabled(true, true);
+		mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
+		//mCurrency -= stringToInt(mImportTotalCostText->getText());
+
+		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
+		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
+		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+
+		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+		mExportedTechPrice = stringToInt(mExportTechCost->getText());
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	

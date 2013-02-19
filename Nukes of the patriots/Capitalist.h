@@ -108,7 +108,6 @@ private:
 	std::shared_ptr<GUIWindow> mIncreasedResourcesWindow;
 	std::shared_ptr<GUIButton> mCloseIncreasedResourcesWindow;
 
-	std::vector<std::shared_ptr<GUIImage>> mCityImages;
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -143,6 +142,7 @@ private:
 	/*GUI-pekare för taxes */
 	std::shared_ptr<GUIWindow> mTaxesWindow;
 	std::shared_ptr<GUIButton> mLowerTaxesButton;
+	std::shared_ptr<GUIText> mTaxValueText;
 	std::shared_ptr<GUIButton> mRaiseTaxesButton;
 	std::shared_ptr<GUIButton> mTaxesCloseButton;
 	/*GUI-pekare för resources*/
@@ -181,24 +181,18 @@ private:
 	std::shared_ptr<GUIButton> mCancelUpgradeSpaceProgramButton;
 	std::shared_ptr<GUIButton> mCancelUpgradeSpyNetworkButton;   
 	std::shared_ptr<GUIButton> mUpgradeCloseButton;
+	
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
-	std::shared_ptr<GUIButton> mExportLowerFoodButton;
-	std::shared_ptr<GUIButton> mExportRaiseFoodButton;
-	std::shared_ptr<GUIButton> mExportLowerGoodsButton;
-	std::shared_ptr<GUIButton> mExportRaiseGoodsButton;
-	std::shared_ptr<GUIButton> mExportLowerTechButton;
-	std::shared_ptr<GUIButton> mExportRaiseTechButton;
-	std::shared_ptr<GUIEditField> mExportFoodQuantity;
-	std::shared_ptr<GUIEditField> mExportGoodsQuantity;
-	std::shared_ptr<GUIEditField> mExportTechQuantity;
-	std::shared_ptr<GUIEditField> mExportFoodPrice;
-	std::shared_ptr<GUIEditField> mExportGoodsPrice;
-	std::shared_ptr<GUIEditField> mExportTechPrice;
-	std::shared_ptr<GUIEditField> mExportFoodPriceEditField;
-	std::shared_ptr<GUIEditField> mExportGoodsPriceEditField;
-	std::shared_ptr<GUIEditField> mExportTechPriceEditField;
-	std::shared_ptr<GUIButton> mExportCloseButton;
+	std::shared_ptr<GUIText> mExportTotalPriceText[3];
+	std::shared_ptr<GUIImage> mExportQuantityBackground[3];
+	std::shared_ptr<GUIText> mExportQuantityText[3];
+	std::shared_ptr<GUIButton> mExportButtonMinus[3][3];
+	std::shared_ptr<GUIButton> mExportButtonPlus[3][3];
+	std::shared_ptr<GUIEditField> mExportFoodCost;
+	std::shared_ptr<GUIEditField> mExportGoodsCost;
+	std::shared_ptr<GUIEditField> mExportTechCost;
+	std::shared_ptr<GUIButton> mExportConfirmButton;
 
 	std::shared_ptr<GUIWindow> mImportWindow;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];

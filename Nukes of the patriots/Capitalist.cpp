@@ -470,6 +470,7 @@ void Capitalist::initializeCapitalistWindow()
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
+	mTaxValueText						= GUIText::create(sf::FloatRect(100, 100, 100, 50), intToString(mTaxes), mTaxesWindow);
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
@@ -527,20 +528,35 @@ void Capitalist::initializeCapitalistWindow()
 	mUpgradeWindow->setVisible(false);
 
 	mExportWindow						= GUIWindow::create(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
-	mExportLowerFoodButton				= GUIButton::create(CapitalistButtons["LowerFood"], mExportWindow); 
-	mExportRaiseFoodButton				= GUIButton::create(CapitalistButtons["RaiseFood"], mExportWindow);
-	mExportLowerGoodsButton				= GUIButton::create(CapitalistButtons["LowerGoods"], mExportWindow);
-	mExportRaiseGoodsButton				= GUIButton::create(CapitalistButtons["RaiseGoods"], mExportWindow);
-	mExportLowerTechButton				= GUIButton::create(CapitalistButtons["LowerTech"], mExportWindow);
-	mExportRaiseTechButton				= GUIButton::create(CapitalistButtons["RaiseTech"], mExportWindow);
-	mExportCloseButton					= GUIButton::create(CapitalistButtons["CloseExport"], mExportWindow);
 
-	mExportFoodPriceEditField			= GUIEditField::create(sf::FloatRect(509, 51, 100, 50), "0", true, mExportWindow);
-	mExportGoodsPriceEditField			= GUIEditField::create(sf::FloatRect(509, 110, 100, 50), "0", true, mExportWindow);
-	mExportTechPriceEditField			= GUIEditField::create(sf::FloatRect(509, 169, 100, 50), "0", true, mExportWindow);
+	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 
+	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
+
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), "0", true, mExportWindow);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		mExportQuantityText[i] = GUIText::create(
+			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
+			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mExportWindow);
+
+	}
+
+
+	mExportConfirmButton				= GUIButton::create(CapitalistButtons["ExportConfirm"], mExportWindow);
+	mExportConfirmButton->setSize(CapitalistButtons["ExportConfirm"].first.width, CapitalistButtons["ExportConfirm"].first.height);
 	mExportWindow->setVisible(false);
-
+	
 	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
 	
 	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
@@ -550,8 +566,6 @@ void Capitalist::initializeCapitalistWindow()
 	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
 	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
 	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
-	
-	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 
 	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
 	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
@@ -583,21 +597,21 @@ void Capitalist::initializeCapitalistWindow()
 	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
 	mFirstPresidentButton				= GUIButton::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
 	mFirstPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, firstPresRect.width, firstPresRect.height),
+		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getPresidentPlaque(mFirstPresident)), mChoosePresidentWindow);
 
 	mSecondPresidentButton				= GUIButton::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
 	mSecondPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, secondPresRect.width, secondPresRect.height),
+		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getPresidentPlaque(mSecondPresident)), mChoosePresidentWindow);
 
 	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
 	mPickedPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(pickedPresRect.left, pickedPresRect.top + pickedPresRect.height - 5, pickedPresRect.width, pickedPresRect.height),
+		(sf::FloatRect(pickedPresRect.left, pickedPresRect.top + pickedPresRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
 
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
-	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePickedPresident"], mPickedPresidentWindow);
+	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
 	
 	//används för att i början av varje kapitalistrunda visa om någon av resurserna har ökat i pris
@@ -672,161 +686,335 @@ void Capitalist::initializeGuiFunctions()
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
 	});
 
-	mLowerFoodByTenButton->setOnClickFunction([=]()
-	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 10;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -10;
-		if(amount >= 0)
+	mLowerTaxesButton->setOnClickFunction([=]()
+	{
+		int newTax = stringToInt(mTaxValueText->getText()) - 5;
+		if(newTax < mTaxesPreviousRound - 5)
+			newTax = mTaxesPreviousRound - 5;
+		if(newTax < 0)
+			newTax = 0;
+		mTaxValueText->setText(newTax);
+	});
+
+	mRaiseTaxesButton->setOnClickFunction([=]()
+	{
+		int newTax = stringToInt(mTaxValueText->getText()) + 5;
+		if(newTax > mTaxesPreviousRound + 5)
+			newTax = mTaxesPreviousRound + 5;
+		if(newTax > 95)
+			newTax = 95;
+		mTaxValueText->setText(newTax);
+	});
+
+ 	mLowerFoodByTenButton->setOnClickFunction([=]()
+ 	{ 
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 10;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
-	});			
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
+	});		
 	mLowerFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 5;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 5;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) - 1;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText()) - 1;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(foodAmount < 0)
+			foodAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyFoodText->setText(amount);
-			mFoodCost->setText(cost);
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});				
 	mRaiseFoodByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 1;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 1;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 1;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 5;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 5;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 5;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyFoodText->getText()) + 10;
-		int cost = stringToInt(mFoodCost->getText()) + foodCost * 10;
-		mBuyFoodText->setText(amount);
-		mFoodCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText()) + 10;
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			foodAmount -= std::ceilf((float)abs(moneyDifference)/(float)foodCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyFoodText->setText(foodAmount);
+		mFoodCost->setText(foodCost*foodAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 
 	mLowerGoodsByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 10;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -10;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 10;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 5;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 5;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) - 1;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) - 1;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		if(goodsAmount < 0)
+			goodsAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyGoodsText->setText(amount);
-			mGoodsCost->setText(cost);
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByOneButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 1;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 1;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 1;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByFiveButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 5;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 5;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 5;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByTenButton->setOnClickFunction([=]()
 	{ 
-		int amount = stringToInt(mBuyGoodsText->getText()) + 10;
-		int cost = stringToInt(mGoodsCost->getText()) + goodsCost * 10;
-		mBuyGoodsText->setText(amount);
-		mGoodsCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText()) + 10;
+		int techAmount = stringToInt(mBuyTechText->getText());
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			goodsAmount -= std::ceilf((float)abs(moneyDifference)/(float)goodsCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyGoodsText->setText(goodsAmount);
+		mGoodsCost->setText(goodsCost*goodsAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});	
 
 	mLowerTechByTenButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 10;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -10;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 10;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByFiveButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 5;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -5;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 5;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByOneButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) - 1;
-		int cost = stringToInt(mTechCost->getText()) + techCost * -1;
-		if(amount >= 0)
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) - 1;
+		if(techAmount < 0)
+			techAmount = 0;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
 		{
-			mBuyTechText->setText(amount);
-			mTechCost->setText(cost);
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByOneButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 1;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 1;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 1;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByFiveButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 5;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 5;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 5;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByTenButton->setOnClickFunction([=]()
 	{
-		int amount = stringToInt(mBuyTechText->getText()) + 10;
-		int cost = stringToInt(mTechCost->getText()) + techCost * 10;
-		mBuyTechText->setText(amount);
-		mTechCost->setText(cost);
+		int foodAmount = stringToInt(mBuyFoodText->getText());
+		int goodsAmount = stringToInt(mBuyGoodsText->getText());
+		int techAmount = stringToInt(mBuyTechText->getText()) + 10;
+		int totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		int moneyDifference = mCurrency - totalCost;
+		if(moneyDifference < 0)
+		{
+			techAmount -= std::ceilf((float)abs(moneyDifference)/(float)techCost);
+			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
+		}
+		mBuyTechText->setText(techAmount);
+		mTechCost->setText(techCost*techAmount);
+		//mBuyTotalCostText->setText(totalCost);
 	});
+
 
 	/*Upgrade GUI-Window med knappar*/
 	mCapitalistUpgradeButton->setOnClickFunction([=]()	
@@ -923,8 +1111,8 @@ void Capitalist::initializeGuiFunctions()
 		upgradeWindowText();
 	});
 
-	/*Export GUI-Window med knapapr*/
-	mCapitalistTradeButton->setOnClickFunction([=]()	
+	/*Export GUI-Window med knappar*/
+	mCapitalistTradeButton->setOnClickFunction([=]()
 	{ 
 		mCapitalistMainWindow->setEnabled(false, true);
 		mImportWindow->setEnabled(true, true);
@@ -950,7 +1138,7 @@ void Capitalist::initializeGuiFunctions()
 				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
 				int foodPrice = stringToInt(mImportPriceText[i]->getText());
 				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
-				quantity -= (5 * (h+1));
+				quantity -= (h == 0) ? 1 : (h*5);
 				if(quantity < 0)
 					quantity = 0;
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
@@ -967,7 +1155,7 @@ void Capitalist::initializeGuiFunctions()
 				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
 				int foodPrice = stringToInt(mImportPriceText[i]->getText());
 				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
-				quantity += (5 * (h+1));
+				quantity += (h == 0) ? 1 : (h*5);
 				if(quantity > foodAvailable)
 					quantity = foodAvailable;
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
@@ -976,6 +1164,74 @@ void Capitalist::initializeGuiFunctions()
 			});
 		}
 	}
+
+	mImportGotoExportButton->setOnClickFunction(
+		[=]()
+	{
+		mImportWindow->setVisible(false);
+		mExportWindow->setVisible(true);
+		mExportWindow->setEnabled(true, true);
+	});
+
+	std::vector<int*> resourcesAvailable;
+	resourcesAvailable.push_back(&mFood);
+	resourcesAvailable.push_back(&mGoods);
+	resourcesAvailable.push_back(&mTech);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		float x = mExportQuantityBackground[i]->getLocalX(), y = mExportQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mExportButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mExportWindow);
+			mExportButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity -= (h == 0) ? 1 : (h*5);
+				if(quantity < 0)
+					quantity = 0;
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mExportButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mExportWindow);
+			mExportButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = mFood;
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity += (h == 0) ? 1 : (h*5);
+				if(quantity > *resourcesAvailable[i])
+					quantity = *resourcesAvailable[i];
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	mExportConfirmButton->setOnClickFunction(
+		[=]()
+	{
+		mExportWindow->setVisible(false);
+		mCapitalistMainWindow->setEnabled(true, true);
+		mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
+		//mCurrency -= stringToInt(mImportTotalCostText->getText());
+
+		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
+		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
+		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+
+		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+		mExportedTechPrice = stringToInt(mExportTechCost->getText());
+	});
 
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
@@ -987,7 +1243,7 @@ void Capitalist::initializeGuiFunctions()
 	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
-
+		mTaxes = stringToInt(mTaxValueText->getText());
 		mTaxesWindow->setVisible(false); 
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);//ändrar textur till orginal
 	});
@@ -1030,16 +1286,6 @@ void Capitalist::initializeGuiFunctions()
 		upgradeSpaceProgram(spaceDiff); 
 		upgradeSpyNetwork(spyDiff);
 		mCapitalistUpgradeButton->setTexture(CapitalistButtons["Upgrade"]);//ändrar textur till orginal
-	});
-
-	/*Stänger ner Export fönster "Okay-knappen"*/
-	mExportCloseButton->setOnClickFunction([=]()				
-	{ 
-		mCapitalistMainWindow->setEnabled(true, true);
-
-		mExportWindow->setVisible(false); 
-		//ändrar textur till orginal
-		mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
 	});
 
 	

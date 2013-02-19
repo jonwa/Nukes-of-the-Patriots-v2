@@ -225,22 +225,6 @@
 		<image>Communist/kom_texture_button_minus</image>	
 	</button>
 	<button>
-		<name>GoToNextSlide</name>
-		<xPos>520</xPos>
-		<yPos>477</yPos>
-		<width>30</width>
-		<height>70</height>
-		<image>Communist/button_ext</image>	
-	</button>	
-	<button>
-		<name>GoToPreviousSlide</name>
-		<xPos>19</xPos>
-		<yPos>477</yPos>
-		<width>30</width>
-		<height>70</height>	
-		<image>Communist/button_prev</image>	
-	</button>
-	<button>
 		<name>CloseFiveYearPlanWindow</name>
 		<xPos>235</xPos>
 		<yPos>478</yPos>
@@ -455,6 +439,22 @@
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_plus</image>
+	</button>
+	<button>
+		<name>ImportGotoExport</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Communist/button_ext</image>	
+	</button>
+	<button>
+		<name>ExportConfirm</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Communist/button_ext</image>
 	</button>
 	<button>
 		<name>CloseExport</name>
