@@ -70,7 +70,7 @@
 		<yPos>279</yPos>
 		<width>570</width>
 		<height>334</height>
-		<image>Communist/7_kom_window_imp</image>
+		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>CommunistExportWindow</name>
@@ -78,6 +78,6 @@
 		<yPos>279</yPos>
 		<width>570</width>
 		<height>334</height>
-		<image>Communist/7_kom_window_exp</image>
+		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
 </windows>

@@ -4,22 +4,34 @@
 #include <iostream>
 #include <sstream>
 
-std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent)
+std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, Type type, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent)
 {
-	std::shared_ptr<GUIEditField> ret = std::make_shared<GUIEditField>(rect, text, onlyNumbers, parent);
+	std::shared_ptr<GUIEditField> ret = std::make_shared<GUIEditField>(rect, type, text, onlyNumbers, parent);
 	ret->init();
 	return ret;
 }
 
-GUIEditField::GUIEditField(sf::FloatRect rect, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent) :
+GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, EDIT_FIELD),
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
 {
 	mFont.loadFromFile("Font/Moire-Regular.ttf");
 	mText.setFont(mFont);
-
-	sf::Texture *texture = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
+	sf::Texture *texture;
+	switch(type)
+	{
+	case COM:
+		texture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/Communist_Edit_Field"));
+		break;
+	case CAP:
+		texture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/Capitalist_Edit_Field"));
+		break;
+	case MENU:
+		texture = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
+		break;
+	}
+	
 	mSprite.setTexture(*texture);
 	
 	if(mParent != nullptr)

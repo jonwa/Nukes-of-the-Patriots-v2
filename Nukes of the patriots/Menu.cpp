@@ -210,6 +210,8 @@ void Menu::initialize()
 	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
 	//mMainMenuWindow->setVisible(true);
 
+
+
 	/*Fönstret och dess barn för SETTINGS MENU*/
 	//mSettingsMenuWindow	= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
 	//mSettingsMenuWindow->setVisible(false);
@@ -220,15 +222,17 @@ void Menu::initialize()
 
 	/*Fönstret och dess barn för att välja lag*/
 	mChooseTeamWindow		= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
-	mCapitalistNameField	= GUIEditField::create(sf::FloatRect(46 + 8, 269, 218, 41), "'merica", false, mChooseTeamWindow);
-	mCommunistNameField		= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), "Soviet Union", false, mChooseTeamWindow);
+	mTeamCommunist			= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
+	mTeamCapitalist			= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+	mCapitalistNameField	= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
+	mCommunistNameField		= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
 	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
 	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkay"].first.width, ButtonPos["CapitalistOkay"].first.height);
 	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
 	mCommunistOkayButton->setSize(ButtonPos["CommunistOkay"].first.width, ButtonPos["CommunistOkay"].first.height);
 	mChooseTeamWindow->setVisible(false);
 
-	
+
 	/*Lägger in fönstrerna i vektorn för GUIElement*/
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 }

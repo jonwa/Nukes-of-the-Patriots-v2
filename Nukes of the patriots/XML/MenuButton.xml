@@ -42,11 +42,11 @@
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
-		<xPos>106</xPos>
-		<yPos>52</yPos>
-		<width>256</width>
-		<height>400</height>	
-		<image>Menu/Team-Flagga-Kapitalist-up</image>
+		<xPos>43</xPos>
+		<yPos>32</yPos>
+		<width>233</width>
+		<height>284</height>	
+		<image>Menu/kap_teamsign1</image>
 	</button>
 	<button>
 		<name>TeamCapitalistIsPressed</name>
@@ -58,11 +58,11 @@
 	</button>
 	<button>
 		<name>TeamCommunist</name>
-		<xPos>628</xPos>
-		<yPos>52</yPos>
-		<width>256</width>
-		<height>400</height>	
-		<image>Menu/Team-Flagga-Communist-up</image>
+		<xPos>420</xPos>
+		<yPos>32</yPos>
+		<width>233</width>
+		<height>284</height>	
+		<image>Menu/kom_teamsign1</image>
 	</button>
 	<button>
 		<name>TeamCommunistIsPressed</name>

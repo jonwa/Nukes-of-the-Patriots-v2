@@ -37,6 +37,7 @@ Communist::Communist() :
 	
 	fiveYearInitialize();
 	propagandaInitialize();
+	initializeCityImages();
 }
 
 
@@ -572,6 +573,7 @@ void Communist::initializeCommunistWindow()
 	loadWindowPosition();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
+	mChangeCityImage				= GUIButton::create(CommunistButtons["CityImages"], mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
@@ -621,23 +623,23 @@ void Communist::initializeCommunistWindow()
 	mIncomeYearFour->setText(stringToInt(mYearFourTaxesText->getText()) * mPopulation);
 	mIncomeYearFive->setText(stringToInt(mYearFiveTaxesText->getText()) * mPopulation);
 	/*Food*/
-	mYearOneFood					= GUIEditField::create(CommunistButtons["YearOneFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoFood					= GUIEditField::create(CommunistButtons["YearTwoFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeFood					= GUIEditField::create(CommunistButtons["YearThreeFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourFood					= GUIEditField::create(CommunistButtons["YearFourFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveFood					= GUIEditField::create(CommunistButtons["YearFiveFoodEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearOneFood					= GUIEditField::create(CommunistButtons["YearOneFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearTwoFood					= GUIEditField::create(CommunistButtons["YearTwoFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearThreeFood					= GUIEditField::create(CommunistButtons["YearThreeFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFourFood					= GUIEditField::create(CommunistButtons["YearFourFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFiveFood					= GUIEditField::create(CommunistButtons["YearFiveFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 
-	mYearOneGoods					= GUIEditField::create(CommunistButtons["YearOneGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoGoods					= GUIEditField::create(CommunistButtons["YearTwoGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeGoods					= GUIEditField::create(CommunistButtons["YearThreeGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourGoods					= GUIEditField::create(CommunistButtons["YearFourGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveGoods					= GUIEditField::create(CommunistButtons["YearFiveGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearOneGoods					= GUIEditField::create(CommunistButtons["YearOneGoodsEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearTwoGoods					= GUIEditField::create(CommunistButtons["YearTwoGoodsEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearThreeGoods					= GUIEditField::create(CommunistButtons["YearThreeGoodsEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFourGoods					= GUIEditField::create(CommunistButtons["YearFourGoodsEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFiveGoods					= GUIEditField::create(CommunistButtons["YearFiveGoodsEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 
-	mYearOneTech					= GUIEditField::create(CommunistButtons["YearOneTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoTech					= GUIEditField::create(CommunistButtons["YearTwoTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeTech					= GUIEditField::create(CommunistButtons["YearThreeTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourTech					= GUIEditField::create(CommunistButtons["YearFourTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveTech					= GUIEditField::create(CommunistButtons["YearFiveTechEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearOneTech					= GUIEditField::create(CommunistButtons["YearOneTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearTwoTech					= GUIEditField::create(CommunistButtons["YearTwoTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearThreeTech					= GUIEditField::create(CommunistButtons["YearThreeTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFourTech					= GUIEditField::create(CommunistButtons["YearFourTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
+	mYearFiveTech					= GUIEditField::create(CommunistButtons["YearFiveTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 
 	mTotalCostYearOne				= GUIText::create(sf::FloatRect(350, 35, 20, 20), "0", mFiveYearPlanWindow);
 	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(350, 123, 20, 20), "0", mFiveYearPlanWindow);
@@ -693,9 +695,9 @@ void Communist::initializeCommunistWindow()
 	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
 	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
 
 	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
 	{

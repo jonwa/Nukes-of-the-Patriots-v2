@@ -101,7 +101,7 @@ private:
 	void initializeCityImages();
 	
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIImage> mChangeCityImage;
+	std::shared_ptr<GUIButton> mChangeCityImage;
 
 	//President	*mPresident;
 

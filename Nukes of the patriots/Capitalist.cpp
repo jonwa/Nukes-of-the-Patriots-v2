@@ -449,7 +449,7 @@ void Capitalist::initializeCapitalistWindow()
 	loadCapitalistMusic();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
-	mChangeCityImage					= GUIImage::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
+	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
@@ -470,7 +470,7 @@ void Capitalist::initializeCapitalistWindow()
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
-	mTaxValueText						= GUIText::create(sf::FloatRect(100, 100, 100, 50), intToString(mTaxes), mTaxesWindow);
+	mTaxValueText						= GUIText::create(sf::FloatRect(100, 80, 100, 50), intToString(mTaxes), mTaxesWindow);
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
@@ -539,9 +539,9 @@ void Capitalist::initializeCapitalistWindow()
 	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
 	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
 
 	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
 	{

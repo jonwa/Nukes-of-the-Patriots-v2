@@ -11,8 +11,9 @@
 class GUIEditField: public GUIElement
 {
 public:
-	static std::shared_ptr<GUIEditField> create(sf::FloatRect rect, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
-				GUIEditField(sf::FloatRect rect, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
+	enum Type { CAP, COM, MENU };
+	static std::shared_ptr<GUIEditField> create(sf::FloatRect rect, Type type, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
+				GUIEditField(sf::FloatRect rect, Type type, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
 	std::string getText()const{ return mText.getString(); }
 	bool		getCaretVisible();
 	void		setCaretVisible(bool visible);
