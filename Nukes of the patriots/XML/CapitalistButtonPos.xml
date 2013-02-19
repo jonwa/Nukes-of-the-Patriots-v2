@@ -385,6 +385,14 @@
 		<image>Capitalist/kap_texture_button_elect</image>
 	</button>
 	<button>
+		<name>ClosePickedPresident</name>
+		<xPos>235</xPos>
+		<yPos>478</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_ok</image>
+	</button>
+	<button>
 		<name>ImportGotoExport</name>
 		<xPos>191</xPos>
 		<yPos>272</yPos>
