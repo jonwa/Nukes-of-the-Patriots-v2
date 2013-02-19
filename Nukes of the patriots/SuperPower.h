@@ -31,7 +31,21 @@ public:
 	int			getCurrency();
 	int			getRound();
 
-	PoliticalType getType();
+	int			getPatriotismPreviousRound()		{ return mPatriotismPreviousRound; }; 
+	int			getCurrencyPreviousRound()			{ return mCurrencyPreviousRound; };
+	int			getPopulationPreviousRound()		{ return mPopulationPreviousRound; };
+	int			getFoodPreviousRound()				{ return mFoodPreviousRound; };
+	int			getGoodsPreviousRound()				{ return mGoodsPreviousRound; };
+	int			getTechPreviousRound()				{ return mTechPreviousRound; };
+	int			getExportedFoodPreviousRound()		{ return mExportedFoodPreviousRound; };
+	int			getExportedGoodsPreviousRound()		{ return mExportedGoodsPreviousRound; };
+	int			getExportedTechPreviousRound()		{ return mExportedTechPreviousRound; };
+	int			getTaxPreviousRound()				{ return mTaxesPreviousRound; };
+	int			getSpyNetworkPreviousRound()		{ return mSpyNetworkPreviousRound; };
+	int			getNuclearWeaponPreviousRound()		{ return mNuclearWeaponPreviousRound; };
+	int			getSpaceProgramPreviousRound()		{ return mSpaceProgramPreviousRound; };
+
+	PoliticalType	getType();
 
 	void		setRound(int round);
 
@@ -54,21 +68,22 @@ public:
 	virtual void		hideGUI() = 0;
 	virtual void		update() = 0;
 	virtual void		playMusic() {};
+	virtual void			newYearStart() = 0;
 protected:
 	PoliticalType mType;
 
 	int mRound;
 
-	int	mPatriotism;
-	int	mCurrency;
-	int	mPopulation;
-	int	mFood, mExportedFood, mExportedFoodPrice;
-	int	mGoods, mExportedGoods, mExportedGoodsPrice;
-	int	mTech, mExportedTech, mExportedTechPrice;
-	int	mTaxes;
-	int	mSpyNetwork;
-	int	mNuclearWeapon;
-	int	mSpaceProgram;
+	int	mPatriotism, mPatriotismPreviousRound;
+	int	mCurrency, mCurrencyPreviousRound;
+	int	mPopulation, mPopulationPreviousRound;
+	int	mFood, mFoodPreviousRound, mExportedFood, mExportedFoodPreviousRound, mExportedFoodPrice;
+	int	mGoods, mGoodsPreviousRound, mExportedGoods,mExportedGoodsPreviousRound, mExportedGoodsPrice;
+	int	mTech, mTechPreviousRound, mExportedTech, mExportedTechPreviousRound, mExportedTechPrice;
+	int	mTaxes, mTaxesPreviousRound;
+	int	mSpyNetwork, mSpyNetworkPreviousRound;
+	int	mNuclearWeapon, mNuclearWeaponPreviousRound;
+	int	mSpaceProgram, mSpaceProgramPreviousRound;
 	bool mIncreasePopulation;
 	bool mTaxDecreased;
 };

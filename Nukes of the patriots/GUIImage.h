@@ -22,10 +22,13 @@ public:
 
 	~GUIImage(){}
 
-	void setSize(float width, float height);
-	void setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
-	bool render (sf::RenderWindow *window);
-	
+	void		 setSize(float width, float height);
+	void		 setScale(float width, float height);
+	void		 setImage(sf::Texture &texture);
+	bool		 render (sf::RenderWindow *window);
+	void		 setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
+	sf::Texture* getTexture();
+
 private:
 	GUIImage(const GUIImage &guiImage);
 	GUIImage& operator=(const GUIImage &guiImage);

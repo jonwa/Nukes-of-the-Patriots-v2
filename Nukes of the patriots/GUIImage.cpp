@@ -1,6 +1,7 @@
 #include "GUIImage.h"
 #include "ResourceHandler.h"
 
+
 std::shared_ptr<GUIImage> GUIImage::create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent)
 {
 	std::shared_ptr<GUIImage> ret = std::make_shared<GUIImage>(pair, parent);
@@ -9,7 +10,9 @@ std::shared_ptr<GUIImage> GUIImage::create(std::pair<sf::FloatRect, sf::Texture*
 }
 
 GUIImage::GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent) :
+
 	GUIElement(pair.first, parent, IMAGE)
+
 {
 	if (pair.second)
 		mSprite.setTexture(*pair.second);
@@ -18,7 +21,9 @@ GUIImage::GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr
 		mSprite.setPosition(getX() + parent->getX(), getY() + parent->getY());
 	else
 		mSprite.setPosition(getX(), getY());
-	setSize(pair.first.width, pair.first.height);
+
+	//setSize(pair.first.width, pair.first.height);
+
 }
 
 bool GUIImage::render(sf::RenderWindow *window)
@@ -34,15 +39,9 @@ bool GUIImage::render(sf::RenderWindow *window)
 		parent = parent->getParent();
 	}
 	if(visible)
-	{
-		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
-		rect.setPosition(getX(), getY());
-		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
-		//window->draw(rect);
-		
+	{		
 		window->draw(mSprite);
-
 	}
 
 	if(!mChilds.empty())
@@ -63,6 +62,18 @@ void GUIImage::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
 }
 
+sf::Texture* GUIImage::getTexture()  
+{
+	sf::Texture* result = const_cast<sf::Texture*>(mSprite.getTexture());
+	return result;
+}
+
+void GUIImage::setScale(float width, float height)
+{
+	/*mSprite.setTextureRect(sf::IntRect(0, 0, mRectangle.width, mRectangle.height));*/
+	mSprite.setScale(width, height);
+}	
+
 void GUIImage::setSize(float width, float height)
 {
 	float scaleX = width / mSprite.getTexture()->getSize().x;
@@ -71,3 +82,4 @@ void GUIImage::setSize(float width, float height)
 	setWidth(width);
 	setHeight(height);
 }
+

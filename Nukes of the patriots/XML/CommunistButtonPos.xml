@@ -2,8 +2,8 @@
 <buttons>
 	<button>
 		<name>General</name>
-		<xPos>8</xPos>
-		<yPos>644</yPos>
+		<xPos>0</xPos>
+		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
 		<image>Communist/7_kom_plan</image>
@@ -1043,9 +1043,9 @@
 	<button>
 		<name>FirstGeneral</name>
 		<xPos>195</xPos>
-		<yPos>22</yPos>
+		<yPos>129</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>
@@ -1073,11 +1073,35 @@
 		<image>Communist/kom_texture_button_elect</image>	
 	</button>
 	<button>
+		<name>ClosePickedGeneral</name>
+		<xPos>235</xPos>
+		<yPos>478</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Communist/kom_texture_button_ok</image>	
+	</button>
+	<button>
+		<name>LeftPanel</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Communist/kom_panel_left</image>	
+	</button>
+	<button>
+		<name>RightPanel</name>
+		<xPos>812</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Communist/kom_panel_right</image>	
+	</button>
+	<button>
 		<name>PickedGeneral</name>
 		<xPos>195</xPos>
-		<yPos>22</yPos>
+		<yPos>129</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>

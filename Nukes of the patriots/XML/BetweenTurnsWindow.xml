@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<windows>
+	<window>
+		<name>Stats</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image>BetweenTurns/Stats</image>
+	</window>
+	<window>
+		<name>BetweenTurnsSameSpy</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image>BetweenTurns/BetweenTurns</image>
+	</window>
+	<window>
+		<name>BetweenTurnsDiffSpy</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image>BetweenTurns/BetweenTurns1</image>
+	</window>
+</windows>

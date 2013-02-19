@@ -19,15 +19,12 @@ public:
 	void		setText(std::string text);
 	void		setScale(float width, float height);
 	bool		render(sf::RenderWindow *window);
-<<<<<<< HEAD
-	void		setOnGuiChangeFunction(std::function<void()>);
+
+	void				setOnGuiChangeFunction(std::function<void()>);
 	virtual bool		update(sf::RenderWindow *window, sf::Event event);
 	virtual void		onGUIClick(int mouseX, int mouseY);
-=======
-	virtual bool		update(sf::RenderWindow *window, sf::Event event);
-	virtual void		onGUIClick(int mouseX, int mouseY);
+
 	void				setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
->>>>>>> changes
 				~GUIEditField(){}
 private:
 	sf::Text mText;
@@ -39,10 +36,8 @@ private:
 	float mOffsetX, mOffsetY;
 	sf::RectangleShape mCaretShape, mSelectedShape;
 	sf::Sprite mSprite;
-<<<<<<< HEAD
+
 	std::function<void()> mOnGuiChange;
-=======
->>>>>>> changes
 };
 
 #endif

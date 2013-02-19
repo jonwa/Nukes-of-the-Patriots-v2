@@ -32,6 +32,10 @@
 	<image filename="button_ext.png" />
 	<image filename="button_prev.png" />
 	<image filename="7_kap_window_imp.png" />
+	<image filename="Capitalist_Window_Big.png"/>
+	<image filename="Capitalist_Window_Small.png"/>
+	<image filename="kap_panel_left.png"/>
+	<image filename="kap_panel_right.png"/>
 </images>
 <images directory ="Communist">
     <image filename="7_kom_bg.png"/>
@@ -75,6 +79,10 @@
 	<image filename="PropagandaTechOne.png"/>
 	<image filename="PropagandaTechTwo.png"/>
 	<image filename="PropagandaTechThree.png"/>	
+	<image filename="kom_panel_left.png"/>
+	<image filename="kom_panel_right.png"/>
+	<image filename="Communist_Window_big.png"/>
+	<image filename="Communist_Window_Medium.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -116,7 +124,7 @@
 	<image filename="president-Sarah.png"/>
 	<image filename="president-Stieg.png"/>
 	<image filename="president-Sture.png"/>
-	<image filename="president-Will.png"/>	
+	<image filename="president-Will.png"/>
 </images>
 <images directory="Generals">
 	<image filename="president-Alva.png"/>
@@ -124,4 +132,39 @@
 	<image filename="president-Gustav.png"/>
 	<image filename="president-Olga.png"/>
 	<image filename="president-SiB.png"/>
+</images>
+<images directory="BetweenTurns">
+	<image filename="Stats.png"/>
+	<image filename="BetweenTurns.png"/>
+	<image filename="BetweenTurns1.png"/>
+	<image filename="yes.png"/>
+	<image filename="no.png"/>
+	<image filename="Ok-knapp-aktiv.png"/>
+</images>
+<images directory="Plaques">
+	<image filename="president-Blingfaster-plaque.png"/>
+	<image filename="president-Bob-plaque.png"/>
+	<image filename="president-Burt-plaque.png"/>
+	<image filename="president-Carl-plaque.png"/>
+	<image filename="president-Dhelma-plaque.png"/>
+	<image filename="president-Flaire-plaque.png"/>
+	<image filename="president-Frank-plaque.png"/>
+	<image filename="president-Frankie-plaque.png"/>
+	<image filename="president-Gramma-plaque.png"/>
+	<image filename="president-Hans-plaque.png"/>
+	<image filename="president-Henrich-plaque.png"/>
+	<image filename="president-Hugo-plaque.png"/>
+	<image filename="president-Ludo-plaque.png"/>
+	<image filename="president-Nojiko-plaque.png"/>
+	<image filename="president-no-nose-plaque.png"/>
+	<image filename="president-Sam-plaque.png"/>
+	<image filename="president-Sarah-plaque.png"/>
+	<image filename="president-Stieg-plaque.png"/>
+	<image filename="president-Sture-plaque.png"/>
+	<image filename="president-Will-plaque.png"/>
+	<image filename="president-Alva-plaque.png"/>
+	<image filename="president-Boris-plaque.png"/>
+	<image filename="president-Gustav-plaque.png"/>
+	<image filename="president-Olga-plaque.png"/>
+	<image filename="president-SiB-plaque.png"/>
 </images>

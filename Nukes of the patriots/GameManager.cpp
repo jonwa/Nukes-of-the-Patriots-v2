@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GUIManager.h"
+#include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
 #include "Communist.h"
@@ -7,6 +8,7 @@
 #include "President.h"
 #include "tinyxml2.h"
 #include "GUIText.h"
+#include "ResourceHandler.h"
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -23,7 +25,10 @@ GameManager::GameManager() :
 		mVecPlayersLeft(),
 		mRound(0)
 {
+	initializeGuiElement();
+	initializeGuiFunctions();
 }
+
 
 GameManager::~GameManager()
 {}
@@ -56,18 +61,19 @@ void GameManager::init(int year)
 	}
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
+	//startRound();
 
 }
 
-std::shared_ptr<SuperPower> GameManager::getCapitalist()
-{
-	return mVecSuperPowers[0];
-}
-
-std::shared_ptr<SuperPower> GameManager::getCommunist()
-{
-	return mVecSuperPowers[1];
-}
+//std::shared_ptr<SuperPower> GameManager::getCapitalist()
+//{
+//	return mVecSuperPowers[0];
+//}
+//
+//std::shared_ptr<SuperPower> GameManager::getCommunist()
+//{
+//	return mVecSuperPowers[1];
+//}
 
 void GameManager::loadPresidents()
 {
@@ -87,10 +93,14 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "President/" + filename.substr(0, filename.length() - 4);
-				mPresidentVector.push_back(std::make_shared<President>(key));
+				std::shared_ptr<President> president = std::make_shared<President>(key);
+				mPresidentVector.push_back(president);
+				std::string mapKey = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
+				mPresidentPlaqueMap[president] = &ResourceHandler::getInstance()->getTexture(mapKey);
 				childNode = childNode->NextSiblingElement("image");
 			}
 		}
+
 		if(strcmp(images->Attribute("directory"), "Generals") == 0)
 		{
 			tinyxml2::XMLElement *childNode = images->FirstChildElement("image");
@@ -98,7 +108,10 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
-				mGeneralVector.push_back(std::make_shared<President>(key));
+				std::shared_ptr<President> general = std::make_shared<President>(key);
+				mGeneralVector.push_back(general);	
+				std::string mapKey		 = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
+				mGeneralPlaqueMap[general] = &ResourceHandler::getInstance()->getTexture(mapKey);
 				childNode = childNode->NextSiblingElement("image");
 			}
 		}
@@ -117,6 +130,16 @@ std::shared_ptr<President> GameManager::getRandomPresident()
 std::shared_ptr<President> GameManager::getGeneral(int number)
 {
 	return mGeneralVector[number];
+}
+
+sf::Texture& GameManager::getPresidentPlaque(std::shared_ptr<President> president)
+{
+	return *mPresidentPlaqueMap[president];
+}
+
+sf::Texture& GameManager::getGeneralPlaque(std::shared_ptr<President> general)
+{
+	return *mGeneralPlaqueMap[general];
 }
 
 void GameManager::addSuperPower(std::shared_ptr<SuperPower> power)
@@ -177,14 +200,7 @@ std::vector<std::shared_ptr<SuperPower> > GameManager::getPlayers()const
 void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 {
 	mCurrentPlayer = newPlayer;
-	//mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
-	mCurrentPlayer->setRound(mCurrentPlayer->getRound() + 1);
-}
-
-void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlayer)
-{
-	setCurrentPlayer(startingPlayer); // Need to set setCurrentPlayer to update player round
-	mVecPlayersLeft = mVecSuperPowers;
+	std::cout<<"players left to play before: "<<mVecPlayersLeft.size()<<std::endl;
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 	{
 		if((*it) == mCurrentPlayer)
@@ -193,11 +209,28 @@ void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlaye
 			break;
 		}
 	}
+	std::cout<<"players left to play after: "<<mVecPlayersLeft.size()<<std::endl;
+	//mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
+	mCurrentPlayer->setRound(mCurrentPlayer->getRound() + 1);
+}
+
+void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlayer)
+{
+	mSecondDecideWhoStartWindow->setVisible(true);
+	//mNextWindowToShow = mSecondDecideWhoStartWindow;
+	mSecondDecideWhoStartWindow->setEnabled(false, true);
+	mSecondCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
+	mSecondCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
 }
 
 void GameManager::setYear(int year)
 {
 	mYear = year; 
+}
+
+void GameManager::updateStatsWindow()
+{
+	
 }
 
 void GameManager::nextRound()
@@ -208,7 +241,6 @@ void GameManager::nextRound()
 	}
 	mRound++;
 	// Everybody has played once this round, time to decide next player to start by spy network
-	//std::cout<<"players left to play this round: "<<mVecPlayersLeft.size()<<std::endl;
 	if(mVecPlayersLeft.size() == 0)
 	{
 		mVecPlayersLeft = mVecSuperPowers;
@@ -226,18 +258,29 @@ void GameManager::nextRound()
 			if((*it)->getSpyNetwork() == max)
 				nextPlayers.push_back(*it);
 		}
-		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-		setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-		//std::cout<<"starts this year: "<<mCurrentPlayer->getType()<<std::endl;
-		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		// Sätter statsfönstret till true när ett år har gått
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
-			if((*it) == mCurrentPlayer)
-			{
-				mVecPlayersLeft.erase(it);
-				break;
-			}
+			(*it)->newYearStart();
 		}
-		//nextPlayers[randomPlayer]->selectStartingPlayer();
+		updateStatsWindow();
+		mStatsWindow->setVisible(true); 
+
+		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
+		//If both player has same spy network, then select random as next player directly
+		if(nextPlayers.size() == 1)
+		{
+			selectStartingPlayer(nextPlayers[randomPlayer]);
+		}
+		else
+		{
+			setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+			mFirstDecideWhoStartWindow->setVisible(true);
+			//mNextWindowToShow = mFirstDecideWhoStartWindow;
+			mFirstDecideWhoStartWindow->setEnabled(false, true);
+			mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
+			mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+		} 
 	}
 	else
 	{
@@ -255,34 +298,200 @@ void GameManager::nextRound()
 		}
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
 		setCurrentPlayer(nextPlayers[randomPlayer]);
-		// Remove current player from players left to play
-		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
-		{
-			if((*it) == mCurrentPlayer)
-			{
-				mVecPlayersLeft.erase(it);
-				break;
-			}
-		}
+		startRound();
 	}
 	/*Ökar år med ett när rundan är slut*/
 	mYearText->setText(mYear);
-
-	startRound();
 }
 
-
+ //laddar in fönster
 void GameManager::loadWindowPosition()
 {
-	
-}
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/BetweenTurnsWindow.xml");
 
+	if(doc.Error())
+		std::cout << "Fel!";
+	
+	tinyxml2::XMLElement *element = doc.FirstChildElement("windows");
+	tinyxml2::XMLElement *window = element->FirstChildElement("window");
+	
+	const char* temp;
+	while (window != 0)
+	{
+		std::string tempName;
+		if (temp = window->FirstChildElement("name")->GetText())
+		{
+			tempName = temp;
+		}
+		float posX;
+		if (temp = window->FirstChildElement("xPos")->GetText())
+		{
+			posX = atof(temp);
+		}
+		float posY;
+		if (temp = window->FirstChildElement("yPos")->GetText())
+		{
+			posY = atof(temp);
+		}
+		float Width;			 
+		if (temp = window->FirstChildElement("width")->GetText())
+		{
+			Width = atof(temp);
+		}
+		float Height;
+		if (temp = window->FirstChildElement("height")->GetText())
+		{
+			Height = atof(temp);
+		}
+		temp	 = window->FirstChildElement("image")->GetText();
+		std::string name;
+		if (temp)
+			name = temp;
+				
+		BetweenTurnsWindow[tempName].first.left = posX;
+		BetweenTurnsWindow[tempName].first.top = posY;
+		BetweenTurnsWindow[tempName].first.width = Width;
+		BetweenTurnsWindow[tempName].first.height = Height;
+		BetweenTurnsWindow[tempName].second = &ResourceHandler::getInstance()->getTexture(name);
+		
+		window = window->NextSiblingElement();
+	}	
+}
+ //laddar in knappar
 void GameManager::loadButtonPosition()
 {
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/BetweenTurnsButton.xml");
 
+	if(doc.Error())
+		std::cout << "Fel!";
+	
+	tinyxml2::XMLElement *element = doc.FirstChildElement("buttons");
+	tinyxml2::XMLElement *button = element->FirstChildElement("button");
+
+	const char* temp;
+	while (button != 0)
+	{
+		std::string tempName;
+		if (temp = button->FirstChildElement("name")->GetText())
+		{
+			tempName = temp;
+		}
+		float posX;
+		if (temp = button->FirstChildElement("xPos")->GetText())
+		{
+			posX = atof(temp);
+		}
+		float posY;
+		if (temp = button->FirstChildElement("yPos")->GetText())
+		{
+			posY = atof(temp);
+		}
+		float Width;			 
+		if (temp = button->FirstChildElement("width")->GetText())
+		{
+			Width = atof(temp);
+		}
+		float Height;
+		if (temp = button->FirstChildElement("height")->GetText())
+		{
+			Height = atof(temp);
+		}
+		temp	 = button->FirstChildElement("image")->GetText();
+		std::string name;
+		if (temp)
+			name = temp;
+
+		BetweenTurnsButton[tempName].first.left = posX;
+		BetweenTurnsButton[tempName].first.top = posY;
+		BetweenTurnsButton[tempName].first.width = Width;
+		BetweenTurnsButton[tempName].first.height = Height;
+		BetweenTurnsButton[tempName].second = &ResourceHandler::getInstance()->getTexture(name);
+		button = button->NextSiblingElement();
+	}
 }
 
+std::shared_ptr<SuperPower> GameManager::getCapitalist()
+{
+	return mVecSuperPowers[0];
+}
+
+std::shared_ptr<SuperPower> GameManager::getCommunist()
+{
+	return mVecSuperPowers[1];
+}
+
+
+
+ //initierar fönster/knappar till guielement
+void GameManager::initializeGuiElement()
+{
+	loadButtonPosition();
+	loadWindowPosition();
+
+	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
+	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
+	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstDecideWhoStartWindow->setVisible(false);
+
+	mSecondDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsDiffSpy"]);
+	mCapitalistButton					= GUIButton::create(BetweenTurnsButton["Capitalist"], mSecondDecideWhoStartWindow);
+	mCommunistButton					= GUIButton::create(BetweenTurnsButton["Communist"], mSecondDecideWhoStartWindow);
+	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mSecondDecideWhoStartWindow);
+    mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondDecideWhoStartWindow->setVisible(false);
+
+	mStatsWindow						= GUIWindow::create(BetweenTurnsWindow["Stats"]);
+	mCloseStatsWindow					= GUIButton::create(BetweenTurnsButton["CloseStats"], mStatsWindow);
+	mPatriotismChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mCurrencyChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mPopulationChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mFoodChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mGoodsChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mTechChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedFoodChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedGoodsChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mExportedTechChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mTaxChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mSpyNetworkChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mSpaceProgramChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+
+	mStatsWindow->setVisible(false);
+
+	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
+	GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
+	GUIManager::getInstance()->addGUIElement(mStatsWindow);
+}
+
+ //initiering av gui knappar
 void GameManager::initializeGuiFunctions()
 {
-
+	//Stänger statsfönstret och går in i välja lag meny
+	mCloseStatsWindow->setOnClickFunction([=]()
+	{
+		mStatsWindow->setVisible(false);
+		mFirstDecideWhoStartWindow->setEnabled(true, true);
+		mSecondDecideWhoStartWindow->setEnabled(true, true);
+	});
+	//stänger ned fönstret (om bägge har samma spy)
+	mCloseFirstWindow->setOnClickFunction([=]()
+	{
+		mFirstDecideWhoStartWindow->setVisible(false);
+		startRound();
+	});
+	//Kapitalisterna börjar nästa runda
+	mCapitalistButton->setOnClickFunction([=]()
+	{
+		setCurrentPlayer(getCapitalist());
+		startRound();
+	});
+	//Kommunisterna börjar nästa runda
+	mCommunistButton->setOnClickFunction([=]()
+	{
+		setCurrentPlayer(getCommunist());
+		startRound();
+	});
 }

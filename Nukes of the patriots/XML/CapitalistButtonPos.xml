@@ -2,8 +2,8 @@
 <buttons>
 	<button>
 		<name>President</name>
-		<xPos>8</xPos>
-		<yPos>644</yPos>
+		<xPos>0</xPos>
+		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
 		<image></image>
@@ -357,7 +357,7 @@
 		<xPos>63</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>
@@ -365,7 +365,7 @@
 		<xPos>327</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>	
+		<height>194</height>	
 		<image></image>
 	</button>
 	<button>
@@ -373,7 +373,7 @@
 		<xPos>195</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
-		<height>220</height>
+		<height>194</height>
 		<image></image>
 	</button>
 	<button>
@@ -399,5 +399,13 @@
 		<width>199</width>
 		<height>44</height>
 		<image>Capitalist/button_ext</image>	
+	</button>
+	<button>
+		<name>CloseIncreasedResources</name>
+		<xPos>235</xPos>
+		<yPos>110</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
 </buttons>

@@ -2,12 +2,16 @@
 #define _GAME_MANAGER_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include <sstream>
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include <SFML\Graphics\Texture.hpp>
 
 class SuperPower;
+class Communist;
+class Capitalist;
 class President;
 class GUIText;
 
@@ -25,14 +29,20 @@ public:
 	void										setCurrentPlayer(std::shared_ptr<SuperPower> nextPlayer);
 	void										setYear(int year);
 	void										startRound();
+	void										updateStatsWindow();
 	void										nextRound();
 	void										addSuperPower(std::shared_ptr<SuperPower> power);
 	//void										setVector(std::vector<std::shared_ptr<SuperPower> > SuperPowerVec);
 	
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
+
+	sf::Texture&								getPresidentPlaque(std::shared_ptr<President> president);
+	sf::Texture&								getGeneralPlaque(std::shared_ptr<President> general);
+
 	std::shared_ptr<SuperPower>					getCapitalist();
 	std::shared_ptr<SuperPower>					getCommunist();
+
 	void										init(int year);
 private:
 	static GameManager* mInstance;
@@ -50,6 +60,7 @@ private:
 	void loadPresidents();
 	void loadWindowPosition();
 	void loadButtonPosition();
+	void initializeGuiElement();
 	void initializeGuiFunctions();
 
 	int mYear;
@@ -61,10 +72,43 @@ private:
 	std::vector<std::shared_ptr<SuperPower> > mVecPlayersLeft;
 	std::vector<std::shared_ptr<President> > mPresidentVector;
 	std::vector<std::shared_ptr<President> > mGeneralVector;
+
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsWindow;
+	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsButton;
+
+	std::map<std::shared_ptr<President>, sf::Texture*> mPresidentPlaqueMap;
+	std::map<std::shared_ptr<President>, sf::Texture*> mGeneralPlaqueMap;
+
 	std::shared_ptr<SuperPower> mCurrentPlayer;
+
+	std::shared_ptr<GUIWindow> mStatsWindow;
+	std::shared_ptr<GUIButton> mCloseStatsWindow;
+	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mCurrencyChange;
+	std::shared_ptr<GUIText>   mPopulationChange;
+	std::shared_ptr<GUIText>   mFoodChange;
+	std::shared_ptr<GUIText>   mGoodsChange;
+	std::shared_ptr<GUIText>   mTechChange;
+	std::shared_ptr<GUIText>   mExportedFoodChange;
+	std::shared_ptr<GUIText>   mExportedGoodsChange;
+	std::shared_ptr<GUIText>   mExportedTechChange;
+	std::shared_ptr<GUIText>   mTaxChange;
+	std::shared_ptr<GUIText>   mSpyNetworkChange;
+	std::shared_ptr<GUIText>   mNuclearWeaponChange;
+	std::shared_ptr<GUIText>   mSpaceProgramChange;
 
 	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy
 	std::shared_ptr<GUIWindow> mSecondDecideWhoStartWindow; //Om den ena har högre spy än den andra
+	std::shared_ptr<GUIButton> mCapitalistButton;
+	std::shared_ptr<GUIButton> mCommunistButton;
+	std::shared_ptr<GUIButton> mCloseFirstWindow;
+
+	// Texter för de två fönster som finns för att visa lagens spionnätverk för rundan som varit
+	std::shared_ptr<GUIText>   mFirstCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
+
 };
 
 
