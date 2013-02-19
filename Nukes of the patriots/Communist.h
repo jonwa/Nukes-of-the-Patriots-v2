@@ -106,8 +106,7 @@ private:
 	void updateAllResources();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
-
-
+	void initializeCityImages();
 	void propagandaInitialize();
 
 	void loadButtonPosition();
@@ -122,7 +121,10 @@ private:
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
 
- 
+	
+	std::vector<sf::Texture*> CityImages; 
+	std::shared_ptr<GUIImage> mChangeCityImage;
+
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;

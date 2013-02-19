@@ -54,10 +54,10 @@
 	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
 	<image filename="kom_texture_button_plus.png"/>
-	<image filename="button_plu5.png"/>
+	<image filename="kom_texture_button_plus5.png"/>
 	<image filename="button_plu10.png"/>
 	<image filename="kom_texture_button_minus.png"/>
-	<image filename="button_min5.png"/>
+	<image filename="kom_texture_button_minus5.png"/>
 	<image filename="button_min10.png"/>
 	<image filename="button_no.png"/>
 	<image filename="kom_texture_button_smallupgrade.png"/>
@@ -83,6 +83,10 @@
 	<image filename="kom_panel_right.png"/>
 	<image filename="Communist_Window_big.png"/>
 	<image filename="Communist_Window_Medium.png"/>
+	<image filename="kom_city2.png"/>
+	<image filename="kom_city3.png"/>
+	<image filename="kom_city4.png"/>
+	<image filename="kom_city5.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>

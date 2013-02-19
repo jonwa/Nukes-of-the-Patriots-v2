@@ -564,7 +564,7 @@ void Capitalist::initializeCapitalistWindow()
 		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
 
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
-	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePresident"], mPickedPresidentWindow);
+	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePickedPresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
 	
 	//används för att i början av varje kapitalistrunda visa om någon av resurserna har ökat i pris
