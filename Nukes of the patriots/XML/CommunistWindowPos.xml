@@ -14,7 +14,7 @@
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Communist/7_kom_window_president2</image>
+		<image>Communist/Communist_Window_big</image>
 	</window>
 	<window>
 		<name>PickedGeneral</name>
@@ -22,7 +22,7 @@
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Communist/7_kom_window_president2</image>	
+		<image>Communist/Communist_Window_big</image>	
 	</window>
 	<window>
 		<name>FiveYearPlanWindow</name>
@@ -30,7 +30,7 @@
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Communist/7_kom_fiveYearPlan</image>
+		<image>Communist/Communist_Window_big</image>
 	</window>
 	<window>
 		<name>CommunistResourcesWindow</name>
@@ -46,7 +46,7 @@
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Communist/7_kom_window_propaganda1</image>
+		<image>Communist/Communist_Window_big</image>
 	</window>
 	<window>
 		<name>CommunistPropagandaWindowSecond</name>
@@ -54,7 +54,7 @@
 		<yPos>100</yPos>
 		<width>552</width>
 		<height>270</height>
-		<image>Communist/7_kom_window_propaganda2</image>
+		<image>Communist/Communist_Window_Medium</image>
 	</window>	
 	<window>
 		<name>CommunistUpgradeWindow</name>
@@ -62,7 +62,7 @@
 		<yPos>79</yPos>
 		<width>570</width>
 		<height>534</height>
-		<image>Communist/7_kom_window_upg</image>
+		<image>Communist/Communist_Window_big</image>
 	</window>
 	<window>
 		<name>CommunistExportWindow</name>

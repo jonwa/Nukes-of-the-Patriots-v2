@@ -1112,12 +1112,28 @@
 		<height>40</height>
 		<image>Communist/kom_texture_button_ok</image>	
 	</button>
-	<window>
+	<button>
+		<name>LeftPanel</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Communist/kom_panel_left</image>	
+	</button>
+	<button>
+		<name>RightPanel</name>
+		<xPos>812</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Communist/kom_panel_right</image>	
+	</button>
+	<button>
 		<name>PickedGeneral</name>
 		<xPos>195</xPos>
 		<yPos>129</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image></image>
-	</window>
+	</button>
 </buttons>

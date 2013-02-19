@@ -59,9 +59,13 @@ public:
 
 	void		chooseLeader();
 
+	void playMusic();
+	void stopMusic();
+
 	void showGUI();
 	void hideGUI();
 	void update();
+	void newYearStart();
 private:
 	std::string intToString(int i)
 	{
@@ -286,7 +290,8 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-
+	std::shared_ptr<GUIButton> mLeftPanel;
+	std::shared_ptr<GUIButton> mRightPanel;
 
 };
 

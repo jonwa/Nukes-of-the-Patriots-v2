@@ -417,11 +417,35 @@
 		<image>Capitalist/button_ext</image>	
 	</button>
 	<button>
+		<name>LeftPanel</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Capitalist/kap_panel_left</image>	
+	</button>
+	<button>
+		<name>RightPanel</name>
+		<xPos>812</xPos>
+		<yPos>0</yPos>
+		<width>212</width>
+		<height>636</height>
+		<image>Capitalist/kap_panel_right</image>	
+	</button>
+	<button>
 		<name>ExportGoToPreviousSlide</name>
 		<xPos>200</xPos>
 		<yPos>477</yPos>
 		<width>30</width>
 		<height>70</height>
 		<image>Capitalist/button_prev</image>	
+	</button>
+	<button>
+		<name>CloseIncreasedResources</name>
+		<xPos>235</xPos>
+		<yPos>110</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
 </buttons>
