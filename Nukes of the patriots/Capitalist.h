@@ -101,7 +101,6 @@ private:
 	std::shared_ptr<GUIWindow> mIncreasedResourcesWindow;
 	std::shared_ptr<GUIButton> mCloseIncreasedResourcesWindow;
 
-	std::vector<std::shared_ptr<GUIImage>> mCityImages;
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -136,6 +135,7 @@ private:
 	/*GUI-pekare för taxes */
 	std::shared_ptr<GUIWindow> mTaxesWindow;
 	std::shared_ptr<GUIButton> mLowerTaxesButton;
+	std::shared_ptr<GUIText> mTaxValueText;
 	std::shared_ptr<GUIButton> mRaiseTaxesButton;
 	std::shared_ptr<GUIButton> mTaxesCloseButton;
 	/*GUI-pekare för resources*/
