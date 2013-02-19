@@ -36,6 +36,10 @@
 	<image filename="Capitalist_Window_Small.png"/>
 	<image filename="kap_panel_left.png"/>
 	<image filename="kap_panel_right.png"/>
+	<image filename="kap_city2.png"/>
+	<image filename="kap_city3.png"/>
+	<image filename="kap_city4.png"/>
+	<image filename="kap_city5.png"/>
 </images>
 <images directory ="Communist">
     <image filename="7_kom_bg.png"/>
@@ -138,7 +142,7 @@
 	<image filename="president-SiB.png"/>
 </images>
 <images directory="BetweenTurns">
-	<image filename="Stats.png"/>
+	<image filename="stats_menu.png"/>
 	<image filename="BetweenTurns.png"/>
 	<image filename="BetweenTurns1.png"/>
 	<image filename="yes.png"/>

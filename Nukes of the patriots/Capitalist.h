@@ -60,6 +60,8 @@ public:
 	void resetResourcesValues();
 
 private:
+	int mCount;
+
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -94,8 +96,13 @@ private:
 	void initializeGuiFunctions();
 	void initializeCapitalistWindow();
 	void upgradeWindowText();
-
 	
+	void changeCityImage();
+	void initializeCityImages();
+	
+	std::vector<sf::Texture*> CityImages; 
+	std::shared_ptr<GUIImage> mChangeCityImage;
+
 	//President	*mPresident;
 
 	std::shared_ptr<GUIWindow> mIncreasedResourcesWindow;

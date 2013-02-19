@@ -456,4 +456,12 @@
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
+	<button>
+		<name>CityImages</name>
+		<xPos>253</xPos>
+		<yPos>78</yPos>
+		<width>512</width>
+		<height>512</height>
+		<image></image>
+	</button>
 </buttons>

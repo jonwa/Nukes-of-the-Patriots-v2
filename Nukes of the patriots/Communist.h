@@ -66,7 +66,10 @@ public:
 	void hideGUI();
 	void update();
 	void newYearStart();
+
 private:
+	int mCount;
+
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -106,6 +109,7 @@ private:
 	void updateAllResources();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
+	void changeCityImage();
 
 	void initializeCityImages();
 

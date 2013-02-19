@@ -25,7 +25,8 @@ static bool activateWindow	= false;
 
 static int generalCount = 0;
 
-Communist::Communist()
+Communist::Communist() : 
+	mCount(0)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -75,6 +76,17 @@ void Communist::openFiveYearPlan()
 		mFiveYearPlanWindow->setEnabled(true, true);
 		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 		mFiveYearPlanWindow->setVisible(true);
+	}
+}
+
+void Communist::changeCityImage()
+{
+	if((mRound-1) % 10 == 0 && mRound != 1)
+	{
+		mCount++;
+		mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[mCount])); 
+		if(mCount > 5)
+			mCount = 0;
 	}
 }
 
@@ -198,7 +210,6 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
-
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -216,6 +227,8 @@ void Communist::update()
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
 	openFiveYearPlan();
+
+	changeCityImage();
 }
 
 //-----------------------------------------------------------
@@ -729,7 +742,7 @@ void Communist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city3")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city4")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city5")));
-
+	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
 

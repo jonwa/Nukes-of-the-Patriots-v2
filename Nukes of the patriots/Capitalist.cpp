@@ -27,7 +27,8 @@ static int currentTech  = 0;
 static bool activateWindow = false;
 
 Capitalist::Capitalist() :
-	mPresident(nullptr)
+	mPresident(nullptr),
+	mCount(0)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -35,6 +36,7 @@ Capitalist::Capitalist() :
 
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
+	initializeCityImages();
 }
 
 
@@ -55,6 +57,17 @@ void Capitalist::stopMusic()
 std::shared_ptr<President> Capitalist::getPresident()
 {
 	return mPresident;
+}
+
+void Capitalist::changeCityImage()
+{
+	if((mRound-1) % 10 == 0 && mRound != 1)
+	{
+		mCount++;
+		mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[mCount])); 
+		if(mCount > 5)
+			mCount = 0;
+	}
 }
 
 void Capitalist::newYearStart()
@@ -131,6 +144,8 @@ void Capitalist::update()
 	{
 		chooseLeader();
 	}
+
+	changeCityImage();
 }
 
 void Capitalist::setTaxesCost(int tax)
@@ -434,6 +449,7 @@ void Capitalist::initializeCapitalistWindow()
 	loadCapitalistMusic();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
+	mChangeCityImage					= GUIImage::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
@@ -599,7 +615,14 @@ void Capitalist::initializeCapitalistWindow()
 	GUIManager::getInstance()->addGUIElement(mCapitalistMainWindow);
 }
 
-
+void Capitalist::initializeCityImages()
+{
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city2")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city3")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city4")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city5")));
+	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
+}
 
 void Capitalist::chooseLeader()
 {
