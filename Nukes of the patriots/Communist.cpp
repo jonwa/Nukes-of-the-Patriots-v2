@@ -1011,16 +1011,6 @@ void Communist::initializeGuiFunctions()
 		upgradeWindowText();
 	});
 	
-	/*Export knappen på interface*/
-	mCommunistExportButton->setOnClickFunction([=]()			
-	{ 	
-		mCommunistMainWindow->setEnabled(false, true);
-		mExportWindow->setEnabled(true, true);
-		mExportWindow->setVisible(true); 
-		mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
-	});
-
-
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
@@ -1178,15 +1168,6 @@ void Communist::initializeGuiFunctions()
 		upgradeSpaceProgram(spaceDiff); 
 		upgradeSpyNetwork(spyDiff);
 		mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
-	});
-
-	/*Stänger ned exportfönstret*/
-	mExportCloseButton->setOnClickFunction([=]() 
-	{ 
-		mCommunistMainWindow->setEnabled(true, true);
-
-		mExportWindow->setVisible(false); 
-		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
 	});
 
 	/*GUI hantering för valet av general*/
