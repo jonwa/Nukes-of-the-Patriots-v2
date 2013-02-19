@@ -3,13 +3,13 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIEditField.h"
+#include "GUIImage.h"
 #include "GUIText.h"
 #include "tinyxml2.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "President.h"
 #include "GameManager.h"
-#include "GUIEditField.h"
 #include <sstream>
 #include "Timer.h"
 
@@ -41,7 +41,6 @@ Communist::Communist()
 	initializeGuiFunctions();
 	
 	fiveYearInitialize();
-	propagandaInitialize();
 }
 
 
@@ -67,28 +66,15 @@ void Communist::openFiveYearPlan()
 	if((mRound-1) % 5 == 0 && mRound != 1)
 	{
 		mCommunistMainWindow->setEnabled(false, true);
-		mFiveYearPlanWindow->setEnabled(true, true);
-		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
-		mFiveYearPlanWindow->setVisible(true);
-	}
-}
+		mTaxesWindow->setEnabled(true, true);
 
-void Communist::propagandaInitialize()
-{
-	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodOne")));
-	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodTwo")));
-	PropagandaFood.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaFoodThree")));
-	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsOne")));
-	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsTwo")));
-	PropagandaGoods.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaGoodsThree")));
-	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechOne")));
-	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechTwo")));
-	PropagandaTech.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/PropagandaTechThree")));
+		mTaxesWindow->setVisible(true);
+	}
 }
 
 void Communist::setYearlyResources(int year, std::string key, int value)
 {
-	mYearVector[year-1][key] = value;
+	mYearVector[year-1][key] += value;
 }
 
 int Communist::getYearlyFood(int round)
@@ -252,7 +238,7 @@ void Communist::buyPropagandaFood(int round)
 	resourcesTotal += getYearlyGoods(round);
 	resourcesTotal += getYearlyTech(round);
 
-	float percent = mFood/resourcesTotal;
+	int percent = mFood/resourcesTotal;
 	percent*=100;
 
 	for(int i=0;i<10;i++)
@@ -433,45 +419,7 @@ void Communist::loadWindowPosition()
 	}	
 }
 
-void Communist::loadCommunistMusic()
-{
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile("XML/CommunistSounds.xml");
-
-	if(doc.Error())
-		std::cout << "Fel! Communist::loadCommunistMusic";
-	
-	tinyxml2::XMLElement *element = doc.FirstChildElement("tracks");
-	tinyxml2::XMLElement *music = element->FirstChildElement("music");
-	
-	const char* temp;
-	while (music != 0)
-	{
-		std::string tempName; 
-		if (temp = music->FirstChildElement("name")->GetText())
-		{
-			tempName = temp;
-		}
-		
-		temp	 = music->FirstChildElement("file")->GetText();
-		std::string name;
-		if (temp)
-			name = temp;
-				
-		CommunistMusic[tempName] = ResourceHandler::getInstance()->getMusic(name);
-	
-		music = music->NextSiblingElement();	
-	}
-}
-
- /*Används för att spela upp kommunisternas themesong*/
-void Communist::playMusic()
-{
-	CommunistMusic["CommunistMainTheme"]->play();
-}
-
- /*initierar kommunisternas fönster respektive fönster/knappar etc.*/
-
+ /**/
 void Communist::initializeCommunistWindow()
 {
 	loadButtonPosition();
@@ -482,7 +430,7 @@ void Communist::initializeCommunistWindow()
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
-	mCommunistExportButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
+	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 	mCommunistMainWindow->setVisible(false);
 
@@ -495,62 +443,156 @@ void Communist::initializeCommunistWindow()
 	mTechText	 = GUIText::create(sf::FloatRect(10, 440, 40, 40), intToString(getTech()), mCommunistMainWindow);	
 
 	/*Taxes fönster med knappar*/
-	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	
-	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mFiveYearPlanWindow);	
-	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearTwoLowerTaxesButton		= GUIButton::create(CommunistButtons["YearTwoLowerTaxes"], mFiveYearPlanWindow);	
-	mYearTwoRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearThreeLowerTaxesButton		= GUIButton::create(CommunistButtons["YearThreeLowerTaxes"], mFiveYearPlanWindow);	
-	mYearThreeRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearFourLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFourLowerTaxes"], mFiveYearPlanWindow);	
-	mYearFourRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFourRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mFiveYearPlanWindow);	
-	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mFiveYearPlanWindow);
+	mTaxesWindow					= GUIWindow::create(CommunistWindows["CommunistTaxesWindow"], mCommunistMainWindow);	
+	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mTaxesWindow);	
+	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mTaxesWindow);	
+	mYearTwoLowerTaxesButton		= GUIButton::create(CommunistButtons["YearTwoLowerTaxes"], mTaxesWindow);	
+	mYearTwoRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTaxes"], mTaxesWindow);	
+	mYearThreeLowerTaxesButton		= GUIButton::create(CommunistButtons["YearThreeLowerTaxes"], mTaxesWindow);	
+	mYearThreeRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTaxes"], mTaxesWindow);	
+	mYearFourLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFourLowerTaxes"], mTaxesWindow);	
+	mYearFourRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFourRaiseTaxes"], mTaxesWindow);	
+	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mTaxesWindow);	
+	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mTaxesWindow);
 
-	mYearOneTaxesText				= GUIText::create(sf::FloatRect(515, 55, 20, 20), "30", mFiveYearPlanWindow);
-	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(515, 143, 20, 20), "30", mFiveYearPlanWindow);
-	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(515, 231, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFourTaxesText				= GUIText::create(sf::FloatRect(515, 319, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(515, 407, 20, 20), "30", mFiveYearPlanWindow);
+	mYearOneTaxesText				= GUIText::create(sf::FloatRect(104, 77, 20, 20), "0", mTaxesWindow);
+	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(104, 169, 20, 20), "0", mTaxesWindow);
+	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(104, 261, 20, 20), "0", mTaxesWindow);
+	mYearFourTaxesText				= GUIText::create(sf::FloatRect(104, 353, 20, 20), "0", mTaxesWindow);
+	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(104, 445, 20, 20), "0", mTaxesWindow);
+	mTaxesWindow->setVisible(false);
 
-	mIncomeYearOne					= GUIText::create(sf::FloatRect(435, 55, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearTwo					= GUIText::create(sf::FloatRect(435, 143, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearThree				= GUIText::create(sf::FloatRect(435, 231, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFour					= GUIText::create(sf::FloatRect(435, 319, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFive					= GUIText::create(sf::FloatRect(435, 407, 20, 20), "0", mFiveYearPlanWindow);
-
-	mIncomeYearOne->setText(stringToInt(mYearOneTaxesText->getText()) * mPopulation);
-	mIncomeYearTwo->setText(stringToInt(mYearTwoTaxesText->getText()) * mPopulation);
-	mIncomeYearThree->setText(stringToInt(mYearThreeTaxesText->getText()) * mPopulation);
-	mIncomeYearFour->setText(stringToInt(mYearFourTaxesText->getText()) * mPopulation);
-	mIncomeYearFive->setText(stringToInt(mYearFiveTaxesText->getText()) * mPopulation);
+	/*Resource GUI window med knappar*/
+	mResourcesWindow					= GUIWindow::create(CommunistWindows["CommunistResourcesWindow"], mCommunistMainWindow);	
 	/*Food*/
-	mYearOneFood					= GUIEditField::create(CommunistButtons["YearOneFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoFood					= GUIEditField::create(CommunistButtons["YearTwoFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeFood					= GUIEditField::create(CommunistButtons["YearThreeFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourFood					= GUIEditField::create(CommunistButtons["YearFourFoodEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveFood					= GUIEditField::create(CommunistButtons["YearFiveFoodEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearOneLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByTen"], mResourcesWindow);	
+	mYearOneLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByFive"], mResourcesWindow);	
+	mYearOneLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerFoodByOne"], mResourcesWindow);	
+	mYearOneRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByOne"], mResourcesWindow);	
+	mYearOneRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByFive"], mResourcesWindow);	
+	mYearOneRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseFoodByTen"], mResourcesWindow);
+	mYearOneFoodText					= GUIText::create(sf::FloatRect(104, 77, 20, 20), "0", mResourcesWindow);
+	
+	mYearTwoLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByTen"], mResourcesWindow);	
+	mYearTwoLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByFive"], mResourcesWindow);	
+	mYearTwoLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerFoodByOne"], mResourcesWindow);	
+	mYearTwoRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByOne"], mResourcesWindow);	
+	mYearTwoRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByFive"], mResourcesWindow);	
+	mYearTwoRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseFoodByTen"], mResourcesWindow);
+	mYearTwoFoodText					= GUIText::create(sf::FloatRect(104, 169, 20, 20), "0", mResourcesWindow);
 
-	mYearOneGoods					= GUIEditField::create(CommunistButtons["YearOneGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoGoods					= GUIEditField::create(CommunistButtons["YearTwoGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeGoods					= GUIEditField::create(CommunistButtons["YearThreeGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourGoods					= GUIEditField::create(CommunistButtons["YearFourGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveGoods					= GUIEditField::create(CommunistButtons["YearFiveGoodsEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearThreeLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByTen"], mResourcesWindow);	
+	mYearThreeLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByFive"], mResourcesWindow);	
+	mYearThreeLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerFoodByOne"], mResourcesWindow);	
+	mYearThreeRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByOne"], mResourcesWindow);	
+	mYearThreeRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByFive"], mResourcesWindow);	
+	mYearThreeRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseFoodByTen"], mResourcesWindow);
+	mYearThreeFoodText					= GUIText::create(sf::FloatRect(104, 261, 20, 20), "0", mResourcesWindow);
+	
+	mYearFourLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByTen"], mResourcesWindow);	
+	mYearFourLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByFive"], mResourcesWindow);
+	mYearFourLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerFoodByOne"], mResourcesWindow);	
+	mYearFourRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByOne"], mResourcesWindow);
+	mYearFourRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByFive"], mResourcesWindow);	
+	mYearFourRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseFoodByTen"], mResourcesWindow);
+	mYearFourFoodText					= GUIText::create(sf::FloatRect(104, 353, 20, 20), "0", mResourcesWindow);
+		
+	mYearFiveLowerFoodByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByTen"], mResourcesWindow);	
+	mYearFiveLowerFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByFive"], mResourcesWindow);
+	mYearFiveLowerFoodByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerFoodByOne"], mResourcesWindow);	
+	mYearFiveRaiseFoodByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByOne"], mResourcesWindow);
+	mYearFiveRaiseFoodByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByFive"], mResourcesWindow);	
+	mYearFiveRaiseFoodByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseFoodByTen"], mResourcesWindow);
+	mYearFiveFoodText					= GUIText::create(sf::FloatRect(104, 445, 20, 20), "0", mResourcesWindow);
+	
+	/*Goods*/
+	mYearOneLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByTen"], mResourcesWindow);	
+	mYearOneLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByFive"], mResourcesWindow);	
+	mYearOneLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerGoodsByOne"], mResourcesWindow);	
+	mYearOneRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByOne"], mResourcesWindow);	
+	mYearOneRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByFive"], mResourcesWindow);	
+	mYearOneRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseGoodsByTen"], mResourcesWindow);
+	mYearOneGoodsText					= GUIText::create(sf::FloatRect(285, 77, 20, 20), "0", mResourcesWindow);
+	
+	mYearTwoLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByTen"], mResourcesWindow);	
+	mYearTwoLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByFive"], mResourcesWindow);	
+	mYearTwoLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerGoodsByOne"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByOne"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByFive"], mResourcesWindow);	
+	mYearTwoRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseGoodsByTen"], mResourcesWindow);
+	mYearTwoGoodsText					= GUIText::create(sf::FloatRect(285, 169, 20, 20), "0", mResourcesWindow);
 
-	mYearOneTech					= GUIEditField::create(CommunistButtons["YearOneTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearTwoTech					= GUIEditField::create(CommunistButtons["YearTwoTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearThreeTech					= GUIEditField::create(CommunistButtons["YearThreeTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFourTech					= GUIEditField::create(CommunistButtons["YearFourTechEditField"].first, "0", true, mFiveYearPlanWindow);
-	mYearFiveTech					= GUIEditField::create(CommunistButtons["YearFiveTechEditField"].first, "0", true, mFiveYearPlanWindow);
+	mYearThreeLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByTen"], mResourcesWindow);	
+	mYearThreeLowerGoodsByFiveButton	= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByFive"], mResourcesWindow);	
+	mYearThreeLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerGoodsByOne"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByOne"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByFiveButton	= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByFive"], mResourcesWindow);	
+	mYearThreeRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseGoodsByTen"], mResourcesWindow);
+	mYearThreeGoodsText					= GUIText::create(sf::FloatRect(285, 261, 20, 20), "0", mResourcesWindow);
+	
+	mYearFourLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByTen"], mResourcesWindow);	
+	mYearFourLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByFive"], mResourcesWindow);
+	mYearFourLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerGoodsByOne"], mResourcesWindow);	
+	mYearFourRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByOne"], mResourcesWindow);
+	mYearFourRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByFive"], mResourcesWindow);	
+	mYearFourRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseGoodsByTen"], mResourcesWindow);
+	mYearFourGoodsText					= GUIText::create(sf::FloatRect(285, 353, 20, 20), "0", mResourcesWindow);
+	
+	mYearFiveLowerGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByTen"], mResourcesWindow);	
+	mYearFiveLowerGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByFive"], mResourcesWindow);
+	mYearFiveLowerGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerGoodsByOne"], mResourcesWindow);	
+	mYearFiveRaiseGoodsByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByOne"], mResourcesWindow);
+	mYearFiveRaiseGoodsByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByFive"], mResourcesWindow);	
+	mYearFiveRaiseGoodsByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseGoodsByTen"], mResourcesWindow);
+	mYearFiveGoodsText					= GUIText::create(sf::FloatRect(285, 445, 20, 20), "0", mResourcesWindow);
 
-	mTotalCostYearOne				= GUIText::create(sf::FloatRect(350, 35, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(350, 123, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearThree				= GUIText::create(sf::FloatRect(350, 211, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearFour				= GUIText::create(sf::FloatRect(350, 299, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearFive				= GUIText::create(sf::FloatRect(350, 387, 20, 20), "0", mFiveYearPlanWindow);
+	/*Tech*/
+	mYearOneLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByTen"], mResourcesWindow);	
+	mYearOneLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByFive"], mResourcesWindow);	
+	mYearOneLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearOneLowerTechByOne"], mResourcesWindow);	
+	mYearOneRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByOne"], mResourcesWindow);	
+	mYearOneRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByFive"], mResourcesWindow);	
+	mYearOneRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearOneRaiseTechByTen"], mResourcesWindow);
+	mYearOneTechText					= GUIText::create(sf::FloatRect(465, 77, 20, 20), "0", mResourcesWindow);
+	
+	mYearTwoLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByTen"], mResourcesWindow);	
+	mYearTwoLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByFive"], mResourcesWindow);	
+	mYearTwoLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearTwoLowerTechByOne"], mResourcesWindow);	
+	mYearTwoRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByOne"], mResourcesWindow);	
+	mYearTwoRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByFive"], mResourcesWindow);	
+	mYearTwoRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTechByTen"], mResourcesWindow);
+	mYearTwoTechText					= GUIText::create(sf::FloatRect(465, 169, 20, 20), "0", mResourcesWindow);
 
-	mFiveYearPlanCloseButton		= GUIButton::create(CommunistButtons["CloseFiveYearPlanWindow"], mFiveYearPlanWindow);	
-	mFiveYearPlanWindow->setVisible(false);
+	mYearThreeLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByTen"], mResourcesWindow);	
+	mYearThreeLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByFive"], mResourcesWindow);	
+	mYearThreeLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearThreeLowerTechByOne"], mResourcesWindow);	
+	mYearThreeRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByOne"], mResourcesWindow);	
+	mYearThreeRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByFive"], mResourcesWindow);	
+	mYearThreeRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTechByTen"], mResourcesWindow);
+	mYearThreeTechText					= GUIText::create(sf::FloatRect(465, 261, 20, 20), "0", mResourcesWindow);
+	
+	mYearFourLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByTen"], mResourcesWindow);	
+	mYearFourLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByFive"], mResourcesWindow);
+	mYearFourLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearFourLowerTechByOne"], mResourcesWindow);	
+	mYearFourRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByOne"], mResourcesWindow);
+	mYearFourRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByFive"], mResourcesWindow);	
+	mYearFourRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearFourRaiseTechByTen"], mResourcesWindow);
+	mYearFourTechText					= GUIText::create(sf::FloatRect(465, 353, 20, 20), "0", mResourcesWindow);
+	
+	mYearFiveLowerTechByTenButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByTen"], mResourcesWindow);	
+	mYearFiveLowerTechByFiveButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByFive"], mResourcesWindow);
+	mYearFiveLowerTechByOneButton		= GUIButton::create(CommunistButtons["YearFiveLowerTechByOne"], mResourcesWindow);	
+	mYearFiveRaiseTechByOneButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByOne"], mResourcesWindow);
+	mYearFiveRaiseTechByFiveButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByFive"], mResourcesWindow);	
+	mYearFiveRaiseTechByTenButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTechByTen"], mResourcesWindow);
+	mYearFiveTechText					= GUIText::create(sf::FloatRect(465, 445, 20, 20), "0", mResourcesWindow);
+
+	mGoToNextSlideButton				= GUIButton::create(CommunistButtons["GoToNextSlide"], mTaxesWindow);	
+	mTaxesCloseButton					= GUIButton::create(CommunistButtons["CloseTaxesWindow"], mTaxesWindow);	
+	mGoToPreviousSlideButton			= GUIButton::create(CommunistButtons["GoToPreviousSlide"], mResourcesWindow);
+	mResourcesCloseButton				= GUIButton::create(CommunistButtons["CloseResourcesWindow"], mResourcesWindow);	
+	mTaxesWindow->setVisible(false);
+	mResourcesWindow->setVisible(false);
 
 	/*Propaganda GUI window med knappar*/
 	mPropagandaWindowFirst				= GUIWindow::create(CommunistWindows["CommunistPropagandaWindowFirst"], mCommunistMainWindow);
@@ -560,7 +602,6 @@ void Communist::initializeCommunistWindow()
 	mPropagandaBuyTechButton			= GUIButton::create(CommunistButtons["PropagandaBuyTech"], mPropagandaWindowFirst);
 	mPropagandaWindowFirstCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowFirst"], mPropagandaWindowFirst);
 	mPropagandaWindowSecondCloseButton	= GUIButton::create(CommunistButtons["PropagandaCloseWindowSecond"], mPropagandaWindowSecond);
-	mShowBoughtPropaganda				= GUIButton::create(CommunistButtons["ShowPropaganda"], mPropagandaWindowSecond);
 	mPropagandaWindowFirst->setVisible(false);
 	mPropagandaWindowSecond->setVisible(false);
 
@@ -570,29 +611,69 @@ void Communist::initializeCommunistWindow()
 	mUpgradeSpaceProgramButton			= GUIButton::create(CommunistButtons["UpgradeSpaceProgram"], mUpgradeWindow);
 	mUpgradeSpyNetworkButton			= GUIButton::create(CommunistButtons["UpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CommunistButtons["CloseUpgrade"], mUpgradeWindow);
-	mCancelUpgradeNuclearWeaponButton	= GUIButton::create(CommunistButtons["CancelUpgradeNuclearWeapon"], mUpgradeWindow);
-	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
-	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
-	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
-	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
-	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
-	mExportLowerFoodButton				= GUIButton::create(CommunistButtons["CommunistLowerFood"], mExportWindow);
-	mExportRaiseFoodButton				= GUIButton::create(CommunistButtons["CommunistRaiseFood"], mExportWindow);
-	mExportLowerGoodsButton				= GUIButton::create(CommunistButtons["CommunistLowerGoods"], mExportWindow);
-	mExportRaiseGoodsButton				= GUIButton::create(CommunistButtons["CommunistRaiseGoods"], mExportWindow);
-	mExportLowerTechButton				= GUIButton::create(CommunistButtons["CommunistLowerTech"], mExportWindow);
-	mExportRaiseTechButton				= GUIButton::create(CommunistButtons["CommunistRaiseTech"], mExportWindow);
 
-	mExportFoodPrice					= GUIEditField::create(sf::FloatRect(260, 100, 265, 40), "50", true, mExportWindow); 
-	mExportGoodsPrice					= GUIEditField::create(sf::FloatRect(260, 242, 265, 40), "50", true, mExportWindow); 
-	mExportTechPrice					= GUIEditField::create(sf::FloatRect(260, 387, 265, 40), "50", true, mExportWindow); 
+	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
 
-	mExportCloseButton					= GUIButton::create(CommunistButtons["CloseExport"], mExportWindow);
+	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
+	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
+
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), "0", true, mExportWindow);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		mExportQuantityText[i] = GUIText::create(
+			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
+			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mExportWindow);
+
+	}
+
+
+	mExportConfirmButton				= GUIButton::create(CommunistButtons["ExportConfirm"], mExportWindow);
+	mExportConfirmButton->setSize(CommunistButtons["ExportConfirm"].first.width, CommunistButtons["ExportConfirm"].first.height);
 	mExportWindow->setVisible(false);
+	
+	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
+	
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "50", mImportWindow);
+
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+
+	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
+	mImportBuyQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 169, 56, 31), buyField), mImportWindow);
+	
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		mImportBuyQuantityText[i] = GUIText::create(
+			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
+			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
+			100, 50), "0", mImportWindow);
+
+	}
+
+	mImportCostText[0]					= GUIText::create(sf::FloatRect(509, 51, 100, 50), "0", mImportWindow);
+	mImportCostText[1]					= GUIText::create(sf::FloatRect(509, 110, 100, 50), "0", mImportWindow);
+	mImportCostText[2]					= GUIText::create(sf::FloatRect(509, 169, 100, 50), "0", mImportWindow);
+
+	mImportGotoExportButton				= GUIButton::create(CommunistButtons["ImportGotoExport"], mImportWindow);
+	mImportGotoExportButton->setSize(CommunistButtons["ImportGotoExport"].first.width, CommunistButtons["ImportGotoExport"].first.height);
+	mImportWindow->setVisible(false);
 
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
@@ -604,7 +685,6 @@ void Communist::initializeCommunistWindow()
 	mGoToNextPortraitButton				= GUIButton::create(CommunistButtons["GoToNextPortrait"], mChooseGeneralWindow);
 	mGoToPreviousPortraitButton			= GUIButton::create(CommunistButtons["GoToPreviousPortrait"], mChooseGeneralWindow);
 	mCloseGeneralWindow					= GUIButton::create(CommunistButtons["CloseGeneral"], mChooseGeneralWindow);
-	mClosePickedGeneralWindow			= GUIButton::create(CommunistButtons["ClosePickedGeneral"], mPickedGeneralWindow);
 	//mChooseGeneralWindow->setVisible(false);
 	
 	chooseLeader();
@@ -632,177 +712,586 @@ void Communist::chooseLeader()
 /*Initierar funktionerna för femårsplansknapparna. Egen funktion för att inte göra allting så grötigt.*/
 void Communist::fiveYearGuiFunctions()
 {
-	std::vector<std::shared_ptr<GUIEditField> > foodFields;
-	std::vector<std::shared_ptr<GUIEditField> > goodsFields;
-	std::vector<std::shared_ptr<GUIEditField> > techFields;
-	std::vector<std::shared_ptr<GUIText> >		resourcesTotalCost;
-	std::vector<std::shared_ptr<GUIText> >		totalYearCost;
-
-	foodFields.push_back(mYearOneFood);
-	foodFields.push_back(mYearTwoFood);
-	foodFields.push_back(mYearThreeFood);
-	foodFields.push_back(mYearFourFood);
-	foodFields.push_back(mYearFiveFood);
-
-	goodsFields.push_back(mYearOneGoods);
-	goodsFields.push_back(mYearTwoGoods);
-	goodsFields.push_back(mYearThreeGoods);
-	goodsFields.push_back(mYearFourGoods);
-	goodsFields.push_back(mYearFiveGoods);
-
-	techFields.push_back(mYearOneTech);
-	techFields.push_back(mYearTwoTech);
-	techFields.push_back(mYearThreeTech);
-	techFields.push_back(mYearFourTech);
-	techFields.push_back(mYearFiveTech);
-
-	totalYearCost.push_back(mTotalCostYearOne);
-	totalYearCost.push_back(mTotalCostYearTwo);
-	totalYearCost.push_back(mTotalCostYearThree);
-	totalYearCost.push_back(mTotalCostYearFour);
-	totalYearCost.push_back(mTotalCostYearFive);
-
-	resourcesTotalCost.push_back(mYearOneFoodCost);
-	resourcesTotalCost.push_back(mYearTwoFoodCost);
-	resourcesTotalCost.push_back(mYearThreeFoodCost);
-	resourcesTotalCost.push_back(mYearFourFoodCost);
-	resourcesTotalCost.push_back(mYearFiveFoodCost);
-
-	resourcesTotalCost.push_back(mYearOneGoodsCost);
-	resourcesTotalCost.push_back(mYearTwoGoodsCost);
-	resourcesTotalCost.push_back(mYearThreeGoodsCost);
-	resourcesTotalCost.push_back(mYearFourGoodsCost);
-	resourcesTotalCost.push_back(mYearFiveGoodsCost);
-
-	resourcesTotalCost.push_back(mYearOneTechCost);
-	resourcesTotalCost.push_back(mYearTwoTechCost);
-	resourcesTotalCost.push_back(mYearThreeTechCost);
-	resourcesTotalCost.push_back(mYearFourTechCost);
-	resourcesTotalCost.push_back(mYearFiveTechCost);
-
-	int resources = resourcesTotalCost.size()/3;
-	for(int i = 0; i < 3; ++i)
+	/*Food, år ett*/
+	mYearOneLowerFoodByTenButton->setOnClickFunction([=]()
 	{
-		for(int j = 0; j < resources; ++j)
-		{
-			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 83 * (j+1), 20, 20), "0", mFiveYearPlanWindow);
-		}
-	}
-
-	for(int i = 0; i < 5; ++i)
+		int amount = stringToInt(mYearOneFoodText->getText()) - 10;
+		if(amount >= 0)
+			mYearOneFoodText->setText(amount);
+	});
+	mYearOneLowerFoodByFiveButton->setOnClickFunction([=]()
 	{
-		foodFields[i]->setOnGuiChangeFunction([=]()
-		{
-			int foodAmount = stringToInt(foodFields[i]->getText());
-			int goodsAmount = stringToInt(goodsFields[i]->getText());
-			int techAmount = stringToInt(techFields[i]->getText());
-			int amount = foodAmount * foodCost + goodsAmount * goodsCost + techAmount * techCost;
-			resourcesTotalCost[i]->setText(foodAmount * foodCost);
-			totalYearCost[i]->setText(amount);
-		});
-		goodsFields[i]->setOnGuiChangeFunction([=]()
-		{
-			int foodAmount = stringToInt(foodFields[i]->getText());
-			int goodsAmount = stringToInt(goodsFields[i]->getText());
-			int techAmount = stringToInt(techFields[i]->getText());
-			int amount = foodAmount * foodCost + goodsAmount * goodsCost + techAmount * techCost;
-			resourcesTotalCost[i + resources]->setText(goodsAmount * goodsCost);
-			totalYearCost[i]->setText(amount);
-		});
-		techFields[i]->setOnGuiChangeFunction([=]()
-		{
-			int foodAmount = stringToInt(foodFields[i]->getText());
-			int goodsAmount = stringToInt(goodsFields[i]->getText());
-			int techAmount = stringToInt(techFields[i]->getText());
-			int amount = foodAmount * foodCost + goodsAmount * goodsCost + techAmount * techCost;
-			resourcesTotalCost[i + resources*2]->setText(techAmount * techCost);
-			totalYearCost[i]->setText(amount);
-		});
-	}
+		int amount = stringToInt(mYearOneFoodText->getText()) - 5;
+		if(amount >= 0)
+			mYearOneFoodText->setText(amount);
+	});
+	mYearOneLowerFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneFoodText->getText()) - 1;
+		if(amount >= 0)
+			mYearOneFoodText->setText(amount);
+	});
+	mYearOneRaiseFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneFoodText->getText()) + 1;
+		mYearOneFoodText->setText(amount);
+	});
+	mYearOneRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneFoodText->getText()) + 5;
+		mYearOneFoodText->setText(amount);
+	});
+	mYearOneRaiseFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneFoodText->getText()) + 10;
+		mYearOneFoodText->setText(amount);
+	});
 
+	/*Food, år två*/
+	mYearTwoLowerFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) - 10;
+		if(amount >= 0)
+			mYearTwoFoodText->setText(amount);
+	});
+	mYearTwoLowerFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) - 5;
+		if(amount >= 0)
+			mYearTwoFoodText->setText(amount);
+	});
+	mYearTwoLowerFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) - 1;
+		if(amount >= 0)
+			mYearTwoFoodText->setText(amount);
+	});
+	mYearTwoRaiseFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) + 1;
+		mYearTwoFoodText->setText(amount);
+	});
+	mYearTwoRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) + 5;
+		mYearTwoFoodText->setText(amount);
+	});
+	mYearTwoRaiseFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoFoodText->getText()) + 10;
+		mYearTwoFoodText->setText(amount);
+	});
+
+	/*Food, år tre*/
+	mYearThreeLowerFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) - 10;
+		if(amount >= 0)
+			mYearThreeFoodText->setText(amount);
+	});
+	mYearThreeLowerFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) - 5;
+		if(amount >= 0)
+			mYearThreeFoodText->setText(amount);
+	});
+	mYearThreeLowerFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) - 1;
+		if(amount >= 0)
+			mYearThreeFoodText->setText(amount);
+	});
+	mYearThreeRaiseFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) + 1;
+		mYearThreeFoodText->setText(amount);
+	});
+	mYearThreeRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) + 5;
+		mYearThreeFoodText->setText(amount);
+	});
+	mYearThreeRaiseFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeFoodText->getText()) + 10;
+		mYearThreeFoodText->setText(amount);
+	});
 	
+	/*Food, år fyra*/
+	mYearFourLowerFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) - 10;
+		if(amount >= 0)
+			mYearFourFoodText->setText(amount);
+	});
+	mYearFourLowerFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) - 5;
+		if(amount >= 0)
+			mYearFourFoodText->setText(amount);
+	});
+	mYearFourLowerFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) - 1;
+		if(amount >= 0)
+			mYearFourFoodText->setText(amount);
+	});
+	mYearFourRaiseFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) + 1;
+		mYearFourFoodText->setText(amount);
+	});
+	mYearFourRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) + 5;
+		mYearFourFoodText->setText(amount);
+	});
+	mYearFourRaiseFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourFoodText->getText()) + 10;
+		mYearFourFoodText->setText(amount);
+	});
+	
+	/*Food, år fem*/
+	mYearFiveLowerFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) - 10;
+		if(amount >= 0)
+			mYearFiveFoodText->setText(amount);
+	});
+	mYearFiveLowerFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) - 5;
+		if(amount >= 0)
+			mYearFiveFoodText->setText(amount);
+	});
+	mYearFiveLowerFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) - 1;
+		if(amount >= 0)
+			mYearFiveFoodText->setText(amount);
+	});
+	mYearFiveRaiseFoodByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) + 1;
+		mYearFiveFoodText->setText(amount);
+	});
+	mYearFiveRaiseFoodByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) + 5;
+		mYearFiveFoodText->setText(amount);
+	});
+	mYearFiveRaiseFoodByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveFoodText->getText()) + 10;
+		mYearFiveFoodText->setText(amount);
+	});
+	//-------------------------------------------------------------------------------
+	/*Goods, år ett*/
+	mYearOneLowerGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) - 10;
+		if(amount >= 0)
+			mYearOneGoodsText->setText(amount);
+	});
+	mYearOneLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) - 5;
+		if(amount >= 0)
+			mYearOneGoodsText->setText(amount);
+	});
+	mYearOneLowerGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) - 1;
+		if(amount >= 0)
+			mYearOneGoodsText->setText(amount);
+	});
+	mYearOneRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) + 1;
+		mYearOneGoodsText->setText(amount);
+	});
+	mYearOneRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) + 5;
+		mYearOneGoodsText->setText(amount);
+	});
+	mYearOneRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneGoodsText->getText()) + 10;
+		mYearOneGoodsText->setText(amount);
+	});
+	
+	/*Goods, år två*/
+	mYearTwoLowerGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) - 10;
+		if(amount >= 0)
+			mYearTwoGoodsText->setText(amount);
+	});
+	mYearTwoLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) - 5;
+		if(amount >= 0)
+			mYearTwoGoodsText->setText(amount);
+	});
+	mYearTwoLowerGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) - 1;
+		if(amount >= 0)
+			mYearTwoGoodsText->setText(amount);
+	});
+	mYearTwoRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) + 1;
+		mYearTwoGoodsText->setText(amount);
+	});
+	mYearTwoRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) + 5;
+		mYearTwoGoodsText->setText(amount);
+	});
+	mYearTwoRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoGoodsText->getText()) + 10;
+		mYearTwoGoodsText->setText(amount);
+	});
+	
+	/*Goods, år tre*/
+	mYearThreeLowerGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) - 10;
+		if(amount >= 0)
+			mYearThreeGoodsText->setText(amount);
+	});
+	mYearThreeLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) - 5;
+		if(amount >= 0)
+			mYearThreeGoodsText->setText(amount);
+	});
+	mYearThreeLowerGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) - 1;
+		if(amount >= 0)
+			mYearThreeGoodsText->setText(amount);
+	});
+	mYearThreeRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) + 1;
+		mYearThreeGoodsText->setText(amount);
+	});
+	mYearThreeRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) + 5;
+		mYearThreeGoodsText->setText(amount);
+	});
+	mYearThreeRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeGoodsText->getText()) + 10;
+		mYearThreeGoodsText->setText(amount);
+	});
+	
+	/*Goods, år fyra*/
+	mYearFourLowerGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) - 10;
+		if(amount >= 0)
+			mYearFourGoodsText->setText(amount);
+	});
+	mYearFourLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) - 5;
+		if(amount >= 0)
+			mYearFourGoodsText->setText(amount);
+	});
+	mYearFourLowerGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) - 1;
+		if(amount >= 0)
+			mYearFourGoodsText->setText(amount);
+	});
+	mYearFourRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) + 1;
+		mYearFourGoodsText->setText(amount);
+	});
+	mYearFourRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) + 5;
+		mYearFourGoodsText->setText(amount);
+	});
+	mYearFourRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourGoodsText->getText()) + 10;
+		mYearFourGoodsText->setText(amount);
+	});
+	
+	/*Goods, år fem*/
+	mYearFiveLowerGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) - 10;
+		if(amount >= 0)
+			mYearFiveGoodsText->setText(amount);
+	});
+	mYearFiveLowerGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) - 5;
+		if(amount >= 0)
+			mYearFiveGoodsText->setText(amount);
+	});
+	mYearFiveLowerGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) - 1;
+		if(amount >= 0)
+			mYearFiveGoodsText->setText(amount);
+	});
+	mYearFiveRaiseGoodsByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) + 1;
+		mYearFiveGoodsText->setText(amount);
+	});
+	mYearFiveRaiseGoodsByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) + 5;
+		mYearFiveGoodsText->setText(amount);
+	});
+	mYearFiveRaiseGoodsByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveGoodsText->getText()) + 10;
+		mYearFiveGoodsText->setText(amount);
+	});
+	//--------------------------------------------------------------------------------------
+	/*Tech, år ett*/
+	mYearOneLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) - 10;
+		if(amount >= 0)
+			mYearOneTechText->setText(amount);
+	});
+	mYearOneLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) - 5;
+		if(amount >= 0)
+			mYearOneTechText->setText(amount);
+	});
+	mYearOneLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) - 1;
+		if(amount >= 0)
+			mYearOneTechText->setText(amount);
+	});
+	mYearOneRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) + 1;
+		mYearOneTechText->setText(amount);
+	});
+	mYearOneRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) + 5;
+		mYearOneTechText->setText(amount);
+	});
+	mYearOneRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearOneTechText->getText()) + 10;
+		mYearOneTechText->setText(amount);
+	});
+	
+	/*Tech, år två*/
+	mYearTwoLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) - 10;
+		if(amount >= 0)
+			mYearTwoTechText->setText(amount);
+	});
+	mYearTwoLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) - 5;
+		if(amount >= 0)
+			mYearTwoTechText->setText(amount);
+	});
+	mYearTwoLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) - 1;
+		if(amount >= 0)
+			mYearTwoTechText->setText(amount);
+	});
+	mYearTwoRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) + 1;
+		mYearTwoTechText->setText(amount);
+	});
+	mYearTwoRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) + 5;
+		mYearTwoTechText->setText(amount);
+	});
+	mYearTwoRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearTwoTechText->getText()) + 10;
+		mYearTwoTechText->setText(amount);
+	});
+	
+	/*Tech, år tre*/
+	mYearThreeLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) - 10;
+		if(amount >= 0)
+			mYearThreeTechText->setText(amount);
+	});
+	mYearThreeLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) - 5;
+		if(amount >= 0)
+			mYearThreeTechText->setText(amount);
+	});
+	mYearThreeLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) - 1;
+		if(amount >= 0)
+			mYearThreeTechText->setText(amount);
+	});
+	mYearThreeRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) + 1;
+		mYearThreeTechText->setText(amount);
+	});
+	mYearThreeRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) + 5;
+		mYearThreeTechText->setText(amount);
+	});
+	mYearThreeRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearThreeTechText->getText()) + 10;
+		mYearThreeTechText->setText(amount);
+	});
+	
+	/*Tech, år fyra*/
+	mYearFourLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) - 10;
+		if(amount >= 0)
+			mYearFourTechText->setText(amount);
+	});
+	mYearFourLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) - 5;
+		if(amount >= 0)
+			mYearFourTechText->setText(amount);
+	});
+	mYearFourLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) - 1;
+		if(amount >= 0)
+			mYearFourTechText->setText(amount);
+	});
+	mYearFourRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) + 1;
+		mYearFourTechText->setText(amount);
+	});
+	mYearFourRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) + 5;
+		mYearFourTechText->setText(amount);
+	});
+	mYearFourRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFourTechText->getText()) + 10;
+		mYearFourTechText->setText(amount);
+	});
+	
+	/*Tech, år fem*/
+	mYearFiveLowerTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) - 10;
+		if(amount >= 0)
+			mYearFiveTechText->setText(amount);
+	});
+	mYearFiveLowerTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) - 5;
+		if(amount >= 0)
+			mYearFiveTechText->setText(amount);
+	});
+	mYearFiveLowerTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) - 1;
+		if(amount >= 0)
+			mYearFiveTechText->setText(amount);
+	});
+	mYearFiveRaiseTechByOneButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) + 1;
+		mYearFiveTechText->setText(amount);
+	});
+	mYearFiveRaiseTechByFiveButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) + 5;
+		mYearFiveTechText->setText(amount);
+	});
+	mYearFiveRaiseTechByTenButton->setOnClickFunction([=]()
+	{
+		int amount = stringToInt(mYearFiveTechText->getText()) + 10;
+		mYearFiveTechText->setText(amount);
+	});
 	//--------------------------------------------------------------------------
 	/*Taxes, år ett*/
 	mYearOneLowerTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearOneTaxesText->getText()) - taxChange;
-		if(amount < 5)
-			amount = 5;
-		mYearOneTaxesText->setText(amount);
-		mIncomeYearOne->setText(amount * mPopulation);
+		if(amount >= 0)
+			mYearOneTaxesText->setText(amount);
 	});
 	mYearOneRaiseTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearOneTaxesText->getText()) + taxChange;
-		if(amount > 95)
-			amount = 95;
 		mYearOneTaxesText->setText(amount);
-		mIncomeYearOne->setText(amount * mPopulation);
-
 	});
 	mYearTwoLowerTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearTwoTaxesText->getText()) - taxChange;
-		if(amount < 5)
-			amount = 5;
-		mYearTwoTaxesText->setText(amount);
-		mIncomeYearTwo->setText(amount * mPopulation);
+		if(amount >= 0)
+			mYearTwoTaxesText->setText(amount);
 	});
 	mYearTwoRaiseTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearTwoTaxesText->getText()) + taxChange;
-		if(amount > 95)
-			amount = 95;
 		mYearTwoTaxesText->setText(amount);
-		mIncomeYearTwo->setText(amount * mPopulation);
 	});
 	mYearThreeLowerTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearThreeTaxesText->getText()) - taxChange;
-		if(amount < 5)
-			amount = 5;
-		mYearThreeTaxesText->setText(amount);
-		mIncomeYearThree->setText(amount * mPopulation);
+		if(amount >= 0)
+			mYearThreeTaxesText->setText(amount);
 	});
 	mYearThreeRaiseTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearThreeTaxesText->getText()) + taxChange;
-		if(amount > 95)
-			amount = 95;
 		mYearThreeTaxesText->setText(amount);
-		mIncomeYearThree->setText(amount * mPopulation);
 	});
 	mYearFourLowerTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearFourTaxesText->getText()) - taxChange;
-		if(amount < 5)
-			amount = 5;
-		mYearFourTaxesText->setText(amount);
-		mIncomeYearFour->setText(amount * mPopulation);
+		if(amount >= 0)
+			mYearFourTaxesText->setText(amount);
 	});
 	mYearFourRaiseTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearFourTaxesText->getText()) + taxChange;
-		if(amount > 95)
-			amount = 95;
 		mYearFourTaxesText->setText(amount);
-		mIncomeYearFour->setText(amount * mPopulation);
 	});
 	mYearFiveLowerTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearFiveTaxesText->getText()) - taxChange;
-		if(amount < 5)
-			amount = 5;
-		mYearFiveTaxesText->setText(amount);
-		mIncomeYearFive->setText(amount * mPopulation);
+		if(amount >= 0)
+			mYearFiveTaxesText->setText(amount);
 	});
 	mYearFiveRaiseTaxesButton->setOnClickFunction([=]()
 	{
 		int amount = stringToInt(mYearFiveTaxesText->getText()) + taxChange;
-		if(amount > 95)
-			amount = 95;
 		mYearFiveTaxesText->setText(amount);
-		mIncomeYearFive->setText(amount * mPopulation);
 	});
 }
 
@@ -814,9 +1303,9 @@ void Communist::initializeGuiFunctions()
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
 	{
 		mCommunistMainWindow->setEnabled(false, true);
-		mFiveYearPlanWindow->setEnabled(true, true);
+		mTaxesWindow->setEnabled(true, true);
 
-		mFiveYearPlanWindow->setVisible(true); 
+		mTaxesWindow->setVisible(true); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 	});
 	/*Propaganda knappen på interface*/
@@ -824,13 +1313,6 @@ void Communist::initializeGuiFunctions()
 	{ 
 		mCommunistMainWindow->setEnabled(false, true);
 		mPropagandaWindowFirst->setEnabled(true, true);
-
-		mPropagandaBuyFoodButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPropagandaBuyFoodButton->getRectangle(), PropagandaFood[Randomizer::getInstance()->randomNr(PropagandaFood.size(), 0)]));
-		mPropagandaBuyGoodsButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPropagandaBuyGoodsButton->getRectangle(), PropagandaGoods[Randomizer::getInstance()->randomNr(PropagandaGoods.size(), 0)]));
-		mPropagandaBuyTechButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPropagandaBuyTechButton->getRectangle(), PropagandaTech[Randomizer::getInstance()->randomNr(PropagandaTech.size(), 0)]));
 
 		mPropagandaWindowFirst->setVisible(true); 
 		mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
@@ -844,117 +1326,168 @@ void Communist::initializeGuiFunctions()
 		mUpgradeWindow->setVisible(true); 
 		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
 	});
+	/*Gå till nästa slide*/
+	mGoToNextSlideButton->setOnClickFunction([=]()				
+	{ 
+		mTaxesWindow->setEnabled(false, true);
+		mResourcesWindow->setEnabled(true, true);
+
+		mTaxesWindow->setVisible(false); mResourcesWindow->setVisible(true); 
+	});
+	/*Gå till föregående slide*/
+	mGoToPreviousSlideButton->setOnClickFunction([=]()			
+	{
+		mResourcesWindow->setEnabled(false, true);
+		mTaxesWindow->setEnabled(true, true);
+		
+		mResourcesWindow->setVisible(false); mTaxesWindow->setVisible(true); 
+	});
 	
 	/*Export knappen på interface*/
-	mCommunistExportButton->setOnClickFunction([=]()			
-	{ 	
+	mCommunistTradeButton->setOnClickFunction([=]()
+	{ 
 		mCommunistMainWindow->setEnabled(false, true);
+		mImportWindow->setEnabled(true, true);
+
+		mImportWindow->setVisible(true); 
+		mCommunistTradeButton->setTexture(CommunistButtons["ExportIsPressed"]);
+
+	});
+
+	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus"));
+	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus"));
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mImportBuyButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mImportWindow);
+			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity -= (h == 0) ? 1 : (h*5);
+				if(quantity < 0)
+					quantity = 0;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mImportBuyButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mImportWindow);
+			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
+				quantity += (h == 0) ? 1 : (h*5);
+				if(quantity > foodAvailable)
+					quantity = foodAvailable;
+				mImportBuyQuantityText[i]->setText(intToString(quantity));
+				int cost = quantity * (foodAvailable * foodPrice);
+				mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	mImportGotoExportButton->setOnClickFunction(
+		[=]()
+	{
+		mImportWindow->setVisible(false);
+		mExportWindow->setVisible(true);
 		mExportWindow->setEnabled(true, true);
-		mExportWindow->setVisible(true); 
-		mCommunistExportButton->setTexture(CommunistButtons["ExportIsPressed"]);
+	});
+
+	std::vector<int*> resourcesAvailable;
+	resourcesAvailable.push_back(&mFood);
+	resourcesAvailable.push_back(&mGoods);
+	resourcesAvailable.push_back(&mTech);
+
+	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	{
+		float x = mExportQuantityBackground[i]->getLocalX(), y = mExportQuantityBackground[i]->getLocalY();
+		for(int h = 0; h < 3; h++)
+		{
+			mExportButtonMinus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
+				minusTexture),
+				mExportWindow);
+			mExportButtonMinus[i][h]->setOnClickFunction([=]()
+			{
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity -= (h == 0) ? 1 : (h*5);
+				if(quantity < 0)
+					quantity = 0;
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+
+			mExportButtonPlus[i][h] = GUIButton::create(
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
+				plusTexture),
+				mExportWindow);
+			mExportButtonPlus[i][h]->setOnClickFunction([=]()
+			{
+				int foodAvailable = mFood;
+				int quantity = stringToInt(mExportQuantityText[i]->getText());
+				quantity += (h == 0) ? 1 : (h*5);
+				if(quantity > *resourcesAvailable[i])
+					quantity = *resourcesAvailable[i];
+				mExportQuantityText[i]->setText(intToString(quantity));
+				//int cost = quantity * (foodAvailable * foodPrice);
+				//mImportCostText[i]->setText(intToString(cost));
+			});
+		}
+	}
+
+	mExportConfirmButton->setOnClickFunction(
+		[=]()
+	{
+		mExportWindow->setVisible(false);
+		mCommunistMainWindow->setEnabled(true, true);
+		mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
+		//mCurrency -= stringToInt(mImportTotalCostText->getText());
+
+		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
+		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
+		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+
+		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+		mExportedTechPrice = stringToInt(mExportTechCost->getText());
 	});
 
 
-	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
+	mTaxesCloseButton->setOnClickFunction([=]()					
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
-		updateAllResources();
-		mFiveYearPlanWindow->setVisible(false); 
+
+		mTaxesWindow->setVisible(false); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 	});
-	/*Stänger propagandafönster nummer ett*/
+	
+	mResourcesCloseButton->setOnClickFunction([=]()				
+	{ 
+		mCommunistMainWindow->setEnabled(true, true);
+
+		mResourcesWindow->setVisible(false); 
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
+	});
+
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
 	{ 
 		mCommunistMainWindow->setEnabled(true, true);
 
 		mPropagandaWindowFirst->setVisible(false);
 		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
-	});
-	/*Stänger propagandafönster nummer två*/
-	mPropagandaWindowSecondCloseButton->setOnClickFunction([=]()
-	{
-		
-		mPropagandaWindowFirst->setEnabled(true, true);
-		mPropagandaWindowSecond->setVisible(false);
-		mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
-	});
-
-	mPropagandaBuyFoodButton->setOnClickFunction([=]()
-	{
-		mPropagandaWindowSecond->setEnabled(true, true);
-		//buyPropagandaFood(getRound());
-
-		mPropagandaWindowFirst->setEnabled(false, true);
-		mPropagandaWindowSecond->setVisible(true);
-
-		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyFoodButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
-
-		//std::cout << "Food: " << mFood << std::endl;
-	});
-	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
-	{
-		mPropagandaWindowSecond->setEnabled(true, true);
-		//buyPropagandaGoods(getRound());
-
-		mPropagandaWindowFirst->setEnabled(false, true);
-		mPropagandaWindowSecond->setVisible(true);
-
-		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyGoodsButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
-		//std::cout << "Goods: " << mGoods << std::endl;
-	});
-	mPropagandaBuyTechButton->setOnClickFunction([=]()
-	{
-		mPropagandaWindowSecond->setEnabled(true, true);
-		//buyPropagandaTech(getRound());
-
-		mPropagandaWindowFirst->setEnabled(false, true);
-		mPropagandaWindowSecond->setVisible(true);
-
-		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyTechButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
-		//std::cout << "Tech: " << mTech << std::endl;
-	});
-
-	/*Upgrade och cancel knappar för nuclear*/
-	mUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
-	{ 
-		int amount = stringToInt(mBuyNuclearText->getText());
-		++amount;
-		mBuyNuclearText->setText(amount);
-	});		
-	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
-	{
-		mBuyNuclearText->setText(mNuclearText->getText());
-	});
-			
-	/*Upgrade och cancel knappar för spaceprogram*/
-	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
-	{
-		int amount = stringToInt(mBuySpaceProgramText->getText());
-		++amount;
-		mBuySpaceProgramText->setText(amount);
-	});		
-	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
-	{
-		mBuySpaceProgramText->setText(mSpaceText->getText());
-	});
-
-	/*Upgrade och cancel knappar för spynetwork*/
-	mUpgradeSpyNetworkButton->setOnClickFunction([=]()	 
-	{
-		int amount = stringToInt(mBuySpyNetworkText->getText());
-		++amount;
-		mBuySpyNetworkText->setText(amount);
-		
-	});		
-	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
-	{
-		mBuySpyNetworkText->setText(mSpyText->getText());
 	});
 
 	/*Stänger ned Upgradefönstret*/
@@ -969,14 +1502,14 @@ void Communist::initializeGuiFunctions()
 		mSpyNetwork = mSpyNetworkUpdate; mSpyText->setText(intToString(getSpyNetwork())); std::cout << "HERRRRRO" << std::endl;*/
 	});
 
-	/*Stänger ned exportfönstret*/
-	mExportCloseButton->setOnClickFunction([=]() 
-	{ 
-		mCommunistMainWindow->setEnabled(true, true);
+	///*Stänger ned exportfönstret*/
+	//mExportCloseButton->setOnClickFunction([=]() 
+	//{ 
+	//	mCommunistMainWindow->setEnabled(true, true);
 
-		mExportWindow->setVisible(false); 
-		mCommunistExportButton->setTexture(CommunistButtons["Export"]);
-	});
+	//	mExportWindow->setVisible(false); 
+	//	mCommunistExportButton->setTexture(CommunistButtons["Export"]);
+	//});
 
 	/*mUpgradeNuclearWeaponButton->setOnClickFunction(std::bind(&Communist::upgradeNuclearWeapon, this));
 	mUpgradeSpaceProgramButton->setOnClickFunction(std::bind(&Communist::upgradeSpaceProgram, this));
@@ -1010,71 +1543,50 @@ void Communist::initializeGuiFunctions()
 	{
 		mChooseGeneralWindow->setVisible(false);
 		mPickedGeneralWindow->setVisible(true);
-		mPickedGeneralWindow->setEnabled(true, true);
 
 		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
 
 		mPickedGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedGeneralButton->getRectangle(), mGeneral->getTexture())); 
 
-	});
-	/*Stänger ner fönster som visar vilken general som blivit vald*/
-	mClosePickedGeneralWindow->setOnClickFunction([=]()
-	{
+		/**/
+		std::shared_ptr<GUIElement> _test = mPickedGeneralWindow;
+		std::shared_ptr<GUIButton> _generalButton = mCommunistGeneralButton;
+		std::shared_ptr<President> _general = mGeneral;
+		std::shared_ptr<GUIWindow> _fiveYearPlan = mTaxesWindow;
+		Timer::setTimer([=]()
+		{
+			_test->setVisible(false);
 
-		mPickedGeneralWindow->setVisible(false);
-		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
-		mCommunistGeneralButton->setScale(0.53, 0.53);
-		mFiveYearPlanWindow->setVisible(true);
-		mFiveYearPlanWindow->setEnabled(true, true);
+			_generalButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(_generalButton->getRectangle(), _general->getTexture()));
+			_generalButton->setScale(0.53, 0.53);
+			_fiveYearPlan->setVisible(true);
+			_fiveYearPlan->setEnabled(true, true);
+		
+		}, 
+			5000, 1);//antal millisekunder fönstret visas
 	});
+
 	mPropagandaBuyFoodButton->setOnClickFunction([=]()
 	{
 		buyPropagandaFood(getRound());
+		std::cout << "Food: " << mFood << std::endl;
 	});
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
 	{
 		buyPropagandaGoods(getRound());
+		std::cout << "Goods: " << mGoods << std::endl;
 	});
 	mPropagandaBuyTechButton->setOnClickFunction([=]()
 	{
 		buyPropagandaTech(getRound());
+		std::cout << "Tech: " << mTech << std::endl;
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
 	{
 		GameManager::getInstance()->nextRound();
 	});
-}
-
-void Communist::updateAllResources()
-{
-	/*År ett*/
-	setYearlyResources(1, "food", stringToInt(mYearOneFood->getText()));
-	setYearlyResources(1, "goods", stringToInt(mYearOneGoods->getText()));
-	setYearlyResources(1, "tech", stringToInt(mYearOneTech->getText()));
-	setYearlyResources(1, "taxes", stringToInt(mYearOneTaxesText->getText()));
-	/*År två*/
-	setYearlyResources(2, "food", stringToInt(mYearTwoFood->getText()));
-	setYearlyResources(2, "goods", stringToInt(mYearTwoGoods->getText()));
-	setYearlyResources(2, "tech", stringToInt(mYearTwoTech->getText()));
-	setYearlyResources(2, "taxes", stringToInt(mYearTwoTaxesText->getText()));
-	/*År tre*/
-	setYearlyResources(3, "food", stringToInt(mYearThreeFood->getText()));
-	setYearlyResources(3, "goods", stringToInt(mYearThreeGoods->getText()));
-	setYearlyResources(3, "tech", stringToInt(mYearThreeTech->getText()));
-	setYearlyResources(3, "taxes", stringToInt(mYearThreeTaxesText->getText()));
-	/*År fyra*/
-	setYearlyResources(4, "food", stringToInt(mYearFourFood->getText()));
-	setYearlyResources(4, "goods", stringToInt(mYearFourGoods->getText()));
-	setYearlyResources(4, "tech", stringToInt(mYearFourTech->getText()));
-	setYearlyResources(4, "taxes", stringToInt(mYearFourTaxesText->getText()));
-	/*År fem*/
-	setYearlyResources(5, "food", stringToInt(mYearFiveFood->getText()));
-	setYearlyResources(5, "goods", stringToInt(mYearFiveGoods->getText()));
-	setYearlyResources(5, "tech", stringToInt(mYearFiveTech->getText()));
-	setYearlyResources(5, "taxes", stringToInt(mYearFiveTaxesText->getText()));
-	
 }
 
 void Communist::showGUI()

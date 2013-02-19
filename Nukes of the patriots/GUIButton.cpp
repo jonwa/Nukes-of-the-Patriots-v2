@@ -64,12 +64,6 @@ void GUIButton::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
 }
 
-sf::Texture* GUIButton::getTexture()  
-{
-	sf::Texture* result = const_cast<sf::Texture*>(mSprite.getTexture());
-	return result;
-}
-
 void GUIButton::setScale(float width, float height)
 {
 	/*mSprite.setTextureRect(sf::IntRect(0, 0, mRectangle.width, mRectangle.height));*/

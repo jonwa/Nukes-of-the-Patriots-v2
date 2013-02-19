@@ -241,14 +241,6 @@
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
-		<name>CancelUpgradeNuclearWeapon</name>
-		<xPos>58</xPos>
-		<yPos>392</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Capitalist/kap_texture_button_cancel</image>		
-	</button>
-	<button>
 		<name>UpgradeSpaceProgram</name>
 		<xPos>237</xPos>
 		<yPos>314</yPos>
@@ -257,28 +249,12 @@
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
 	</button>
 	<button>
-		<name>CancelUpgradeSpaceProgram</name>
-		<xPos>237</xPos>
-		<yPos>354</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Capitalist/kap_texture_button_cancel</image>		
-	</button>
-	<button>
 		<name>UpgradeSpyNetwork</name>
 		<xPos>416</xPos>
 		<yPos>285</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_smallupgrade</image>
-	</button>
-	<button>
-		<name>CancelUpgradeSpyNetwork</name>
-		<xPos>416</xPos>
-		<yPos>325</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Capitalist/kap_texture_button_cancel</image>	
 	</button>
 	<button>
 		<name>CloseUpgrade</name>
@@ -417,11 +393,11 @@
 		<image>Capitalist/button_ext</image>	
 	</button>
 	<button>
-		<name>ExportGoToPreviousSlide</name>
-		<xPos>200</xPos>
-		<yPos>477</yPos>
-		<width>30</width>
-		<height>70</height>
-		<image>Capitalist/button_prev</image>	
+		<name>ExportConfirm</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Capitalist/button_ext</image>	
 	</button>
 </buttons>

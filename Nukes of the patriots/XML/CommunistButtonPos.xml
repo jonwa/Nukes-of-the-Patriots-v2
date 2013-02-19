@@ -26,202 +26,202 @@
 	</button>
 	<button>
 		<name>YearOneLowerTaxes</name>
-		<xPos>480</xPos>
-		<yPos>35</yPos>
+		<xPos>40</xPos>
+		<yPos>59</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_min5</image>
 	</button>
 	<button>
 		<name>YearOneRaiseTaxes</name>
-		<xPos>543</xPos>
-		<yPos>35</yPos>
+		<xPos>150</xPos>
+		<yPos>59</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_plu5</image>
 	</button>
 	<button>
 		<name>YearTwoLowerTaxes</name>
-		<xPos>480</xPos>
-		<yPos>123</yPos>
+		<xPos>40</xPos>
+		<yPos>150</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_min5</image>
 	</button>
 	<button>
 		<name>YearTwoRaiseTaxes</name>
-		<xPos>543</xPos>
-		<yPos>123</yPos>
+		<xPos>150</xPos>
+		<yPos>150</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_plu5</image>
 	</button>
 	<button>
 		<name>YearThreeLowerTaxes</name>
-		<xPos>480</xPos>
-		<yPos>211</yPos>
+		<xPos>40</xPos>
+		<yPos>242</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_min5</image>
 	</button>
 	<button>
 		<name>YearThreeRaiseTaxes</name>
-		<xPos>543</xPos>
-		<yPos>211</yPos>
+		<xPos>150</xPos>
+		<yPos>242</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_plu5</image>
 	</button>
 	<button>
 		<name>YearFourLowerTaxes</name>
-		<xPos>480</xPos>
-		<yPos>299</yPos>
+		<xPos>40</xPos>
+		<yPos>334</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_min5</image>
 	</button>
 	<button>
 		<name>YearFourRaiseTaxes</name>
-		<xPos>543</xPos>
-		<yPos>299</yPos>
+		<xPos>150</xPos>
+		<yPos>334</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_plu5</image>
 	</button>
 	<button>
 		<name>YearFiveLowerTaxes</name>
-		<xPos>480</xPos>
-		<yPos>387</yPos>
+		<xPos>40</xPos>
+		<yPos>426</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_min5</image>
 	</button>
 	<button>
 		<name>YearFiveRaiseTaxes</name>
-		<xPos>543</xPos>
-		<yPos>387</yPos>
+		<xPos>150</xPos>
+		<yPos>426</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/button_plu5</image>
 	</button>
 	<button>
-		<name>YearOneFoodEditField</name>
-		<xPos>35</xPos>
-		<yPos>35</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneLowerFoodByTen</name>
+		<xPos>20</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min10</image>	
 	</button>	
 	<button>
-		<name>YearTwoFoodEditField</name>
-		<xPos>35</xPos>
-		<yPos>123</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneLowerFoodByFive</name>
+		<xPos>40</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min5</image>	
 	</button>
 	<button>
-		<name>YearThreeFoodEditField</name>
-		<xPos>35</xPos>
-		<yPos>211</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneLowerFoodByOne</name>
+		<xPos>60</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/kom_texture_button_minus</image>	
 	</button>
 	<button>
-		<name>YearFourFoodEditField</name>
-		<xPos>35</xPos>
-		<yPos>299</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneRaiseFoodByOne</name>
+		<xPos>130</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/kom_texture_button_plus</image>	
 	</button>	
 	<button>
-		<name>YearFiveFoodEditField</name>
-		<xPos>35</xPos>
-		<yPos>387</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneRaiseFoodByFive</name>
+		<xPos>150</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_plu5</image>	
 	</button>
 	<button>
-		<name>YearOneGoodsEditField</name>
-		<xPos>136</xPos>
-		<yPos>35</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearOneRaiseFoodByTen</name>
+		<xPos>170</xPos>
+		<yPos>59</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_plu10</image>	
 	</button>
 	<button>
-		<name>YearTwoGoodsEditField</name>
-		<xPos>136</xPos>
-		<yPos>123</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoLowerFoodByTen</name>
+		<xPos>20</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min10</image>	
 	</button>
 	<button>
-		<name>YearThreeGoodsEditField</name>
-		<xPos>136</xPos>
-		<yPos>211</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoLowerFoodByFive</name>
+		<xPos>40</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min5</image>	
 	</button>
 	<button>
-		<name>YearFourGoodsEditField</name>
-		<xPos>136</xPos>
-		<yPos>299</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoLowerFoodByOne</name>
+		<xPos>60</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/kom_texture_button_minus</image>	
 	</button>	
 	<button>
-		<name>YearFiveGoodsEditField</name>
-		<xPos>136</xPos>
-		<yPos>387</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoRaiseFoodByOne</name>
+		<xPos>130</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/kom_texture_button_plus</image>	
 	</button>
 	<button>
-		<name>YearOneTechEditField</name>
-		<xPos>237</xPos>
-		<yPos>35</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoRaiseFoodByFive</name>
+		<xPos>150</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_plu5</image>	
 	</button>
 	<button>
-		<name>YearTwoTechEditField</name>
-		<xPos>237</xPos>
-		<yPos>123</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearTwoRaiseFoodByTen</name>
+		<xPos>170</xPos>
+		<yPos>150</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_plu10</image>	
 	</button>
 	<button>
-		<name>YearThreeTechEditField</name>
-		<xPos>237</xPos>
-		<yPos>211</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearThreeLowerFoodByTen</name>
+		<xPos>20</xPos>
+		<yPos>241</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min10</image>	
 	</button>
 	<button>
-		<name>YearFourTechEditField</name>
-		<xPos>237</xPos>
-		<yPos>299</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearThreeLowerFoodByFive</name>
+		<xPos>40</xPos>
+		<yPos>241</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/button_min5</image>	
 	</button>
 	<button>
-		<name>YearFiveTechEditField</name>
-		<xPos>237</xPos>
-		<yPos>387</yPos>
-		<width>51</width>
-		<height>37</height>
+		<name>YearThreeLowerFoodByOne</name>
+		<xPos>60</xPos>
+		<yPos>241</yPos>
+		<width>20</width>
+		<height>40</height>
 		<image>Communist/kom_texture_button_minus</image>	
 	</button>
 	<button>
@@ -841,7 +841,7 @@
 		<image>Communist/button_prev</image>	
 	</button>
 	<button>
-		<name>CloseFiveYearPlanWindow</name>
+		<name>CloseTaxesWindow</name>
 		<xPos>235</xPos>
 		<yPos>478</yPos>
 		<width>100</width>
@@ -883,19 +883,11 @@
 	<button>
 		<name>PropagandaCloseWindowSecond</name>
 		<xPos>235</xPos>
-		<yPos>216</yPos>
+		<yPos>477</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Communist/kom_texture_button_ok</image>
+		<image>Communist/button_okay</image>
 	</button>
-	<button>
-		<name>ShowPropaganda</name>
-		<xPos>50</xPos>
-		<yPos>37</yPos>
-		<width>111</width>
-		<height>176</height>
-		<image></image>
-	</button>	
 	<button>
 		<name>PropagandaBuyFood</name>
 		<xPos>20</xPos>
@@ -945,14 +937,6 @@
 		<image>Communist/kom_texture_button_smallupgrade</image>		
 	</button>
 	<button>
-		<name>CancelUpgradeNuclearWeapon</name>
-		<xPos>58</xPos>
-		<yPos>392</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Communist/kom_texture_button_cancel</image>		
-	</button>
-	<button>
 		<name>UpgradeSpaceProgram</name>
 		<xPos>237</xPos>
 		<yPos>314</yPos>
@@ -961,28 +945,12 @@
 		<image>Communist/kom_texture_button_smallupgrade</image>		
 	</button>
 	<button>
-		<name>CancelUpgradeSpaceProgram</name>
-		<xPos>237</xPos>
-		<yPos>354</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Communist/kom_texture_button_cancel</image>		
-	</button>
-	<button>
 		<name>UpgradeSpyNetwork</name>
 		<xPos>416</xPos>
 		<yPos>285</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_smallupgrade</image>	
-	</button>
-	<button>
-		<name>CancelUpgradeSpyNetwork</name>
-		<xPos>416</xPos>
-		<yPos>325</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Communist/kom_texture_button_cancel</image>	
 	</button>
 	<button>
 		<name>CloseUpgrade</name>
@@ -1105,19 +1073,27 @@
 		<image>Communist/kom_texture_button_elect</image>	
 	</button>
 	<button>
-		<name>ClosePickedGeneral</name>
-		<xPos>235</xPos>
-		<yPos>478</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>Communist/kom_texture_button_ok</image>	
-	</button>
-	<window>
 		<name>PickedGeneral</name>
 		<xPos>195</xPos>
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>220</height>
 		<image></image>
-	</window>
+	</button>
+	<button>
+		<name>ImportGotoExport</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Communist/button_ext</image>	
+	</button>
+	<button>
+		<name>ExportConfirm</name>
+		<xPos>191</xPos>
+		<yPos>272</yPos>
+		<width>199</width>
+		<height>44</height>
+		<image>Communist/button_ext</image>	
+	</button>
 </buttons>
