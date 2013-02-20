@@ -5,8 +5,10 @@
 Timer::Timer(std::function<void()> callbackFunc, int time, int timesToExecute) : 
 	mCallbackFunc(callbackFunc),
 	mTime(time > 0 ? time : 50),
+	mTimerDuration(mTime),
 	mTimesToExecute(timesToExecute >= 0 ? timesToExecute : 1),
-	mClock()
+	mClock(),
+	mAlive(true)
 {
 	mTimesToExecuteLeft = mTimesToExecute;
 	TimerHandler::getInstance()->addTimer(this);
@@ -19,10 +21,15 @@ Timer* Timer::setTimer(std::function<void()> callbackFunc, int time, int timesTo
 	return nullptr;
 }
 
+int Timer::getTimerDuration()
+{
+	return mTimerDuration;
+}
+
 int Timer::getTimeLeft()
 {
 	sf::Time timePassed = mClock.getElapsedTime();
-	return mTime - timePassed.asMilliseconds();
+	return (mTime - timePassed.asMilliseconds() < 0) ? 0 : mTime - timePassed.asMilliseconds();
 }
 
 int Timer::getTimesToExecuteLeft()
@@ -33,6 +40,11 @@ int Timer::getTimesToExecuteLeft()
 std::function<void()> Timer::getCallbackFunction()
 {
 	return mCallbackFunc;
+}
+
+bool Timer::isTimer(Timer* timer)
+{
+	return TimerHandler::getInstance()->isTimer(timer);
 }
 
 bool Timer::tick()
@@ -47,7 +59,10 @@ bool Timer::tick()
 			mCallbackFunc();
 
 		if(mTimesToExecuteLeft == 0)
+		{
+			mAlive = false;
 			return false;
+		}
 		else
 			resetTimer();
 	}
@@ -57,6 +72,12 @@ bool Timer::tick()
 void Timer::killTimer()
 {
 	TimerHandler::getInstance()->removeTimer(this);
+	mAlive = false;
+}
+
+bool Timer::isAlive()
+{
+	return mAlive;
 }
 
 Timer::~Timer()

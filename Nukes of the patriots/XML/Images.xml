@@ -36,8 +36,10 @@
 	<image filename="Capitalist_Window_Import_Export.png"/>
 	<image filename="Capitalist_Window_Small.png"/>
 	<image filename="Capitalist_Edit_Field.png"/>
+	<image filename="kap_panel_top.png"/>
 	<image filename="kap_panel_left.png"/>
 	<image filename="kap_panel_right.png"/>
+	<image filename="kap_city_border.png"/>
 	<image filename="kap_city2.png"/>
 	<image filename="kap_city3.png"/>
 	<image filename="kap_city4.png"/>
@@ -92,10 +94,13 @@
 	<image filename="Communist_Window_Medium.png"/>
 	<image filename="Communist_Window_Import_Export.png"/>
 	<image filename="Communist_Edit_Field.png"/>
-	<image filename="kom_city2.png"/>
-	<image filename="kom_city3.png"/>
-	<image filename="kom_city4.png"/>
-	<image filename="kom_city5.png"/>
+	<image filename="kom_city_border.png"/>
+	<image filename="kom_panel_top.png"/>
+	<image filename="kom1.png"/>
+	<image filename="kom2.png"/>
+	<image filename="kom3.png"/>
+	<image filename="kom4.png"/>
+	<image filename="kom5.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -151,6 +156,7 @@
 	<image filename="yes.png"/>
 	<image filename="no.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>
+	<image filename="inzoomat.png"/>
 </images>
 <images directory="Plaques">
 	<image filename="president-Blingfaster-plaque.png"/>

@@ -20,7 +20,7 @@ public:
 	bool			getVisible()const;
 	std::shared_ptr<GUIElement> getParent()const;
 	GUIType			getGUIType()const;
-	int				getAlpha()const;
+	sf::Color		getColor()const;
 	bool			getMouseIsInside()const;
 	bool			isEnabled()const;
 	bool			isSelected()const;
@@ -30,8 +30,9 @@ public:
 	void			setY(float y);
 	void			setWidth(float width);
 	void			setHeight(float height);
+	virtual void	setSize(float width, float height){};
 	void			setVisible(bool visible);
-	void			setAlpha(int alpha);
+	virtual void	setColor(sf::Color color);
 	void			setMouseIsInside(bool inside);
 	void			setEnabled(bool enabled, bool effectChildren = false);
 	void			setSelected(bool selected);
@@ -54,7 +55,7 @@ public:
 	virtual			~GUIElement();
 protected:
 	sf::FloatRect mRectangle;
-	int mAlpha;
+	sf::Color mColor;
 	bool mVisible, mMouseInside, mEnabled, mSelected;
 	std::shared_ptr<GUIElement> mParent;
 	GUIType mGUIType;

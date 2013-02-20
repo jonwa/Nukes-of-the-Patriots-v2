@@ -72,4 +72,20 @@
 		<height>168</height>
 		<image>Capitalist/7_kap_window_tax</image>		
 	</window>
+	<window>
+		<name>CapitalistBorder</name>
+		<xPos>212</xPos>
+		<yPos>36</yPos>
+		<width>600</width>
+		<height>600</height>
+		<image>Capitalist/kap_city_border</image>
+	</window>
+	<window>
+		<name>CapitalistBorderTop</name>
+		<xPos>212</xPos>
+		<yPos>0</yPos>
+		<width>600</width>
+		<height>36</height>
+		<image>Capitalist/kap_panel_top</image>
+	</window>
 </windows>

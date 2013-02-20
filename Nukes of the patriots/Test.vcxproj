@@ -12,6 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationHandler.cpp" />
+    <ClCompile Include="GUIAnimation.cpp" />
+    <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="Capitalist.cpp" />
     <ClCompile Include="Communist.cpp" />
     <ClCompile Include="EventHandler.cpp" />
@@ -35,6 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationHandler.h" />
+    <ClInclude Include="GUIAnimation.h" />
+    <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="Capitalist.h" />
     <ClInclude Include="Communist.h" />
     <ClInclude Include="EventHandler.h" />

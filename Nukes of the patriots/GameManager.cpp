@@ -8,7 +8,9 @@
 #include "President.h"
 #include "tinyxml2.h"
 #include "GUIText.h"
-#include "ResourceHandler.h"
+#include "Timer.h"
+#include "TimerHandler.h"
+#include "GUIAnimation.h"
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -65,15 +67,15 @@ void GameManager::init(int year)
 
 }
 
-//std::shared_ptr<SuperPower> GameManager::getCapitalist()
-//{
-//	return mVecSuperPowers[0];
-//}
-//
-//std::shared_ptr<SuperPower> GameManager::getCommunist()
-//{
-//	return mVecSuperPowers[1];
-//}
+std::shared_ptr<SuperPower> GameManager::getCapitalist()
+{
+	return mVecSuperPowers[0];
+}
+
+std::shared_ptr<SuperPower> GameManager::getCommunist()
+{
+	return mVecSuperPowers[1];
+}
 
 void GameManager::loadPresidents()
 {
@@ -264,8 +266,25 @@ void GameManager::nextRound()
 			(*it)->newYearStart();
 		}
 		updateStatsWindow();
-		mStatsWindow->setVisible(true); 
 
+		mStatsWindow[0]->setVisible(true);
+		mStatsWindow[1]->setVisible(false);
+		GUIAnimation::move(mStatsWindow[0], 4000, mStatsWindow[0]->getRectangle(), sf::FloatRect(-(mStatsWindow[0]->getWidth()*1.73067)/2, -(mStatsWindow[0]->getHeight()*1.73067)/2 - 100, mStatsWindow[0]->getWidth()*2.73067, mStatsWindow[0]->getHeight()*2.73067));
+		//aktiverar en timer för statswindows, en zoomövergång från det första till det andra
+		//TA BORT DETTA OCH ÄNDRA TILL INZOOMAT 
+		Timer::setTimer([=]()
+		{
+			GUIAnimation::fadeToColor(mStatsWindow[0], 1000, mStatsWindow[0]->getColor(), sf::Color(255, 255, 255, 0));
+			std::shared_ptr<GUIWindow> _statsWindow = mStatsWindow[0];
+			Timer::setTimer([=]()
+			{
+				_statsWindow->setVisible(false);
+			}, 1000, 1);
+
+			mStatsWindow[1]->setColor(sf::Color(255, 255, 255, 0));
+			mStatsWindow[1]->setVisible(true);
+			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
+		}, 3000, 1);
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
 		//If both player has same spy network, then select random as next player directly
 		if(nextPlayers.size() == 1)
@@ -412,16 +431,6 @@ void GameManager::loadButtonPosition()
 	}
 }
 
-std::shared_ptr<SuperPower> GameManager::getCapitalist()
-{
-	return mVecSuperPowers[0];
-}
-
-std::shared_ptr<SuperPower> GameManager::getCommunist()
-{
-	return mVecSuperPowers[1];
-}
-
 
 
  //initierar fönster/knappar till guielement
@@ -443,27 +452,22 @@ void GameManager::initializeGuiElement()
     mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mSecondDecideWhoStartWindow);
 	mSecondDecideWhoStartWindow->setVisible(false);
 
-	mStatsWindow						= GUIWindow::create(BetweenTurnsWindow["Stats"]);
-	mCloseStatsWindow					= GUIButton::create(BetweenTurnsButton["CloseStats"], mStatsWindow);
-	mPatriotismChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mCurrencyChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mPopulationChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mFoodChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mGoodsChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mTechChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mExportedFoodChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mExportedGoodsChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mExportedTechChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mTaxChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mSpyNetworkChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
-	mSpaceProgramChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mStatsWindow);
+	mStatsWindow[0]						= GUIWindow::create(BetweenTurnsWindow["Stats"]);     //icke inzoomat, tidsbaserad inzoomning på detta sm leder till "mStatsWindow[1]"
+	mStatsWindow[1]						= GUIWindow::create(BetweenTurnsWindow["ShowStats"]); //inzoomat, visar stats
+	mCloseStatsWindow					= GUIButton::create(BetweenTurnsButton["CloseStats"], mStatsWindow[1]);
 
-	mStatsWindow->setVisible(false);
+	mStatsWindow[0]->setVisible(false);
+	mStatsWindow[1]->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
 	GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
-	GUIManager::getInstance()->addGUIElement(mStatsWindow);
+	GUIManager::getInstance()->addGUIElement(mStatsWindow[0]);
+	GUIManager::getInstance()->addGUIElement(mStatsWindow[1]);
+}
+
+std::shared_ptr<GUIWindow> GameManager::getStatsWindow()
+{
+	return mStatsWindow[1];
 }
 
  //initiering av gui knappar
@@ -472,7 +476,7 @@ void GameManager::initializeGuiFunctions()
 	//Stänger statsfönstret och går in i välja lag meny
 	mCloseStatsWindow->setOnClickFunction([=]()
 	{
-		mStatsWindow->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
 		mFirstDecideWhoStartWindow->setEnabled(true, true);
 		mSecondDecideWhoStartWindow->setEnabled(true, true);
 	});

@@ -51,3 +51,18 @@ bool GUIWindow::render(sf::RenderWindow *window)
 	}
 	return true;
 }
+
+void GUIWindow::setSize(float width, float height)
+{
+	float scaleX = width / mSprite.getTexture()->getSize().x;
+	float scaleY = height / mSprite.getTexture()->getSize().y;
+	mSprite.setScale(scaleX, scaleY); 
+	setWidth(width);
+	setHeight(height);
+}
+
+void GUIWindow::setColor(sf::Color color)
+{
+	mSprite.setColor(color);
+	GUIElement::setColor(color);
+}

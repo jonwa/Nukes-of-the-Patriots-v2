@@ -108,6 +108,11 @@ private:
 	std::shared_ptr<GUIWindow> mIncreasedResourcesWindow;
 	std::shared_ptr<GUIButton> mCloseIncreasedResourcesWindow;
 
+	std::shared_ptr<GUIText> mPopulationText;
+	std::shared_ptr<GUIText> mCurrencyText;
+	std::shared_ptr<GUIText> mPatriotismText;
+
+	std::shared_ptr<GUIText> mStatsText[2][9];
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -130,6 +135,8 @@ private:
 
 	/*GUI-pekare för kapitalisternas interface*/
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
+	std::shared_ptr<GUIWindow> mCapitalistBorder;
+	std::shared_ptr<GUIWindow> mCapitalistBorderTop;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
 	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;

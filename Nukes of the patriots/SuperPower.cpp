@@ -128,14 +128,7 @@ void SuperPower::getTaxIncome()
 /*Kontrollerar ifall det finns nog med mat till hela befolkningen*/
 bool SuperPower::enoughFood()
 {
-	if(mFood >= mPopulation)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return mFood >= mPopulation;
 }
 
 void SuperPower::updateFood()

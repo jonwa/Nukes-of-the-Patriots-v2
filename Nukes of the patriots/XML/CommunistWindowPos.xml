@@ -80,4 +80,20 @@
 		<height>334</height>
 		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
+	<window>
+		<name>CommunistBorder</name>
+		<xPos>212</xPos>
+		<yPos>36</yPos>
+		<width>600</width>
+		<height>600</height>
+		<image>Communist/kom_city_border</image>
+	</window>
+	<window>
+		<name>CommunistBorderTop</name>
+		<xPos>212</xPos>
+		<yPos>0</yPos>
+		<width>600</width>
+		<height>36</height>
+		<image>Communist/kom_panel_top</image>
+	</window>
 </windows>

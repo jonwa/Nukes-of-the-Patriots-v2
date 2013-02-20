@@ -61,7 +61,7 @@ std::shared_ptr<President> Capitalist::getPresident()
 
 void Capitalist::changeCityImage()
 {
-	if((mRound-1) % 10 == 0 && mRound != 1)
+	if((mRound-1) % 9 == 0 && mRound != 1)
 	{
 		mCount++;
 		mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[mCount])); 
@@ -449,6 +449,8 @@ void Capitalist::initializeCapitalistWindow()
 	loadCapitalistMusic();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
+	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
+	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
 	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
@@ -458,6 +460,14 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
 	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
+
+	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " millions", mCapitalistMainWindow);
+	mPopulationText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
+	mCurrencyText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
+	mPatriotismText->setScale(0.5, 0.5);
+
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
@@ -619,6 +629,35 @@ void Capitalist::initializeCapitalistWindow()
 	mCloseIncreasedResourcesWindow		= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesWindow);
 	mIncreasedResourcesWindow->setVisible(false);
 	chooseLeader();
+
+	std::shared_ptr<GUIWindow> statsWindow = GameManager::getInstance()->getStatsWindow();
+
+	mPatriotismChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mPatriotismChange->setScale(0.5, 0.5);
+	mCurrencyChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mCurrencyChange->setScale(0.5, 0.5);
+	mPopulationChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mPopulationChange->setScale(0.5, 0.5);
+	mFoodChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mFoodChange->setScale(0.5, 0.5);
+	mGoodsChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mGoodsChange->setScale(0.5, 0.5);
+	mTechChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mTechChange->setScale(0.5, 0.5);
+	mExportedFoodChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mExportedFoodChange->setScale(0.5, 0.5);
+	mExportedGoodsChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mExportedGoodsChange->setScale(0.5, 0.5);
+	mExportedTechChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mExportedTechChange->setScale(0.5, 0.5);
+	mTaxChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mTaxChange->setScale(0.5, 0.5);
+	mSpyNetworkChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mSpyNetworkChange->setScale(0.5, 0.5);
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mNuclearWeaponChange->setScale(0.5, 0.5);
+	mSpaceProgramChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	mSpaceProgramChange->setScale(0.5, 0.5);
 
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager

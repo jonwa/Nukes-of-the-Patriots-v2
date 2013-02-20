@@ -12,6 +12,8 @@ public:
 	
 	GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
 	bool	render(sf::RenderWindow *window);
+	void	setSize(float width, float height);
+	void	setColor(sf::Color color);
 			~GUIWindow(){}
 
 private:

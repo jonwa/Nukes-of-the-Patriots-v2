@@ -11,10 +11,12 @@ class Timer
 {
 public:
 	static Timer* setTimer(std::function<void()> callbackFunc, int time = 50, int timesToExecute = 1);
-
+	static bool isTimer(Timer* timer);
 	std::function<void()> getCallbackFunction();
 	int getTimeLeft();
 	int getTimesToExecuteLeft();
+	bool isAlive();
+	int getTimerDuration();
 
 	bool tick();
 	void killTimer();
@@ -24,8 +26,9 @@ private:
 	Timer(std::function<void()> callbackFunc, int time, int timesToExecute);
 private:
 	std::function<void()> mCallbackFunc;
-	int mTime;
+	int mTime, mTimerDuration;
 	int mTimesToExecute, mTimesToExecuteLeft;
+	bool mAlive;
 	sf::Clock mClock;
 };
 

@@ -11,7 +11,8 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mCallMouseEnterFunc(false),
 	mCallMouseLeaveFunc(false),
 	mEnabled(true),
-	mSelected(false)
+	mSelected(false),
+	mColor(sf::Color(255, 255, 255, 255))
 {
 }
 
@@ -103,9 +104,9 @@ GUIType	GUIElement::getGUIType()const
 { 
 	return mGUIType; 
 }
-int	GUIElement::getAlpha()const
+sf::Color GUIElement::getColor()const
 { 
-	return mAlpha; 
+	return mColor;
 }
 bool GUIElement::getMouseIsInside()const
 {
@@ -169,9 +170,9 @@ void GUIElement::setEnabled(bool enabled, bool effectChildren)
 	}
 }
 
-void GUIElement::setAlpha(int alpha)
+void GUIElement::setColor(sf::Color color)
 {
-	mAlpha = alpha; 
+	mColor = color;
 }
 
 void GUIElement::setSelected(bool selected)

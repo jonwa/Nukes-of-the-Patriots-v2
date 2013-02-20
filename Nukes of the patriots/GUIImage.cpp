@@ -97,3 +97,9 @@ void GUIImage::setSize(float width, float height)
 	setHeight(height);
 }
 
+void GUIImage::setColor(sf::Color color)
+{
+	mSprite.setColor(color);
+	GUIElement::setColor(color);
+}
+

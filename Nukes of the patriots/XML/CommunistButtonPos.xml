@@ -538,8 +538,8 @@
 	</button>
 	<button>
 		<name>CityImages</name>
-		<xPos>253</xPos>
-		<yPos>78</yPos>
+		<xPos>256</xPos>
+		<yPos>80</yPos>
 		<width>512</width>
 		<height>512</height>
 		<image></image>

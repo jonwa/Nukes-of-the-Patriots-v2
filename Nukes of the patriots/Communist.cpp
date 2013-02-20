@@ -81,7 +81,7 @@ void Communist::openFiveYearPlan()
 
 void Communist::changeCityImage()
 {
-	if((mRound-1) % 10 == 0 && mRound != 1)
+	if((mRound-1) % 9 == 0 && mRound != 1)
 	{
 		mCount++;
 		mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[mCount])); 
@@ -159,20 +159,47 @@ int Communist::getYearlyTaxes(int round)
 
 void Communist::newYearStart()
 {
+	//communist title: 745, 90
+	//capitalist title: 241, 90
+	int statsPosX = 125, statsPosY = 177;   //communist 628, 177
 	int foodPatriotismChange = 0;
 	if(mFood == 0)
+	{
 		foodPatriotismChange = -4;
+		mFoodChange->setText("No food for the population");
+		mFoodChange->setY(statsPosY);
+		statsPosY += mFoodChange->getHeight();
+	}
 	else if(mFood > 0 && mFood <= mPopulation/2)
+	{
 		foodPatriotismChange = -2;
+		mFoodChange->setText("Not quite as much food as we expected");
+		mFoodChange->setY(statsPosY);
+		statsPosY += mFoodChange->getHeight();
+	}
+	else
+		mFoodChange->setText("");
 
 	mFood -= mPopulation;
 	if(mFood < 0) mFood = 0;
 	int taxPatriotismChange = 0;
 	int taxChange = mTaxes - mTaxesPreviousRound;
 	if(taxChange > 0)
+	{
 		taxPatriotismChange = -2;
+		mTaxChange->setText("Tax increased");
+		mTaxChange->setY(statsPosY);
+		statsPosY += mTaxChange->getHeight();
+	}
 	else if(taxChange < 0)
+	{
 		taxPatriotismChange = 1;
+		mTaxChange->setText("Tax decreased");
+		mTaxChange->setY(statsPosY);
+		statsPosY += mTaxChange->getHeight();
+	}
+	else
+		mTaxChange->setText("");
 
 	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
 
@@ -181,14 +208,45 @@ void Communist::newYearStart()
 
 	int nuclearDifference = mNuclearWeapon - enemyNuclearWeapon;
 	int spaceProgramDifference = mSpaceProgram - enemySpaceProgram;
+	bool spaceProgramIncreased = (mSpaceProgram > mSpaceProgramPreviousRound);
+	if(spaceProgramIncreased)
+	{
+		mSpaceProgramIncreasedText->setText("Space program increased");
+		mSpaceProgramIncreasedText->setY(statsPosY);
+		statsPosY += mSpaceProgramIncreasedText->getHeight();
+	}
+	else
+		mSpaceProgramIncreasedText->setText("");
 
 	int nuclearWeaponChange = 0;
 	int spaceProgramChange = 0;
 	int exportedChange = 0;
-	if(nuclearDifference > 0)
-		nuclearWeaponChange = (nuclearDifference > enemyNuclearWeapon*2) ? 2 : 1;
+	if(nuclearDifference > enemyNuclearWeapon*2)
+	{
+		mNuclearWeaponChange->setText("Nuclear weapon double as much as the enemy");
+		nuclearWeaponChange = 2;
+		mNuclearWeaponChange->setY(statsPosY);
+		statsPosY += mNuclearWeaponChange->getHeight();
+	}
+	else if(nuclearDifference > enemyNuclearWeapon)
+	{
+		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
+		nuclearWeaponChange = 1;
+		mNuclearWeaponChange->setY(statsPosY);
+		statsPosY += mNuclearWeaponChange->getHeight();
+	}
+	else
+		mNuclearWeaponChange->setText("");
+
 	if(spaceProgramDifference > enemySpaceProgram)
-		spaceProgramChange += 1;
+	{
+		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
+		spaceProgramChange = 1;
+		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
+		statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
+	}
+	else
+		mSpaceProgramMoreThanEnemyText->setText("");
 	
 	// My exported resources
 	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
@@ -203,9 +261,16 @@ void Communist::newYearStart()
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
+	{
+		mExportedChange->setText("Exported more resources than enemy");
 		exportedChange += 1;
+		mExportedChange->setY(statsPosY);
+		statsPosY += mExportedChange->getHeight();
+	}
+	else
+		mExportedChange->setText("");
 
-	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange;
+	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 }
 
 void Communist::update()
@@ -573,6 +638,8 @@ void Communist::initializeCommunistWindow()
 	loadWindowPosition();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
+	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
+	mCommunistBorderTop				= GUIWindow::create(CommunistWindows["CommunistBorderTop"], mCommunistMainWindow);
 	mChangeCityImage				= GUIButton::create(CommunistButtons["CityImages"], mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
@@ -582,6 +649,15 @@ void Communist::initializeCommunistWindow()
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 	mLeftPanel						= GUIButton::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
 	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
+
+	
+	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " millions", mCommunistMainWindow);
+	mPopulationText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
+	mCurrencyText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCommunistMainWindow);
+	mPatriotismText->setScale(0.5, 0.5);
+
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
@@ -771,6 +847,22 @@ void Communist::initializeCommunistWindow()
 	chooseLeader();
 
 	
+	std::shared_ptr<GUIWindow> statsWindow = GameManager::getInstance()->getStatsWindow();
+
+	int statsPosY = 177;
+
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+	statsPosY += mNuclearWeaponChange->getHeight();
+	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+	statsPosY += mSpaceProgramIncreasedText->getHeight();
+	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+	statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
+	mExportedChange						= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+	statsPosY += mExportedChange->getHeight();
+	mFoodChange							= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+	statsPosY += mFoodChange->getHeight();
+	mTaxChange							= GUIText::create(sf::FloatRect(628, statsPosY, 0, 0), "0", statsWindow);
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -785,10 +877,11 @@ void Communist::initializeCommunistWindow()
 
 void Communist::initializeCityImages()
 {
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city2")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city3")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city4")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_city5")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom1")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom2")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom3")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom4")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom5")));
 	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 

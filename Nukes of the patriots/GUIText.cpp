@@ -16,7 +16,7 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	mFont.loadFromFile("Font/Moire-Regular.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
-	mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height/2);
+	mText.setOrigin(mText.getGlobalBounds().width/2, mText.getGlobalBounds().height/2);
 	sf::FloatRect boundBox = mText.getGlobalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);

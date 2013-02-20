@@ -24,6 +24,7 @@ public:
 
 	void		 setSize(float width, float height);
 	void		 setScale(float width, float height);
+	void		 setColor(sf::Color color);
 	void		 setImage(sf::Texture &texture);
 	bool		 render (sf::RenderWindow *window);
 	void		 setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);

@@ -131,7 +131,10 @@ private:
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
 
- 
+ 	std::shared_ptr<GUIText> mPopulationText;
+	std::shared_ptr<GUIText> mCurrencyText;
+	std::shared_ptr<GUIText> mPatriotismText;
+
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
 	std::shared_ptr<GUIText> mSpyText;
@@ -145,6 +148,8 @@ private:
 	
 	/*GUI-pekare för kommunisternas interface*/
 	std::shared_ptr<GUIWindow> mCommunistMainWindow;
+	std::shared_ptr<GUIWindow> mCommunistBorder;
+	std::shared_ptr<GUIWindow> mCommunistBorderTop;
 	std::shared_ptr<GUIButton> mCommunistGeneralButton;
 	std::shared_ptr<GUIButton> mCommunistFiveYearPlanButton;		
 	std::shared_ptr<GUIButton> mCommunistPropagandaButton;	
@@ -311,6 +316,16 @@ private:
 	std::shared_ptr<GUIButton> mLeftPanel;
 	std::shared_ptr<GUIButton> mRightPanel;
 
+
+	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mPopulationChange;
+	std::shared_ptr<GUIText>   mFoodChange;
+	std::shared_ptr<GUIText>   mTechChange;
+	std::shared_ptr<GUIText>   mExportedChange;
+	std::shared_ptr<GUIText>   mTaxChange;
+	std::shared_ptr<GUIText>   mNuclearWeaponChange;
+	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyText;
+	std::shared_ptr<GUIText>   mSpaceProgramIncreasedText;
 };
 
 #endif

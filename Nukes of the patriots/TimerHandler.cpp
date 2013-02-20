@@ -22,6 +22,16 @@ void TimerHandler::removeTimer(Timer* timer)
 	}
 }
 
+bool TimerHandler::isTimer(Timer* timer)
+{
+	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size(); it++)
+	{
+		if(mVecTimers[it] == timer)
+			return true;
+	}
+	return false;
+}
+
 void TimerHandler::tick()
 {
 	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size(); it++)

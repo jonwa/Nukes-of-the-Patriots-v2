@@ -42,6 +42,8 @@ public:
 
 	std::shared_ptr<SuperPower>					getCapitalist();
 	std::shared_ptr<SuperPower>					getCommunist();
+	
+	std::shared_ptr<GUIWindow>					getStatsWindow();
 
 	void										init(int year);
 private:
@@ -81,21 +83,8 @@ private:
 
 	std::shared_ptr<SuperPower> mCurrentPlayer;
 
-	std::shared_ptr<GUIWindow> mStatsWindow;
+	std::shared_ptr<GUIWindow> mStatsWindow[2];
 	std::shared_ptr<GUIButton> mCloseStatsWindow;
-	std::shared_ptr<GUIText>   mPatriotismChange;
-	std::shared_ptr<GUIText>   mCurrencyChange;
-	std::shared_ptr<GUIText>   mPopulationChange;
-	std::shared_ptr<GUIText>   mFoodChange;
-	std::shared_ptr<GUIText>   mGoodsChange;
-	std::shared_ptr<GUIText>   mTechChange;
-	std::shared_ptr<GUIText>   mExportedFoodChange;
-	std::shared_ptr<GUIText>   mExportedGoodsChange;
-	std::shared_ptr<GUIText>   mExportedTechChange;
-	std::shared_ptr<GUIText>   mTaxChange;
-	std::shared_ptr<GUIText>   mSpyNetworkChange;
-	std::shared_ptr<GUIText>   mNuclearWeaponChange;
-	std::shared_ptr<GUIText>   mSpaceProgramChange;
 
 	std::shared_ptr<GUIWindow> mFirstDecideWhoStartWindow;   //Om bägge har samma spy
 	std::shared_ptr<GUIWindow> mSecondDecideWhoStartWindow; //Om den ena har högre spy än den andra
