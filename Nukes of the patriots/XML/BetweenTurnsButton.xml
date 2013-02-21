@@ -2,8 +2,8 @@
 <buttons>
 	<button>
 		<name>CloseStats</name>
-		<xPos>415</xPos>
-		<yPos>700</yPos>
+		<xPos>435</xPos>
+		<yPos>687</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>

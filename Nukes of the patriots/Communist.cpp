@@ -25,7 +25,8 @@ static bool activateWindow	= false;
 static int generalCount = 0;
 
 Communist::Communist() : 
-	mCount(0)
+	mCount(0),
+	mUpdateGUIThread(nullptr)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -37,6 +38,49 @@ Communist::Communist() :
 	fiveYearInitialize();
 	propagandaInitialize();
 	initializeCityImages();
+	mUpdateGUIThread = new sf::Thread(&Communist::updateGUI, this);
+	mUpdateGUIThread->launch();
+}
+
+void Communist::updateGUI()
+{
+	Timer::setTimer([=]()
+	{
+		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
+		if(mPopulation != oldPopulation)
+			mPopulationText->setText(intToString(mPopulation) + " millions");
+		int oldCurrency = stringToInt(mCurrencyText->getText());
+		if(mCurrency != oldCurrency)
+			mCurrencyText->setText(intToString(mCurrency));
+		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		if(mPatriotism != oldPatriotism)
+			mPatriotismText->setText(intToString(mPatriotism));
+
+		/*GUI text för utskrift av värden på komunisternas interface*/
+		int oldNuclear = stringToInt(mNuclearText->getText());
+		if(getNuclearWeapon() != oldNuclear)
+			mNuclearText->setText(intToString(getNuclearWeapon()));
+
+		int oldSpaceProgram = stringToInt(mSpaceText->getText());
+		if(getSpaceProgram() != oldSpaceProgram)
+			mSpaceText->setText(intToString(getSpaceProgram()));
+
+		int oldSpyNetwork = stringToInt(mSpyText->getText());
+		if(getSpyNetwork() != oldSpyNetwork)
+			mSpyText->setText(intToString(getSpyNetwork()));
+
+		int oldFood = stringToInt(mFoodText->getText());
+		if(getFood() != oldFood)
+			mFoodText->setText(intToString(getFood()));
+
+		int oldGoods = stringToInt(mGoodsText->getText());
+		if(getGoods() != oldGoods)
+			mGoodsText->setText(intToString(getGoods()));
+
+		int oldTech = stringToInt(mTechText->getText());
+		if(getTech() != oldTech)
+			mTechText->setText(intToString(getTech()));
+	}, 50, 0);
 }
 
 
@@ -267,7 +311,7 @@ void Communist::newYearStart()
 
 	if(spaceProgramDifference > enemySpaceProgram)
 	{
-		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
+		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
 		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
@@ -308,10 +352,13 @@ void Communist::newYearStart()
 	}
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
+	mPatriotism += totalPatriotismChange;
 }
 
 void Communist::update()
 {
+	if(mRound > 1)
+		getTaxIncome();
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -691,6 +738,7 @@ void Communist::initializeCommunistWindow()
 	
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
+
 	mPopulationText->setAlignment("middle");
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
@@ -699,9 +747,17 @@ void Communist::initializeCommunistWindow()
 	mPatriotismText->setScale(0.5, 0.5);
 	mPatriotismText->setAlignment("middle");
 
+	mPopulationText->setColor(sf::Color::White);
+
+	mCurrencyText->setColor(sf::Color::White);
+
+	mPatriotismText->setColor(sf::Color::White);
+
+
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
+
 	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCommunistMainWindow);
 	mNuclearText->setAlignment("middle");
 	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCommunistMainWindow);
@@ -714,6 +770,7 @@ void Communist::initializeCommunistWindow()
 	mGoodsText->setAlignment("middle");
 	mTechText							= GUIText::create(sf::FloatRect(31, 431, 0, 0), intToString(getTech()), mCommunistMainWindow);
 	mTechText->setAlignment("middle");
+
 
 	/*Taxes fönster med knappar*/
 	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	
@@ -1581,6 +1638,9 @@ void Communist::initializeGuiFunctions()
 		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
 		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
 		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+		mFood -= mExportedFood;
+		mGoods -= mExportedGoods;
+		mTech -= mExportedTech;
 
 		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
 		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());

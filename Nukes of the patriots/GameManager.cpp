@@ -47,6 +47,7 @@ void GameManager::init(int year)
 	mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
 	mYearText->setScale(0.5, 0.5);
 	mYearText->setAlignment("middle");
+	mYearText->setColor(sf::Color::White);
 	GUIManager::getInstance()->addGUIElement(mYearText);
 	
 	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
@@ -168,21 +169,21 @@ void GameManager::startRound()
 	int goodsBought = 0;
 	int techBought = 0;
 	int exports = 0;
-
 	// if nobody bought my exports - then it will be sold internationally
-	//foodBought = moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
-	//goodsBought = moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
-	//techBought = moneyIntTech / mCurrentPlayer->getExportedTechPrice();
+	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 0 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
+	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
+	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 0 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
 	//// if international market tries to buy more resources than you have
-	//if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
-	//if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();
-	//if(techBought > mCurrentPlayer->getExportedTech()) techBought = mCurrentPlayer->getExportedTech();
-	//exports += (foodBought * mCurrentPlayer->getExportedFoodPrice()) + (goodsBought * mCurrentPlayer->getExportedGoodsPrice()) + (techBought * mCurrentPlayer->getExportedTechPrice());
-	//mCurrentPlayer->setExportedFood(mCurrentPlayer->getExportedFood() - foodBought);
-	//mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
-	//mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
-	//mCurrentPlayer->getTaxIncome();
-	//mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+	if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
+	if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();
+	if(techBought > mCurrentPlayer->getExportedTech()) techBought = mCurrentPlayer->getExportedTech();
+	exports += (foodBought * mCurrentPlayer->getExportedFoodPrice()) + (goodsBought * mCurrentPlayer->getExportedGoodsPrice()) + (techBought * mCurrentPlayer->getExportedTechPrice());
+	mCurrentPlayer->setExportedFood(mCurrentPlayer->getExportedFood() - foodBought);
+	mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
+	mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
+	std::cout<<"exports: "<<exports<<std::endl;
+	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+
 	mCurrentPlayer->update();
 	mCurrentPlayer->showGUI();
 }
@@ -205,7 +206,6 @@ std::vector<std::shared_ptr<SuperPower> > GameManager::getPlayers()const
 void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 {
 	mCurrentPlayer = newPlayer;
-	std::cout<<"players left to play before: "<<mVecPlayersLeft.size()<<std::endl;
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 	{
 		if((*it) == mCurrentPlayer)
@@ -214,8 +214,6 @@ void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 			break;
 		}
 	}
-	std::cout<<"players left to play after: "<<mVecPlayersLeft.size()<<std::endl;
-	//mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
 	mCurrentPlayer->setRound(mCurrentPlayer->getRound() + 1);
 }
 
@@ -272,6 +270,9 @@ void GameManager::nextRound()
 
 		mStatsWindow[0]->setVisible(true);
 		mStatsWindow[0]->setColor(sf::Color(255, 255, 255, 255));
+		mStatsWindow[0]->setSize(1024, 768);
+		mStatsWindow[0]->setX(0);
+		mStatsWindow[0]->setY(0);
 		mStatsWindow[1]->setVisible(false);
 		mFirstDecideWhoStartWindow->setVisible(false);
 		mSecondDecideWhoStartWindow->setVisible(false);

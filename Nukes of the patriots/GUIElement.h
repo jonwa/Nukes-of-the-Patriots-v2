@@ -51,6 +51,7 @@ public:
 	bool			onMove(sf::RenderWindow *window);
 	virtual bool	render(sf::RenderWindow *window) = 0;
 	virtual void	onGUIClick(int mouseX, int mouseY){};
+	virtual void	onGUIHover(int mouseX, int mouseY){};
 	void			tick();
 	virtual			~GUIElement();
 protected:

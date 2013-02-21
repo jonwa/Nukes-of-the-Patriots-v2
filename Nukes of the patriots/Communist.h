@@ -33,7 +33,6 @@ public:
 	Communist();
 	~Communist();
 
-	void		getTaxIncome();
 	void		updateFood();
 	bool		enoughFood();
 
@@ -65,9 +64,11 @@ public:
 	void hideGUI();
 	void update();
 	void newYearStart();
+	void updateGUI();
 
 private:
 	int mCount;
+	sf::Thread *mUpdateGUIThread;
 
 	std::string intToString(int i)
 	{

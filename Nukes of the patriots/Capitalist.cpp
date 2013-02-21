@@ -28,7 +28,8 @@ static bool activateWindow = false;
 
 Capitalist::Capitalist() :
 	mPresident(nullptr),
-	mCount(0)
+	mCount(0),
+	mUpdateGUIThread(nullptr)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -37,8 +38,50 @@ Capitalist::Capitalist() :
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
 	initializeCityImages();
+	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
+	mUpdateGUIThread->launch();
 }
 
+void Capitalist::updateGUI()
+{
+	Timer::setTimer([=]()
+	{
+		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
+		if(mPopulation != oldPopulation)
+			mPopulationText->setText(intToString(mPopulation) + " millions");
+		int oldCurrency = stringToInt(mCurrencyText->getText());
+		if(mCurrency != oldCurrency)
+			mCurrencyText->setText(intToString(mCurrency));
+		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		if(mPatriotism != oldPatriotism)
+			mPatriotismText->setText(intToString(mPatriotism));
+
+		/*GUI text för utskrift av värden på komunisternas interface*/
+		int oldNuclear = stringToInt(mNuclearText->getText());
+		if(getNuclearWeapon() != oldNuclear)
+			mNuclearText->setText(intToString(getNuclearWeapon()));
+
+		int oldSpaceProgram = stringToInt(mSpaceText->getText());
+		if(getSpaceProgram() != oldSpaceProgram)
+			mSpaceText->setText(intToString(getSpaceProgram()));
+
+		int oldSpyNetwork = stringToInt(mSpyText->getText());
+		if(getSpyNetwork() != oldSpyNetwork)
+			mSpyText->setText(intToString(getSpyNetwork()));
+
+		int oldFood = stringToInt(mFoodText->getText());
+		if(getFood() != oldFood)
+			mFoodText->setText(intToString(getFood()));
+
+		int oldGoods = stringToInt(mGoodsText->getText());
+		if(getGoods() != oldGoods)
+			mGoodsText->setText(intToString(getGoods()));
+
+		int oldTech = stringToInt(mTechText->getText());
+		if(getTech() != oldTech)
+			mTechText->setText(intToString(getTech()));
+	}, 50, 0);
+}
 
 Capitalist::~Capitalist()
 {
@@ -181,7 +224,7 @@ void Capitalist::newYearStart()
 
 	if(spaceProgramDifference > enemySpaceProgram)
 	{
-		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
+		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
 		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
@@ -222,12 +265,13 @@ void Capitalist::newYearStart()
 	}
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
-
+	mPatriotism += totalPatriotismChange;
 }
 
 void Capitalist::update()
 {
-	//playMusic();
+	if(mRound > 1)
+		getTaxIncome();
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -555,7 +599,7 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
-	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
+	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
@@ -574,10 +618,17 @@ void Capitalist::initializeCapitalistWindow()
 	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
 	mPatriotismText->setScale(0.5, 0.5);
 	mPatriotismText->setAlignment("middle");
+	
+	mPopulationText->setColor(sf::Color::White);
+
+	mCurrencyText->setColor(sf::Color::White);
+
+	mPatriotismText->setColor(sf::Color::White);
 
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
+
 	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
 	mNuclearText->setAlignment("middle");
 	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
@@ -595,6 +646,7 @@ void Capitalist::initializeCapitalistWindow()
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
 	mTaxValueText						= GUIText::create(sf::FloatRect(105, 78, 0, 0), intToString(mTaxes), mTaxesWindow);
 	mTaxValueText->setAlignment("middle");
+
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
