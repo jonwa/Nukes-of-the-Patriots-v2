@@ -6,7 +6,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/7_kom_plan</image>
+		<image>Communist/president-red-question-frame</image>
 	</button>
 	<button>
 		<name>FiveYearPlan</name>
@@ -484,17 +484,17 @@
 		<name>GoToNextPortrait</name>
 		<xPos>524</xPos>
 		<yPos>223</yPos>
-		<width>30</width>
-		<height>70</height>
-		<image>Communist/button_ext</image>	
+		<width>20</width>
+		<height>40</height>
+		<image>Communist/kom_texture_button_arrowright</image>	
 	</button>
 	<button>
 		<name>GoToPreviousPortrait</name>
 		<xPos>20</xPos>
 		<yPos>223</yPos>
-		<width>30</width>
-		<height>70</height>
-		<image>Communist/button_prev</image>	
+		<width>20</width>
+		<height>40</height>
+		<image>Communist/kom_texture_button_arrowleft</image>	
 	</button>
 	<button>
 		<name>CloseGeneral</name>

@@ -2,43 +2,51 @@
 <menu>
 	<button>
 		<name>StartGame</name>
-		<xPos>374</xPos>
-		<yPos>223</yPos>
-		<width>279</width>
-		<height>52</height>
-		<image></image>
+		<xPos>397</xPos>
+		<yPos>49</yPos>
+		<width>54</width>
+		<height>144</height>
+		<image>Menu/play-poster</image>
+	</button>
+	<button>
+		<name>MultiPlayer</name>
+		<xPos>579</xPos>
+		<yPos>131</yPos>
+		<width>64</width>
+		<height>137</height>
+		<image>Menu/multiplayer-poster</image>
 	</button>
 	<button>
 		<name>LoadGame</name>
-		<xPos>374</xPos>
-		<yPos>314</yPos>
-		<width>279</width>
-		<height>52</height>
-		<image></image>
+		<xPos>382</xPos>
+		<yPos>236</yPos>
+		<width>61</width>
+		<height>135</height>
+		<image>Menu/load-poster</image>
 	</button>
 	<button>
 		<name>Settings</name>
-		<xPos>374</xPos>
-		<yPos>404</yPos>
-		<width>279</width>
-		<height>52</height>
-		<image></image>
+		<xPos>557</xPos>
+		<yPos>329</yPos>
+		<width>70</width>
+		<height>159</height>
+		<image>Menu/options-poster</image>
 	</button>
 	<button>	
 		<name>Credits</name>
-		<xPos>374</xPos>
-		<yPos>494</yPos>
-		<width>279</width>
-		<height>52</height>
-		<image></image>
+		<xPos>375</xPos>
+		<yPos>473</yPos>
+		<width>73</width>
+		<height>155</height>
+		<image>Menu/credits-poster</image>
 	</button>
 	<button>		
 		<name>Exit</name>
-		<xPos>374</xPos>
-		<yPos>584</yPos>
-		<width>279</width>
-		<height>52</height>	
-		<image></image>
+		<xPos>578</xPos>
+		<yPos>510</yPos>
+		<width>52</width>
+		<height>165</height>	
+		<image>Menu/exit-poster</image>
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
@@ -50,11 +58,11 @@
 	</button>
 	<button>
 		<name>TeamCapitalistIsPressed</name>
-		<xPos>106</xPos>
-		<yPos>52</yPos>
-		<width>256</width>
-		<height>400</height>	
-		<image>Menu/Team-Flagga-Kapitalist-down</image>
+		<xPos>43</xPos>
+		<yPos>32</yPos>
+		<width>233</width>
+		<height>284</height>	
+		<image>Menu/kap_teamsign_hover</image>
 	</button>
 	<button>
 		<name>TeamCommunist</name>
@@ -66,11 +74,11 @@
 	</button>
 	<button>
 		<name>TeamCommunistIsPressed</name>
-		<xPos>628</xPos>
-		<yPos>52</yPos>
-		<width>256</width>
-		<height>400</height>	
-		<image>Menu/Team-Flagga-Communist-down</image>
+		<xPos>420</xPos>
+		<yPos>32</yPos>
+		<width>233</width>
+		<height>284</height>	
+		<image>Menu/kom_teamsign_hover</image>
 	</button>
 	<button>
 		<name>CapitalistName</name>
@@ -106,42 +114,50 @@
 	</button>
 	<button>
 		<name>StartGameHover</name>
-		<xPos>252</xPos>
-		<yPos>245</yPos>
-		<width>520</width>
-		<height>30</height>	
-		<image>Menu/3_1start</image>
+		<xPos>397</xPos>
+		<yPos>49</yPos>
+		<width>54</width>
+		<height>144</height>
+		<image>Menu/play-poster-red</image>
+	</button>
+	<button>
+		<name>MultiPlayerHover</name>
+		<xPos>579</xPos>
+		<yPos>131</yPos>
+		<width>64</width>
+		<height>137</height>
+		<image>Menu/multiplayer-poster-red</image>
 	</button>
 	<button>
 		<name>LoadGameHover</name>
-		<xPos>252</xPos>
-		<yPos>336</yPos>
-		<width>520</width>
-		<height>30</height>	
-		<image>Menu/3_2load</image>
+		<xPos>382</xPos>
+		<yPos>236</yPos>
+		<width>61</width>
+		<height>135</height>
+		<image>Menu/load-poster-red</image>
 	</button>
 	<button>
 		<name>SettingsHover</name>
-		<xPos>252</xPos>
-		<yPos>426</yPos>
-		<width>520</width>
-		<height>30</height>	
-		<image>Menu/3_3settings</image>
+		<xPos>557</xPos>
+		<yPos>329</yPos>
+		<width>70</width>
+		<height>159</height>
+		<image>Menu/options-poster-red</image>
 	</button>
 	<button>
 		<name>CreditsHover</name>
-		<xPos>252</xPos>
-		<yPos>516</yPos>
-		<width>520</width>
-		<height>30</height>	
-		<image>Menu/3_4credits</image>
+		<xPos>375</xPos>
+		<yPos>473</yPos>
+		<width>73</width>
+		<height>155</height>
+		<image>Menu/credits-poster-red</image>
 	</button>
 	<button>
 		<name>ExitHover</name>
-		<xPos>252</xPos>
-		<yPos>606</yPos>
-		<width>520</width>
-		<height>30</height>	
-		<image>Menu/3_5exit</image>
+		<xPos>578</xPos>
+		<yPos>510</yPos>
+		<width>52</width>
+		<height>165</height>	
+		<image>Menu/exit-poster-red</image>
 	</button>		
 </menu>

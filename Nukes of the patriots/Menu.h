@@ -43,6 +43,7 @@ private:
 	std::shared_ptr<GUIWindow> mChooseTeamWindow;
 
 	std::shared_ptr<GUIButton> mStartNewGameButton;
+	std::shared_ptr<GUIButton> mMultiPlayerButton;
 	std::shared_ptr<GUIButton> mLoadGameButton;
 	std::shared_ptr<GUIButton> mSettingsButton;
 	std::shared_ptr<GUIButton> mCreditsButton;
@@ -54,12 +55,11 @@ private:
 	std::shared_ptr<GUIButton> mCommunistOkayButton;
 
 	std::shared_ptr<GUIButton> mTeamCommunist;
+	std::shared_ptr<GUIButton> mTeamCommunistIsPicked;
 	std::shared_ptr<GUIButton> mTeamCapitalist;
+	std::shared_ptr<GUIButton> mTeamCapitalistIsPicked;
 
-	//std::shared_ptr<GUIWindow> mChoosePresidentWindow;
-	//std::shared_ptr<GUIButton> mFirstPresidentButton;
-	//std::shared_ptr<GUIButton> mSecondPresidentButton;
-	//std::shared_ptr<GUIButton> mClosePresidentWindow;
+
 	sf::RenderWindow &mWindow;
 };
 

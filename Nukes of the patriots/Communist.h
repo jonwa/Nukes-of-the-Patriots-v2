@@ -17,7 +17,6 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Audio\Music.hpp>
 
-
 class President;
 class GUIElement;
 class GUIButton;
@@ -316,6 +315,7 @@ private:
 	std::shared_ptr<GUIButton> mLeftPanel;
 	std::shared_ptr<GUIButton> mRightPanel;
 
+	std::shared_ptr<GUIText>    mCommunistHeadLine;
 
 	std::shared_ptr<GUIText>   mPatriotismChange;
 	std::shared_ptr<GUIText>   mPopulationChange;
@@ -326,6 +326,16 @@ private:
 	std::shared_ptr<GUIText>   mNuclearWeaponChange;
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyText;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedText;
+
+	std::shared_ptr<GUIText>   mPatriotismChangeValue;
+	std::shared_ptr<GUIText>   mPopulationChangeValue;
+	std::shared_ptr<GUIText>   mFoodChangeValue;
+	std::shared_ptr<GUIText>   mTechChangeValue;
+	std::shared_ptr<GUIText>   mExportedChangeValue;
+	std::shared_ptr<GUIText>   mTaxChangeValue;
+	std::shared_ptr<GUIText>   mNuclearWeaponChangeValue;
+	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
+	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 };
 
 #endif

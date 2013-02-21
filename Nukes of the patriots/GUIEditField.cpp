@@ -98,7 +98,7 @@ bool GUIEditField::render(sf::RenderWindow *window)
 	float y = static_cast<float>(getY());
 	mRenderTexture.clear(sf::Color::Color(255, 255, 255, 0));
 	//mText.setPosition((sf::Vector2f(x, y)));
-	mText.setColor(sf::Color::Color(0, 0, 0, 255));
+	mText.setColor(sf::Color::Color(255, 255, 255, 255));
 	//mRenderTexture.draw(mSprite);
 	mRenderTexture.draw(mText);
 	if(isSelected())
