@@ -337,6 +337,17 @@ private:
 	std::shared_ptr<GUIText>   mNuclearWeaponChangeValue;
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
+
+	
+	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
+	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
+	std::shared_ptr<GUIText>   mCurrentTaxesText[2];
+	std::shared_ptr<GUIText>   mTaxesIncomeText[2];      
+	std::shared_ptr<GUIButton> mCloseTaxesIncomeWindow;
+
+	std::shared_ptr<GUIWindow> mPopulationEatsFoodWindow;
+	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
+	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
 };
 
 #endif

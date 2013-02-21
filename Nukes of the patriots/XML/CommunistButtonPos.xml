@@ -544,4 +544,20 @@
 		<height>512</height>
 		<image></image>
 	</button>
+	<button>
+		<name>CloseTaxesIncome</name>
+		<xPos>235</xPos>
+		<yPos>110</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Communist/kom_texture_button_ok</image>
+	</button>
+	<button>
+		<name>ClosePopulationEatsFood</name>
+		<xPos>235</xPos>
+		<yPos>478</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Communist/kom_texture_button_ok</image>
+	</button>
 </buttons>

@@ -219,8 +219,9 @@ void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlayer)
 {
 	mSecondDecideWhoStartWindow->setVisible(true);
-	//mNextWindowToShow = mSecondDecideWhoStartWindow;
-	mSecondDecideWhoStartWindow->setEnabled(false, true);
+	mStatsWindow[1]->setVisible(false);
+	mFirstDecideWhoStartWindow->setEnabled(true, true);
+	mSecondDecideWhoStartWindow->setEnabled(true, true);
 	mSecondCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
 	mSecondCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
 }
@@ -293,8 +294,7 @@ void GameManager::nextRound()
 		}, 3000, 1);
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
 		//If both player has same spy network, then select random as next player directly
-
-		Timer::setTimer([=]()
+		mCloseStatsWindow->setOnClickFunction([=]()
 		{
 			if(nextPlayers.size() == 1)
 			{
@@ -304,12 +304,13 @@ void GameManager::nextRound()
 			{
 				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
 				mFirstDecideWhoStartWindow->setVisible(true);
+				mStatsWindow[1]->setVisible(false);
 				//mNextWindowToShow = mFirstDecideWhoStartWindow;
-				mFirstDecideWhoStartWindow->setEnabled(false, true);
+				mFirstDecideWhoStartWindow->setEnabled(true, true);
 				mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
 				mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
 			} 
-		}, 4000, 1);
+		});
 	}
 	else
 	{
@@ -483,13 +484,6 @@ std::shared_ptr<GUIWindow> GameManager::getStatsWindow()
  //initiering av gui knappar
 void GameManager::initializeGuiFunctions()
 {
-	//Stänger statsfönstret och går in i välja lag meny
-	mCloseStatsWindow->setOnClickFunction([=]()
-	{
-		mStatsWindow[1]->setVisible(false);
-		mFirstDecideWhoStartWindow->setEnabled(true, true);
-		mSecondDecideWhoStartWindow->setEnabled(true, true);
-	});
 	//stänger ned fönstret (om bägge har samma spy)
 	mCloseFirstWindow->setOnClickFunction([=]()
 	{
@@ -500,12 +494,14 @@ void GameManager::initializeGuiFunctions()
 	mCapitalistButton->setOnClickFunction([=]()
 	{
 		setCurrentPlayer(getCapitalist());
+		mSecondDecideWhoStartWindow->setVisible(false);
 		startRound();
 	});
 	//Kommunisterna börjar nästa runda
 	mCommunistButton->setOnClickFunction([=]()
 	{
 		setCurrentPlayer(getCommunist());
+		mSecondDecideWhoStartWindow->setVisible(false);
 		startRound();
 	});
 }

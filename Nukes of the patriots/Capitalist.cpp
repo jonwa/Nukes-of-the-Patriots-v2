@@ -117,6 +117,8 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
+	mTaxesIncomeWindow->setVisible(true);
+	getTaxIncome();
 	//communist title: 745, 90
 	//capitalist title: 241, 90
 	int statsPosY = 177;   //communist 628, 177
@@ -139,6 +141,8 @@ void Capitalist::newYearStart()
 		mFoodChangeValue->setY(statsPosY);
 		statsPosY += mFoodChange->getHeight();
 	}
+	else if(mFood >= mPopulation)
+		mPopulation += 1;
 	else
 	{
 		mFoodChange->setText("");
@@ -264,14 +268,20 @@ void Capitalist::newYearStart()
 		mExportedChangeValue->setText("");
 	}
 
+
+	mCurrentPopulationText[1]->setText(mPopulation);
+	mCurrentTaxesText[1]->setText(mTaxes);
+	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
+	std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
+
+	//mIncreasedResourcesText->setText("heJ");
+
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 	mPatriotism += totalPatriotismChange;
 }
 
 void Capitalist::update()
 {
-	if(mRound > 1)
-		getTaxIncome();
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -287,6 +297,8 @@ void Capitalist::update()
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
+	std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
+	std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 
 	if((mRound-1) % 4 == 0 ) 
 	{
@@ -856,6 +868,46 @@ void Capitalist::initializeCapitalistWindow()
 	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 390, 0, 0), "", mChoosePresidentWindow);
 	mSecondNegativeStat->setScale(0.6, 0.6);
 
+
+
+	mTaxesIncomeWindow					= GUIWindow::create(CapitalistWindows["TaxesIncome"], mCapitalistMainWindow);
+	mCurrentPopulationText[0]			= GUIText::create(sf::FloatRect(50, 26, 0, 0), "Population ", mTaxesIncomeWindow);
+	mCurrentPopulationText[0]->setScale(0.8, 0.8);
+	mCurrentPopulationText[0]->setAlignment("left");
+	mCurrentPopulationText[1]			= GUIText::create(sf::FloatRect(331, 26, 0, 0), intToString(getPopulation()) + " million", mTaxesIncomeWindow);
+	mCurrentPopulationText[1]->setScale(0.8, 0.8);
+	mCurrentPopulationText[1]->setAlignment("left");
+
+    mCurrentTaxesText[0]		        = GUIText::create(sf::FloatRect(50, 50, 0, 0), "Current tax ", mTaxesIncomeWindow);
+	mCurrentTaxesText[0]->setScale(0.8, 0.8);
+	mCurrentTaxesText[0]->setAlignment("left");
+	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 50, 0, 0), intToString(getTaxes()), mTaxesIncomeWindow);
+	mCurrentTaxesText[1]->setScale(0.8, 0.8);
+	mCurrentTaxesText[1]->setAlignment("left");
+
+    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 74, 0, 0), "Tax income ", mTaxesIncomeWindow);
+	mTaxesIncomeText[0]->setScale(0.8, 0.8);
+	mTaxesIncomeText[0]->setAlignment("left");
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 74, 0, 0), "0", mTaxesIncomeWindow);
+	mTaxesIncomeText[1]->setScale(0.8, 0.8);
+	mTaxesIncomeText[1]->setAlignment("left");
+
+	mCloseTaxesIncomeWindow				= GUIButton::create(CapitalistButtons["CloseTaxesIncome"], mTaxesIncomeWindow);
+	mTaxesIncomeWindow->setVisible(false);
+
+	mIncreasedResourcesPriceWindow		= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
+	mIncreasedResourcesText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "Example: The price of goods is now 21", mIncreasedResourcesPriceWindow);
+	mIncreasedResourcesText->setScale(0.8, 0.8);
+	mIncreasedResourcesText->setAlignment("left");
+	mCloseIncreasedResourcesPriceWindow	= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesPriceWindow);
+	mIncreasedResourcesPriceWindow->setVisible(false);
+	
+	mPopulationEatsFoodWindow			= GUIWindow::create(CapitalistWindows["PopulationEatsFood"], mCapitalistMainWindow);
+	mPopulationEatsFoodText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "Example: Population eats 50 food \nPopulation grows to 51 million",  mPopulationEatsFoodWindow);
+	mPopulationEatsFoodText->setScale(0.8, 0.8);
+	mPopulationEatsFoodText->setAlignment("left");
+	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
+	mPopulationEatsFoodWindow->setVisible(false);
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -1598,6 +1650,18 @@ void Capitalist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{ 
+		mIncreasedResourcesPriceWindow->setVisible(true);
+	});
+	
+	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
+	{
+		mIncreasedResourcesPriceWindow->setVisible(false);
+		mPopulationEatsFoodWindow->setVisible(true);
+	});
+
+	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
+	{
+		mPopulationEatsFoodWindow->setVisible(false);
 		/*if(mTaxes < mCurrentTax)
 			setPatriotism(getPatriotism() + 2);
 		else if(mTaxes > mCurrentTax)
@@ -1608,6 +1672,12 @@ void Capitalist::initializeGuiFunctions()
 		GameManager::getInstance()->nextRound();  
 		stopMusic();
 	});
+	
+	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
+	{
+		mTaxesIncomeWindow->setVisible(false);
+	});
+
 
 	mCloseIncreasedResourcesWindow->setOnClickFunction([=]()
 	{
@@ -1636,7 +1706,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
-	playMusic();
+	//playMusic();
 }
 
 void Capitalist::hideGUI()
