@@ -224,7 +224,7 @@ void Capitalist::newYearStart()
 
 	if(spaceProgramDifference > enemySpaceProgram)
 	{
-		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
+		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
 		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
@@ -265,7 +265,7 @@ void Capitalist::newYearStart()
 	}
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
-
+	mPatriotism += totalPatriotismChange;
 }
 
 void Capitalist::update()

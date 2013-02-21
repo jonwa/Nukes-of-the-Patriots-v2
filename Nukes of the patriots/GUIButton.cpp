@@ -20,6 +20,9 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 	else
 		mSprite.setPosition(getX(), getY());
 	//setSize((pair.first.width == 0) ? pair.second->getSize().x : pair.first.width, (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height);
+
+	onClickSoundBuff.loadFromFile("Music/click_sound_normal_buttons.wav");
+	onClickSound.setBuffer(onClickSoundBuff);
 }
 
 bool GUIButton::render(sf::RenderWindow *window)
@@ -85,4 +88,10 @@ void GUIButton::setSize(float width, float height)
 	mSprite.setScale(scaleX, scaleY); 
 	setWidth(width);
 	setHeight(height);
+}
+
+void GUIButton::onGUIClick(int mouseX, int mouseY)
+{
+	onClickSound.play();
+	onClickSound.setVolume(15);
 }
