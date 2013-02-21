@@ -222,6 +222,15 @@ private:
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 
+	std::shared_ptr<GUIText>   mPresidentBiography;
+	std::shared_ptr<GUIText>   mPresidentPositiveText[2];
+	std::shared_ptr<GUIText>   mPresidentNegativeText;
+	std::shared_ptr<GUIText>   mPresidentStats;
+	std::shared_ptr<GUIText>   mFirstPositiveStat[2];
+	std::shared_ptr<GUIText>   mFirstNegativeStat;
+	std::shared_ptr<GUIText>   mSecondPositiveStat[2];
+	std::shared_ptr<GUIText>   mSecondNegativeStat;
+
 	std::shared_ptr<GUIButton> mLeftPanel;
 	std::shared_ptr<GUIButton> mRightPanel;
 
