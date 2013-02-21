@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <images directory ="Capitalist">
-    <image filename="ref.png"/>
 	<image filename="7_kom_pres.png"/>
 	<image filename="kap_texture_button_taxes.png"/>
 	<image filename="kap_texture_button_invert_taxes.png"/>
@@ -44,9 +43,9 @@
 	<image filename="kap_city3.png"/>
 	<image filename="kap_city4.png"/>
 	<image filename="kap_city5.png"/>
+	<image filename="president-blue-question.png"/>
 </images>
 <images directory ="Communist">
-    <image filename="7_kom_bg.png"/>
 	<image filename="kom_texture_button_plan.png"/>
 	<image filename="kom_texture_button_invert_plan.png"/>
 	<image filename="kom_texture_button_propaganda.png"/>
@@ -101,6 +100,9 @@
 	<image filename="kom3.png"/>
 	<image filename="kom4.png"/>
 	<image filename="kom5.png"/>
+	<image filename="president-red-question-frame.png"/>
+	<image filename="kom_texture_button_arrowleft.png"/>
+	<image filename="kom_texture_button_arrowright.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -118,7 +120,22 @@
 	<image filename="Namnruta-aktiv.png"/>
 	<image filename="Namnruta-inaktiv.png" />
 	<image filename="choose_team.png" />
+	<image filename="kom_teamsign_hover.png"/>
+	<image filename="kap_teamsign_hover.png"/>
 	
+	<image filename="play-poster.png"/>
+	<image filename="multiplayer-poster.png"/>
+	<image filename="load-poster.png"/>
+	<image filename="options-poster.png"/>
+	<image filename="credits-poster.png"/>
+	<image filename="exit-poster.png"/>
+	
+	<image filename="play-poster-red.png"/>
+	<image filename="multiplayer-poster-red.png"/>
+	<image filename="load-poster-red.png"/>
+	<image filename="options-poster-red.png"/>
+	<image filename="credits-poster-red.png"/>
+	<image filename="exit-poster-red.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

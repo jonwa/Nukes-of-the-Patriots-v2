@@ -83,3 +83,13 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	return true;
 }
+
+void GUIText::setAlignment(std::string alignment)
+{
+	if(strcmp(alignment.c_str(), "left") == 0)
+		mText.setOrigin(mText.getPosition().x, mText.getPosition().y);
+	else if(strcmp(alignment.c_str(), "right") == 0)
+		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
+	else if(strcmp(alignment.c_str(), "middle") == 0)
+		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
+}
