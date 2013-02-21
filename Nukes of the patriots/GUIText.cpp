@@ -16,10 +16,12 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
+	mText.setColor(sf::Color::Black);
 	mText.setOrigin(mText.getGlobalBounds().width/2, mText.getGlobalBounds().height/2);
 	sf::FloatRect boundBox = mText.getGlobalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+
 }
 
 void GUIText::setText(std::string text)
@@ -67,7 +69,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
-		mText.setColor(sf::Color::Color(0, 0, 0, 255));
+		//mText.setColor(sf::Color::Color(0, 0, 0, 255));
 		mText.setPosition((sf::Vector2f(getX(), getY())));
 		window->draw(mText);
 	}
@@ -92,4 +94,11 @@ void GUIText::setAlignment(std::string alignment)
 		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "middle") == 0)
 		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
+}
+
+
+void GUIText::setColor(sf::Color color)
+{
+	mText.setColor(color);
+	GUIElement::setColor(color);
 }

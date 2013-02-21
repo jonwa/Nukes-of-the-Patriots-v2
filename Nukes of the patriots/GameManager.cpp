@@ -46,6 +46,7 @@ void GameManager::init(int year)
 	/*Skriver ut året på interface*/
 	mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
 	mYearText->setScale(0.5, 0.5);
+	mYearText->setColor(sf::Color::White);
 	GUIManager::getInstance()->addGUIElement(mYearText);
 	
 	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
@@ -271,6 +272,9 @@ void GameManager::nextRound()
 
 		mStatsWindow[0]->setVisible(true);
 		mStatsWindow[0]->setColor(sf::Color(255, 255, 255, 255));
+		mStatsWindow[0]->setSize(1024, 768);
+		mStatsWindow[0]->setX(0);
+		mStatsWindow[0]->setY(0);
 		mStatsWindow[1]->setVisible(false);
 		mFirstDecideWhoStartWindow->setVisible(false);
 		mSecondDecideWhoStartWindow->setVisible(false);

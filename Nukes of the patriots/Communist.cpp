@@ -691,20 +691,27 @@ void Communist::initializeCommunistWindow()
 	
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText->setColor(sf::Color::White);
+
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText->setColor(sf::Color::White);
+
 	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCommunistMainWindow);
 	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText->setColor(sf::Color::White);
 
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
-	mNuclearText = GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
-	mSpaceText	 = GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
-	mSpyText	 = GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
-	mFoodText	 = GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCommunistMainWindow);
-	mGoodsText   = GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCommunistMainWindow);
-	mTechText	 = GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+	mFoodText	 = GUIText::create(sf::FloatRect(30, 7, 40, 40), intToString(getFood()), mCommunistMainWindow);
+	mGoodsText   = GUIText::create(sf::FloatRect(30, 219, 40, 40), intToString(getGoods()), mCommunistMainWindow);
+	mTechText	 = GUIText::create(sf::FloatRect(30, 431, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+
+	mNuclearText = GUIText::create(sf::FloatRect(840, 7, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mSpaceText	 = GUIText::create(sf::FloatRect(840, 219, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpyText	 = GUIText::create(sf::FloatRect(840, 431, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
+
 
 	/*Taxes fönster med knappar*/
 	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	

@@ -567,24 +567,31 @@ void Capitalist::initializeCapitalistWindow()
 
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText->setColor(sf::Color::White);
+
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText->setColor(sf::Color::White);
+
 	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
 	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText->setColor(sf::Color::White);
 
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
-	mNuclearText						= GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
-	mSpaceText							= GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
-	mSpyText							= GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
-	mFoodText							= GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCapitalistMainWindow);
-	mGoodsText							= GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
-	mTechText							= GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(30, 7, 40, 40), intToString(getFood()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(30, 219, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(30, 431, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+
+	mNuclearText						= GUIText::create(sf::FloatRect(840, 7, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(840, 219, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(840, 431, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
+
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
-	mTaxValueText						= GUIText::create(sf::FloatRect(100, 80, 100, 50), intToString(mTaxes), mTaxesWindow);
+	mTaxValueText						= GUIText::create(sf::FloatRect(105, 70, 100, 50), intToString(mTaxes), mTaxesWindow);
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);

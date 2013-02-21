@@ -11,18 +11,15 @@ AnimationHandler* AnimationHandler::getInstance()
 
 AnimationHandler::AnimationHandler():mAnimationVector(),mUpdateThread(nullptr)
 {
-	mUpdateThread = new sf::Thread(&AnimationHandler::tick, this);
-	mUpdateThread->launch();
+	//mUpdateThread = new sf::Thread(&AnimationHandler::tick, this);
+	//mUpdateThread->launch();
 }
 
 void AnimationHandler::tick()
 {
-	while(true)
+	for(std::vector< std::shared_ptr<Animation> >::size_type it = 0; it < mAnimationVector.size(); it++)
 	{
-		for(std::vector< std::shared_ptr<Animation> >::size_type it = 0; it < mAnimationVector.size(); it++)
-		{
-			mAnimationVector[it]->tick();
-		}
+		mAnimationVector[it]->tick();
 	}
 }
 

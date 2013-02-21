@@ -10,8 +10,8 @@ class AnimationHandler
 public:
 	static AnimationHandler* getInstance();
 	void addAnimation(std::shared_ptr<Animation> animation);
-private:
 	void tick();
+private:
 	AnimationHandler();
 	~AnimationHandler();
 private:
