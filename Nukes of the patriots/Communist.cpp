@@ -250,7 +250,7 @@ void Communist::newYearStart()
 		taxPatriotismChange = 1;
 		mTaxChange->setText("Tax decreased");
 		mTaxChange->setY(statsPosY);
-		mTaxChangeValue->setText(taxPatriotismChange);
+		mTaxChangeValue->setText("+"+intToString(taxPatriotismChange));
 		mTaxChangeValue->setY(statsPosY);
 		statsPosY += mTaxChange->getHeight();
 	}
@@ -272,7 +272,7 @@ void Communist::newYearStart()
 	{
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText(1);
+		mSpaceProgramIncreasedTextValue->setText("+1");
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -290,7 +290,7 @@ void Communist::newYearStart()
 		mNuclearWeaponChange->setText("Nuclear weapon double as much as the enemy");
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
-		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
 		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
@@ -299,7 +299,7 @@ void Communist::newYearStart()
 		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
-		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
 		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
@@ -314,7 +314,7 @@ void Communist::newYearStart()
 		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
-		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
+		mSpaceProgramMoreThanEnemyTextValue->setText("+"+intToString(spaceProgramChange));
 		mSpaceProgramMoreThanEnemyTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
 	}
@@ -341,7 +341,7 @@ void Communist::newYearStart()
 		mExportedChange->setText("Exported more resources than enemy");
 		exportedChange += 1;
 		mExportedChange->setY(statsPosY);
-		mExportedChangeValue->setText(exportedChange);
+		mExportedChangeValue->setText("+"+intToString(exportedChange));
 		mExportedChangeValue->setY(statsPosY);
 		statsPosY += mExportedChange->getHeight();
 	}
@@ -352,6 +352,7 @@ void Communist::newYearStart()
 	}
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
+	mPatriotism += totalPatriotismChange;
 }
 
 void Communist::update()
@@ -942,53 +943,53 @@ void Communist::initializeCommunistWindow()
 
 	int statsPosY = 177;
 
-	mCommunistHeadLine					= GUIText::create(sf::FloatRect(800, 130, 0, 0), "COMMUNIST", statsWindow);
+	mCommunistHeadLine					= GUIText::create(sf::FloatRect(758, 130, 0, 0), "COMMUNIST", statsWindow);
 	mCommunistHeadLine->setAlignment("middle");
 
-	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mNuclearWeaponChange->setAlignment("left");
 	mNuclearWeaponChange->setScale(0.5, 0.5);
-	mNuclearWeaponChangeValue			= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mNuclearWeaponChangeValue			= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mNuclearWeaponChangeValue->setAlignment("left");
 	mNuclearWeaponChangeValue->setScale(0.5, 0.5);
 	statsPosY += mNuclearWeaponChange->getHeight();
 
-	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramIncreasedText->setAlignment("left");
 	mSpaceProgramIncreasedText->setScale(0.5, 0.5);
-	mSpaceProgramIncreasedTextValue		= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramIncreasedTextValue		= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramIncreasedTextValue->setAlignment("left");
 	mSpaceProgramIncreasedTextValue->setScale(0.5, 0.5);
 	statsPosY += mSpaceProgramIncreasedText->getHeight();
 
-	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramMoreThanEnemyText->setAlignment("left");
 	mSpaceProgramMoreThanEnemyText->setScale(0.5, 0.5);
-	mSpaceProgramMoreThanEnemyTextValue	= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramMoreThanEnemyTextValue	= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramMoreThanEnemyTextValue->setAlignment("left");
 	mSpaceProgramMoreThanEnemyTextValue->setScale(0.5, 0.5);
 	statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
 
-	mExportedChange						= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mExportedChange						= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mExportedChange->setAlignment("left");
 	mExportedChange->setScale(0.5, 0.5);
-	mExportedChangeValue	= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mExportedChangeValue	= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mExportedChangeValue->setAlignment("left");
 	mExportedChangeValue->setScale(0.5, 0.5);
 	statsPosY += mExportedChange->getHeight();
 
-	mFoodChange							= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mFoodChange							= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mFoodChange->setAlignment("left");
 	mFoodChange->setScale(0.5, 0.5);
-	mFoodChangeValue	= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mFoodChangeValue	= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mFoodChangeValue->setAlignment("left");
 	mFoodChangeValue->setScale(0.5, 0.5);
 	statsPosY += mFoodChange->getHeight();
 
-	mTaxChange							= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
+	mTaxChange							= GUIText::create(sf::FloatRect(585, statsPosY, 0, 0), "0", statsWindow);
 	mTaxChange->setScale(0.5, 0.5);
 	mTaxChange->setAlignment("left");
-	mTaxChangeValue	= GUIText::create(sf::FloatRect(850, statsPosY, 0, 0), "0", statsWindow);
+	mTaxChangeValue	= GUIText::create(sf::FloatRect(855, statsPosY, 0, 0), "0", statsWindow);
 	mTaxChangeValue->setAlignment("left");
 	mTaxChangeValue->setScale(0.5, 0.5);
 
@@ -1583,6 +1584,8 @@ void Communist::initializeGuiFunctions()
 		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
 		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
 		mExportedTechPrice = stringToInt(mExportTechCost->getText());
+
+		std::cout<<"communist Exported goods: "<<mExportedGoods<<std::endl;
 	});
 
 	mCommunistEndTurnButton->setOnClickFunction([=]()	

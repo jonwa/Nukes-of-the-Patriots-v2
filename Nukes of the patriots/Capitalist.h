@@ -163,18 +163,24 @@ private:
 	std::shared_ptr<GUIButton> mRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mRaiseFoodByTenButton;
+	std::shared_ptr<GUIText> mResourceFoodPriceText;
+
 	std::shared_ptr<GUIButton> mLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mLowerGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mLowerGoodsByOneButton;
 	std::shared_ptr<GUIButton> mRaiseGoodsByOneButton;
 	std::shared_ptr<GUIButton> mRaiseGoodsByFiveButton;
 	std::shared_ptr<GUIButton> mRaiseGoodsByTenButton;
+	std::shared_ptr<GUIText> mResourceGoodsPriceText;
+
 	std::shared_ptr<GUIButton> mLowerTechByTenButton;
 	std::shared_ptr<GUIButton> mLowerTechByFiveButton;
 	std::shared_ptr<GUIButton> mLowerTechByOneButton;
 	std::shared_ptr<GUIButton> mRaiseTechByOneButton;
 	std::shared_ptr<GUIButton> mRaiseTechByFiveButton;
 	std::shared_ptr<GUIButton> mRaiseTechByTenButton;
+	std::shared_ptr<GUIText> mResourceTechPriceText;
+
 	std::shared_ptr<GUIButton> mResourceCloseButton;
 	/*GIU-pekare för upgrade*/
 	std::shared_ptr<GUIWindow> mUpgradeWindow;
