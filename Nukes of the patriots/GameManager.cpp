@@ -46,6 +46,7 @@ void GameManager::init(int year)
 	/*Skriver ut året på interface*/
 	mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
 	mYearText->setScale(0.5, 0.5);
+	mYearText->setAlignment("middle");
 	mYearText->setColor(sf::Color::White);
 	GUIManager::getInstance()->addGUIElement(mYearText);
 	

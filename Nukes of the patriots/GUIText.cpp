@@ -11,17 +11,16 @@ std::shared_ptr<GUIText> GUIText::create(sf::FloatRect rect, std::string text, s
 
 GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, TEXT),
+	mAlignment("left"),
 	mFont(sf::Font::getDefaultFont())
 {
 	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setColor(sf::Color::Black);
-	mText.setOrigin(mText.getGlobalBounds().width/2, mText.getGlobalBounds().height/2);
 	sf::FloatRect boundBox = mText.getGlobalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
-
 }
 
 void GUIText::setText(std::string text)
@@ -69,8 +68,23 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
+<<<<<<< HEAD
+		float posX = getX(), posY = getY();
+		if(mAlignment == "left")
+			posX += 0;
+		else if(mAlignment == "middle")
+		{
+			posX -= mText.getGlobalBounds().width/2;
+			posY -= mText.getGlobalBounds().height;
+		}
+		else if(mAlignment == "right")
+			posX -= mText.getGlobalBounds().width;
+
+		mText.setPosition(sf::Vector2f(posX, posY));
+=======
 		//mText.setColor(sf::Color::Color(0, 0, 0, 255));
 		mText.setPosition((sf::Vector2f(getX(), getY())));
+>>>>>>> a87805b35432592e6136435f8737824948359035
 		window->draw(mText);
 	}
 
@@ -88,11 +102,16 @@ bool GUIText::render(sf::RenderWindow *window)
 
 void GUIText::setAlignment(std::string alignment)
 {
-	if(strcmp(alignment.c_str(), "left") == 0)
+	/*if(strcmp(alignment.c_str(), "left") == 0)
 		mText.setOrigin(mText.getPosition().x, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "right") == 0)
 		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "middle") == 0)
+<<<<<<< HEAD
+		mText.setOrigin(mText.getLocalBounds().width/2, mText.getPosition().y);*/
+
+	mAlignment = alignment;
+=======
 		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
 }
 
@@ -101,4 +120,5 @@ void GUIText::setColor(sf::Color color)
 {
 	mText.setColor(color);
 	GUIElement::setColor(color);
+>>>>>>> a87805b35432592e6136435f8737824948359035
 }
