@@ -691,20 +691,29 @@ void Communist::initializeCommunistWindow()
 	
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText->setAlignment("middle");
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText->setAlignment("middle");
 	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCommunistMainWindow);
 	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText->setAlignment("middle");
 
 	mCommunistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
-	mNuclearText = GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCommunistMainWindow);
-	mSpaceText	 = GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCommunistMainWindow);
-	mSpyText	 = GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCommunistMainWindow);
-	mFoodText	 = GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCommunistMainWindow);
-	mGoodsText   = GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCommunistMainWindow);
-	mTechText	 = GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCommunistMainWindow);	
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mNuclearText->setAlignment("middle");
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpaceText->setAlignment("middle");
+	mSpyText							= GUIText::create(sf::FloatRect(843, 431, 0, 0), intToString(getSpyNetwork()), mCommunistMainWindow);
+	mSpyText->setAlignment("middle");
+	mFoodText							= GUIText::create(sf::FloatRect(31, 7, 0, 0), intToString(getFood()), mCommunistMainWindow);
+	mFoodText->setAlignment("middle");
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 219, 0, 0), intToString(getGoods()), mCommunistMainWindow);
+	mGoodsText->setAlignment("middle");
+	mTechText							= GUIText::create(sf::FloatRect(31, 431, 0, 0), intToString(getTech()), mCommunistMainWindow);
+	mTechText->setAlignment("middle");
 
 	/*Taxes fönster med knappar*/
 	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	
@@ -719,23 +728,54 @@ void Communist::initializeCommunistWindow()
 	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mFiveYearPlanWindow);	
 	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mFiveYearPlanWindow);
 
-	mYearOneTaxesText				= GUIText::create(sf::FloatRect(515, 55, 20, 20), "30", mFiveYearPlanWindow);
-	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(515, 143, 20, 20), "30", mFiveYearPlanWindow);
-	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(515, 231, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFourTaxesText				= GUIText::create(sf::FloatRect(515, 319, 20, 20), "30", mFiveYearPlanWindow);
-	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(515, 407, 20, 20), "30", mFiveYearPlanWindow);
+	mFiveYearTotalCostText			= GUIText::create(sf::FloatRect(345, 28, 0, 0), "Cost", mFiveYearPlanWindow);
+	mFiveYearTotalCostText->setScale(0.8, 0.8);
+	mFiveYearTotalCostText->setAlignment("middle");
 
-	mIncomeYearOne					= GUIText::create(sf::FloatRect(435, 55, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearTwo					= GUIText::create(sf::FloatRect(435, 143, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearThree				= GUIText::create(sf::FloatRect(435, 231, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFour					= GUIText::create(sf::FloatRect(435, 319, 20, 20), "0", mFiveYearPlanWindow);
-	mIncomeYearFive					= GUIText::create(sf::FloatRect(435, 407, 20, 20), "0", mFiveYearPlanWindow);
+	mFiveYearIncomeText				= GUIText::create(sf::FloatRect(427, 28, 0, 0), "Income", mFiveYearPlanWindow);
+	mFiveYearIncomeText->setScale(0.8, 0.8);
+	mFiveYearIncomeText->setAlignment("middle");
 
-	mIncomeYearOne->setText(stringToInt(mYearOneTaxesText->getText()) * mPopulation);
-	mIncomeYearTwo->setText(stringToInt(mYearTwoTaxesText->getText()) * mPopulation);
-	mIncomeYearThree->setText(stringToInt(mYearThreeTaxesText->getText()) * mPopulation);
-	mIncomeYearFour->setText(stringToInt(mYearFourTaxesText->getText()) * mPopulation);
-	mIncomeYearFive->setText(stringToInt(mYearFiveTaxesText->getText()) * mPopulation);
+	mFiveYearTaxText				= GUIText::create(sf::FloatRect(506, 28, 0, 0), "Taxes", mFiveYearPlanWindow);
+	mFiveYearTaxText->setScale(0.8, 0.8);
+	mFiveYearTaxText->setAlignment("middle");
+
+	mYearOneTaxesText				= GUIText::create(sf::FloatRect(506, 66, 20, 20), "30", mFiveYearPlanWindow);
+	mYearOneTaxesText->setAlignment("middle");
+	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(506, 154, 20, 20), "30", mFiveYearPlanWindow);
+	mYearTwoTaxesText->setAlignment("middle");
+	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(506, 242, 20, 20), "30", mFiveYearPlanWindow);
+	mYearThreeTaxesText->setAlignment("middle");
+	mYearFourTaxesText				= GUIText::create(sf::FloatRect(506, 330, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFourTaxesText->setAlignment("middle");
+	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(506, 418, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFiveTaxesText->setAlignment("middle");
+
+	mIncomeYearOne					= GUIText::create(sf::FloatRect(427, 66, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearOne->setScale(0.8, 0.8);
+	mIncomeYearOne->setAlignment("middle");
+
+	mIncomeYearTwo					= GUIText::create(sf::FloatRect(427, 154, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearTwo->setScale(0.8, 0.8);
+	mIncomeYearTwo->setAlignment("middle");
+
+	mIncomeYearThree				= GUIText::create(sf::FloatRect(427, 242, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearThree->setScale(0.8, 0.8);
+	mIncomeYearThree->setAlignment("middle");
+
+	mIncomeYearFour					= GUIText::create(sf::FloatRect(427, 330, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFour->setScale(0.8, 0.8);
+	mIncomeYearFour->setAlignment("middle");
+
+	mIncomeYearFive					= GUIText::create(sf::FloatRect(427, 418, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFive->setScale(0.8, 0.8);
+	mIncomeYearFive->setAlignment("middle");
+
+	mIncomeYearOne->setText(intToString(stringToInt(mYearOneTaxesText->getText()) * mPopulation) + " §");
+	mIncomeYearTwo->setText(intToString(stringToInt(mYearTwoTaxesText->getText()) * mPopulation) + " §");
+	mIncomeYearThree->setText(intToString(stringToInt(mYearThreeTaxesText->getText()) * mPopulation) + " §");
+	mIncomeYearFour->setText(intToString(stringToInt(mYearFourTaxesText->getText()) * mPopulation) + " §");
+	mIncomeYearFive->setText(intToString(stringToInt(mYearFiveTaxesText->getText()) * mPopulation) + " §");
 	/*Food*/
 	mYearOneFood					= GUIEditField::create(CommunistButtons["YearOneFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 	mYearTwoFood					= GUIEditField::create(CommunistButtons["YearTwoFoodEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
@@ -755,11 +795,20 @@ void Communist::initializeCommunistWindow()
 	mYearFourTech					= GUIEditField::create(CommunistButtons["YearFourTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 	mYearFiveTech					= GUIEditField::create(CommunistButtons["YearFiveTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 
-	mTotalCostYearOne				= GUIText::create(sf::FloatRect(350, 35, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(350, 123, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearThree				= GUIText::create(sf::FloatRect(350, 211, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearFour				= GUIText::create(sf::FloatRect(350, 299, 20, 20), "0", mFiveYearPlanWindow);
-	mTotalCostYearFive				= GUIText::create(sf::FloatRect(350, 387, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearOne				= GUIText::create(sf::FloatRect(309, 66, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearOne->setScale(0.8, 0.8);
+
+	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(309, 154, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearTwo->setScale(0.8, 0.8);
+
+	mTotalCostYearThree				= GUIText::create(sf::FloatRect(309, 242, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearThree->setScale(0.8, 0.8);
+
+	mTotalCostYearFour				= GUIText::create(sf::FloatRect(309, 330, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearFour->setScale(0.8, 0.8);
+
+	mTotalCostYearFive				= GUIText::create(sf::FloatRect(309, 418, 20, 20), "0", mFiveYearPlanWindow);
+	mTotalCostYearFive->setScale(0.8, 0.8);
 
 	mFiveYearPlanCloseButton		= GUIButton::create(CommunistButtons["CloseFiveYearPlanWindow"], mFiveYearPlanWindow);	
 	mFiveYearPlanWindow->setVisible(false);
@@ -939,6 +988,15 @@ void Communist::initializeCommunistWindow()
 	mTaxChangeValue->setAlignment("left");
 	mTaxChangeValue->setScale(0.5, 0.5);
 
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(39, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mFiveYearPlanWindow);
+	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))));
+
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(140, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mFiveYearPlanWindow);
+	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))));
+
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
+	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))));
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -1025,7 +1083,7 @@ void Communist::fiveYearGuiFunctions()
 	{
 		for(int j = 0; j < resources; ++j)
 		{
-			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 83 * (j+1), 20, 20), "0", mFiveYearPlanWindow);
+			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 103 + 88 * j, 20, 20), "0", mFiveYearPlanWindow);
 		}
 	}
 
@@ -1069,7 +1127,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount < 5)
 			amount = 5;
 		mYearOneTaxesText->setText(amount);
-		mIncomeYearOne->setText(amount * mPopulation);
+		mIncomeYearOne->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearOneRaiseTaxesButton->setOnClickFunction([=]()
 	{
@@ -1077,7 +1135,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount > 95)
 			amount = 95;
 		mYearOneTaxesText->setText(amount);
-		mIncomeYearOne->setText(amount * mPopulation);
+		mIncomeYearOne->setText(intToString(amount * mPopulation) + " §");
 
 	});
 	mYearTwoLowerTaxesButton->setOnClickFunction([=]()
@@ -1086,7 +1144,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount < 5)
 			amount = 5;
 		mYearTwoTaxesText->setText(amount);
-		mIncomeYearTwo->setText(amount * mPopulation);
+		mIncomeYearTwo->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearTwoRaiseTaxesButton->setOnClickFunction([=]()
 	{
@@ -1094,7 +1152,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount > 95)
 			amount = 95;
 		mYearTwoTaxesText->setText(amount);
-		mIncomeYearTwo->setText(amount * mPopulation);
+		mIncomeYearTwo->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearThreeLowerTaxesButton->setOnClickFunction([=]()
 	{
@@ -1102,7 +1160,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount < 5)
 			amount = 5;
 		mYearThreeTaxesText->setText(amount);
-		mIncomeYearThree->setText(amount * mPopulation);
+		mIncomeYearThree->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearThreeRaiseTaxesButton->setOnClickFunction([=]()
 	{
@@ -1110,7 +1168,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount > 95)
 			amount = 95;
 		mYearThreeTaxesText->setText(amount);
-		mIncomeYearThree->setText(amount * mPopulation);
+		mIncomeYearThree->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearFourLowerTaxesButton->setOnClickFunction([=]()
 	{
@@ -1118,7 +1176,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount < 5)
 			amount = 5;
 		mYearFourTaxesText->setText(amount);
-		mIncomeYearFour->setText(amount * mPopulation);
+		mIncomeYearFour->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearFourRaiseTaxesButton->setOnClickFunction([=]()
 	{
@@ -1126,7 +1184,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount > 95)
 			amount = 95;
 		mYearFourTaxesText->setText(amount);
-		mIncomeYearFour->setText(amount * mPopulation);
+		mIncomeYearFour->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearFiveLowerTaxesButton->setOnClickFunction([=]()
 	{
@@ -1134,7 +1192,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount < 5)
 			amount = 5;
 		mYearFiveTaxesText->setText(amount);
-		mIncomeYearFive->setText(amount * mPopulation);
+		mIncomeYearFive->setText(intToString(amount * mPopulation) + " §");
 	});
 	mYearFiveRaiseTaxesButton->setOnClickFunction([=]()
 	{
@@ -1142,7 +1200,7 @@ void Communist::fiveYearGuiFunctions()
 		if(amount > 95)
 			amount = 95;
 		mYearFiveTaxesText->setText(amount);
-		mIncomeYearFive->setText(amount * mPopulation);
+		mIncomeYearFive->setText(intToString(amount * mPopulation) + " §");
 	});
 }
 

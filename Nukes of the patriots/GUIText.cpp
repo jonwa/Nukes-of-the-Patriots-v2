@@ -11,15 +11,17 @@ std::shared_ptr<GUIText> GUIText::create(sf::FloatRect rect, std::string text, s
 
 GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, TEXT),
+	mAlignment("left"),
 	mFont(sf::Font::getDefaultFont())
 {
 	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
-	mText.setOrigin(mText.getGlobalBounds().width/2, mText.getGlobalBounds().height/2);
+	//mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height/2);
 	sf::FloatRect boundBox = mText.getGlobalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+	mText.setColor(sf::Color::Color(0, 0, 0, 255));
 }
 
 void GUIText::setText(std::string text)
@@ -67,8 +69,18 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
-		mText.setColor(sf::Color::Color(0, 0, 0, 255));
-		mText.setPosition((sf::Vector2f(getX(), getY())));
+		float posX = getX(), posY = getY();
+		if(mAlignment == "left")
+			posX += 0;
+		else if(mAlignment == "middle")
+		{
+			posX -= mText.getGlobalBounds().width/2;
+			posY -= mText.getGlobalBounds().height;
+		}
+		else if(mAlignment == "right")
+			posX -= mText.getGlobalBounds().width;
+
+		mText.setPosition(sf::Vector2f(posX, posY));
 		window->draw(mText);
 	}
 
@@ -86,10 +98,12 @@ bool GUIText::render(sf::RenderWindow *window)
 
 void GUIText::setAlignment(std::string alignment)
 {
-	if(strcmp(alignment.c_str(), "left") == 0)
+	/*if(strcmp(alignment.c_str(), "left") == 0)
 		mText.setOrigin(mText.getPosition().x, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "right") == 0)
 		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "middle") == 0)
-		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
+		mText.setOrigin(mText.getLocalBounds().width/2, mText.getPosition().y);*/
+
+	mAlignment = alignment;
 }

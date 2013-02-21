@@ -567,24 +567,34 @@ void Capitalist::initializeCapitalistWindow()
 
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText->setAlignment("middle");
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText->setAlignment("middle");
 	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
 	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText->setAlignment("middle");
 
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
-	mNuclearText						= GUIText::create(sf::FloatRect(836, 12, 40, 40), intToString(getNuclearWeapon()), mCapitalistMainWindow);
-	mSpaceText							= GUIText::create(sf::FloatRect(836, 224, 40, 40), intToString(getSpaceProgram()), mCapitalistMainWindow);
-	mSpyText							= GUIText::create(sf::FloatRect(836, 436, 40, 40), intToString(getSpyNetwork()), mCapitalistMainWindow);
-	mFoodText							= GUIText::create(sf::FloatRect(29, 12, 40, 40), intToString(getFood()), mCapitalistMainWindow);
-	mGoodsText							= GUIText::create(sf::FloatRect(29, 224, 40, 40), intToString(getGoods()), mCapitalistMainWindow);
-	mTechText							= GUIText::create(sf::FloatRect(29, 436, 40, 40), intToString(getTech()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mNuclearText->setAlignment("middle");
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpaceText->setAlignment("middle");
+	mSpyText							= GUIText::create(sf::FloatRect(843, 431, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mSpyText->setAlignment("middle");
+	mFoodText							= GUIText::create(sf::FloatRect(31, 7, 0, 0), intToString(getFood()), mCapitalistMainWindow);
+	mFoodText->setAlignment("middle");
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 219, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
+	mGoodsText->setAlignment("middle");
+	mTechText							= GUIText::create(sf::FloatRect(31, 431, 0, 0), intToString(getTech()), mCapitalistMainWindow);
+	mTechText->setAlignment("middle");
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
-	mTaxValueText						= GUIText::create(sf::FloatRect(100, 80, 100, 50), intToString(mTaxes), mTaxesWindow);
+	mTaxValueText						= GUIText::create(sf::FloatRect(105, 78, 0, 0), intToString(mTaxes), mTaxesWindow);
+	mTaxValueText->setAlignment("middle");
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
 	mTaxesWindow->setVisible(false);
@@ -613,12 +623,18 @@ void Capitalist::initializeCapitalistWindow()
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
 
 	
-	mBuyFoodText						= GUIText::create(sf::FloatRect(93, 70, 40, 40), "0",mResourceWindow);
-	mBuyGoodsText						= GUIText::create(sf::FloatRect(273, 70, 40, 40), "0", mResourceWindow);
-	mBuyTechText						= GUIText::create(sf::FloatRect(453, 70, 40, 40), "0", mResourceWindow);
-	mFoodCost							= GUIText::create(sf::FloatRect(30, 20, 40, 40), "0", mResourceWindow);
-	mGoodsCost							= GUIText::create(sf::FloatRect(210, 20, 40, 40), "0", mResourceWindow);
-	mTechCost							= GUIText::create(sf::FloatRect(390, 20, 40, 40), "0", mResourceWindow);
+	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 70, 0, 0), "0",mResourceWindow);
+	mBuyFoodText->setAlignment("middle");
+	mBuyGoodsText						= GUIText::create(sf::FloatRect(285, 70, 40, 40), "0", mResourceWindow);
+	mBuyGoodsText->setAlignment("middle");
+	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
+	mBuyTechText->setAlignment("middle");
+	mFoodCost							= GUIText::create(sf::FloatRect(55, 30, 40, 40), "0 §", mResourceWindow);
+	mFoodCost->setAlignment("middle");
+	mGoodsCost							= GUIText::create(sf::FloatRect(236, 30, 40, 40), "0 §", mResourceWindow);
+	mGoodsCost->setAlignment("middle");
+	mTechCost							= GUIText::create(sf::FloatRect(416, 30, 40, 40), "0 §", mResourceWindow);
+	mTechCost->setAlignment("middle");
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
@@ -647,22 +663,23 @@ void Capitalist::initializeCapitalistWindow()
 	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
 	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
 	
-	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string(""));
 
 	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
 	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
 	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 60, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 115, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 170, 157, 28), GUIEditField::CAP, "0", true, mExportWindow);
 
 	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
 	{
 		mExportQuantityText[i] = GUIText::create(
-			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
+			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2 - 5, 
 			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
 			100, 50), "0", mExportWindow);
+		mExportQuantityText[i]->setAlignment("middle");
 
 	}
 
@@ -673,13 +690,13 @@ void Capitalist::initializeCapitalistWindow()
 	
 	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
 	
-	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 56, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 115, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 174, 56, 31), "50", mImportWindow);
 
-	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
-	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
-	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 56, 56, 31), "1", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 115, 56, 31), "1", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 174, 56, 31), "1", mImportWindow);
 
 	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
 	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
@@ -688,15 +705,16 @@ void Capitalist::initializeCapitalistWindow()
 	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
 	{
 		mImportBuyQuantityText[i] = GUIText::create(
-			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
+			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2 - 5, 
 			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
 			100, 50), "0", mImportWindow);
+		mImportBuyQuantityText[i]->setAlignment("middle");
 
 	}
 
-	mImportCostText[0]					= GUIText::create(sf::FloatRect(509, 51, 100, 50), "0", mImportWindow);
-	mImportCostText[1]					= GUIText::create(sf::FloatRect(509, 110, 100, 50), "0", mImportWindow);
-	mImportCostText[2]					= GUIText::create(sf::FloatRect(509, 169, 100, 50), "0", mImportWindow);
+	mImportCostText[0]					= GUIText::create(sf::FloatRect(470, 56, 100, 50), "0", mImportWindow);
+	mImportCostText[1]					= GUIText::create(sf::FloatRect(470, 116, 100, 50), "0", mImportWindow);
+	mImportCostText[2]					= GUIText::create(sf::FloatRect(470, 174, 100, 50), "0", mImportWindow);
 
 	mImportGotoExportButton				= GUIButton::create(CapitalistButtons["ImportGotoExport"], mImportWindow);
 	mImportGotoExportButton->setSize(CapitalistButtons["ImportGotoExport"].first.width, CapitalistButtons["ImportGotoExport"].first.height);
@@ -805,6 +823,18 @@ void Capitalist::initializeCapitalistWindow()
 	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 390, 0, 0), "", mChoosePresidentWindow);
 	mSecondNegativeStat->setScale(0.6, 0.6);
 
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(135, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
+	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mImportWindow);
+	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mExportWindow);
+
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(315, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
+	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mImportWindow);
+	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mExportWindow);
+
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(495, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
+	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
+	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
+	
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -915,7 +945,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});		
 	mLowerFoodByFiveButton->setOnClickFunction([=]()
@@ -933,7 +963,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerFoodByOneButton->setOnClickFunction([=]()
@@ -951,7 +981,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});				
 	mRaiseFoodByOneButton->setOnClickFunction([=]()
@@ -967,7 +997,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByFiveButton->setOnClickFunction([=]()
@@ -983,7 +1013,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseFoodByTenButton->setOnClickFunction([=]()
@@ -999,7 +1029,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyFoodText->setText(foodAmount);
-		mFoodCost->setText(foodCost*foodAmount);
+		mFoodCost->setText(intToString(foodCost*foodAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 
@@ -1018,7 +1048,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByFiveButton->setOnClickFunction([=]()
@@ -1036,7 +1066,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mLowerGoodsByOneButton->setOnClickFunction([=]()
@@ -1054,7 +1084,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByOneButton->setOnClickFunction([=]()
@@ -1070,7 +1100,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByFiveButton->setOnClickFunction([=]()
@@ -1086,7 +1116,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 	mRaiseGoodsByTenButton->setOnClickFunction([=]()
@@ -1102,7 +1132,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyGoodsText->setText(goodsAmount);
-		mGoodsCost->setText(goodsCost*goodsAmount);
+		mGoodsCost->setText(intToString(goodsCost*goodsAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});	
 
@@ -1121,7 +1151,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByFiveButton->setOnClickFunction([=]()
@@ -1139,7 +1169,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 	mLowerTechByOneButton->setOnClickFunction([=]()
@@ -1157,7 +1187,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByOneButton->setOnClickFunction([=]()
@@ -1173,7 +1203,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByFiveButton->setOnClickFunction([=]()
@@ -1189,7 +1219,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 	mRaiseTechByTenButton->setOnClickFunction([=]()
@@ -1205,7 +1235,7 @@ void Capitalist::initializeGuiFunctions()
 			totalCost = foodCost*foodAmount + goodsCost*goodsAmount + techCost*techAmount;
 		}
 		mBuyTechText->setText(techAmount);
-		mTechCost->setText(techCost*techAmount);
+		mTechCost->setText(intToString(techCost*techAmount) + " §");
 		//mBuyTotalCostText->setText(totalCost);
 	});
 

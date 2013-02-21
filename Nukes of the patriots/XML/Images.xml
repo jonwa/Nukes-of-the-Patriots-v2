@@ -44,6 +44,12 @@
 	<image filename="kap_city4.png"/>
 	<image filename="kap_city5.png"/>
 	<image filename="president-blue-question.png"/>
+	<image filename="tech_image.png"/>
+	<image filename="food_image.png"/>
+	<image filename="goods_image.png"/>
+	<image filename="nuclear_image.png"/>
+	<image filename="space_image.png"/>
+	<image filename="spy_image.png"/>
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
@@ -103,6 +109,12 @@
 	<image filename="president-red-question-frame.png"/>
 	<image filename="kom_texture_button_arrowleft.png"/>
 	<image filename="kom_texture_button_arrowright.png"/>
+	<image filename="tech_image.png"/>
+	<image filename="food_image.png"/>
+	<image filename="goods_image.png"/>
+	<image filename="nuclear_image.png"/>
+	<image filename="space_image.png"/>
+	<image filename="spy_image.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>

@@ -24,6 +24,7 @@ private:
 	GUIText& operator=(const GUIText &guiText);
 	sf::Text mText;
 	sf::Font mFont;
+	std::string mAlignment;
 };
 
 #endif

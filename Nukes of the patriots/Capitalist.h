@@ -256,6 +256,11 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
+	std::shared_ptr<GUIImage>  mFoodImage[3];
+	std::shared_ptr<GUIImage>  mGoodsImage[3];
+	std::shared_ptr<GUIImage>  mTechImage[3];
+
+
 };
 
 
