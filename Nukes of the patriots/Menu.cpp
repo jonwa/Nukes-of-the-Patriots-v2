@@ -19,8 +19,8 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	//MenuMusic["MainMenuTrack"]->play();
-	//MenuMusic["MainMenuTrack"]->setLoop(true);
+	MenuMusic["MainMenuTrack"]->play();
+	MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
 
@@ -204,6 +204,7 @@ void Menu::initialize()
 	/*Fönstret och dess barn för MAIN MENU*/
 	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
+	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
 	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
 	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
@@ -223,7 +224,9 @@ void Menu::initialize()
 	/*Fönstret och dess barn för att välja lag*/
 	mChooseTeamWindow		= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
 	mTeamCommunist			= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
+	//mTeamCommunistIsPicked  = GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
 	mTeamCapitalist			= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
 	mCapitalistNameField	= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
 	mCommunistNameField		= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
 	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
@@ -249,6 +252,10 @@ void Menu::initializeGuiFuctions()
 	mStartNewGameButton->setMouseLeaveFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGame"]); });
 	mStartNewGameButton->setOnClickFunction([=]()		{ mMainMenuWindow->setVisible(false); mChooseTeamWindow->setVisible(true); });
 
+	mMultiPlayerButton->setMouseEnterFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayerHover"]); });
+	mMultiPlayerButton->setMouseLeaveFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayer"]); });
+	mMultiPlayerButton->setOnClickFunction([=]()		{ });
+
 	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
 	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
 	mLoadGameButton->setOnClickFunction([=]()			{ });
@@ -273,6 +280,7 @@ void Menu::initializeGuiFuctions()
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
 		mCapitalistOkayButton->setEnabled(false);
 		mCapitalistNameField->setEnabled(false);
+		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalistIsPressed"].second));
 		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
@@ -293,6 +301,7 @@ void Menu::initializeGuiFuctions()
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
 		mCommunistOkayButton->setEnabled(false);
 		mCommunistNameField->setEnabled(false);
+		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunistIsPressed"].second));
 		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)

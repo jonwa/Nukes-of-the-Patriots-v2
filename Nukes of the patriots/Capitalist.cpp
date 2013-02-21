@@ -89,7 +89,9 @@ Capitalist::~Capitalist()
 
 void Capitalist::playMusic()
 {
-	CapitalistMusic["CapitalistMainTheme"]->play();
+	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
+	music->setVolume(60);
+	music->play();
 }
 
 void Capitalist::stopMusic()
@@ -115,20 +117,61 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
+	//communist title: 745, 90
+	//capitalist title: 241, 90
+	int statsPosY = 177;   //communist 628, 177
 	int foodPatriotismChange = 0;
 	if(mFood == 0)
+	{
 		foodPatriotismChange = -4;
+		mFoodChange->setText("No food for the population");
+		mFoodChange->setY(statsPosY);
+		mFoodChangeValue->setText(foodPatriotismChange);
+		mFoodChangeValue->setY(statsPosY);
+		statsPosY += mFoodChange->getHeight();
+	}
 	else if(mFood > 0 && mFood <= mPopulation/2)
+	{
 		foodPatriotismChange = -2;
+		mFoodChange->setText("Not as much food as we expected");
+		mFoodChange->setY(statsPosY);
+		mFoodChangeValue->setText(foodPatriotismChange);
+		mFoodChangeValue->setY(statsPosY);
+		statsPosY += mFoodChange->getHeight();
+	}
+	else
+	{
+		mFoodChange->setText("");
+		mFoodChangeValue->setText("");
+	}
 
 	mFood -= mPopulation;
 	if(mFood < 0) mFood = 0;
 	int taxPatriotismChange = 0;
 	int taxChange = mTaxes - mTaxesPreviousRound;
 	if(taxChange > 0)
+	{
 		taxPatriotismChange = -3;
+		mTaxChange->setText("Tax increased");
+		mTaxChange->setY(statsPosY);
+		mTaxChangeValue->setText(taxPatriotismChange);
+		mTaxChangeValue->setY(statsPosY);
+		statsPosY += mTaxChange->getHeight();
+	}
 	else if(taxChange < 0)
+	{
 		taxPatriotismChange = 2;
+		mTaxChange->setText("Tax decreased");
+		mTaxChange->setY(statsPosY);
+		mTaxChangeValue->setText(taxPatriotismChange);
+		mTaxChangeValue->setY(statsPosY);
+		statsPosY += mTaxChange->getHeight();
+	}
+	else
+	{
+		mTaxChange->setText("");
+		mTaxChangeValue->setText("");
+	}
 
 	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
 
@@ -137,14 +180,62 @@ void Capitalist::newYearStart()
 
 	int nuclearDifference = mNuclearWeapon - enemyNuclearWeapon;
 	int spaceProgramDifference = mSpaceProgram - enemySpaceProgram;
+	bool spaceProgramIncreased = (mSpaceProgram > mSpaceProgramPreviousRound);
+	if(spaceProgramIncreased)
+	{
+		mSpaceProgramIncreasedText->setText("Space program increased");
+		mSpaceProgramIncreasedText->setY(statsPosY);
+		mSpaceProgramIncreasedTextValue->setText(1);
+		mSpaceProgramIncreasedTextValue->setY(statsPosY);
+		statsPosY += mSpaceProgramIncreasedText->getHeight();
+	}
+	else
+	{
+		mSpaceProgramIncreasedText->setText("");
+		mSpaceProgramIncreasedTextValue->setText("");
+	}
 
 	int nuclearWeaponChange = 0;
 	int spaceProgramChange = 0;
 	int exportedChange = 0;
-	if(nuclearDifference > 0)
-		nuclearWeaponChange = (nuclearDifference > enemyNuclearWeapon*2) ? 2 : 1;
+	if(nuclearDifference > enemyNuclearWeapon*2)
+	{
+		mNuclearWeaponChange->setText("Nuclear weapon double as much as the enemy");
+		nuclearWeaponChange = 2;
+		mNuclearWeaponChange->setY(statsPosY);
+		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		statsPosY += mNuclearWeaponChange->getHeight();
+	}
+	else if(nuclearDifference > enemyNuclearWeapon)
+	{
+		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
+		nuclearWeaponChange = 1;
+		mNuclearWeaponChange->setY(statsPosY);
+		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		statsPosY += mNuclearWeaponChange->getHeight();
+	}
+	else
+	{
+		mNuclearWeaponChange->setText("");
+		mNuclearWeaponChangeValue->setText("");
+	}
+
 	if(spaceProgramDifference > enemySpaceProgram)
-		spaceProgramChange += 1;
+	{
+		mSpaceProgramMoreThanEnemyText->setText("Space program higher level than the enemy");
+		spaceProgramChange = 1;
+		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
+		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
+		mSpaceProgramMoreThanEnemyTextValue->setY(statsPosY);
+		statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
+	}
+	else
+	{
+		mSpaceProgramMoreThanEnemyText->setText("");
+		mSpaceProgramMoreThanEnemyTextValue->setText("");
+	}
 	
 	// My exported resources
 	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
@@ -159,9 +250,21 @@ void Capitalist::newYearStart()
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
+	{
+		mExportedChange->setText("Exported more resources than enemy");
 		exportedChange += 1;
+		mExportedChange->setY(statsPosY);
+		mExportedChangeValue->setText(exportedChange);
+		mExportedChangeValue->setY(statsPosY);
+		statsPosY += mExportedChange->getHeight();
+	}
+	else
+	{
+		mExportedChange->setText("");
+		mExportedChangeValue->setText("");
+	}
 
-	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange;
+	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 
 }
 
@@ -506,7 +609,7 @@ void Capitalist::initializeCapitalistWindow()
 	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " millions", mCapitalistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
 	mCurrencyText->setScale(0.5, 0.5);
@@ -666,43 +769,85 @@ void Capitalist::initializeCapitalistWindow()
 		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
 
 	mClosePresidentWindow				= GUIButton::create(CapitalistButtons["ClosePresident"], mChoosePresidentWindow);
-	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePresident"], mPickedPresidentWindow);
+	mClosePickedPresidentWindow			= GUIButton::create(CapitalistButtons["ClosePickedPresident"], mPickedPresidentWindow);
 	mPickedPresidentWindow->setVisible(false);
 	
 	//används för att i början av varje kapitalistrunda visa om någon av resurserna har ökat i pris
 	mIncreasedResourcesWindow			= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
 	mCloseIncreasedResourcesWindow		= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesWindow);
 	mIncreasedResourcesWindow->setVisible(false);
-	chooseLeader();
 
 	std::shared_ptr<GUIWindow> statsWindow = GameManager::getInstance()->getStatsWindow();
 
-	mPatriotismChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mPatriotismChange->setScale(0.5, 0.5);
-	mCurrencyChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mCurrencyChange->setScale(0.5, 0.5);
-	mPopulationChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mPopulationChange->setScale(0.5, 0.5);
-	mFoodChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mFoodChange->setScale(0.5, 0.5);
-	mGoodsChange						= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mGoodsChange->setScale(0.5, 0.5);
-	mTechChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mTechChange->setScale(0.5, 0.5);
-	mExportedFoodChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mExportedFoodChange->setScale(0.5, 0.5);
-	mExportedGoodsChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mExportedGoodsChange->setScale(0.5, 0.5);
-	mExportedTechChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mExportedTechChange->setScale(0.5, 0.5);
-	mTaxChange							= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mTaxChange->setScale(0.5, 0.5);
-	mSpyNetworkChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mSpyNetworkChange->setScale(0.5, 0.5);
-	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
+	int statsPosY = 177;
+
+	mCapitalistHeadLine					= GUIText::create(sf::FloatRect(200, 130, 0, 0), "CAPITALIST", statsWindow);
+	mCapitalistHeadLine->setAlignment("middle");
+
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mNuclearWeaponChange->setAlignment("left");
 	mNuclearWeaponChange->setScale(0.5, 0.5);
-	mSpaceProgramChange					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", statsWindow);
-	mSpaceProgramChange->setScale(0.5, 0.5);
+	mNuclearWeaponChangeValue			= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mNuclearWeaponChangeValue->setAlignment("left");
+	mNuclearWeaponChangeValue->setScale(0.5, 0.5);
+	statsPosY += mNuclearWeaponChange->getHeight();
+
+	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramIncreasedText->setAlignment("left");
+	mSpaceProgramIncreasedText->setScale(0.5, 0.5);
+	mSpaceProgramIncreasedTextValue		= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramIncreasedTextValue->setAlignment("left");
+	mSpaceProgramIncreasedTextValue->setScale(0.5, 0.5);
+	statsPosY += mSpaceProgramIncreasedText->getHeight();
+
+	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramMoreThanEnemyText->setAlignment("left");
+	mSpaceProgramMoreThanEnemyText->setScale(0.5, 0.5);
+	mSpaceProgramMoreThanEnemyTextValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramMoreThanEnemyTextValue->setAlignment("left");
+	mSpaceProgramMoreThanEnemyTextValue->setScale(0.5, 0.5);
+	statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
+
+	mExportedChange						= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mExportedChange->setAlignment("left");
+	mExportedChange->setScale(0.5, 0.5);
+	mExportedChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mExportedChangeValue->setAlignment("left");
+	mExportedChangeValue->setScale(0.5, 0.5);
+	statsPosY += mExportedChange->getHeight();
+
+	mFoodChange							= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mFoodChange->setAlignment("left");
+	mFoodChange->setScale(0.5, 0.5);
+	mFoodChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mFoodChangeValue->setAlignment("left");
+	mFoodChangeValue->setScale(0.5, 0.5);
+	statsPosY += mFoodChange->getHeight();
+
+	mTaxChange							= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mTaxChange->setScale(0.5, 0.5);
+	mTaxChange->setAlignment("left");
+	mTaxChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
+	mTaxChangeValue->setAlignment("left");
+	mTaxChangeValue->setScale(0.5, 0.5);
+
+	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 260, 0, 0), "", mPickedPresidentWindow);
+	mPresidentBiography->setScale(0.6, 0.6);
+	mPresidentPositiveText[0]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mPresidentPositiveText[1]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mPresidentNegativeText				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mFirstPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[0]->setScale(0.6, 0.6);
+	mSecondPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[0]->setScale(0.6, 0.6);
+	mFirstNegativeStat					= GUIText::create(sf::FloatRect(65, 390, 0, 0), "", mChoosePresidentWindow);
+	mFirstNegativeStat->setScale(0.6, 0.6);
+	mFirstPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[1]->setScale(0.6, 0.6);
+	mSecondPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[1]->setScale(0.6, 0.6);
+	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 390, 0, 0), "", mChoosePresidentWindow);
+	mSecondNegativeStat->setScale(0.6, 0.6);
 
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
@@ -710,6 +855,7 @@ void Capitalist::initializeCapitalistWindow()
 	 	vilket är alla GUIElement som finns i denna klass som har 
 	 	mCapitalistMainWindow som parent-argument i dess konstruktor
 																		*/
+	chooseLeader();
 	GUIManager::getInstance()->addGUIElement(mCapitalistMainWindow);
 }
 
@@ -745,6 +891,14 @@ void Capitalist::chooseLeader()
 	mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
 	mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 		(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+	mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+	mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+	mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+	mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+	mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+	mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
 }
 
 
@@ -1387,6 +1541,8 @@ void Capitalist::initializeGuiFunctions()
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+
+		mPresidentBiography->setText(mPresident->getBiography());
 	});
 
 	/*Val av president bild 2*/
@@ -1401,6 +1557,8 @@ void Capitalist::initializeGuiFunctions()
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+
+		mPresidentBiography->setText(mPresident->getBiography());
 	});		
 
 	/*När en president har blivit vald*/
@@ -1441,6 +1599,7 @@ void Capitalist::initializeGuiFunctions()
 		//mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
 		//mTaxes = mCurrentTax;
 		GameManager::getInstance()->nextRound();  
+		stopMusic();
 	});
 
 	mCloseIncreasedResourcesWindow->setOnClickFunction([=]()
@@ -1470,6 +1629,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
+	playMusic();
 }
 
 void Capitalist::hideGUI()

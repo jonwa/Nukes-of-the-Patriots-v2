@@ -16,7 +16,7 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
 {
-	mFont.loadFromFile("Font/Moire-Regular.ttf");
+	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
 	sf::Texture *texture;
 	switch(type)
@@ -98,7 +98,7 @@ bool GUIEditField::render(sf::RenderWindow *window)
 	float y = static_cast<float>(getY());
 	mRenderTexture.clear(sf::Color::Color(255, 255, 255, 0));
 	//mText.setPosition((sf::Vector2f(x, y)));
-	mText.setColor(sf::Color::Color(0, 0, 0, 255));
+	mText.setColor(sf::Color::Color(255, 255, 255, 255));
 	//mRenderTexture.draw(mSprite);
 	mRenderTexture.draw(mText);
 	if(isSelected())

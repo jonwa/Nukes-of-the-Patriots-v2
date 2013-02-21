@@ -17,7 +17,7 @@
 class President
 {
 public:
-	President(std::string& filename);
+	President(std::string& filename, std::string &name);
 	~President();
 
 	void initializeImages(std::string &path);
@@ -34,12 +34,20 @@ public:
 
 	int getYearsElected() { return mYearsElected; }
 	void setYearsElected(int years) { mYearsElected = years; }
+
+	std::string& getFirstPositiveStat();
+	std::string& getSecondPositiveStat();
+	std::string& getNegativeStat();
+	std::string& getBiography();
 private:
+	std::string mName;
 	void randomStatFunc();
 	int mYearsElected;
 	sf::Sprite mPortrait;
 	sf::Texture* mTexture;
-	std::map <std::string,float> mValues;
+	std::map <std::string, float> mValues;
+	std::vector<std::string> mPositiveStats;
+	std::vector<std::string> mNegativeStats;
 	std::vector<std::string> randomStats;
 	
 };

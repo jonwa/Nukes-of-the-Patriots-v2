@@ -95,7 +95,8 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "President/" + filename.substr(0, filename.length() - 4);
-				std::shared_ptr<President> president = std::make_shared<President>(key);
+				std::string name	 = key.substr(20, key.length());
+				std::shared_ptr<President> president = std::make_shared<President>(key, name);
 				mPresidentVector.push_back(president);
 				std::string mapKey = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
 				mPresidentPlaqueMap[president] = &ResourceHandler::getInstance()->getTexture(mapKey);
@@ -110,7 +111,8 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
-				std::shared_ptr<President> general = std::make_shared<President>(key);
+				std::string name	 = key.substr(10, key.length());
+				std::shared_ptr<President> general = std::make_shared<President>(key, name);
 				mGeneralVector.push_back(general);	
 				std::string mapKey		 = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
 				mGeneralPlaqueMap[general] = &ResourceHandler::getInstance()->getTexture(mapKey);
@@ -265,7 +267,10 @@ void GameManager::nextRound()
 		updateStatsWindow();
 
 		mStatsWindow[0]->setVisible(true);
+		mStatsWindow[0]->setColor(sf::Color(255, 255, 255, 255));
 		mStatsWindow[1]->setVisible(false);
+		mFirstDecideWhoStartWindow->setVisible(false);
+		mSecondDecideWhoStartWindow->setVisible(false);
 		GUIAnimation::move(mStatsWindow[0], 4000, mStatsWindow[0]->getRectangle(), sf::FloatRect(-(mStatsWindow[0]->getWidth()*1.73067)/2, -(mStatsWindow[0]->getHeight()*1.73067)/2 - 100, mStatsWindow[0]->getWidth()*2.73067, mStatsWindow[0]->getHeight()*2.73067));
 		//aktiverar en timer för statswindows, en zoomövergång från det första till det andra
 		//TA BORT DETTA OCH ÄNDRA TILL INZOOMAT 
@@ -283,20 +288,24 @@ void GameManager::nextRound()
 			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
 		}, 3000, 1);
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-		if(nextPlayers.size() == 1)
+		//If both player has same spy network, then select random as next player directly
+
+		Timer::setTimer([=]()
 		{
-			selectStartingPlayer(nextPlayers[randomPlayer]);
-		}
-		else
-		{
-			//If both player has same spy network, then select random as next player directly
-			setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-			mFirstDecideWhoStartWindow->setVisible(true);
-			//mNextWindowToShow = mFirstDecideWhoStartWindow;
-			mFirstDecideWhoStartWindow->setEnabled(false, true);
-			mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
-			mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
-		} 
+			if(nextPlayers.size() == 1)
+			{
+				selectStartingPlayer(nextPlayers[randomPlayer]);
+			}
+			else
+			{
+				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+				mFirstDecideWhoStartWindow->setVisible(true);
+				//mNextWindowToShow = mFirstDecideWhoStartWindow;
+				mFirstDecideWhoStartWindow->setEnabled(false, true);
+				mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
+				mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+			} 
+		}, 4000, 1);
 	}
 	else
 	{

@@ -13,7 +13,7 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	GUIElement(rect, parent, TEXT),
 	mFont(sf::Font::getDefaultFont())
 {
-	mFont.loadFromFile("Font/Moire-Regular.ttf");
+	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setOrigin(mText.getGlobalBounds().width/2, mText.getGlobalBounds().height/2);
@@ -82,4 +82,14 @@ bool GUIText::render(sf::RenderWindow *window)
 		}
 	}
 	return true;
+}
+
+void GUIText::setAlignment(std::string alignment)
+{
+	if(strcmp(alignment.c_str(), "left") == 0)
+		mText.setOrigin(mText.getPosition().x, mText.getPosition().y);
+	else if(strcmp(alignment.c_str(), "right") == 0)
+		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
+	else if(strcmp(alignment.c_str(), "middle") == 0)
+		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
 }

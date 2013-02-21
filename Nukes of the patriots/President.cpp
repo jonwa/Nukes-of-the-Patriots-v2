@@ -1,11 +1,40 @@
 #include "president.h"
 #include "ResourceHandler.h"
 #include <iostream>
+#include "tinyxml2.h"
 
-President::President(std::string &filename):
+static std::string histories[] = {
+	""
+};
+
+static std::map<std::string, std::string> biographyMap;
+
+void initBiographyMap()
+{
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/PresidentText.xml");
+
+	if(doc.Error())
+		std::cout << "Fel!";
+	
+	tinyxml2::XMLElement *presidentsNode = doc.FirstChildElement("PresidentText");
+	tinyxml2::XMLElement *president = presidentsNode->FirstChildElement("President");
+	while(president != NULL)
+	{
+		std::string name = president->Attribute("name");
+		std::string text = president->GetText();
+		biographyMap.insert(std::pair<std::string, std::string>(name, text));
+		president = president->NextSiblingElement("President");
+	}
+}
+
+President::President(std::string &filename, std::string &name):
+	mName(name),
 	mYearsElected(0)
 {
-	
+	if(biographyMap.empty())
+		initBiographyMap();
+
 	initializeImages(filename);
 	randomStatFunc();
 }
@@ -13,6 +42,11 @@ President::President(std::string &filename):
 President::~President()
 {
 
+}
+
+std::string& President::getBiography()
+{
+	return biographyMap.find(mName)->second;
 }
 
 void President::randomStatFunc()
@@ -28,6 +62,23 @@ void President::randomStatFunc()
 	randomStats.push_back("spyPrice");
 	randomStats.push_back("patriotismTax");
 	
+	std::map<std::string, std::string> posStatsText;
+	posStatsText.insert(std::pair<std::string, std::string>("foodPrice", "Food Price -2"));
+	posStatsText.insert(std::pair<std::string, std::string>("goodsPrice", "Goods Price -2"));
+	posStatsText.insert(std::pair<std::string, std::string>("techPrice", "Tech Price -2"));
+	posStatsText.insert(std::pair<std::string, std::string>("nuclearPrice", "Nuclear weapons \n20% cheaper"));
+	posStatsText.insert(std::pair<std::string, std::string>("spacePrice", "Space program \n20% cheaper"));
+	posStatsText.insert(std::pair<std::string, std::string>("spyPrice", "Spy network \n20% cheaper"));
+	posStatsText.insert(std::pair<std::string, std::string>("patriotismTax", "Tax cuts give \n+1 extra patriotism"));
+
+	std::map<std::string, std::string> negStatsText;
+	negStatsText.insert(std::pair<std::string, std::string>("foodPrice", "Food price +2"));
+	negStatsText.insert(std::pair<std::string, std::string>("goodsPrice", "Goods price +2"));
+	negStatsText.insert(std::pair<std::string, std::string>("techPrice", "Tech price +2"));
+	negStatsText.insert(std::pair<std::string, std::string>("nuclearPrice", "Nuclear weapons \n20% more expensive"));
+	negStatsText.insert(std::pair<std::string, std::string>("spacePrice", "Space program \n20% more expensive"));
+	negStatsText.insert(std::pair<std::string, std::string>("spyPrice", "Spy network \n20% more expensive"));
+	negStatsText.insert(std::pair<std::string, std::string>("popEatsMore", "Population eats \n10% more food"));
 
 	std::map<std::string, float> posStatMap;
 	posStatMap.insert(std::pair<std::string,float>("foodPrice", -2.f));
@@ -50,11 +101,13 @@ void President::randomStatFunc()
 	int random = ( randomizer->randomNr(randomStats.size(),0) );
 
 	mValues.insert(std::pair<std::string,float>(randomStats[random], posStatMap.find(randomStats[random])->second));
+	mPositiveStats.push_back(posStatsText.find(randomStats[random])->second);
 	randomStats[random] = randomStats.back();
 	randomStats.pop_back();
 
 	random = ( randomizer->randomNr(randomStats.size(),0) );
 	mValues.insert(std::pair<std::string,float>(randomStats[random], posStatMap.find(randomStats[random])->second));
+	mPositiveStats.push_back(posStatsText.find(randomStats[random])->second);
 	randomStats[random] = randomStats.back();
 	randomStats.pop_back();
 
@@ -70,6 +123,7 @@ void President::randomStatFunc()
 	}
 
 	mValues.insert(std::pair<std::string,float>(randomStats[random], negStatMap.find(randomStats[random])->second));
+	mNegativeStats.push_back(negStatsText.find(randomStats[random])->second);
 	randomStats[random] = randomStats.back();
 	randomStats.pop_back();
 
@@ -81,7 +135,18 @@ void President::randomStatFunc()
 	randomStats.clear();
 }
 
-
+std::string& President::getFirstPositiveStat()
+{
+	return mPositiveStats[0];
+}
+std::string& President::getSecondPositiveStat()
+{
+	return mPositiveStats[1];
+}
+std::string& President::getNegativeStat()
+{
+	return mNegativeStats[0];
+}
 
 float President::getFoodPriceModifier()
 {

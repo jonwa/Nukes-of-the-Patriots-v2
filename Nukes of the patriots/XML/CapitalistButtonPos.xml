@@ -6,7 +6,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image></image>
+		<image>Capitalist/president-blue-question</image>
 	</button>
 	<button>
 		<name>Taxes</name>
@@ -428,8 +428,8 @@
 		<name>ExportConfirm</name>
 		<xPos>191</xPos>
 		<yPos>272</yPos>
-		<width>199</width>
-		<height>44</height>
+		<width>100</width>
+		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>	
 	</button>
 	<button>
