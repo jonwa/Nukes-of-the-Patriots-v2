@@ -165,21 +165,21 @@ void GameManager::startRound()
 	int goodsBought = 0;
 	int techBought = 0;
 	int exports = 0;
-
 	// if nobody bought my exports - then it will be sold internationally
-	//foodBought = moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
-	//goodsBought = moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
-	//techBought = moneyIntTech / mCurrentPlayer->getExportedTechPrice();
+	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 0 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
+	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
+	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 0 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
 	//// if international market tries to buy more resources than you have
-	//if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
-	//if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();
-	//if(techBought > mCurrentPlayer->getExportedTech()) techBought = mCurrentPlayer->getExportedTech();
-	//exports += (foodBought * mCurrentPlayer->getExportedFoodPrice()) + (goodsBought * mCurrentPlayer->getExportedGoodsPrice()) + (techBought * mCurrentPlayer->getExportedTechPrice());
-	//mCurrentPlayer->setExportedFood(mCurrentPlayer->getExportedFood() - foodBought);
-	//mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
-	//mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
-	//mCurrentPlayer->getTaxIncome();
-	//mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+	if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
+	if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();
+	if(techBought > mCurrentPlayer->getExportedTech()) techBought = mCurrentPlayer->getExportedTech();
+	exports += (foodBought * mCurrentPlayer->getExportedFoodPrice()) + (goodsBought * mCurrentPlayer->getExportedGoodsPrice()) + (techBought * mCurrentPlayer->getExportedTechPrice());
+	mCurrentPlayer->setExportedFood(mCurrentPlayer->getExportedFood() - foodBought);
+	mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
+	mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
+	std::cout<<"exports: "<<exports<<std::endl;
+	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+
 	mCurrentPlayer->update();
 	mCurrentPlayer->showGUI();
 }
@@ -202,7 +202,6 @@ std::vector<std::shared_ptr<SuperPower> > GameManager::getPlayers()const
 void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 {
 	mCurrentPlayer = newPlayer;
-	std::cout<<"players left to play before: "<<mVecPlayersLeft.size()<<std::endl;
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 	{
 		if((*it) == mCurrentPlayer)
@@ -211,8 +210,6 @@ void GameManager::setCurrentPlayer(std::shared_ptr<SuperPower> newPlayer)
 			break;
 		}
 	}
-	std::cout<<"players left to play after: "<<mVecPlayersLeft.size()<<std::endl;
-	//mCurrentPlayer->playMusic(); // ta bort senare, mest för att testa
 	mCurrentPlayer->setRound(mCurrentPlayer->getRound() + 1);
 }
 
@@ -286,13 +283,13 @@ void GameManager::nextRound()
 			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
 		}, 3000, 1);
 		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-		//If both player has same spy network, then select random as next player directly
 		if(nextPlayers.size() == 1)
 		{
 			selectStartingPlayer(nextPlayers[randomPlayer]);
 		}
 		else
 		{
+			//If both player has same spy network, then select random as next player directly
 			setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
 			mFirstDecideWhoStartWindow->setVisible(true);
 			//mNextWindowToShow = mFirstDecideWhoStartWindow;

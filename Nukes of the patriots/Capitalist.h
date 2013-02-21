@@ -26,6 +26,7 @@ class Communist;
 #include <sstream>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Audio\Music.hpp>
+#include <SFML/System.hpp>
 
 class Capitalist : public SuperPower 
 {
@@ -56,11 +57,13 @@ public:
 
 	void playMusic();
 	void stopMusic();
+	void updateGUI();
 
 	void resetResourcesValues();
 
 private:
 	int mCount;
+	sf::Thread *mUpdateGUIThread;
 
 	std::string intToString(int i)
 	{

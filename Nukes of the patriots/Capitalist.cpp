@@ -28,7 +28,8 @@ static bool activateWindow = false;
 
 Capitalist::Capitalist() :
 	mPresident(nullptr),
-	mCount(0)
+	mCount(0),
+	mUpdateGUIThread(nullptr)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -37,8 +38,50 @@ Capitalist::Capitalist() :
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
 	initializeCityImages();
+	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
+	mUpdateGUIThread->launch();
 }
 
+void Capitalist::updateGUI()
+{
+	Timer::setTimer([=]()
+	{
+		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
+		if(mPopulation != oldPopulation)
+			mPopulationText->setText(intToString(mPopulation) + " millions");
+		int oldCurrency = stringToInt(mCurrencyText->getText());
+		if(mCurrency != oldCurrency)
+			mCurrencyText->setText(intToString(mCurrency));
+		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		if(mPatriotism != oldPatriotism)
+			mPatriotismText->setText(intToString(mPatriotism));
+
+		/*GUI text för utskrift av värden på komunisternas interface*/
+		int oldNuclear = stringToInt(mNuclearText->getText());
+		if(getNuclearWeapon() != oldNuclear)
+			mNuclearText->setText(intToString(getNuclearWeapon()));
+
+		int oldSpaceProgram = stringToInt(mSpaceText->getText());
+		if(getSpaceProgram() != oldSpaceProgram)
+			mSpaceText->setText(intToString(getSpaceProgram()));
+
+		int oldSpyNetwork = stringToInt(mSpyText->getText());
+		if(getSpyNetwork() != oldSpyNetwork)
+			mSpyText->setText(intToString(getSpyNetwork()));
+
+		int oldFood = stringToInt(mFoodText->getText());
+		if(getFood() != oldFood)
+			mFoodText->setText(intToString(getFood()));
+
+		int oldGoods = stringToInt(mGoodsText->getText());
+		if(getGoods() != oldGoods)
+			mGoodsText->setText(intToString(getGoods()));
+
+		int oldTech = stringToInt(mTechText->getText());
+		if(getTech() != oldTech)
+			mTechText->setText(intToString(getTech()));
+	}, 50, 0);
+}
 
 Capitalist::~Capitalist()
 {
@@ -124,6 +167,8 @@ void Capitalist::newYearStart()
 
 void Capitalist::update()
 {
+	if(mRound > 1)
+		getTaxIncome();
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -451,7 +496,7 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
-	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow); 
+	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);

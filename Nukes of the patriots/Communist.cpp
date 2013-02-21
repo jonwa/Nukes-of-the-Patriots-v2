@@ -26,7 +26,8 @@ static bool activateWindow	= false;
 static int generalCount = 0;
 
 Communist::Communist() : 
-	mCount(0)
+	mCount(0),
+	mUpdateGUIThread(nullptr)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -38,6 +39,49 @@ Communist::Communist() :
 	fiveYearInitialize();
 	propagandaInitialize();
 	initializeCityImages();
+	mUpdateGUIThread = new sf::Thread(&Communist::updateGUI, this);
+	mUpdateGUIThread->launch();
+}
+
+void Communist::updateGUI()
+{
+	Timer::setTimer([=]()
+	{
+		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
+		if(mPopulation != oldPopulation)
+			mPopulationText->setText(intToString(mPopulation) + " millions");
+		int oldCurrency = stringToInt(mCurrencyText->getText());
+		if(mCurrency != oldCurrency)
+			mCurrencyText->setText(intToString(mCurrency));
+		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		if(mPatriotism != oldPatriotism)
+			mPatriotismText->setText(intToString(mPatriotism));
+
+		/*GUI text för utskrift av värden på komunisternas interface*/
+		int oldNuclear = stringToInt(mNuclearText->getText());
+		if(getNuclearWeapon() != oldNuclear)
+			mNuclearText->setText(intToString(getNuclearWeapon()));
+
+		int oldSpaceProgram = stringToInt(mSpaceText->getText());
+		if(getSpaceProgram() != oldSpaceProgram)
+			mSpaceText->setText(intToString(getSpaceProgram()));
+
+		int oldSpyNetwork = stringToInt(mSpyText->getText());
+		if(getSpyNetwork() != oldSpyNetwork)
+			mSpyText->setText(intToString(getSpyNetwork()));
+
+		int oldFood = stringToInt(mFoodText->getText());
+		if(getFood() != oldFood)
+			mFoodText->setText(intToString(getFood()));
+
+		int oldGoods = stringToInt(mGoodsText->getText());
+		if(getGoods() != oldGoods)
+			mGoodsText->setText(intToString(getGoods()));
+
+		int oldTech = stringToInt(mTechText->getText());
+		if(getTech() != oldTech)
+			mTechText->setText(intToString(getTech()));
+	}, 50, 0);
 }
 
 
@@ -275,6 +319,8 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
+	if(mRound > 1)
+		getTaxIncome();
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -1447,6 +1493,9 @@ void Communist::initializeGuiFunctions()
 		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
 		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
 		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+		mFood -= mExportedFood;
+		mGoods -= mExportedGoods;
+		mTech -= mExportedTech;
 
 		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
 		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());

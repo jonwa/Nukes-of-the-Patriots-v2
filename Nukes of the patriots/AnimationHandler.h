@@ -10,14 +10,15 @@ class AnimationHandler
 public:
 	static AnimationHandler* getInstance();
 	void addAnimation(std::shared_ptr<Animation> animation);
-private:
 	void tick();
+private:
 	AnimationHandler();
 	~AnimationHandler();
 private:
 	static AnimationHandler* instance;
 	sf::Thread *mUpdateThread;
 	std::vector< std::shared_ptr<Animation> > mAnimationVector;
+	sf::Mutex mMutex;
 };
 
 #endif
