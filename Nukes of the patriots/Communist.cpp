@@ -890,7 +890,7 @@ void Communist::initializeCommunistWindow()
 	int statsPosY = 177;
 
 	mCommunistHeadLine					= GUIText::create(sf::FloatRect(800, 130, 0, 0), "COMMUNIST", statsWindow);
-	mCommunistHeadLine->setAlignment("left");
+	mCommunistHeadLine->setAlignment("middle");
 
 	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(600, statsPosY, 0, 0), "0", statsWindow);
 	mNuclearWeaponChange->setAlignment("left");

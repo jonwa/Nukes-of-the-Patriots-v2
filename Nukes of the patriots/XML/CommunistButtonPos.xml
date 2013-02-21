@@ -475,7 +475,7 @@
 	<button>
 		<name>FirstGeneral</name>
 		<xPos>195</xPos>
-		<yPos>129</yPos>
+		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image></image>
@@ -531,7 +531,7 @@
 	<button>
 		<name>PickedGeneral</name>
 		<xPos>195</xPos>
-		<yPos>129</yPos>
+		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image></image>
