@@ -19,8 +19,8 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	MenuMusic["MainMenuTrack"]->play();
-	MenuMusic["MainMenuTrack"]->setLoop(true);
+	//MenuMusic["MainMenuTrack"]->play();
+	//MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
 

@@ -190,6 +190,10 @@ private:
 	std::shared_ptr<GUIEditField> mYearFourFood;
 	std::shared_ptr<GUIEditField> mYearFiveFood;
 
+	std::shared_ptr<GUIText>      mFiveYearTotalCostText;
+	std::shared_ptr<GUIText>	  mFiveYearIncomeText;
+	std::shared_ptr<GUIText>	  mFiveYearTaxText;
+
 	std::shared_ptr<GUIText>	  mYearOneFoodCost;
 	std::shared_ptr<GUIText>	  mYearTwoFoodCost;
 	std::shared_ptr<GUIText>	  mYearThreeFoodCost;
@@ -337,6 +341,22 @@ private:
 	std::shared_ptr<GUIText>   mNuclearWeaponChangeValue;
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
+
+
+	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
+	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
+	std::shared_ptr<GUIText>   mCurrentTaxesText[2];
+	std::shared_ptr<GUIText>   mTaxesIncomeText[2];      
+	std::shared_ptr<GUIButton> mCloseTaxesIncomeWindow;
+
+	std::shared_ptr<GUIWindow> mPopulationEatsFoodWindow;
+	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
+	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
+
+	std::shared_ptr<GUIImage>  mFoodImage[2];
+	std::shared_ptr<GUIImage>  mGoodsImage[2];
+	std::shared_ptr<GUIImage>  mTechImage[2];
+
 };
 
 #endif
