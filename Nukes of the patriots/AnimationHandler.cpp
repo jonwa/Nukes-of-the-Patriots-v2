@@ -25,6 +25,8 @@ void AnimationHandler::tick()
 
 void AnimationHandler::addAnimation(std::shared_ptr<Animation> animation)
 {
+	//mMutex.lock();
 	mAnimationVector.push_back(animation);
+	//mMutex.unlock();
 }
 

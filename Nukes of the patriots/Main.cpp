@@ -30,7 +30,6 @@ int main()
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	sf::Sprite cursor(cursorTexture);
-	
 	GUIManager::getInstance()->init(&window);
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
@@ -56,7 +55,7 @@ int main()
 		
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		cursor.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
-		//GUIManager::getInstance()->update();
+		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();
         window.clear();

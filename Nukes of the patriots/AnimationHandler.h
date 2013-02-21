@@ -18,6 +18,7 @@ private:
 	static AnimationHandler* instance;
 	sf::Thread *mUpdateThread;
 	std::vector< std::shared_ptr<Animation> > mAnimationVector;
+	sf::Mutex mMutex;
 };
 
 #endif

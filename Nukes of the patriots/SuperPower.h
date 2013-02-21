@@ -53,6 +53,11 @@ public:
 	void		updateFood();
 	bool		enoughFood();
 
+	void		setExportedFood(int food)	{ mExportedFood = food; };
+	void		setExportedGoods(int goods) { mExportedGoods = goods; };
+	void		setExportedTech(int tech)	{ mExportedTech = tech; };
+	void		setCurrency(int currency)	{ mCurrency = currency; };
+
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
