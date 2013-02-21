@@ -732,7 +732,6 @@ void Capitalist::initializeCapitalistWindow()
 	mIncreasedResourcesWindow			= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
 	mCloseIncreasedResourcesWindow		= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesWindow);
 	mIncreasedResourcesWindow->setVisible(false);
-	chooseLeader();
 
 	std::shared_ptr<GUIWindow> statsWindow = GameManager::getInstance()->getStatsWindow();
 
@@ -788,12 +787,31 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxChangeValue->setAlignment("left");
 	mTaxChangeValue->setScale(0.5, 0.5);
 
+	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 260, 0, 0), "", mPickedPresidentWindow);
+	mPresidentBiography->setScale(0.6, 0.6);
+	mPresidentPositiveText[0]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mPresidentPositiveText[1]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mPresidentNegativeText				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
+	mFirstPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[0]->setScale(0.6, 0.6);
+	mSecondPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[0]->setScale(0.6, 0.6);
+	mFirstNegativeStat					= GUIText::create(sf::FloatRect(65, 390, 0, 0), "", mChoosePresidentWindow);
+	mFirstNegativeStat->setScale(0.6, 0.6);
+	mFirstPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[1]->setScale(0.6, 0.6);
+	mSecondPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[1]->setScale(0.6, 0.6);
+	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 390, 0, 0), "", mChoosePresidentWindow);
+	mSecondNegativeStat->setScale(0.6, 0.6);
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
 	 	vilket är alla GUIElement som finns i denna klass som har 
 	 	mCapitalistMainWindow som parent-argument i dess konstruktor
 																		*/
+	chooseLeader();
 	GUIManager::getInstance()->addGUIElement(mCapitalistMainWindow);
 }
 
@@ -829,6 +847,14 @@ void Capitalist::chooseLeader()
 	mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
 	mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 		(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+	mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+	mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+	mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+	mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+	mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+	mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
 }
 
 
@@ -1471,6 +1497,8 @@ void Capitalist::initializeGuiFunctions()
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+
+		mPresidentBiography->setText(mPresident->getBiography());
 	});
 
 	/*Val av president bild 2*/
@@ -1485,6 +1513,8 @@ void Capitalist::initializeGuiFunctions()
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+
+		mPresidentBiography->setText(mPresident->getBiography());
 	});		
 
 	/*När en president har blivit vald*/

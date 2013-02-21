@@ -95,7 +95,8 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "President/" + filename.substr(0, filename.length() - 4);
-				std::shared_ptr<President> president = std::make_shared<President>(key);
+				std::string name	 = key.substr(20, key.length());
+				std::shared_ptr<President> president = std::make_shared<President>(key, name);
 				mPresidentVector.push_back(president);
 				std::string mapKey = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
 				mPresidentPlaqueMap[president] = &ResourceHandler::getInstance()->getTexture(mapKey);
@@ -110,7 +111,8 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
-				std::shared_ptr<President> general = std::make_shared<President>(key);
+				std::string name	 = key.substr(10, key.length());
+				std::shared_ptr<President> general = std::make_shared<President>(key, name);
 				mGeneralVector.push_back(general);	
 				std::string mapKey		 = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";
 				mGeneralPlaqueMap[general] = &ResourceHandler::getInstance()->getTexture(mapKey);
