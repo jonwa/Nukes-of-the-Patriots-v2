@@ -68,7 +68,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
-<<<<<<< HEAD
+
 		float posX = getX(), posY = getY();
 		if(mAlignment == "left")
 			posX += 0;
@@ -81,10 +81,7 @@ bool GUIText::render(sf::RenderWindow *window)
 			posX -= mText.getGlobalBounds().width;
 
 		mText.setPosition(sf::Vector2f(posX, posY));
-=======
-		//mText.setColor(sf::Color::Color(0, 0, 0, 255));
-		mText.setPosition((sf::Vector2f(getX(), getY())));
->>>>>>> a87805b35432592e6136435f8737824948359035
+
 		window->draw(mText);
 	}
 
@@ -107,12 +104,11 @@ void GUIText::setAlignment(std::string alignment)
 	else if(strcmp(alignment.c_str(), "right") == 0)
 		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "middle") == 0)
-<<<<<<< HEAD
+
 		mText.setOrigin(mText.getLocalBounds().width/2, mText.getPosition().y);*/
 
 	mAlignment = alignment;
-=======
-		mText.setOrigin(mText.getGlobalBounds().width/2, mText.getPosition().y);
+
 }
 
 
@@ -120,5 +116,4 @@ void GUIText::setColor(sf::Color color)
 {
 	mText.setColor(color);
 	GUIElement::setColor(color);
->>>>>>> a87805b35432592e6136435f8737824948359035
 }
