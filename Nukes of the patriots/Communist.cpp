@@ -744,7 +744,7 @@ void Communist::initializeCommunistWindow()
 	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 
 	
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
 
 	mPopulationText->setAlignment("middle");
@@ -766,17 +766,17 @@ void Communist::initializeCommunistWindow()
 
 	/*GUI text för utskrift av värden på kapitalisternas interface*/
 
-	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCommunistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 20, 0, 0), intToString(getNuclearWeapon()), mCommunistMainWindow);
 	mNuclearText->setAlignment("middle");
-	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCommunistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 232, 0, 0), intToString(getSpaceProgram()), mCommunistMainWindow);
 	mSpaceText->setAlignment("middle");
-	mSpyText							= GUIText::create(sf::FloatRect(843, 431, 0, 0), intToString(getSpyNetwork()), mCommunistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(843, 444, 0, 0), intToString(getSpyNetwork()), mCommunistMainWindow);
 	mSpyText->setAlignment("middle");
-	mFoodText							= GUIText::create(sf::FloatRect(31, 7, 0, 0), intToString(getFood()), mCommunistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(31, 20, 0, 0), intToString(getFood()), mCommunistMainWindow);
 	mFoodText->setAlignment("middle");
-	mGoodsText							= GUIText::create(sf::FloatRect(31, 219, 0, 0), intToString(getGoods()), mCommunistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 232, 0, 0), intToString(getGoods()), mCommunistMainWindow);
 	mGoodsText->setAlignment("middle");
-	mTechText							= GUIText::create(sf::FloatRect(31, 431, 0, 0), intToString(getTech()), mCommunistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(31, 444, 0, 0), intToString(getTech()), mCommunistMainWindow);
 	mTechText->setAlignment("middle");
 
 
@@ -805,34 +805,34 @@ void Communist::initializeCommunistWindow()
 	mFiveYearTaxText->setScale(0.8, 0.8);
 	mFiveYearTaxText->setAlignment("middle");
 
-	mYearOneTaxesText				= GUIText::create(sf::FloatRect(506, 66, 20, 20), "30", mFiveYearPlanWindow);
+	mYearOneTaxesText				= GUIText::create(sf::FloatRect(506, 86, 20, 20), "30", mFiveYearPlanWindow);
 	mYearOneTaxesText->setAlignment("middle");
-	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(506, 154, 20, 20), "30", mFiveYearPlanWindow);
+	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(506, 174, 20, 20), "30", mFiveYearPlanWindow);
 	mYearTwoTaxesText->setAlignment("middle");
-	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(506, 242, 20, 20), "30", mFiveYearPlanWindow);
+	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(506, 262, 20, 20), "30", mFiveYearPlanWindow);
 	mYearThreeTaxesText->setAlignment("middle");
-	mYearFourTaxesText				= GUIText::create(sf::FloatRect(506, 330, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFourTaxesText				= GUIText::create(sf::FloatRect(506, 350, 20, 20), "30", mFiveYearPlanWindow);
 	mYearFourTaxesText->setAlignment("middle");
-	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(506, 418, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(506, 438, 20, 20), "30", mFiveYearPlanWindow);
 	mYearFiveTaxesText->setAlignment("middle");
 
-	mIncomeYearOne					= GUIText::create(sf::FloatRect(427, 66, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearOne					= GUIText::create(sf::FloatRect(427, 86, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearOne->setScale(0.8, 0.8);
 	mIncomeYearOne->setAlignment("middle");
 
-	mIncomeYearTwo					= GUIText::create(sf::FloatRect(427, 154, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearTwo					= GUIText::create(sf::FloatRect(427, 174, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearTwo->setScale(0.8, 0.8);
 	mIncomeYearTwo->setAlignment("middle");
 
-	mIncomeYearThree				= GUIText::create(sf::FloatRect(427, 242, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearThree				= GUIText::create(sf::FloatRect(427, 262, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearThree->setScale(0.8, 0.8);
 	mIncomeYearThree->setAlignment("middle");
 
-	mIncomeYearFour					= GUIText::create(sf::FloatRect(427, 330, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFour					= GUIText::create(sf::FloatRect(427, 350, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearFour->setScale(0.8, 0.8);
 	mIncomeYearFour->setAlignment("middle");
 
-	mIncomeYearFive					= GUIText::create(sf::FloatRect(427, 418, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFive					= GUIText::create(sf::FloatRect(427, 438, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearFive->setScale(0.8, 0.8);
 	mIncomeYearFive->setAlignment("middle");
 
@@ -900,14 +900,21 @@ void Communist::initializeCommunistWindow()
 	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	
-	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
-	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 70, 20, 20), "0", mUpgradeWindow);
-	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 105, 20, 20), "0", mUpgradeWindow);
-	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
-	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 35, 20, 20), "0", mUpgradeWindow);
-	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 70, 20, 20), "0", mUpgradeWindow);
-	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
-	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 20, 20, 20), "0", mUpgradeWindow);
+	mSpyPanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(358, 60, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/spy_panel"))), mUpgradeWindow);
+	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/space_panel"))), mUpgradeWindow);
+	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/nuclear_panel"))), mUpgradeWindow);
+
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 155, 22, 22), "0", mUpgradeWindow);
+	mBuyNuclearText->setAlignment("middle");
+	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 95, 20, 20), "0", mUpgradeWindow);
+	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 60, 20, 20), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(210, 117, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText->setAlignment("middle");
+	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 60, 20, 20), "0", mUpgradeWindow);
+	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 25, 20, 20), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 80, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText->setAlignment("middle");
+	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 10, 20, 20), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	/*Export GUI Window med knappar*/
@@ -1095,6 +1102,8 @@ void Communist::initializeCommunistWindow()
 	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))));
 
+	mGeneralBiography = GUIText::create(sf::FloatRect(40, 260, 0, 0), "", mPickedGeneralWindow);
+	mGeneralBiography->setScale(0.6, 0.6);
 
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
@@ -1182,7 +1191,7 @@ void Communist::fiveYearGuiFunctions()
 	{
 		for(int j = 0; j < resources; ++j)
 		{
-			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 103 + 88 * j, 20, 20), "0", mFiveYearPlanWindow);
+			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 90 + 88 * j, 20, 20), "0", mFiveYearPlanWindow);
 		}
 	}
 
@@ -1553,6 +1562,8 @@ void Communist::initializeGuiFunctions()
 		mPickedGeneralPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
+		mGeneralBiography->setText(mGeneral->getBiography());
+
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
@@ -1728,11 +1739,11 @@ void Communist::upgradeWindowText()
 	int spaceProgramTechPrice	= (spaceProgram + 1) * 10;
 	int spyNetworkTechPrice		= (spyNetwork + 1) * 10;
 
-	mNuclearGoodsCost->setText(nuclearGoodsPrice);
-	mNuclearTechCost->setText(nuclearTechPrice);
-	mSpaceProgramGoodsCost->setText(spaceProgramGoodsPrice);
-	mSpaceProgramTechCost->setText(spaceProgramTechPrice);
-	mSpyNetworkTechCost->setText(spyNetworkTechPrice);
+	mNuclearGoodsCost->setText("Goods " +intToString(nuclearGoodsPrice));
+	mNuclearTechCost->setText("Tech " +intToString(nuclearTechPrice));
+	mSpaceProgramGoodsCost->setText("Goods " +intToString(spaceProgramGoodsPrice));
+	mSpaceProgramTechCost->setText("Tech " +intToString(spaceProgramTechPrice));
+	mSpyNetworkTechCost->setText("Tech " +intToString(spyNetworkTechPrice));
 }
 
 void Communist::updateAllResources()

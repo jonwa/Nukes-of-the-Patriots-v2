@@ -152,7 +152,8 @@ private:
 	/*GUI-pekare för taxes */
 	std::shared_ptr<GUIWindow> mTaxesWindow;
 	std::shared_ptr<GUIButton> mLowerTaxesButton;
-	std::shared_ptr<GUIText> mTaxValueText;
+	std::shared_ptr<GUIText>   mTaxValueText;
+	std::shared_ptr<GUIText>   mTaxText;
 	std::shared_ptr<GUIButton> mRaiseTaxesButton;
 	std::shared_ptr<GUIButton> mTaxesCloseButton;
 	/*GUI-pekare för resources*/
@@ -285,6 +286,9 @@ private:
 	std::shared_ptr<GUIImage>  mGoodsImage[3];
 	std::shared_ptr<GUIImage>  mTechImage[3];
 
+	std::shared_ptr<GUIImage>  mNuclearPanel;
+	std::shared_ptr<GUIImage>  mSpacePanel;
+	std::shared_ptr<GUIImage>  mSpyPanel;
 
 };
 

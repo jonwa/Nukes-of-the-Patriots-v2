@@ -113,7 +113,7 @@ void GameManager::loadPresidents()
 			{
 				std::string filename = childNode->Attribute("filename");
 				std::string key		 = "Generals/" + filename.substr(0, filename.length() - 4);
-				std::string name	 = key.substr(10, key.length());
+				std::string name	 = key.substr(19, key.length());
 				std::shared_ptr<President> general = std::make_shared<President>(key, name);
 				mGeneralVector.push_back(general);	
 				std::string mapKey		 = "Plaques/" + filename.substr(0, filename.length() - 4) + "-plaque";

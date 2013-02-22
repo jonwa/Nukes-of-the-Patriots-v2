@@ -122,7 +122,6 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
-	int statsPosX = 125, statsPosY = 177;   //communist 628, 177
 	mTaxesIncomeWindow->setVisible(true);
 	getTaxIncome();
 	//communist title: 745, 90
@@ -659,7 +658,7 @@ void Capitalist::initializeCapitalistWindow()
 	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 14, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
 	mPopulationText->setAlignment("middle");
 	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
@@ -679,23 +678,26 @@ void Capitalist::initializeCapitalistWindow()
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
 
-	mNuclearText						= GUIText::create(sf::FloatRect(843, 7, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 20, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
 	mNuclearText->setAlignment("middle");
-	mSpaceText							= GUIText::create(sf::FloatRect(843, 219, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 232, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
 	mSpaceText->setAlignment("middle");
-	mSpyText							= GUIText::create(sf::FloatRect(843, 431, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(843, 444, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
 	mSpyText->setAlignment("middle");
-	mFoodText							= GUIText::create(sf::FloatRect(31, 7, 0, 0), intToString(getFood()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(31, 20, 0, 0), intToString(getFood()), mCapitalistMainWindow);
 	mFoodText->setAlignment("middle");
-	mGoodsText							= GUIText::create(sf::FloatRect(31, 219, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 232, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
 	mGoodsText->setAlignment("middle");
-	mTechText							= GUIText::create(sf::FloatRect(31, 431, 0, 0), intToString(getTech()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(31, 444, 0, 0), intToString(getTech()), mCapitalistMainWindow);
 	mTechText->setAlignment("middle");
+
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
 	mTaxValueText						= GUIText::create(sf::FloatRect(105, 78, 0, 0), intToString(mTaxes), mTaxesWindow);
 	mTaxValueText->setAlignment("middle");
+	mTaxText							= GUIText::create(sf::FloatRect(105, 38, 0, 0), "Tax", mTaxesWindow);
+	mTaxText->setAlignment("middle");
 
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
@@ -734,12 +736,9 @@ void Capitalist::initializeCapitalistWindow()
 	mBuyGoodsText->setAlignment("middle");
 	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
-	mFoodCost							= GUIText::create(sf::FloatRect(55, 30, 40, 40), "0 §", mResourceWindow);
-	mFoodCost->setAlignment("middle");
-	mGoodsCost							= GUIText::create(sf::FloatRect(236, 30, 40, 40), "0 §", mResourceWindow);
-	mGoodsCost->setAlignment("middle");
-	mTechCost							= GUIText::create(sf::FloatRect(416, 30, 40, 40), "0 §", mResourceWindow);
-	mTechCost->setAlignment("middle");
+	mFoodCost							= GUIText::create(sf::FloatRect(125, 20, 40, 40), "0 §", mResourceWindow);
+	mGoodsCost							= GUIText::create(sf::FloatRect(305, 20, 40, 40), "0 §", mResourceWindow);
+	mTechCost							= GUIText::create(sf::FloatRect(485, 20, 40, 40), "0 §", mResourceWindow);
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
@@ -752,14 +751,21 @@ void Capitalist::initializeCapitalistWindow()
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CapitalistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
 
-	mBuyNuclearText						= GUIText::create(sf::FloatRect(159, 145, 22, 22), "0", mUpgradeWindow);
-	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 70, 20, 20), "0", mUpgradeWindow);
-	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 105, 20, 20), "0", mUpgradeWindow);
-	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(337, 107, 22, 22), "0", mUpgradeWindow);
-	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 35, 20, 20), "0", mUpgradeWindow);
-	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 70, 20, 20), "0", mUpgradeWindow);
-	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(517, 78, 22, 22), "0", mUpgradeWindow);
-	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 20, 20, 20), "0", mUpgradeWindow);
+	mSpyPanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(358, 60, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/spy_panel"))), mUpgradeWindow);
+	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/space_panel"))), mUpgradeWindow);
+	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/nuclear_panel"))), mUpgradeWindow);
+
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 155, 22, 22), "0", mUpgradeWindow);
+	mBuyNuclearText->setAlignment("middle");
+	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 95, 20, 20), "0", mUpgradeWindow);
+	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 60, 20, 20), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(210, 117, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText->setAlignment("middle");
+	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 60, 20, 20), "0", mUpgradeWindow);
+	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 25, 20, 20), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 80, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText->setAlignment("middle");
+	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 10, 20, 20), "0", mUpgradeWindow);
 	mUpgradeWindow->setVisible(false);
 
 	mExportWindow						= GUIWindow::create(CapitalistWindows["CapitalistExportWindow"], mCapitalistMainWindow);
@@ -968,15 +974,15 @@ void Capitalist::initializeCapitalistWindow()
 	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
 	mPopulationEatsFoodWindow->setVisible(false);
 
-	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(135, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(45, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
 	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mImportWindow);
 	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mExportWindow);
 
-	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(315, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(225, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
 	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mImportWindow);
 	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mExportWindow);
 
-	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(495, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(405, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 	
@@ -1776,11 +1782,11 @@ void Capitalist::upgradeWindowText()
 	int spaceProgramTechPrice	= (spaceProgram + 1) * 10 * mPresident->getSpacePriceModifier();
 	int spyNetworkTechPrice		= (spyNetwork + 1) * 10 * mPresident->getSpyPriceModifier();
 
-	mNuclearGoodsCost->setText(nuclearGoodsPrice);
-	mNuclearTechCost->setText(nuclearTechPrice);
-	mSpaceProgramGoodsCost->setText(spaceProgramGoodsPrice);
-	mSpaceProgramTechCost->setText(spaceProgramTechPrice);
-	mSpyNetworkTechCost->setText(spyNetworkTechPrice);
+	mNuclearGoodsCost->setText("Goods " +intToString(nuclearGoodsPrice));
+	mNuclearTechCost->setText("Tech " +intToString(nuclearTechPrice));
+	mSpaceProgramGoodsCost->setText("Goods " +intToString(spaceProgramGoodsPrice));
+	mSpaceProgramTechCost->setText("Tech " +intToString(spaceProgramTechPrice));
+	mSpyNetworkTechCost->setText("Tech " +intToString(spyNetworkTechPrice));
 	
 }
 
