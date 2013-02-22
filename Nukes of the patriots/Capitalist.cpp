@@ -80,6 +80,11 @@ void Capitalist::updateGUI()
 		int oldTech = stringToInt(mTechText->getText());
 		if(getTech() != oldTech)
 			mTechText->setText(intToString(getTech()));
+
+
+		mResourceFoodPriceText->setText(foodCost);
+		mResourceGoodsPriceText->setText(goodsCost);
+		mResourceTechPriceText->setText(techCost);
 	}, 50, 0);
 }
 
@@ -117,6 +122,7 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
+	int statsPosX = 125, statsPosY = 177;   //communist 628, 177
 	mTaxesIncomeWindow->setVisible(true);
 	getTaxIncome();
 	//communist title: 745, 90
@@ -155,7 +161,7 @@ void Capitalist::newYearStart()
 	int taxChange = mTaxes - mTaxesPreviousRound;
 	if(taxChange > 0)
 	{
-		taxPatriotismChange = -3;
+		taxPatriotismChange = -2;
 		mTaxChange->setText("Tax increased");
 		mTaxChange->setY(statsPosY);
 		mTaxChangeValue->setText(taxPatriotismChange);
@@ -164,10 +170,10 @@ void Capitalist::newYearStart()
 	}
 	else if(taxChange < 0)
 	{
-		taxPatriotismChange = 2;
+		taxPatriotismChange = 1;
 		mTaxChange->setText("Tax decreased");
 		mTaxChange->setY(statsPosY);
-		mTaxChangeValue->setText(taxPatriotismChange);
+		mTaxChangeValue->setText("+"+intToString(taxPatriotismChange));
 		mTaxChangeValue->setY(statsPosY);
 		statsPosY += mTaxChange->getHeight();
 	}
@@ -189,7 +195,7 @@ void Capitalist::newYearStart()
 	{
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText(1);
+		mSpaceProgramIncreasedTextValue->setText("+1");
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -207,7 +213,7 @@ void Capitalist::newYearStart()
 		mNuclearWeaponChange->setText("Nuclear weapon double as much as the enemy");
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
-		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
 		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
@@ -216,7 +222,7 @@ void Capitalist::newYearStart()
 		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
-		mNuclearWeaponChangeValue->setText(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
 		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
@@ -231,7 +237,7 @@ void Capitalist::newYearStart()
 		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
-		mSpaceProgramMoreThanEnemyTextValue->setText(spaceProgramChange);
+		mSpaceProgramMoreThanEnemyTextValue->setText("+"+intToString(spaceProgramChange));
 		mSpaceProgramMoreThanEnemyTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
 	}
@@ -242,15 +248,15 @@ void Capitalist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
-	int exportedGoodsChange = mExportedGoods - (mExportedGoods - mExportedGoodsPreviousRound);
-	int exportedTechChange = mExportedTech - (mExportedTech - mExportedTechPreviousRound);
+	int exportedFoodChange = mExportedFood;
+	int exportedGoodsChange = mExportedGoods;
+	int exportedTechChange = mExportedTech;
 	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFood() - (enemy->getExportedFood() - enemy->getExportedFoodPreviousRound());
-	int enemyGoodsExported = enemy->getExportedFood() - (enemy->getExportedGoods() - enemy->getExportedGoodsPreviousRound());
-	int enemyTechExported = enemy->getExportedFood() - (enemy->getExportedTech() - enemy->getExportedTechPreviousRound());
+	int enemyFoodExported = enemy->getExportedFood();
+	int enemyGoodsExported = enemy->getExportedFood();
+	int enemyTechExported = enemy->getExportedFood();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
@@ -258,7 +264,7 @@ void Capitalist::newYearStart()
 		mExportedChange->setText("Exported more resources than enemy");
 		exportedChange += 1;
 		mExportedChange->setY(statsPosY);
-		mExportedChangeValue->setText(exportedChange);
+		mExportedChangeValue->setText("+"+intToString(exportedChange));
 		mExportedChangeValue->setY(statsPosY);
 		statsPosY += mExportedChange->getHeight();
 	}
@@ -274,14 +280,43 @@ void Capitalist::newYearStart()
 	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
 	std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 
-	//mIncreasedResourcesText->setText("heJ");
-
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 	mPatriotism += totalPatriotismChange;
 }
 
 void Capitalist::update()
 {
+	if(mRound > 1)
+	{
+		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
+
+		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+
+		mImportBuyQuantityText[0]->setText("0");
+		mImportBuyQuantityText[1]->setText("0");
+		mImportBuyQuantityText[2]->setText("0");
+
+		mImportCostText[0]->setText("0");
+		mImportCostText[1]->setText("0");
+		mImportCostText[2]->setText("0");
+
+		if(enemy->getExportedFood() == 0)
+			mImportPriceText[0]->setText("N/A");
+		else
+			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+		if(enemy->getExportedGoods() == 0)
+			mImportPriceText[1]->setText("N/A");
+		else
+			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+		if(enemy->getExportedTech() == 0)
+			mImportPriceText[2]->setText("N/A");
+		else
+			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+	}
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -321,6 +356,9 @@ void Capitalist::setPresident(std::shared_ptr<President> president)
 	foodCost	+= president->getFoodPriceModifier();
 	goodsCost	+= president->getGoodsPriceModifier();
 	techCost	+= president->getTechPriceModifier();
+	if(foodCost < 1)foodCost = 1;
+	if(goodsCost < 1)goodsCost = 1;
+	if(techCost < 1)techCost = 1;
 }
 
 //--------------------------------------------
@@ -670,6 +708,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseFoodByOneButton				= GUIButton::create(CapitalistButtons["RaiseFoodByOne"], mResourceWindow);
 	mRaiseFoodByFiveButton				= GUIButton::create(CapitalistButtons["RaiseFoodByFive"], mResourceWindow);
 	mRaiseFoodByTenButton				= GUIButton::create(CapitalistButtons["RaiseFoodByTen"], mResourceWindow);
+	mResourceFoodPriceText				= GUIText::create(sf::FloatRect(30, 100, 40, 40), intToString(foodCost), mResourceWindow);
 
 	mLowerGoodsByTenButton				= GUIButton::create(CapitalistButtons["LowerGoodsByTen"], mResourceWindow);
 	mLowerGoodsByFiveButton				= GUIButton::create(CapitalistButtons["LowerGoodsByFive"], mResourceWindow);
@@ -677,6 +716,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseGoodsByOneButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByOne"], mResourceWindow);
 	mRaiseGoodsByFiveButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByFive"], mResourceWindow);
 	mRaiseGoodsByTenButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByTen"], mResourceWindow);
+	mResourceGoodsPriceText				= GUIText::create(sf::FloatRect(210, 100, 40, 40), intToString(goodsCost), mResourceWindow);
 
 	mLowerTechByTenButton				= GUIButton::create(CapitalistButtons["LowerTechByTen"], mResourceWindow);
 	mLowerTechByFiveButton				= GUIButton::create(CapitalistButtons["LowerTechByFive"], mResourceWindow);
@@ -685,6 +725,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
 	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
+	mResourceTechPriceText				= GUIText::create(sf::FloatRect(390, 100, 40, 40), intToString(techCost), mResourceWindow);
 
 	
 	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 70, 0, 0), "0",mResourceWindow);
@@ -754,13 +795,13 @@ void Capitalist::initializeCapitalistWindow()
 	
 	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
 	
-	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 56, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 115, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 174, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "0", mImportWindow);
 
-	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 56, 56, 31), "1", mImportWindow);
-	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 115, 56, 31), "1", mImportWindow);
-	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 174, 56, 31), "1", mImportWindow);
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "N/A", mImportWindow);
 
 	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
 	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
@@ -819,10 +860,10 @@ void Capitalist::initializeCapitalistWindow()
 
 	int statsPosY = 177;
 
-	mCapitalistHeadLine					= GUIText::create(sf::FloatRect(200, 130, 0, 0), "CAPITALIST", statsWindow);
+	mCapitalistHeadLine					= GUIText::create(sf::FloatRect(253, 130, 0, 0), "CAPITALIST", statsWindow);
 	mCapitalistHeadLine->setAlignment("middle");
 
-	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mNuclearWeaponChange->setAlignment("left");
 	mNuclearWeaponChange->setScale(0.5, 0.5);
 	mNuclearWeaponChangeValue			= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -830,7 +871,7 @@ void Capitalist::initializeCapitalistWindow()
 	mNuclearWeaponChangeValue->setScale(0.5, 0.5);
 	statsPosY += mNuclearWeaponChange->getHeight();
 
-	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramIncreasedText			= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramIncreasedText->setAlignment("left");
 	mSpaceProgramIncreasedText->setScale(0.5, 0.5);
 	mSpaceProgramIncreasedTextValue		= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -838,7 +879,7 @@ void Capitalist::initializeCapitalistWindow()
 	mSpaceProgramIncreasedTextValue->setScale(0.5, 0.5);
 	statsPosY += mSpaceProgramIncreasedText->getHeight();
 
-	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mSpaceProgramMoreThanEnemyText		= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mSpaceProgramMoreThanEnemyText->setAlignment("left");
 	mSpaceProgramMoreThanEnemyText->setScale(0.5, 0.5);
 	mSpaceProgramMoreThanEnemyTextValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -846,7 +887,7 @@ void Capitalist::initializeCapitalistWindow()
 	mSpaceProgramMoreThanEnemyTextValue->setScale(0.5, 0.5);
 	statsPosY += mSpaceProgramMoreThanEnemyText->getHeight();
 
-	mExportedChange						= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mExportedChange						= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mExportedChange->setAlignment("left");
 	mExportedChange->setScale(0.5, 0.5);
 	mExportedChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -854,7 +895,7 @@ void Capitalist::initializeCapitalistWindow()
 	mExportedChangeValue->setScale(0.5, 0.5);
 	statsPosY += mExportedChange->getHeight();
 
-	mFoodChange							= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mFoodChange							= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mFoodChange->setAlignment("left");
 	mFoodChange->setScale(0.5, 0.5);
 	mFoodChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -862,7 +903,7 @@ void Capitalist::initializeCapitalistWindow()
 	mFoodChangeValue->setScale(0.5, 0.5);
 	statsPosY += mFoodChange->getHeight();
 
-	mTaxChange							= GUIText::create(sf::FloatRect(100, statsPosY, 0, 0), "0", statsWindow);
+	mTaxChange							= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
 	mTaxChange->setScale(0.5, 0.5);
 	mTaxChange->setAlignment("left");
 	mTaxChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
@@ -1564,6 +1605,15 @@ void Capitalist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{ 
+		int foodBought = mFood - mFoodPreviousRound;
+		int goodsBought = mGoods - mGoodsPreviousRound;
+		int techBought = mTech - mTechPreviousRound;
+		if(foodBought > goodsBought && foodBought > techBought)
+			foodCost += 1;
+		else if(goodsBought > foodBought && goodsBought > techBought)
+			foodCost += 1;
+		else if(techBought > foodBought && techBought > goodsBought)
+			foodCost += 1;
 		GameManager::getInstance()->nextRound();  
 	});
 

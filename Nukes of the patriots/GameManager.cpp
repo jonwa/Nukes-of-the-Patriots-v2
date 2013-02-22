@@ -181,7 +181,6 @@ void GameManager::startRound()
 	mCurrentPlayer->setExportedFood(mCurrentPlayer->getExportedFood() - foodBought);
 	mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
 	mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
-	std::cout<<"exports: "<<exports<<std::endl;
 	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
 
 	mCurrentPlayer->update();
