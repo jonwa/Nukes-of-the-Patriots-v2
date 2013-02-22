@@ -122,7 +122,6 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
-	int statsPosX = 125, statsPosY = 177;   //communist 628, 177
 	mTaxesIncomeWindow->setVisible(true);
 	getTaxIncome();
 	//communist title: 745, 90
@@ -335,10 +334,10 @@ void Capitalist::update()
 	std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
 	std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 
-	if((mRound-1) % 4 == 0 ) 
+	/*if((mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
-	}
+	}*/
 
 	changeCityImage();
 }
@@ -734,11 +733,11 @@ void Capitalist::initializeCapitalistWindow()
 	mBuyGoodsText->setAlignment("middle");
 	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
-	mFoodCost							= GUIText::create(sf::FloatRect(55, 30, 40, 40), "0 §", mResourceWindow);
+	mFoodCost							= GUIText::create(sf::FloatRect(125, 35, 40, 40), "0 §", mResourceWindow);
 	mFoodCost->setAlignment("middle");
-	mGoodsCost							= GUIText::create(sf::FloatRect(236, 30, 40, 40), "0 §", mResourceWindow);
+	mGoodsCost							= GUIText::create(sf::FloatRect(305, 35, 40, 40), "0 §", mResourceWindow);
 	mGoodsCost->setAlignment("middle");
-	mTechCost							= GUIText::create(sf::FloatRect(416, 30, 40, 40), "0 §", mResourceWindow);
+	mTechCost							= GUIText::create(sf::FloatRect(485, 35, 40, 40), "0 §", mResourceWindow);
 	mTechCost->setAlignment("middle");
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
@@ -968,15 +967,15 @@ void Capitalist::initializeCapitalistWindow()
 	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
 	mPopulationEatsFoodWindow->setVisible(false);
 
-	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(135, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(20, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
 	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mImportWindow);
 	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mExportWindow);
 
-	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(315, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(201, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
 	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mImportWindow);
 	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mExportWindow);
 
-	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(495, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(381, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 	
@@ -1757,6 +1756,10 @@ void Capitalist::initializeGuiFunctions()
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
 	{
 		mTaxesIncomeWindow->setVisible(false);
+		if((mRound-1) % 4 == 0 ) 
+	{
+		chooseLeader();
+	}
 	});
 
 

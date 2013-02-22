@@ -108,10 +108,9 @@ void GUIText::setAlignment(std::string alignment)
 		mText.setOrigin(mText.getLocalBounds().width/2, mText.getPosition().y);*/
 
 	mAlignment = alignment;
-<<<<<<< HEAD
 
-=======
->>>>>>> 2182abd3603ed94a46a9105afcb79c10af3c6985
+
+
 }
 
 
