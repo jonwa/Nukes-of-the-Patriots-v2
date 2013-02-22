@@ -710,7 +710,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseFoodByOneButton				= GUIButton::create(CapitalistButtons["RaiseFoodByOne"], mResourceWindow);
 	mRaiseFoodByFiveButton				= GUIButton::create(CapitalistButtons["RaiseFoodByFive"], mResourceWindow);
 	mRaiseFoodByTenButton				= GUIButton::create(CapitalistButtons["RaiseFoodByTen"], mResourceWindow);
-	mResourceFoodPriceText				= GUIText::create(sf::FloatRect(30, 100, 40, 40), intToString(foodCost), mResourceWindow);
+	mResourceFoodPriceText				= GUIText::create(sf::FloatRect(15, 100, 40, 40), intToString(foodCost) + " §", mResourceWindow);
 
 	mLowerGoodsByTenButton				= GUIButton::create(CapitalistButtons["LowerGoodsByTen"], mResourceWindow);
 	mLowerGoodsByFiveButton				= GUIButton::create(CapitalistButtons["LowerGoodsByFive"], mResourceWindow);
@@ -718,7 +718,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseGoodsByOneButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByOne"], mResourceWindow);
 	mRaiseGoodsByFiveButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByFive"], mResourceWindow);
 	mRaiseGoodsByTenButton				= GUIButton::create(CapitalistButtons["RaiseGoodsByTen"], mResourceWindow);
-	mResourceGoodsPriceText				= GUIText::create(sf::FloatRect(210, 100, 40, 40), intToString(goodsCost), mResourceWindow);
+	mResourceGoodsPriceText				= GUIText::create(sf::FloatRect(195, 100, 40, 40), intToString(goodsCost) + " §", mResourceWindow);
 
 	mLowerTechByTenButton				= GUIButton::create(CapitalistButtons["LowerTechByTen"], mResourceWindow);
 	mLowerTechByFiveButton				= GUIButton::create(CapitalistButtons["LowerTechByFive"], mResourceWindow);
@@ -727,7 +727,7 @@ void Capitalist::initializeCapitalistWindow()
 	mRaiseTechByFiveButton				= GUIButton::create(CapitalistButtons["RaiseTechByFive"], mResourceWindow);
 	mRaiseTechByTenButton				= GUIButton::create(CapitalistButtons["RaiseTechByTen"], mResourceWindow);
 	mResourceCloseButton				= GUIButton::create(CapitalistButtons["CloseResource"], mResourceWindow);
-	mResourceTechPriceText				= GUIText::create(sf::FloatRect(390, 100, 40, 40), intToString(techCost), mResourceWindow);
+	mResourceTechPriceText				= GUIText::create(sf::FloatRect(375, 100, 40, 40), intToString(techCost) + " §", mResourceWindow);
 
 	
 	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 70, 0, 0), "0",mResourceWindow);
@@ -736,10 +736,12 @@ void Capitalist::initializeCapitalistWindow()
 	mBuyGoodsText->setAlignment("middle");
 	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
-
-	mFoodCost							= GUIText::create(sf::FloatRect(125, 20, 40, 40), "0 §", mResourceWindow);
-	mGoodsCost							= GUIText::create(sf::FloatRect(305, 20, 40, 40), "0 §", mResourceWindow);
-	mTechCost							= GUIText::create(sf::FloatRect(485, 20, 40, 40), "0 §", mResourceWindow);
+	mFoodCost							= GUIText::create(sf::FloatRect(105, 40, 40, 40), "0 §", mResourceWindow);
+	mFoodCost->setAlignment("middle");
+	mGoodsCost							= GUIText::create(sf::FloatRect(285, 40, 40, 40), "0 §", mResourceWindow);
+	mGoodsCost->setAlignment("middle");
+	mTechCost							= GUIText::create(sf::FloatRect(465, 40, 40, 40), "0 §", mResourceWindow);
+	mTechCost->setAlignment("middle");
 
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
@@ -976,15 +978,15 @@ void Capitalist::initializeCapitalistWindow()
 	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
 	mPopulationEatsFoodWindow->setVisible(false);
 
-	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(45, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(23, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
 	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mImportWindow);
 	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mExportWindow);
 
-	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(225, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(203, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mResourceWindow);
 	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mImportWindow);
 	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mExportWindow);
 
-	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(405, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(383, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mResourceWindow);
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 	
