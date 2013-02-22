@@ -50,6 +50,9 @@
 	<image filename="nuclear_image.png"/>
 	<image filename="space_image.png"/>
 	<image filename="spy_image.png"/>
+	<image filename="nuclear_panel.png"/>
+	<image filename="space_panel.png"/>
+	<image filename="spy_panel.png"/>
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
@@ -116,6 +119,9 @@
 	<image filename="nuclear_image.png"/>
 	<image filename="space_image.png"/>
 	<image filename="spy_image.png"/>
+	<image filename="nuclear_panel.png"/>
+	<image filename="space_panel.png"/>
+	<image filename="spy_panel.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -161,7 +167,7 @@
 	<image filename="president-Frankie.png"/>
 	<image filename="president-Gramma.png"/>
 	<image filename="president-Hans.png"/>
-	<image filename="president-Henrich.png"/>
+	<image filename="president-Heinrich.png"/>
 	<image filename="president-Hugo.png"/>
 	<image filename="president-Ludo.png"/>
 	<image filename="president-Nojiko.png"/>
@@ -199,7 +205,7 @@
 	<image filename="president-Frankie-plaque.png"/>
 	<image filename="president-Gramma-plaque.png"/>
 	<image filename="president-Hans-plaque.png"/>
-	<image filename="president-Henrich-plaque.png"/>
+	<image filename="president-Heinrich-plaque.png"/>
 	<image filename="president-Hugo-plaque.png"/>
 	<image filename="president-Ludo-plaque.png"/>
 	<image filename="president-Nojiko-plaque.png"/>

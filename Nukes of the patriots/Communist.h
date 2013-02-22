@@ -130,6 +130,7 @@ private:
 
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
+	std::shared_ptr<GUIText>   mGeneralBiography;
 
  	std::shared_ptr<GUIText> mPopulationText;
 	std::shared_ptr<GUIText> mCurrencyText;
@@ -356,6 +357,10 @@ private:
 	std::shared_ptr<GUIImage>  mFoodImage[2];
 	std::shared_ptr<GUIImage>  mGoodsImage[2];
 	std::shared_ptr<GUIImage>  mTechImage[2];
+
+	std::shared_ptr<GUIImage>  mNuclearPanel;
+	std::shared_ptr<GUIImage>  mSpacePanel;
+	std::shared_ptr<GUIImage>  mSpyPanel;
 
 };
 
