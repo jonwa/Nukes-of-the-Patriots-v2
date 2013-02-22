@@ -366,7 +366,37 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
+	if(mRound > 1)
+	{
+		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
 
+		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+
+		mImportBuyQuantityText[0]->setText("0");
+		mImportBuyQuantityText[1]->setText("0");
+		mImportBuyQuantityText[2]->setText("0");
+
+		mImportCostText[0]->setText("0");
+		mImportCostText[1]->setText("0");
+		mImportCostText[2]->setText("0");
+
+		if(enemy->getExportedFood() == 0)
+			mImportPriceText[0]->setText("N/A");
+		else
+			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+		if(enemy->getExportedGoods() == 0)
+			mImportPriceText[1]->setText("N/A");
+		else
+			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+		if(enemy->getExportedTech() == 0)
+			mImportPriceText[2]->setText("N/A");
+		else
+			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+	}
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -943,13 +973,13 @@ void Communist::initializeCommunistWindow()
 	
 	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
 	
-	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "50", mImportWindow);
-	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "50", mImportWindow);
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "0", mImportWindow);
 
-	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
-	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
-	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "N/A", mImportWindow);
 
 	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
 	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
@@ -1680,9 +1710,9 @@ void Communist::initializeGuiFunctions()
 		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
 		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
 		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
-		mFood -= mExportedFood;
-		mGoods -= mExportedGoods;
-		mTech -= mExportedTech;
+		mFood = mFoodPreviousRound - mExportedFood;
+		mGoods = mGoodsPreviousRound - mExportedGoods;
+		mTech = mTechPreviousRound - mExportedTech;
 
 		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
 		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
@@ -1768,7 +1798,7 @@ void Communist::updateAllResources()
 void Communist::showGUI()
 {
 	mCommunistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Communist::hideGUI()

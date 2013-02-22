@@ -247,15 +247,15 @@ void Capitalist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFood;
-	int exportedGoodsChange = mExportedGoods;
-	int exportedTechChange = mExportedTech;
+	int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
+	int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
+	int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
 	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedFood();
-	int enemyTechExported = enemy->getExportedFood();
+	int enemyFoodExported = enemy->getExportedFood() - enemy->getExportedFood();
+	int enemyGoodsExported = enemy->getExportedGoods() - enemy->getExportedFood();
+	int enemyTechExported = enemy->getExportedTech() - enemy->getExportedFood();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
@@ -331,8 +331,8 @@ void Capitalist::update()
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
-	std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
-	std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
+	//std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
+	//std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 
 	/*if((mRound-1) % 4 == 0 ) 
 	{
@@ -1595,6 +1595,9 @@ void Capitalist::initializeGuiFunctions()
 		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
 		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
 		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+		mFood = mFoodPreviousRound - mExportedFood;
+		mGoods = mGoodsPreviousRound - mExportedGoods;
+		mTech = mTechPreviousRound - mExportedTech;
 
 		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
 		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
@@ -1757,9 +1760,9 @@ void Capitalist::initializeGuiFunctions()
 	{
 		mTaxesIncomeWindow->setVisible(false);
 		if((mRound-1) % 4 == 0 ) 
-	{
-		chooseLeader();
-	}
+		{
+			chooseLeader();
+		}
 	});
 
 
@@ -1790,7 +1793,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Capitalist::hideGUI()
