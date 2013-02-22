@@ -334,10 +334,10 @@ void Capitalist::update()
 	std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
 	std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 
-	if((mRound-1) % 4 == 0 ) 
+	/*if((mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
-	}
+	}*/
 
 	changeCityImage();
 }
@@ -736,9 +736,11 @@ void Capitalist::initializeCapitalistWindow()
 	mBuyGoodsText->setAlignment("middle");
 	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
+
 	mFoodCost							= GUIText::create(sf::FloatRect(125, 20, 40, 40), "0 §", mResourceWindow);
 	mGoodsCost							= GUIText::create(sf::FloatRect(305, 20, 40, 40), "0 §", mResourceWindow);
 	mTechCost							= GUIText::create(sf::FloatRect(485, 20, 40, 40), "0 §", mResourceWindow);
+
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
@@ -1763,6 +1765,10 @@ void Capitalist::initializeGuiFunctions()
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
 	{
 		mTaxesIncomeWindow->setVisible(false);
+		if((mRound-1) % 4 == 0 ) 
+	{
+		chooseLeader();
+	}
 	});
 
 

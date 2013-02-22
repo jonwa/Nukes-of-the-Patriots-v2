@@ -68,6 +68,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	}
 	if(visible)
 	{
+
 		float posX = getX(), posY = getY();
 		if(mAlignment == "left")
 			posX += 0;
@@ -80,6 +81,7 @@ bool GUIText::render(sf::RenderWindow *window)
 			posX -= mText.getGlobalBounds().width;
 
 		mText.setPosition(sf::Vector2f(posX, posY));
+
 		window->draw(mText);
 	}
 
@@ -102,10 +104,13 @@ void GUIText::setAlignment(std::string alignment)
 	else if(strcmp(alignment.c_str(), "right") == 0)
 		mText.setOrigin(mText.getPosition().x + mText.getGlobalBounds().width, mText.getPosition().y);
 	else if(strcmp(alignment.c_str(), "middle") == 0)
-<<<<<<< HEAD
+
 		mText.setOrigin(mText.getLocalBounds().width/2, mText.getPosition().y);*/
 
 	mAlignment = alignment;
+
+
+
 }
 
 
