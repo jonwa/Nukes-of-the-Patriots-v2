@@ -30,6 +30,7 @@ public:
 	void			setY(float y);
 	void			setWidth(float width);
 	void			setHeight(float height);
+	void			setRectangle(sf::FloatRect rect);
 	virtual void	setSize(float width, float height){};
 	void			setVisible(bool visible);
 	virtual void	setColor(sf::Color color);
@@ -55,7 +56,7 @@ public:
 	void			tick();
 	virtual			~GUIElement();
 protected:
-	sf::FloatRect mRectangle;
+	sf::FloatRect mRectangle, mLocalRectangle;
 	sf::Color mColor;
 	bool mVisible, mMouseInside, mEnabled, mSelected;
 	std::shared_ptr<GUIElement> mParent;

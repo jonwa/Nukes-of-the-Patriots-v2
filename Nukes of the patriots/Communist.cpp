@@ -383,7 +383,7 @@ void Communist::update()
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
-	openFiveYearPlan();
+	/*openFiveYearPlan();*/
 
 	changeCityImage();
 }
@@ -924,7 +924,7 @@ void Communist::initializeCommunistWindow()
 	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
 	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
 	
-	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"));
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string(""));
 
 	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
 	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
@@ -940,6 +940,7 @@ void Communist::initializeCommunistWindow()
 			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
 			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
 			100, 50), "0", mExportWindow);
+		mExportQuantityText[i]->setAlignment("middle");
 
 	}
 
@@ -968,6 +969,7 @@ void Communist::initializeCommunistWindow()
 			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
 			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
 			100, 50), "0", mImportWindow);
+		mImportBuyQuantityText[i]->setAlignment("middle");
 
 	}
 
@@ -1094,13 +1096,16 @@ void Communist::initializeCommunistWindow()
 	mPopulationEatsFoodWindow->setVisible(false);
 
 	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(39, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mFiveYearPlanWindow);
-	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))));
+	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mImportWindow);
+	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mExportWindow);
 
 	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(140, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mFiveYearPlanWindow);
-	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))));
+	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mImportWindow);
+	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/goods_image"))), mExportWindow);
 
 	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
-	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))));
+	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
+	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 
 	mGeneralBiography = GUIText::create(sf::FloatRect(40, 260, 0, 0), "", mPickedGeneralWindow);
 	mGeneralBiography->setScale(0.6, 0.6);
@@ -1705,6 +1710,7 @@ void Communist::initializeGuiFunctions()
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
 	{
 		mTaxesIncomeWindow->setVisible(false);
+		openFiveYearPlan();
 	});
 
 	/*nästa runda*/
@@ -1779,7 +1785,7 @@ void Communist::updateAllResources()
 void Communist::showGUI()
 {
 	mCommunistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Communist::hideGUI()

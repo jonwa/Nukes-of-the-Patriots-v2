@@ -16,6 +16,7 @@
 #include "Timer.h"
 #include "TimerHandler.h"
 #include "Communist.h"
+#include "GUIAnimation.h"
 #include <SFML\Window\Mouse.hpp>
 
 static int foodCost		= 10;
@@ -691,7 +692,6 @@ void Capitalist::initializeCapitalistWindow()
 	mTechText							= GUIText::create(sf::FloatRect(31, 444, 0, 0), intToString(getTech()), mCapitalistMainWindow);
 	mTechText->setAlignment("middle");
 
-
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
 	mTaxValueText						= GUIText::create(sf::FloatRect(105, 78, 0, 0), intToString(mTaxes), mTaxesWindow);
@@ -997,6 +997,7 @@ void Capitalist::initializeCapitalistWindow()
 	 	mCapitalistMainWindow som parent-argument i dess konstruktor
 																		*/
 	chooseLeader();
+
 	GUIManager::getInstance()->addGUIElement(mCapitalistMainWindow);
 }
 
@@ -1054,6 +1055,11 @@ void Capitalist::initializeGuiFunctions()
 		mTaxesWindow->setEnabled(true, true);
 		mTaxesWindow->setVisible(true); 
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["TaxesIsPressed"]);
+		GUIAnimation::move(mTaxesWindow, 200, sf::FloatRect(mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2, mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2, 0, 0), mTaxesWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mTaxesWindow->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mTaxesWindow->getChildVector()[i], 200, sf::FloatRect(mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2, mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2, 0, 0), mTaxesWindow->getChildVector()[i]->getRectangle());
+		}
 	});
 
 	/*Resources GUI-Window knappar*/
@@ -1063,6 +1069,11 @@ void Capitalist::initializeGuiFunctions()
 		mResourceWindow->setEnabled(true, true);
 		mResourceWindow->setVisible(true); 
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
+		GUIAnimation::move(mResourceWindow, 200, sf::FloatRect(mResourceWindow->getX() + mResourceWindow->getRectangle().width/2, mResourceWindow->getY() + mResourceWindow->getRectangle().height/2, 0, 0), mResourceWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mResourceWindow->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mResourceWindow->getChildVector()[i], 200, sf::FloatRect(mResourceWindow->getX() + mResourceWindow->getRectangle().width/2, mResourceWindow->getY() + mResourceWindow->getRectangle().height/2, 0, 0), mResourceWindow->getChildVector()[i]->getRectangle());
+		}
 	});
 
 	mLowerTaxesButton->setOnClickFunction([=]()
@@ -1410,6 +1421,12 @@ void Capitalist::initializeGuiFunctions()
 		mBuySpaceProgramText->setText(mSpaceText->getText());
 		mBuySpyNetworkText->setText(mSpyText->getText());
 
+		GUIAnimation::move(mUpgradeWindow, 200, sf::FloatRect(mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2, mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2, 0, 0), mUpgradeWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mUpgradeWindow->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mUpgradeWindow->getChildVector()[i], 200, sf::FloatRect(mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2, mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2, 0, 0), mUpgradeWindow->getChildVector()[i]->getRectangle());
+		}
+
 		upgradeWindowText();
 
 	});
@@ -1498,6 +1515,12 @@ void Capitalist::initializeGuiFunctions()
 
 		mImportWindow->setVisible(true); 
 		mCapitalistTradeButton->setTexture(CapitalistButtons["ExportIsPressed"]);
+
+		GUIAnimation::move(mImportWindow, 200, sf::FloatRect(mImportWindow->getX() + mImportWindow->getRectangle().width/2, mImportWindow->getY() + mImportWindow->getRectangle().height/2, 0, 0), mImportWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mImportWindow->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mImportWindow->getChildVector()[i], 200, sf::FloatRect(mImportWindow->getX() + mImportWindow->getRectangle().width/2, mImportWindow->getY() + mImportWindow->getRectangle().height/2, 0, 0), mImportWindow->getChildVector()[i]->getRectangle());
+		}
 
 	});
 
@@ -1668,8 +1691,9 @@ void Capitalist::initializeGuiFunctions()
 		int spyDiff = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
 
 		mCapitalistMainWindow->setEnabled(true, true);
-		
-		mUpgradeWindow->setVisible(false); 	
+		mUpgradeWindow->setEnabled(false, true);
+	
+		mUpgradeWindow->setVisible(false);
 		upgradeNuclearWeapon(nuclearDiff); 
 		upgradeSpaceProgram(spaceDiff); 
 		upgradeSpyNetwork(spyDiff);
@@ -1801,7 +1825,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Capitalist::hideGUI()

@@ -59,6 +59,11 @@ void GUIWindow::setSize(float width, float height)
 	mSprite.setScale(scaleX, scaleY); 
 	setWidth(width);
 	setHeight(height);
+
+	for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	{
+		mChilds[i]->setScale(scaleX,scaleY);
+	}
 }
 
 void GUIWindow::setColor(sf::Color color)

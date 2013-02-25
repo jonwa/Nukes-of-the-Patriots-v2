@@ -266,8 +266,6 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
-
-
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
 	std::shared_ptr<GUIText>   mCurrentTaxesText[2];

@@ -44,7 +44,7 @@ bool GUIButton::render(sf::RenderWindow *window)
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
 		//window->draw(rect);
-		
+		mSprite.setPosition(getX(), getY());
 		window->draw(mSprite);
 
 	}
@@ -85,7 +85,7 @@ void GUIButton::setSize(float width, float height)
 {
 	float scaleX = width / mSprite.getTexture()->getSize().x;
 	float scaleY = height / mSprite.getTexture()->getSize().y;
-	mSprite.setScale(scaleX, scaleY); 
+	mSprite.setScale(scaleX, scaleY);
 	setWidth(width);
 	setHeight(height);
 }
