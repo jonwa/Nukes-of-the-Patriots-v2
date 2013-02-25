@@ -22,7 +22,9 @@ using namespace std;
 
 int main()
 {
+
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!");//, sf::Style::Fullscreen);
+
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
