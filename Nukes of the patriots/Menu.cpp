@@ -9,6 +9,8 @@
 #include <SFML\Window\Mouse.hpp>
 #include "GameManager.h"
 #include "Timer.h"
+#include "TcpServer.h"
+#include "TcpClient.h"
 
 
  /*Konstruktorn kör initialize-funktionen*/
@@ -16,7 +18,11 @@ Menu::Menu(sf::RenderWindow &window) :
 	mWindow(window),
 	mCapitalistTeamChosen(false),
 	mCommunistTeamChosen(false)
+	mTcpServer(nullptr),
+	mTcpClient(nullptr)
 { 
+	mTcpServer = new sf::TcpServer(55001);
+	mTcpClient = new sf::TcpClient(55001, sf::IpAddress::LocalHost);
 	initialize(); 
 	initializeGuiFuctions();
 	//MenuMusic["MainMenuTrack"]->play();
@@ -283,6 +289,11 @@ void Menu::initialize()
 	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
 	mCommunistOkayButton->setSize(ButtonPos["CommunistOkay"].first.width, ButtonPos["CommunistOkay"].first.height);
 	mChooseTeamWindow->setVisible(false);
+	
+	// Lan play ("Multi-player")
+	mLanPlayWindow			= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
+	mLanPlayQuickConnect	= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mLanPlayWindow->setVisible(false);
 
 
 	/*Lägger in fönstrerna i vektorn för GUIElement*/
@@ -305,7 +316,17 @@ void Menu::initializeGuiFuctions()
 
 	mMultiPlayerButton->setMouseEnterFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayerHover"]); });
 	mMultiPlayerButton->setMouseLeaveFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayer"]); });
-	mMultiPlayerButton->setOnClickFunction([=]()		{ });
+	mMultiPlayerButton->setOnClickFunction([=]()		
+	{ 
+		//mParentWindow->setEnabled(false, true);
+		mLanPlayWindow->setVisible(true);
+		mLanPlayWindow->setEnabled(true, true);
+	});
+
+	mLanPlayQuickConnect->setOnClickFunction([=]()
+	{
+
+	});
 
 	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
 	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
