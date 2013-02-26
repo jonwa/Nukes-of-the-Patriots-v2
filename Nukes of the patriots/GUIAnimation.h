@@ -14,7 +14,7 @@ public:
 	GUIAnimation(std::shared_ptr<GUIElement> guiElement);
 	static void move(std::shared_ptr<GUIElement> guiElement, int time, sf::FloatRect startRect, sf::FloatRect endRect);
 	static void fadeToColor(std::shared_ptr<GUIElement> guiElement, int time, sf::Color startColor, sf::Color endColor);
-	void tick();
+	bool tick();
 	~GUIAnimation(){};
 private:
 	std::shared_ptr<GUIElement> mGUIElement;

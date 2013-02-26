@@ -11,7 +11,6 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 
 #include "SuperPower.h"
 #include <memory>
-#include <sstream>
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
@@ -33,7 +32,6 @@ public:
 	Communist();
 	~Communist();
 
-	void		updateFood();
 	bool		enoughFood();
 
 	bool		setFood(int value);
@@ -69,20 +67,6 @@ public:
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
-
-	std::string intToString(int i)
-	{
-		std::stringstream converter;
-		converter << i;
-		return converter.str();
-	}
-
-	int stringToInt(std::string str)
-	{
-		if(str.size() == 0)
-			return 0;
-		return atoi(str.c_str());
-	}
 	
 	std::vector<sf::Texture*> PropagandaFood;
 	std::vector<sf::Texture*> PropagandaGoods;

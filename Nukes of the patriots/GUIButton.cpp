@@ -30,8 +30,11 @@ bool GUIButton::render(sf::RenderWindow *window)
 	bool visible = getVisible();
 	if(!visible)return false;
 	std::shared_ptr<GUIElement> parent = getParent();
+	float x = getLocalX(), y = getLocalY();
 	while(parent != NULL)
 	{
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		visible = parent->getVisible();
 		if(!visible)
 			return false;
@@ -40,11 +43,11 @@ bool GUIButton::render(sf::RenderWindow *window)
 	if(visible)
 	{
 		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
-		rect.setPosition(getX(), getY());
+		rect.setPosition(x, y);
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
 		//window->draw(rect);
-		mSprite.setPosition(getX(), getY());
+		mSprite.setPosition(x, y);
 		window->draw(mSprite);
 
 	}
@@ -94,4 +97,10 @@ void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
 	onClickSound.play();
 	onClickSound.setVolume(15);
+}
+
+void GUIButton::setColor(sf::Color color)
+{
+	mSprite.setColor(color);
+	GUIElement::setColor(color);
 }

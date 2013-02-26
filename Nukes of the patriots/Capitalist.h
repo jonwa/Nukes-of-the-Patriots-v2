@@ -23,7 +23,6 @@ class Communist;
 #include <vector>
 #include <memory>
 #include <map>
-#include <sstream>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
@@ -65,24 +64,11 @@ private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
 
-	std::string intToString(int i)
-	{
-		std::stringstream converter;
-		converter << i;
-		return converter.str();
-	}
-
-	int stringToInt(std::string str)
-	{
-		if(str.size() == 0)
-			return 0;
-		return atoi(str.c_str());
-	}
-
 
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
 	std::shared_ptr<President> mSecondPresident;
+	int	mPickedPresident;
 
 	/*Skapar två std::map. En dit alla knappar för kapitalisternas läggs in i samt 
 	  en dit alla kapitalisternas fönster läggs in i. Detta sker via hämtade värden

@@ -86,16 +86,17 @@ bool GUIEditField::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
+	float x = getLocalX(), y = getLocalY();
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		visible = parent->getVisible();
 		if(!visible)
 			return false;
 		parent = parent->getParent();
 	}
-	float x = static_cast<float>(getX());
-	float y = static_cast<float>(getY());
 	mRenderTexture.clear(sf::Color::Color(255, 255, 255, 0));
 	//mText.setPosition((sf::Vector2f(x, y)));
 	mText.setColor(sf::Color::Color(255, 255, 255, 255));
@@ -124,6 +125,7 @@ bool GUIEditField::render(sf::RenderWindow *window)
 
 	sf::Sprite sprite(mRenderTexture.getTexture());
 	sprite.setPosition(sf::Vector2f(x + 8*mOffsetX, y + 8*mOffsetY));
+	mSprite.setPosition(getX(), getY());
 	window->draw(mSprite);
 	window->draw(sprite);
 

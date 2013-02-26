@@ -58,10 +58,13 @@ bool GUIText::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
+	float x = getLocalX(), y = getLocalY();
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
 		visible = parent->getVisible();
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		if(!visible)
 			return false;
 		parent = parent->getParent();
@@ -69,7 +72,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	if(visible)
 	{
 
-		float posX = getX(), posY = getY();
+		float posX = x, posY = y;
 		if(mAlignment == "left")
 			posX += 0;
 		else if(mAlignment == "middle")

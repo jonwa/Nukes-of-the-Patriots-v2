@@ -41,14 +41,16 @@ GUIAnimation::GUIAnimation(std::shared_ptr<GUIElement> guiElement):
 {
 }
 
-void GUIAnimation::tick()
+bool GUIAnimation::tick()
 {
 	float timeleft = 0;
 	float duration = 1;
+	bool alive = false;
 	if(Timer::isTimer(mMoveTimer))
 	{
 		timeleft = mMoveTimer->getTimeLeft();
 		duration = mMoveTimer->getTimerDuration();
+		alive = true;
 	}
 	float progress = 1 - (timeleft/duration);
 
@@ -64,10 +66,13 @@ void GUIAnimation::tick()
 	{
 		fadeTimeLeft = mColorFadeTimer->getTimeLeft();
 		fadeDuration = mColorFadeTimer->getTimerDuration();
+		alive = true;
 	}
 	progress = 1 - (fadeTimeLeft/fadeDuration);
 
 	sf::Color newColor = sf::Color( mStartColor.r + (mEndColor.r - mStartColor.r)*progress, mStartColor.g + (mEndColor.g - mStartColor.g)*progress, 
 			mStartColor.b + (mEndColor.b - mStartColor.b)*progress, mStartColor.a + (mEndColor.a - mStartColor.a)*progress);
 	mGUIElement->setColor(newColor);
+	
+	return alive;
 }

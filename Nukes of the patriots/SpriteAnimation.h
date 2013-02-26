@@ -25,7 +25,7 @@ class SpriteAnimation: public Animation
 		void setPosition(const sf::Vector2f &position);
 		const sf::Sprite &getSprite() const;
 		bool endOfSpriteAnimation();
-		void tick();
+		bool tick();
 		
 	private:
 		int mFrameCount, mTimePerFrame, mCurrentFrame;  
