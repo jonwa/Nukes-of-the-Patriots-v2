@@ -159,5 +159,13 @@
 		<width>52</width>
 		<height>165</height>	
 		<image>Menu/exit-poster-red</image>
-	</button>		
+	</button>
+	<button>
+		<name>LanPlayQuickConnect</name>
+		<xPos>365</xPos>
+		<yPos>84</yPos>
+		<width>293</width>
+		<height>44</height>	
+		<image>Menu/lan_quick_connect</image>
+	</button>	
 </menu>

@@ -155,6 +155,8 @@
 	<image filename="options-poster-red.png"/>
 	<image filename="credits-poster-red.png"/>
 	<image filename="exit-poster-red.png"/>
+	<image filename="lan_window_background.png" />
+	<image filename="lan_quick_connect.png" />
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>
