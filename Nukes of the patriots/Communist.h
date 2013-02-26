@@ -33,6 +33,7 @@ public:
 	Communist();
 	~Communist();
 
+	void		clear();
 	void		updateFood();
 	bool		enoughFood();
 

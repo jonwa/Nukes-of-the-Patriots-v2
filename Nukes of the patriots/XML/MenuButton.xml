@@ -49,6 +49,30 @@
 		<image>Menu/exit-poster</image>
 	</button>
 	<button>
+		<name>Resume</name>
+		<xPos>397</xPos>
+		<yPos>49</yPos>
+		<width>54</width>
+		<height>144</height>
+		<image>Menu/Resume</image>
+	</button>
+	<button>
+		<name>Restart</name>
+		<xPos>579</xPos>
+		<yPos>131</yPos>
+		<width>64</width>
+		<height>137</height>
+		<image>Menu/Restart</image>
+	</button>
+	<button>
+		<name>SaveGame</name>
+		<xPos>382</xPos>
+		<yPos>236</yPos>
+		<width>61</width>
+		<height>135</height>
+		<image>Menu/load-poster</image>
+	</button>
+	<button>
 		<name>TeamCapitalist</name>
 		<xPos>43</xPos>
 		<yPos>32</yPos>
@@ -167,5 +191,21 @@
 		<width>293</width>
 		<height>44</height>	
 		<image>Menu/lan_quick_connect</image>
+	</button>		
+	<button>
+		<name>ResumeHover</name>
+		<xPos>397</xPos>
+		<yPos>49</yPos>
+		<width>54</width>
+		<height>144</height>
+		<image>Menu/ResumeHover</image>
+	</button>
+	<button>
+		<name>RestartHover</name>
+		<xPos>579</xPos>
+		<yPos>131</yPos>
+		<width>64</width>
+		<height>137</height>
+		<image>Menu/RestartHover</image>
 	</button>	
 </menu>
