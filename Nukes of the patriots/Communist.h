@@ -355,9 +355,9 @@ private:
 	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
 	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
 
-	std::shared_ptr<GUIImage>  mFoodImage[2];
-	std::shared_ptr<GUIImage>  mGoodsImage[2];
-	std::shared_ptr<GUIImage>  mTechImage[2];
+	std::shared_ptr<GUIImage>  mFoodImage[3];
+	std::shared_ptr<GUIImage>  mGoodsImage[3];
+	std::shared_ptr<GUIImage>  mTechImage[3];
 
 	std::shared_ptr<GUIImage>  mNuclearPanel;
 	std::shared_ptr<GUIImage>  mSpacePanel;

@@ -3,6 +3,7 @@
 
 GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, GUIType guiType) : 
 	mRectangle(rect),
+	mLocalRectangle(rect),
 	mVisible(true),
 	mParent(parent),
 	mGUIType(guiType),
@@ -33,8 +34,8 @@ void GUIElement::init()
 	if(mParent != NULL)
 	{
 		mParent->addChild(getPtr());
-		setX(mRectangle.left += mParent->mRectangle.left);
-		setY(mRectangle.top += mParent->mRectangle.top);
+		setX(mRectangle.left + mParent->mRectangle.left);
+		setY(mRectangle.top + mParent->mRectangle.top);
 	}
 }
 
@@ -131,11 +132,21 @@ sf::FloatRect GUIElement::getRectangle()
 
 void GUIElement::setX(float x)
 {
-	mRectangle.left = x; 
+	mRectangle.left = x;
+
+	/*for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	{
+		mChilds[i]->setX(getX() + mChilds[i]->mLocalRectangle.left);
+	}*/
 }
 void GUIElement::setY(float y)
 { 
 	mRectangle.top = y;
+
+	/*for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	{
+		mChilds[i]->setY(getY() + mChilds[i]->mLocalRectangle.top);
+	}*/
 }
 void GUIElement::setWidth(float width)
 {
@@ -145,6 +156,12 @@ void GUIElement::setHeight(float height)
 { 
 	mRectangle.height = height;
 }
+
+void GUIElement::setRectangle(sf::FloatRect rect)
+{
+	mRectangle = rect;
+}
+
 void GUIElement::setVisible(bool visible)
 { 
 	mVisible = visible;

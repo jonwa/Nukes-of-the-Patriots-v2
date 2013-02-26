@@ -47,7 +47,8 @@ bool GUIImage::render(sf::RenderWindow *window)
 	}
 	if(visible)
 
-	{		
+	{
+		mSprite.setPosition(getX(), getY());
 		window->draw(mSprite);
 	}
 
