@@ -149,6 +149,11 @@
 	<image filename="credits-poster.png"/>
 	<image filename="exit-poster.png"/>
 	
+	<image filename="Resume.png"/>
+	<image filename="ResumeHover.png"/>
+	<image filename="Restart.png"/>
+	<image filename="RestartHover.png"/>
+	
 	<image filename="play-poster-red.png"/>
 	<image filename="multiplayer-poster-red.png"/>
 	<image filename="load-poster-red.png"/>

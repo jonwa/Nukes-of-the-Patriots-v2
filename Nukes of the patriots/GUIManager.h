@@ -16,7 +16,7 @@ public:
 	void update(sf::Event event);
 	void tick();
 
-		~GUIManager(){}
+		~GUIManager();
 private:
 	void setWindow(sf::RenderWindow *window);
 private:

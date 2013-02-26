@@ -86,13 +86,63 @@ void Communist::updateGUI()
 
 Communist::~Communist()
 {
+	
 }
+
+
+void Communist::clear()
+{
+	mYearVector.clear();
+	mResourcesFoodButtons.clear();
+	mResourcesGoodsButtons.clear();
+	mResourcesTechButtons.clear();
+	CommunistMusic.clear();
+
+	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CommunistButtons.begin(); it != CommunistButtons.end(); it++)
+	{
+		delete (*it).second.second;
+	}
+	CommunistButtons.clear();
+
+	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CommunistWindows.begin(); it != CommunistWindows.end(); it++)
+	{
+		delete (*it).second.second;
+	}
+	CommunistWindows.clear();
+	
+	for(std::vector<sf::Texture*>::iterator it = CityImages.begin(); it != CityImages.end(); it++)
+	{
+		delete (*it);
+	}
+	CityImages.clear();
+
+	for(std::vector<sf::Texture*>::iterator it = PropagandaFood.begin(); it != PropagandaFood.end(); it++)
+	{
+		delete (*it);
+	}
+	PropagandaFood.clear();
+
+	for(std::vector<sf::Texture*>::iterator it = PropagandaGoods.begin(); it != PropagandaGoods.end(); it++)
+	{
+		delete (*it);
+	}
+	PropagandaGoods.clear();
+
+	for(std::vector<sf::Texture*>::iterator it = PropagandaTech.begin(); it != PropagandaTech.end(); it++)
+	{
+		delete (*it);
+	}
+	PropagandaTech.clear();
+
+
+}
+
 //spelar upp musiken samt loopar den
 void Communist::playMusic()
 {
 	std::shared_ptr<sf::Music> music = CommunistMusic["CommunistMainTheme"];
 	music->setVolume(100);
-	music->play();
+	//music->play();
 }
 //Stoppar musiken
 void Communist::stopMusic()

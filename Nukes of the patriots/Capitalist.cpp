@@ -17,6 +17,8 @@
 #include "TimerHandler.h"
 #include "Communist.h"
 #include <SFML\Window\Mouse.hpp>
+#include <SFML\Window\Keyboard.hpp>
+#include "Menu.h"
 
 static int foodCost		= 10;
 static int goodsCost	= 20;
@@ -40,6 +42,33 @@ Capitalist::Capitalist() :
 	initializeCityImages();
 	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
 	mUpdateGUIThread->launch();
+}
+Capitalist::~Capitalist()
+{
+	
+}
+	//clear containers
+void Capitalist::clear()
+{
+	CapitalistMusic.clear();
+
+	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CapitalistButtons.begin(); it != CapitalistButtons.end(); it++) 
+	{
+		delete (*it).second.second;		
+	}
+	CapitalistButtons.clear();
+
+	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CapitalistWindows.begin(); it != CapitalistWindows.end(); it++)
+	{
+		delete (*it).second.second;
+	}
+	CapitalistWindows.clear();
+
+	for(std::vector<sf::Texture*>::iterator it = CityImages.begin(); it != CityImages.end(); it++)
+	{
+		delete (*it);
+	}
+	CityImages.clear();
 }
 
 void Capitalist::updateGUI()
@@ -88,15 +117,12 @@ void Capitalist::updateGUI()
 	}, 50, 0);
 }
 
-Capitalist::~Capitalist()
-{
-}
 
 void Capitalist::playMusic()
 {
 	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
 	music->setVolume(60);
-	music->play();
+	//music->play();
 }
 
 void Capitalist::stopMusic()

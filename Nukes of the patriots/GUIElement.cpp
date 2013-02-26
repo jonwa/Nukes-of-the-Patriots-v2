@@ -27,6 +27,7 @@ GUIElement::~GUIElement()
 	}
 }
 
+
 void GUIElement::init()
 {
 	if(mParent != NULL)

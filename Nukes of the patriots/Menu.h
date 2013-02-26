@@ -21,6 +21,8 @@ public:
 	Menu();
 	Menu(sf::RenderWindow &window);
 	~Menu();
+	void clear();
+	void setInGameMenuVisible();
 
 private:
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
@@ -34,8 +36,11 @@ private:
 	void loadWindowPosition();
 	void loadMenuMusic();
 
+	void resetPickTeamValues();
+
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
+	std::shared_ptr<GUIWindow> mInGameMenuWindow;
 	//std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
 	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
@@ -48,6 +53,10 @@ private:
 	std::shared_ptr<GUIButton> mSettingsButton;
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
+
+	std::shared_ptr<GUIButton> mResumeGameButton;
+	std::shared_ptr<GUIButton> mRestartGameButton;
+	std::shared_ptr<GUIButton> mSaveGameButton;
 
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;
