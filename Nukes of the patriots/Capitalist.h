@@ -19,11 +19,13 @@ class President;
 class Randomizer;
 class Communist;
 
+
 #include "SuperPower.h"
 #include <vector>
 #include <memory>
 #include <map>
 #include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML\Window\Event.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
 
@@ -36,6 +38,7 @@ public:
 	std::shared_ptr<President>	getPresident();
 	void						setPresident(std::shared_ptr<President>);
 
+	void clear();
 
 	bool upgradeNuclearWeapon(int value);
 	bool upgradeSpaceProgram(int value);

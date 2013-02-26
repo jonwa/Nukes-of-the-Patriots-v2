@@ -32,6 +32,7 @@ public:
 	Communist();
 	~Communist();
 
+	void		clear();
 	bool		enoughFood();
 
 	bool		setFood(int value);

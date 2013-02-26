@@ -48,6 +48,7 @@ public:
 	void loadImages();
 	void loadSounds();
 	void load();
+	void clear();
 
 private:
 	ResourceHandler();

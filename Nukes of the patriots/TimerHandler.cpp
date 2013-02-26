@@ -5,9 +5,20 @@
 TimerHandler::TimerHandler() :
 	mVecTimers(){}
 
+TimerHandler::~TimerHandler(){ clear(); }
+
 void TimerHandler::addTimer(Timer* timer)
 {
 	mVecTimers.push_back(timer);
+}
+
+void TimerHandler::clear()
+{
+	for(std::vector<Timer*>::iterator it = mVecTimers.begin(); it != mVecTimers.end(); it++)
+	{
+		delete (*it);
+	}
+	mVecTimers.clear();
 }
 
 void TimerHandler::removeTimer(Timer* timer)

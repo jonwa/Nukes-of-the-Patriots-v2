@@ -7,6 +7,7 @@ class Timer;
 class TimerHandler
 {
 public:
+	void clear();
 	static TimerHandler* getInstance();
 	void addTimer(Timer* timer);
 	void removeTimer(Timer* timer);

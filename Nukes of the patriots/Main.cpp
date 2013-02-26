@@ -1,5 +1,6 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Window\Mouse.hpp>
+#include <SFML\Window\Keyboard.hpp>
 #include "GUIManager.h"
 #include "GUIElement.h"
 #include "GUIWindow.h"
@@ -23,7 +24,8 @@ using namespace std;
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!");//, sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
+
 
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
@@ -36,8 +38,8 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu menu(window);
-	
-	
+
+
 	while (window.isOpen())
     {
 		sf::Event event;
@@ -47,14 +49,20 @@ int main()
 			GUIManager::getInstance()->update(event);
 			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
 				GameManager::getInstance()->nextRound();
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			if (event.type == sf::Event::Closed/* || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)*/)
 				window.close();
+			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
+			{
+				GameManager::getInstance()->getCurrentPlayer()->hideGUI();
+				std::cout<<"in game menu is visible"<<std::endl;
+				menu.setInGameMenuVisible();
+			}
 		}
 		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
 			cursor.setTexture(cursorClickedTexture);
 		else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)
 			cursor.setTexture(cursorTexture);
-		
+
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		cursor.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
 		AnimationHandler::getInstance()->tick();
@@ -65,6 +73,7 @@ int main()
 		TimerHandler::getInstance()->tick();
 		window.draw(cursor);
         window.display();
+		
     }
     return EXIT_SUCCESS;
 }

@@ -11,9 +11,10 @@ public:
 	static AnimationHandler* getInstance();
 	void addAnimation(std::shared_ptr<Animation> animation);
 	void tick();
+	void clear();
 private:
 	AnimationHandler();
-	~AnimationHandler();
+	~AnimationHandler() { clear(); };
 private:
 	static AnimationHandler* instance;
 	sf::Thread *mUpdateThread;

@@ -11,6 +11,11 @@ GUIManager* GUIManager::getInstance()
 	return mInstance;
 }
 
+GUIManager::~GUIManager()
+{
+	mGuiElements.clear();
+}
+
 void GUIManager::setWindow(sf::RenderWindow *window)
 {
 	mWindow = window;
