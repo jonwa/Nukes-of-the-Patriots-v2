@@ -34,7 +34,6 @@ public:
 
 
 	void		reset();
-	void		updateFood();
 
 	bool		enoughFood();
 

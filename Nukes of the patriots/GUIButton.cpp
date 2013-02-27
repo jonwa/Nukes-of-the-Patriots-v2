@@ -106,5 +106,5 @@ void GUIButton::setColor(sf::Color color)
 {
 	mSprite.setColor(color);
 	GUIElement::setColor(color);
->>>>>>> 534be990e5365ddb749a868b84b00b1ebf13ceaa
+
 }

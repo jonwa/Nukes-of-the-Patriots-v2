@@ -56,22 +56,6 @@ void GameManager::init(int year)
 {
 
 	if(!mLoaded)
-
-	getInstance()->setYear(year);
-	loadPresidents();
-	mVecSuperPowers.push_back(std::make_shared<Capitalist>());
-	mVecSuperPowers.push_back(std::make_shared<Communist>());
-	mVecPlayersLeft = mVecSuperPowers;
-
-	/*Skriver ut året på interface*/
-	mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
-	mYearText->setScale(0.6, 0.6);
-	mYearText->setAlignment("middle");
-	mYearText->setColor(sf::Color::White);
-	GUIManager::getInstance()->addGUIElement(mYearText);
-	
-	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
-
 	{
 		getInstance()->setYear(year);
 		loadPresidents();
@@ -80,11 +64,19 @@ void GameManager::init(int year)
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
-		mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
-		mYearText->setScale(0.5, 0.5);
+		mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
+		mYearText->setScale(0.6, 0.6);
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);
 		GUIManager::getInstance()->addGUIElement(mYearText);
+	
+	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	{
+		getInstance()->setYear(year);
+		loadPresidents();
+		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
+		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		mVecPlayersLeft = mVecSuperPowers;
 	
 		/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
