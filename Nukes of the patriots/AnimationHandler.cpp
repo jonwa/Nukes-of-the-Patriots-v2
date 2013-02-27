@@ -15,8 +15,12 @@ AnimationHandler::AnimationHandler():mAnimationVector(),mUpdateThread(nullptr)
 	//mUpdateThread->launch();
 }
 
-void AnimationHandler::clear()
+void AnimationHandler::reset()
 {
+	for(std::vector< std::shared_ptr<Animation> >::size_type it = 0; it < mAnimationVector.size(); it++)
+	{
+		mAnimationVector[it].reset();
+	}
 	mAnimationVector.clear();	
 }
 
@@ -25,6 +29,7 @@ void AnimationHandler::tick()
 	for(std::vector< std::shared_ptr<Animation> >::size_type it = 0; it < mAnimationVector.size(); it++)
 	{
 		mAnimationVector[it]->tick();
+
 	}
 }
 

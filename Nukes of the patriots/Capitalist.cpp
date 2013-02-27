@@ -48,28 +48,42 @@ Capitalist::~Capitalist()
 {
 	
 }
-	//clear containers
-void Capitalist::clear()
+
+void Capitalist::reset()
 {
-	CapitalistMusic.clear();
+	static int foodCost		= 10;
+	static int goodsCost	= 20;
+	static int techCost		= 30;
+	static int taxChange	= 5;
+	static int currentGoods = 0;
+	static int currentTech  = 0;
+	static bool activateWindow = false;
+	mPresident = nullptr;
+	mCount = 0;
+	mIncreasePopulation = false;
+	mRound = 0;
+	
+	mTaxesWindow->setVisible(false);
+	mResourceWindow->setVisible(false);
+	mUpgradeWindow->setVisible(false);
+	mImportWindow->setVisible(false);
+	mExportWindow->setVisible(false);
 
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CapitalistButtons.begin(); it != CapitalistButtons.end(); it++) 
-	{
-		delete (*it).second.second;		
-	}
-	CapitalistButtons.clear();
-
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CapitalistWindows.begin(); it != CapitalistWindows.end(); it++)
-	{
-		delete (*it).second.second;
-	}
-	CapitalistWindows.clear();
-
-	for(std::vector<sf::Texture*>::iterator it = CityImages.begin(); it != CityImages.end(); it++)
-	{
-		delete (*it);
-	}
-	CityImages.clear();
+	mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
+	mCapitalistTaxesButton->setSize(CapitalistButtons["Taxes"].first.width, CapitalistButtons["Taxes"].first.height);
+	mCapitalistResourceButton->setTexture(CapitalistButtons["Resource"]);
+	mCapitalistResourceButton->setSize(CapitalistButtons["Resource"].first.width, CapitalistButtons["Resource"].first.height);
+	mCapitalistUpgradeButton->setTexture(CapitalistButtons["Upgrade"]);
+	mCapitalistUpgradeButton->setSize(CapitalistButtons["Upgrade"].first.width, CapitalistButtons["Upgrade"].first.height);
+	mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
+	mCapitalistTradeButton->setSize(CapitalistButtons["Export"].first.width, CapitalistButtons["Export"].first.height);
+	
+	mChoosePresidentWindow->setVisible(true);
+	mChoosePresidentWindow->setEnabled(true, true );
+	mCapitalistPresident->setTexture(CapitalistButtons["President"]);
+	mCapitalistPresident->setSize(CapitalistButtons["President"].first.width, CapitalistButtons["President"].first.height);
+	
+	SuperPower::reset();
 }
 
 void Capitalist::updateGUI()
@@ -1549,9 +1563,10 @@ void Capitalist::initializeGuiFunctions()
 		}
 
 	});
-
+	
 	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus"));
 	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus"));
+	
 	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
 	{
 		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
@@ -1665,19 +1680,21 @@ void Capitalist::initializeGuiFunctions()
 	});
 
 	/*nästa runda*/
-	mCapitalistEndTurnButton->setOnClickFunction([=]()	
-	{ 
-		int foodBought = mFood - mFoodPreviousRound;
-		int goodsBought = mGoods - mGoodsPreviousRound;
-		int techBought = mTech - mTechPreviousRound;
-		if(foodBought > goodsBought && foodBought > techBought)
-			foodCost += 1;
-		else if(goodsBought > foodBought && goodsBought > techBought)
-			foodCost += 1;
-		else if(techBought > foodBought && techBought > goodsBought)
-			foodCost += 1;
-		GameManager::getInstance()->nextRound();  
-	});
+	//mCapitalistEndTurnButton->setOnClickFunction([=]()	
+	//{ 
+	//	int foodBought = mFood - mFoodPreviousRound;
+	//	int goodsBought = mGoods - mGoodsPreviousRound;
+	//	int techBought = mTech - mTechPreviousRound;
+	//	if(foodBought > goodsBought && foodBought > techBought)
+	//		foodCost += 1;
+	//	else if(goodsBought > foodBought && goodsBought > techBought)
+	//		foodCost += 1;
+	//	else if(techBought > foodBought && techBought > goodsBought)
+	//		foodCost += 1;
+	//	GameManager::getInstance()->nextRound();  
+	//
+	//	mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
+	//});
 
 	/*Stänger ner Taxes fönstret*/
 	mTaxesCloseButton->setOnClickFunction([=]()					
@@ -1795,6 +1812,7 @@ void Capitalist::initializeGuiFunctions()
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{ 
 		mIncreasedResourcesPriceWindow->setVisible(true);
+		mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
 	});
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
@@ -1811,7 +1829,7 @@ void Capitalist::initializeGuiFunctions()
 		else if(mTaxes > mCurrentTax)
 			setPatriotism(getPatriotism() - 3);*/
 		
-		//mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
+		
 		//mTaxes = mCurrentTax;
 		GameManager::getInstance()->nextRound();  
 		stopMusic();

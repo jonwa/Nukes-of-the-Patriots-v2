@@ -8,6 +8,6 @@
 <tracks directory ="Communist">
 	<music filename="Kommunist.ogg"/>
 </tracks>
-<tracks directory ="">
+<tracks directory ="Other">
 	<music filename="click_sound_normal_buttons.wav"/>
 </tracks>

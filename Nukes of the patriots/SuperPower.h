@@ -74,6 +74,7 @@ public:
 	virtual void		update() = 0;
 	virtual void		playMusic() {};
 	virtual void		newYearStart() = 0;
+	virtual void		reset();
 protected:
 	PoliticalType mType;
 

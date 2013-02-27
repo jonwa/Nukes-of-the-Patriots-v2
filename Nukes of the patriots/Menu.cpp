@@ -7,7 +7,9 @@
 #include <sstream>
 #include <iostream>
 #include <SFML\Window\Mouse.hpp>
+#include "AnimationHandler.h"
 #include "GameManager.h"
+#include "TimerHandler.h"
 #include "Timer.h"
 
 
@@ -19,53 +21,41 @@ Menu::Menu(sf::RenderWindow &window) :
 { 
 	initialize(); 
 	initializeGuiFuctions();
-	//MenuMusic["MainMenuTrack"]->play();
-	//MenuMusic["MainMenuTrack"]->setLoop(true);
+	MenuMusic["MainMenuTrack"]->play();
+	MenuMusic["MainMenuTrack"]->setLoop(true);
 }
-Menu::~Menu(){}
+Menu::~Menu(){ }
 
 void Menu::clear()
 {
 	MenuMusic.clear();
-
-	for( std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = ButtonPos.begin(); it != ButtonPos.end(); it++)
-	{
-		delete (*it).second.second;
-	}
 	ButtonPos.clear();
-
-	for( std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = WindowPos.begin(); it != WindowPos.end(); it++)
-	{
-		delete (*it).second.second;
-	}
 	WindowPos.clear();
 }
 
-void Menu::setInGameMenuVisible()
+
+void Menu:: update(sf::Event &event)
 {
-	mInGameMenuWindow->setVisible(true);
+	if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
+	{
+		//GameManager::getInstance()->getCurrentPlayer()->hideGUI();
+		std::cout<<"in game menu is visible"<<std::endl;
+
+		GUIManager::getInstance()->setOnTop(mInGameMenuWindow);
+
+		mInGameMenuWindow->setVisible(true);
+	}
 }
 
-void Menu::resetPickTeamValues()
+void Menu::resetChooseTeamValues()
 {
-		mCapitalistTeamChosen = false;
-		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
-		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
-		mCapitalistOkayButton->setEnabled(true);
-		mCapitalistNameField->setEnabled(true);
-		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalist"].second));
+	mCapitalistTeamChosen = false;
+	mCommunistTeamChosen = false;
+}
 
-		mCommunistTeamChosen = false;
-		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
-		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
-		mCommunistOkayButton->setEnabled(true);
-		mCommunistNameField->setEnabled(true);
-		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunist"].second));
-
+void Menu::setMainMenuVisible()
+{
+	mMainMenuWindow->setVisible(true);
 }
 
  /*Laddar in menyknapparnas positions- och storleksinformation
@@ -252,7 +242,7 @@ void Menu::initialize()
 	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
 	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
-	//mMainMenuWindow->setVisible(true);
+	mMainMenuWindow->setVisible(false);
 
 	//InGameMenu with buttons. 
 	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"]);
@@ -271,23 +261,23 @@ void Menu::initialize()
 	mCreditsMenuWindow->setVisible(false);
 
 	/*Fönstret och dess barn för att välja lag*/
-	mChooseTeamWindow		= GUIWindow::create(WindowPos["ChooseTeam"]);
-	mTeamCommunist			= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
-	//mTeamCommunistIsPicked  = GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
-	mTeamCapitalist			= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
+	mTeamCommunist				= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
+	//mTeamCommunistIsPicked	= GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
+	mTeamCapitalist				= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
-	mCapitalistNameField	= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
-	mCommunistNameField		= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
-	mCapitalistOkayButton	= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
+	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
+	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
+	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
 	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkay"].first.width, ButtonPos["CapitalistOkay"].first.height);
-	mCommunistOkayButton	= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
+	mCommunistOkayButton		= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
 	mCommunistOkayButton->setSize(ButtonPos["CommunistOkay"].first.width, ButtonPos["CommunistOkay"].first.height);
 	mChooseTeamWindow->setVisible(false);
 
 
 	/*Lägger in fönstrerna i vektorn för GUIElement*/
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
-	GUIManager::getInstance()->addGUIElement(mChooseTeamWindow);
+	
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 }
 
@@ -380,7 +370,7 @@ void Menu::initializeGuiFuctions()
 	{
 		mInGameMenuWindow->setVisible(false);
 		mResumeGameButton->setTexture(ButtonPos["Resume"]); 
-		GameManager::getInstance()->getCurrentPlayer()->showGUI();
+		//GameManager::getInstance()->getCurrentPlayer()->showGUI();
 	});
 	
 	   //Restart game
@@ -394,14 +384,24 @@ void Menu::initializeGuiFuctions()
 	});
 	mRestartGameButton->setOnClickFunction([=]()
 	{
-		 GameManager::getInstance()->clear();
-		 clear();
-		 resetPickTeamValues();
-
-		 mInGameMenuWindow->setEnabled(true, false); 
-		 mInGameMenuWindow->setVisible(false);
-		 mChooseTeamWindow->setEnabled(true, true);
-		 mChooseTeamWindow->setVisible(true);
+		GameManager::getInstance()->reset();
+		mParentWindow->setVisible(true);
+		mInGameMenuWindow->setVisible(false); 
+		mChooseTeamWindow->setVisible(true);
+	
+		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
+		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalist"].second));
+		
+		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
+		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunist"].second));
+		resetChooseTeamValues();
+		mChooseTeamWindow->setEnabled(true, true);
 	});
 
 	mSaveGameButton->setOnClickFunction([=]()
