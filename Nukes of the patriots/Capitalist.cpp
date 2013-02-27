@@ -689,21 +689,24 @@ void Capitalist::initializeCapitalistWindow()
 	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
-	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 20, 0, 0), intToString(mPopulation) + " million", mCapitalistMainWindow);
+	mPopulationText->setScale(0.7, 0.7);
+	mPopulationText->setColor(sf::Color::White);
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
-	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 14, 0, 0), intToString(mCurrency), mCapitalistMainWindow);
+	mCurrencyText->setScale(0.7, 0.7);
+	mCurrencyText->setColor(sf::Color::White);
 	mCurrencyText->setAlignment("middle");
-	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
-	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(530, 53, 0, 0), intToString(mPatriotism), mCapitalistMainWindow);
+	mPatriotismText->setScale(0.7, 0.7);
+	mPatriotismText->setColor(sf::Color::White);
 	mPatriotismText->setAlignment("middle");
 	
-	mPopulationText->setColor(sf::Color::White);
+	
 
-	mCurrencyText->setColor(sf::Color::White);
+	
 
-	mPatriotismText->setColor(sf::Color::White);
+	
 
 	mCapitalistMainWindow->setVisible(false);
 
@@ -1687,11 +1690,12 @@ void Capitalist::initializeGuiFunctions()
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
 		mTaxesWindow->setEnabled(false, true);
+		mTaxesWindow->setVisible(false);
 		mTaxes = stringToInt(mTaxValueText->getText());
 		
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);//ändrar textur till orginal
 
-		std::shared_ptr<GUIWindow> _window = mTaxesWindow;
+		/*std::shared_ptr<GUIWindow> _window = mTaxesWindow;
 		sf::FloatRect rect = mTaxesWindow->getRectangle();
 		float x = mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2;
 		float y = mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2;
@@ -1705,7 +1709,7 @@ void Capitalist::initializeGuiFunctions()
 		{ 
 			_window->setVisible(false);
 			_window->setRectangle(rect);
-		}, 500, 1);
+		}, 500, 1);*/
 	});
 
 	/*Stänger ner resources fönstret "Okay-knappen"*/

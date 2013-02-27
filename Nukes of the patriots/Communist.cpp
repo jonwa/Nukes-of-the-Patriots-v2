@@ -48,7 +48,7 @@ void Communist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " millions");
+			mPopulationText->setText(intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
@@ -143,6 +143,7 @@ void Communist::playMusic()
 	std::shared_ptr<sf::Music> music = CommunistMusic["CommunistMainTheme"];
 	music->setVolume(100);
 	//music->play();
+	//music->setLoop(true);
 }
 //Stoppar musiken
 void Communist::stopMusic()
@@ -822,19 +823,19 @@ void Communist::initializeCommunistWindow()
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
-	mLeftPanel						= GUIButton::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
-	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
+	mLeftPanel						= GUIImage::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
+	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 
 	
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
-	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 20, 0, 0), intToString(mPopulation) + " million", mCommunistMainWindow);
+	mPopulationText->setScale(0.7, 0.7);
 
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
-	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 14, 0, 0), intToString(mCurrency), mCommunistMainWindow);
+	mCurrencyText->setScale(0.7, 0.7);
 	mCurrencyText->setAlignment("middle");
-	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCommunistMainWindow);
-	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(530, 53, 0, 0), intToString(mPatriotism), mCommunistMainWindow);
+	mPatriotismText->setScale(0.7, 0.7);
 	mPatriotismText->setAlignment("middle");
 
 	mPopulationText->setColor(sf::Color::White);

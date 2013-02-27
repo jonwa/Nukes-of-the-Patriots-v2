@@ -303,8 +303,8 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>    mCommunistHeadLine;
 
