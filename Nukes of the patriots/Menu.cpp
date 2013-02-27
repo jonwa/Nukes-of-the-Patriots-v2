@@ -11,18 +11,40 @@
 #include "Timer.h"
 #include "TcpServer.h"
 #include "TcpClient.h"
+#include "UdpServer.h"
+#include "UdpClient.h"
+#include "Event.h"
+#include <SFML/Network.hpp>
 
 
  /*Konstruktorn kör initialize-funktionen*/
 Menu::Menu(sf::RenderWindow &window) : 
 	mWindow(window),
 	mCapitalistTeamChosen(false),
-	mCommunistTeamChosen(false)
+	mCommunistTeamChosen(false),
 	mTcpServer(nullptr),
-	mTcpClient(nullptr)
+	mTcpClient(nullptr),
+	mUdpServer(nullptr),
+	mUdpClient(nullptr)
 { 
-	mTcpServer = new sf::TcpServer(55001);
-	mTcpClient = new sf::TcpClient(55001, sf::IpAddress::LocalHost);
+	mTcpServer = new sf::TcpServer(sf::Socket::AnyPort);
+	mUdpServer = new sf::UdpServer(55002);
+	mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
+	Event::addEventHandler("onPlayerConnect", [=](sf::Packet packet)
+	{
+		char clientIp[1024];
+		packet>>clientIp;
+		std::cout<<"Client looking for server: "<<clientIp<<std::endl;
+		sf::Packet _packet;
+		_packet<<sf::IpAddress::getPublicAddress().toString()<<mTcpServer->getPort();
+		mUdpServer->triggerClientEvent("serverAwaitingConnection", _packet, sf::IpAddress::IpAddress(clientIp), 55001);
+	});
+	mTcpClient = new sf::TcpClient(mTcpServer->getPort(), sf::IpAddress::getLocalAddress());
+	std::cout<<sf::IpAddress::getPublicAddress().toString()<<" port: "<<mUdpServer->getPort()<<std::endl;
+
+	sf::Packet packet;
+	packet<<sf::IpAddress::getLocalAddress().toString();
+	mUdpClient->triggerServerEvent("onPlayerConnect", packet);
 	initialize(); 
 	initializeGuiFuctions();
 	//MenuMusic["MainMenuTrack"]->play();

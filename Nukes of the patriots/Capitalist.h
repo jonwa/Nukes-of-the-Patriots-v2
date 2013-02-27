@@ -93,7 +93,7 @@ private:
 	void initializeCityImages();
 	
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	//President	*mPresident;
 
@@ -230,8 +230,8 @@ private:
 	std::shared_ptr<GUIText>   mSecondPositiveStat[2];
 	std::shared_ptr<GUIText>   mSecondNegativeStat;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>   mCapitalistHeadLine;
 

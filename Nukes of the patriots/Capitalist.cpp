@@ -41,7 +41,7 @@ Capitalist::Capitalist() :
 
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
-	initializeCityImages();
+
 	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
 	mUpdateGUIThread->launch();
 }
@@ -79,7 +79,7 @@ void Capitalist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " millions");
+			mPopulationText->setText(intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
@@ -125,6 +125,7 @@ void Capitalist::playMusic()
 	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
 	music->setVolume(60);
 	//music->play();
+	//music->setLoop(true);
 }
 
 void Capitalist::stopMusic()
@@ -672,19 +673,21 @@ void Capitalist::initializeCapitalistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCapitalistMusic();
+	initializeCityImages();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
-	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow);
+	mChangeCityImage					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
-	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
-	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
+	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
+	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
 	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.5, 0.5);
@@ -1034,7 +1037,7 @@ void Capitalist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city3")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city4")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city5")));
-	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
+	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
 void Capitalist::chooseLeader()
@@ -1680,12 +1683,29 @@ void Capitalist::initializeGuiFunctions()
 	});
 
 	/*Stänger ner Taxes fönstret*/
-	mTaxesCloseButton->setOnClickFunction([=]()					
+	mTaxesCloseButton->setOnClickFunction([&]()					
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
+		mTaxesWindow->setEnabled(false, true);
 		mTaxes = stringToInt(mTaxValueText->getText());
-		mTaxesWindow->setVisible(false); 
+		
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);//ändrar textur till orginal
+
+		std::shared_ptr<GUIWindow> _window = mTaxesWindow;
+		sf::FloatRect rect = mTaxesWindow->getRectangle();
+		float x = mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2;
+		float y = mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2;
+		GUIAnimation::move(mTaxesWindow, 100, mTaxesWindow->getRectangle(), sf::FloatRect(x, y, 0, 0));
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mTaxesWindow->getChildVector().size(); ++i)
+		{
+			std::shared_ptr<GUIElement> element = mTaxesWindow->getChildVector()[i];
+			GUIAnimation::move(element, 100, element->getRectangle(), sf::FloatRect(x, y, 0, 0));
+		}
+		Timer::setTimer([=]()
+		{ 
+			_window->setVisible(false);
+			_window->setRectangle(rect);
+		}, 500, 1);
 	});
 
 	/*Stänger ner resources fönstret "Okay-knappen"*/

@@ -194,8 +194,7 @@
 </images>
 <images directory="BetweenTurns">
 	<image filename="stats_menu.png"/>
-	<image filename="BetweenTurns.png"/>
-	<image filename="BetweenTurns1.png"/>
+	<image filename="spynetwork_menu.png"/>
 	<image filename="yes.png"/>
 	<image filename="no.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>

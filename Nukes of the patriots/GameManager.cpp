@@ -273,8 +273,8 @@ void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlaye
 	mStatsWindow[1]->setVisible(false);
 	mFirstDecideWhoStartWindow->setEnabled(true, true);
 	mSecondDecideWhoStartWindow->setEnabled(true, true);
-	mSecondCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
-	mSecondCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+	mSecondCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+	mSecondCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
 }
 
 void GameManager::setYear(int year)
@@ -359,8 +359,8 @@ void GameManager::nextRound()
 				mStatsWindow[1]->setVisible(false);
 				//mNextWindowToShow = mFirstDecideWhoStartWindow;
 				mFirstDecideWhoStartWindow->setEnabled(true, true);
-				mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
-				mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
 			} 
 		});
 	}
@@ -504,15 +504,27 @@ void GameManager::initializeGuiElement()
 
 	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
 	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
-	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mFirstDecideWhoStartWindow);
-	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCapitalistSpyNetworkText->setScale(0.4, 0.4);
+	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCommunistSpyNetworkText->setScale(0.4, 0.4);
+	mCapitalistHeadline[0]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mFirstDecideWhoStartWindow);
+	mCapitalistHeadline[0]->setScale(0.5, 0.5);
+	mCommunistHeadline[0]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mFirstDecideWhoStartWindow);
+	mCommunistHeadline[0]->setScale(0.5, 0.5);
 	mFirstDecideWhoStartWindow->setVisible(false);
 
 	mSecondDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsDiffSpy"]);
 	mCapitalistButton					= GUIButton::create(BetweenTurnsButton["Capitalist"], mSecondDecideWhoStartWindow);
 	mCommunistButton					= GUIButton::create(BetweenTurnsButton["Communist"], mSecondDecideWhoStartWindow);
-	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mSecondDecideWhoStartWindow);
-    mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCapitalistSpyNetworkText->setScale(0.4, 0.4);
+    mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCommunistSpyNetworkText->setScale(0.4, 0.4);
+	mCapitalistHeadline[1]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mSecondDecideWhoStartWindow);
+	mCapitalistHeadline[1]->setScale(0.5, 0.5);
+	mCommunistHeadline[1]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mSecondDecideWhoStartWindow);
+	mCommunistHeadline[1]->setScale(0.5, 0.5);
 	mSecondDecideWhoStartWindow->setVisible(false);
 
 	mStatsWindow[0]						= GUIWindow::create(BetweenTurnsWindow["Stats"]);     //icke inzoomat, tidsbaserad inzoomning på detta sm leder till "mStatsWindow[1]"

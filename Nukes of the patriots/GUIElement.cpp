@@ -159,7 +159,7 @@ void GUIElement::setHeight(float height)
 
 void GUIElement::setRectangle(sf::FloatRect rect)
 {
-	mRectangle = rect;
+	mRectangle = sf::FloatRect(rect);
 }
 
 void GUIElement::setVisible(bool visible)

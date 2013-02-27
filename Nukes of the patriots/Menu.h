@@ -19,6 +19,8 @@ namespace sf
 {
 class TcpServer;
 class TcpClient;
+class UdpServer;
+class UdpClient;
 }
 
 class Menu
@@ -83,6 +85,8 @@ private:
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;
+	sf::UdpServer* mUdpServer;
+	sf::UdpClient* mUdpClient;
 };
 
 #endif

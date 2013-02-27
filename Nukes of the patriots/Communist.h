@@ -111,7 +111,7 @@ private:
 	void loadCommunistMusic();
 
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;

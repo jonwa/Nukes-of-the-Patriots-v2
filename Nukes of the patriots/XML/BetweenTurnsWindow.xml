@@ -22,7 +22,7 @@
 		<yPos>0</yPos>
 		<width>1024</width>
 		<height>768</height>
-		<image>BetweenTurns/BetweenTurns</image>
+		<image>BetweenTurns/spynetwork_menu</image>
 	</window>
 	<window>
 		<name>BetweenTurnsDiffSpy</name>
@@ -30,6 +30,6 @@
 		<yPos>0</yPos>
 		<width>1024</width>
 		<height>768</height>
-		<image>BetweenTurns/BetweenTurns1</image>
+		<image>BetweenTurns/spynetwork_menu</image>
 	</window>
 </windows>

@@ -54,7 +54,7 @@ bool GUIButton::render(sf::RenderWindow *window)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}
@@ -65,7 +65,9 @@ bool GUIButton::render(sf::RenderWindow *window)
 
 void GUIButton::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 {
+	std::cout << "New texture: " << pair.second << std::endl;
 	mSprite.setTexture(*pair.second);
+	std::cout << "mSprite texture: " << mSprite.getTexture() << std::endl;
 	mSprite.setPosition(pair.first.left, pair.first.top);
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
 }

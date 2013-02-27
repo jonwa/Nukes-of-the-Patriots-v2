@@ -38,7 +38,6 @@ Communist::Communist() :
 	
 	fiveYearInitialize();
 	propagandaInitialize();
-	initializeCityImages();
 	mUpdateGUIThread = new sf::Thread(&Communist::updateGUI, this);
 	mUpdateGUIThread->launch();
 }
@@ -810,11 +809,13 @@ void Communist::initializeCommunistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCommunistMusic();
+	initializeCityImages();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
 	mCommunistBorderTop				= GUIWindow::create(CommunistWindows["CommunistBorderTop"], mCommunistMainWindow);
-	mChangeCityImage				= GUIButton::create(CommunistButtons["CityImages"], mCommunistMainWindow);
+	mChangeCityImage				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+									  (CommunistButtons["CityImages"].first, CityImages[0]), mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
@@ -1210,7 +1211,7 @@ void Communist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom3")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom4")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom5")));
-	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
+	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
 void Communist::chooseLeader()

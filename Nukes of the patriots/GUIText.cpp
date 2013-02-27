@@ -54,6 +54,16 @@ void GUIText::setScale(float width, float height)
 	setHeight(boundBox.height);
 }
 
+void GUIText::setSize(float width, float height)
+{
+	/*float scaleX = width / mText.getLocalBounds().width;
+	float scaleY = height / mText.getLocalBounds().height;
+	std::cout << "Scale X: " << scaleX << " Scale Y: " << scaleY << std::endl;
+	mText.setScale(scaleX, scaleY);
+	setWidth(width);
+	setHeight(height);*/
+}
+
 bool GUIText::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
@@ -83,7 +93,7 @@ bool GUIText::render(sf::RenderWindow *window)
 		else if(mAlignment == "right")
 			posX -= mText.getGlobalBounds().width;
 
-		mText.setPosition(sf::Vector2f(posX, posY));
+		mText.setPosition(posX, posY);
 
 		window->draw(mText);
 	}
@@ -92,7 +102,7 @@ bool GUIText::render(sf::RenderWindow *window)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}

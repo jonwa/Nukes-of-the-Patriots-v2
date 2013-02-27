@@ -10,24 +10,24 @@
 	</button>
 	<button>
 		<name>Capitalist</name>
-		<xPos>455</xPos>
-		<yPos>400</yPos>
+		<xPos>444</xPos>
+		<yPos>610</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>BetweenTurns/no</image>
 	</button>
 	<button>
 		<name>Communist</name>
-		<xPos>455</xPos>
-		<yPos>450</yPos>
+		<xPos>444</xPos>
+		<yPos>670</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>BetweenTurns/yes</image>
 	</button>
 	<button>
 		<name>FirstWindowOkay</name>
-		<xPos>450</xPos>
-		<yPos>500</yPos>
+		<xPos>444</xPos>
+		<yPos>630</yPos>
 		<width>132</width>
 		<height>64</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>

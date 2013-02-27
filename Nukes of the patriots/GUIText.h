@@ -18,6 +18,7 @@ public:
 	void		setAlignment(std::string alignment);
 	bool		render(sf::RenderWindow *window);
 	void		setColor(sf::Color color);
+	void		setSize(float width, float height);
 	std::string intToString(int i);
 				~GUIText(){}
 private:
