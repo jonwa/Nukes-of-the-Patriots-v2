@@ -44,7 +44,7 @@ bool GUIWindow::render(sf::RenderWindow *window)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}
@@ -60,14 +60,19 @@ void GUIWindow::setSize(float width, float height)
 	setWidth(width);
 	setHeight(height);
 
-	for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	/*for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 	{
 		mChilds[i]->setScale(scaleX,scaleY);
-	}
+	}*/
 }
 
 void GUIWindow::setColor(sf::Color color)
 {
 	mSprite.setColor(color);
 	GUIElement::setColor(color);
+
+	for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	{
+		mChilds[i]->setColor(color);
+	}
 }

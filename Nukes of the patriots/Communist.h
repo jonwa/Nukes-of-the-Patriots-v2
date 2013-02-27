@@ -11,7 +11,6 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 
 #include "SuperPower.h"
 #include <memory>
-#include <sstream>
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
@@ -33,8 +32,10 @@ public:
 	Communist();
 	~Communist();
 
+
 	void		reset();
 	void		updateFood();
+
 	bool		enoughFood();
 
 	bool		setFood(int value);
@@ -70,20 +71,6 @@ public:
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
-
-	std::string intToString(int i)
-	{
-		std::stringstream converter;
-		converter << i;
-		return converter.str();
-	}
-
-	int stringToInt(std::string str)
-	{
-		if(str.size() == 0)
-			return 0;
-		return atoi(str.c_str());
-	}
 	
 	std::vector<sf::Texture*> PropagandaFood;
 	std::vector<sf::Texture*> PropagandaGoods;
@@ -127,7 +114,7 @@ private:
 	void loadCommunistMusic();
 
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
@@ -319,8 +306,8 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>    mCommunistHeadLine;
 

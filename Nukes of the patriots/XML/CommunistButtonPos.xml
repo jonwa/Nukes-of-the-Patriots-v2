@@ -275,9 +275,9 @@
 	<button>
 		<name>ShowPropaganda</name>
 		<xPos>50</xPos>
-		<yPos>37</yPos>
-		<width>111</width>
-		<height>176</height>
+		<yPos>32</yPos>
+		<width>140</width>
+		<height>217</height>
 		<image></image>
 	</button>	
 	<button>

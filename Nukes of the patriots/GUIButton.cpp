@@ -31,8 +31,11 @@ bool GUIButton::render(sf::RenderWindow *window)
 	if(!visible) 
 		return false;
 	std::shared_ptr<GUIElement> parent = getParent();
+	float x = getLocalX(), y = getLocalY();
 	while(parent != NULL)
 	{
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		visible = parent->getVisible();
 		if(!visible)
 			return false;
@@ -41,18 +44,18 @@ bool GUIButton::render(sf::RenderWindow *window)
 	if(visible)
 	{
 		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
-		rect.setPosition(getX(), getY());
+		rect.setPosition(x, y);
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
 		//window->draw(rect);
-		mSprite.setPosition(getX(), getY());
+		mSprite.setPosition(x, y);
 		window->draw(mSprite);
 
 	}
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}
@@ -63,7 +66,9 @@ bool GUIButton::render(sf::RenderWindow *window)
 
 void GUIButton::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 {
+	std::cout << "New texture: " << pair.second << std::endl;
 	mSprite.setTexture(*pair.second);
+	std::cout << "mSprite texture: " << mSprite.getTexture() << std::endl;
 	mSprite.setPosition(pair.first.left, pair.first.top);
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
 }
@@ -95,4 +100,11 @@ void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
 	mOnClickSound->setVolume(15);
 	mOnClickSound->play();
+}
+
+void GUIButton::setColor(sf::Color color)
+{
+	mSprite.setColor(color);
+	GUIElement::setColor(color);
+>>>>>>> 534be990e5365ddb749a868b84b00b1ebf13ceaa
 }

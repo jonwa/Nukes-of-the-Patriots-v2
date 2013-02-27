@@ -24,7 +24,6 @@ class Communist;
 #include <vector>
 #include <memory>
 #include <map>
-#include <sstream>
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML\Window\Event.hpp>
 #include <SFML\Audio\Music.hpp>
@@ -70,7 +69,6 @@ private:
 	sf::Thread *mUpdateGUIThread;
 
 
-
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -89,6 +87,7 @@ private:
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
 	std::shared_ptr<President> mSecondPresident;
+	int	mPickedPresident;
 
 	/*Skapar två std::map. En dit alla knappar för kapitalisternas läggs in i samt 
 	  en dit alla kapitalisternas fönster läggs in i. Detta sker via hämtade värden
@@ -110,7 +109,7 @@ private:
 	void initializeCityImages();
 	
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	//President	*mPresident;
 
@@ -247,8 +246,8 @@ private:
 	std::shared_ptr<GUIText>   mSecondPositiveStat[2];
 	std::shared_ptr<GUIText>   mSecondNegativeStat;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>   mCapitalistHeadLine;
 

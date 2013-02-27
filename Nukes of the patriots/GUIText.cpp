@@ -18,15 +18,18 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setColor(sf::Color::Black);
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+
+	mOnClickFunction = [=](){std::cout << "X: " << getX() << " Y: " << getY() << std::endl << "OriginX: " << mText.getOrigin().x << " OriginY: " <<mText.getOrigin().y << std::endl;};
 }
 
 void GUIText::setText(std::string text)
 {
-	mText.setString(sf::String(text.c_str()));
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	mText.setString(text);
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
 }
@@ -40,8 +43,8 @@ std::string GUIText::intToString(int i)
 
 void GUIText::setText(int value)
 {
-	mText.setString(sf::String(intToString(value).c_str()));
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	mText.setString(intToString(value));
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
 }
@@ -49,39 +52,61 @@ void GUIText::setText(int value)
 void GUIText::setScale(float width, float height)
 {
 	mText.setScale(width, height);
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+}
+
+void GUIText::setSize(float width, float height)
+{
+	/*float scaleX = width / mText.getLocalBounds().width;
+	float scaleY = height / mText.getLocalBounds().height;
+	std::cout << "Scale X: " << scaleX << " Scale Y: " << scaleY << std::endl;
+	mText.setScale(scaleX, scaleY);
+	setWidth(width);
+	setHeight(height);*/
 }
 
 bool GUIText::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
+	float x = getLocalX(), y = getLocalY();
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
 		visible = parent->getVisible();
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		if(!visible)
 			return false;
 		parent = parent->getParent();
 	}
 	if(visible)
-	{
-
-		float posX = getX(), posY = getY();
+	{		
+		float posX = x, posY = y;
 		if(mAlignment == "left")
-			posX += 0;
+		{
+			mText.setPosition(getX(), getY());
+			//mText.setOrigin(mText.getGlobalBounds().width, mText.getGlobalBounds().height);
+		}
+			//posX += 0;
 		else if(mAlignment == "middle")
 		{
-			posX -= mText.getGlobalBounds().width/2;
-			posY -= mText.getGlobalBounds().height;
+			mText.setPosition(getX(), getY());
+			mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height);
+			/*posX -= mText.getGlobalBounds().width/2;
+			posY -= mText.getGlobalBounds().height/2;*/
 		}
 		else if(mAlignment == "right")
-			posX -= mText.getGlobalBounds().width;
+		{
+			mText.setPosition(getX(), getY());
+			mText.setOrigin(mText.getLocalBounds().width, mText.getLocalBounds().height);
+		}
+			//posX -= mText.getGlobalBounds().width;
 
-		mText.setPosition(sf::Vector2f(posX, posY));
-
+		
+		//mText.setPosition(posX, posY);
 		window->draw(mText);
 	}
 
@@ -89,7 +114,7 @@ bool GUIText::render(sf::RenderWindow *window)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}

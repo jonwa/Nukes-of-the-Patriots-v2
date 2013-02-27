@@ -20,6 +20,7 @@ public:
 	void	setScale(float width, float height);
 	void	setSize(float width, float height);
 	void	onGUIClick(int mouseX, int mouseY);
+	void	setColor(sf::Color color);
 
 	~GUIButton(){}
 

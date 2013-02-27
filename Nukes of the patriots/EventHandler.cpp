@@ -1,30 +1,30 @@
 #include "EventHandler.h"
-#include "Capitalist.h"
-#include "GUIManager.h"
-#include "GUIElement.h"
-#include "GUIWindow.h"
-#include "GUIButton.h"
-#include "GUIText.h"
+#include "Event.h"
+#include <iostream>
 
-//static EventHandler *mInstance = 0;
-//
-//EventHandler* EventHandler::getInstance()
-//{
-//	if(mInstance = 0)
-//	{
-//		mInstance = new EventHandler();
-//	}
-//	return mInstance;
-//}
-//
-//EventHandler::EventHandler()
-//{
-//	guiWindow = new GUIWindow(400, 400, 400, 400);
-//}
-//
-//void EventHandler::openCommunistUpgradeMenu(GUIElement *guiElement)
-//{
-//	if(guiElement == guiButton)	
-//	{
-//	}
-//}
+EventHandler* EventHandler::mInstance = NULL;
+
+EventHandler* EventHandler::getInstance()
+{
+	if(mInstance == nullptr)
+		mInstance = new EventHandler();
+	return mInstance;
+}
+
+EventHandler::EventHandler():mEvents(){}
+
+void EventHandler::addEvent(Event* event)
+{
+	mEvents.push_back(event);
+}
+
+void EventHandler::triggerEvent(std::string eventName, sf::Packet packet)
+{
+	for(std::vector<Event*>::size_type i = 0; i < mEvents.size(); i++)
+	{
+		if(strcmp(eventName.c_str(), mEvents[i]->getEventName().c_str()) == 0)
+		{
+			mEvents[i]->triggerEvent(packet);
+		}
+	}
+}

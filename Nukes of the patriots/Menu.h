@@ -15,6 +15,14 @@
 class Capitalist;
 class Communist;
 
+namespace sf
+{
+class TcpServer;
+class TcpClient;
+class UdpServer;
+class UdpClient;
+}
+
 class Menu
 {
 public:
@@ -73,7 +81,16 @@ private:
 	std::shared_ptr<GUIButton> mTeamCapitalistIsPicked;
 
 
+	std::shared_ptr<GUIWindow> mLanPlayWindow;
+	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
+
+
 	sf::RenderWindow &mWindow;
+
+	sf::TcpServer* mTcpServer;
+	sf::TcpClient* mTcpClient;
+	sf::UdpServer* mUdpServer;
+	sf::UdpClient* mUdpClient;
 };
 
 #endif

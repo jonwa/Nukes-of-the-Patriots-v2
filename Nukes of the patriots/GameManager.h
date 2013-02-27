@@ -106,6 +106,9 @@ private:
 	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 
+	std::shared_ptr<GUIText>   mCommunistHeadline[2];
+	std::shared_ptr<GUIText>   mCapitalistHeadline[2];
+
 };
 
 

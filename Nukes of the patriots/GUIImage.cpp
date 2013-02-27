@@ -37,9 +37,12 @@ bool GUIImage::render(sf::RenderWindow *window)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
+	float x = getLocalX(), y = getLocalY();
 	std::shared_ptr<GUIElement> parent = getParent();
 	while(parent != NULL)
 	{
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		visible = parent->getVisible();
 		if(!visible)
 			return false;
@@ -48,13 +51,13 @@ bool GUIImage::render(sf::RenderWindow *window)
 	if(visible)
 
 	{
-		mSprite.setPosition(getX(), getY());
+		mSprite.setPosition(x, y);
 		window->draw(mSprite);
 	}
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window);
 		}

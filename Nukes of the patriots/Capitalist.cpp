@@ -32,7 +32,8 @@ static bool activateWindow = false;
 Capitalist::Capitalist() :
 	mPresident(nullptr),
 	mCount(0),
-	mUpdateGUIThread(nullptr)
+	mUpdateGUIThread(nullptr),
+	mPickedPresident(0)
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -40,7 +41,7 @@ Capitalist::Capitalist() :
 
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
-	initializeCityImages();
+
 	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
 	mUpdateGUIThread->launch();
 }
@@ -92,7 +93,7 @@ void Capitalist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " millions");
+			mPopulationText->setText(intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
@@ -138,6 +139,7 @@ void Capitalist::playMusic()
 	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
 	music->setVolume(60);
 	//music->play();
+	//music->setLoop(true);
 }
 
 void Capitalist::stopMusic()
@@ -288,15 +290,15 @@ void Capitalist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
-	int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
-	int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
+	int exportedFoodChange = mExportedFood;
+	int exportedGoodsChange = mExportedGoods;
+	int exportedTechChange = mExportedTech;
 	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFood() - enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedGoods() - enemy->getExportedFood();
-	int enemyTechExported = enemy->getExportedTech() - enemy->getExportedFood();
+	int enemyFoodExported = enemy->getExportedFood();
+	int enemyGoodsExported = enemy->getExportedFood();
+	int enemyTechExported = enemy->getExportedFood();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
@@ -685,35 +687,40 @@ void Capitalist::initializeCapitalistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCapitalistMusic();
+	initializeCityImages();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
-	mChangeCityImage					= GUIButton::create(CapitalistButtons["CityImages"], mCapitalistMainWindow);
+	mChangeCityImage					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
-	mLeftPanel							= GUIButton::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
-	mRightPanel							= GUIButton::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
+	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
+	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCapitalistMainWindow);
-	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 20, 0, 0), intToString(mPopulation) + " million", mCapitalistMainWindow);
+	mPopulationText->setScale(0.7, 0.7);
+	mPopulationText->setColor(sf::Color::White);
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCapitalistMainWindow);
-	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 14, 0, 0), intToString(mCurrency), mCapitalistMainWindow);
+	mCurrencyText->setScale(0.7, 0.7);
+	mCurrencyText->setColor(sf::Color::White);
 	mCurrencyText->setAlignment("middle");
-	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCapitalistMainWindow);
-	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(530, 53, 0, 0), intToString(mPatriotism), mCapitalistMainWindow);
+	mPatriotismText->setScale(0.7, 0.7);
+	mPatriotismText->setColor(sf::Color::White);
 	mPatriotismText->setAlignment("middle");
 	
-	mPopulationText->setColor(sf::Color::White);
+	
 
-	mCurrencyText->setColor(sf::Color::White);
+	
 
-	mPatriotismText->setColor(sf::Color::White);
+	
 
 	mCapitalistMainWindow->setVisible(false);
 
@@ -1005,14 +1012,14 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxesIncomeWindow->setVisible(false);
 
 	mIncreasedResourcesPriceWindow		= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
-	mIncreasedResourcesText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "Example: The price of goods is now 21", mIncreasedResourcesPriceWindow);
+	mIncreasedResourcesText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "", mIncreasedResourcesPriceWindow);
 	mIncreasedResourcesText->setScale(0.8, 0.8);
 	mIncreasedResourcesText->setAlignment("left");
 	mCloseIncreasedResourcesPriceWindow	= GUIButton::create(CapitalistButtons["CloseIncreasedResources"], mIncreasedResourcesPriceWindow);
 	mIncreasedResourcesPriceWindow->setVisible(false);
 	
 	mPopulationEatsFoodWindow			= GUIWindow::create(CapitalistWindows["PopulationEatsFood"], mCapitalistMainWindow);
-	mPopulationEatsFoodText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "Example: Population eats 50 food \nPopulation grows to 51 million",  mPopulationEatsFoodWindow);
+	mPopulationEatsFoodText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "",  mPopulationEatsFoodWindow);
 	mPopulationEatsFoodText->setScale(0.8, 0.8);
 	mPopulationEatsFoodText->setAlignment("left");
 	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
@@ -1047,7 +1054,7 @@ void Capitalist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city3")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city4")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city5")));
-	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
+	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
 void Capitalist::chooseLeader()
@@ -1095,10 +1102,14 @@ void Capitalist::initializeGuiFunctions()
 		mTaxesWindow->setEnabled(true, true);
 		mTaxesWindow->setVisible(true); 
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["TaxesIsPressed"]);
-		GUIAnimation::move(mTaxesWindow, 200, sf::FloatRect(mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2, mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2, 0, 0), mTaxesWindow->getRectangle());
+
+		float x = mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2;
+		float y = mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2;
+		GUIAnimation::move(mTaxesWindow, 100, sf::FloatRect(x, y, 0, 0), mTaxesWindow->getRectangle());
 		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mTaxesWindow->getChildVector().size(); ++i)
 		{
-			GUIAnimation::move(mTaxesWindow->getChildVector()[i], 200, sf::FloatRect(mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2, mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2, 0, 0), mTaxesWindow->getChildVector()[i]->getRectangle());
+			
+			GUIAnimation::move(mTaxesWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mTaxesWindow->getChildVector()[i]->getRectangle());
 		}
 	});
 
@@ -1109,10 +1120,14 @@ void Capitalist::initializeGuiFunctions()
 		mResourceWindow->setEnabled(true, true);
 		mResourceWindow->setVisible(true); 
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
-		GUIAnimation::move(mResourceWindow, 200, sf::FloatRect(mResourceWindow->getX() + mResourceWindow->getRectangle().width/2, mResourceWindow->getY() + mResourceWindow->getRectangle().height/2, 0, 0), mResourceWindow->getRectangle());
+
+		float x = mResourceWindow->getX() + mResourceWindow->getRectangle().width/2;
+		float y = mResourceWindow->getY() + mResourceWindow->getRectangle().height/2;
+		GUIAnimation::move(mResourceWindow, 100, sf::FloatRect(x, y, 0, 0), mResourceWindow->getRectangle());
 		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mResourceWindow->getChildVector().size(); ++i)
 		{
-			GUIAnimation::move(mResourceWindow->getChildVector()[i], 200, sf::FloatRect(mResourceWindow->getX() + mResourceWindow->getRectangle().width/2, mResourceWindow->getY() + mResourceWindow->getRectangle().height/2, 0, 0), mResourceWindow->getChildVector()[i]->getRectangle());
+			
+			GUIAnimation::move(mResourceWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mResourceWindow->getChildVector()[i]->getRectangle());
 		}
 	});
 
@@ -1461,10 +1476,13 @@ void Capitalist::initializeGuiFunctions()
 		mBuySpaceProgramText->setText(mSpaceText->getText());
 		mBuySpyNetworkText->setText(mSpyText->getText());
 
-		GUIAnimation::move(mUpgradeWindow, 200, sf::FloatRect(mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2, mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2, 0, 0), mUpgradeWindow->getRectangle());
+		float x = mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2;
+		float y = mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2;
+		GUIAnimation::move(mUpgradeWindow, 100, sf::FloatRect(x, y, 0, 0), mUpgradeWindow->getRectangle());
 		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mUpgradeWindow->getChildVector().size(); ++i)
 		{
-			GUIAnimation::move(mUpgradeWindow->getChildVector()[i], 200, sf::FloatRect(mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2, mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2, 0, 0), mUpgradeWindow->getChildVector()[i]->getRectangle());
+			
+			GUIAnimation::move(mUpgradeWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mUpgradeWindow->getChildVector()[i]->getRectangle());
 		}
 
 		upgradeWindowText();
@@ -1556,10 +1574,13 @@ void Capitalist::initializeGuiFunctions()
 		mImportWindow->setVisible(true); 
 		mCapitalistTradeButton->setTexture(CapitalistButtons["ExportIsPressed"]);
 
-		GUIAnimation::move(mImportWindow, 200, sf::FloatRect(mImportWindow->getX() + mImportWindow->getRectangle().width/2, mImportWindow->getY() + mImportWindow->getRectangle().height/2, 0, 0), mImportWindow->getRectangle());
+		float x = mImportWindow->getX() + mImportWindow->getRectangle().width/2;
+		float y = mImportWindow->getY() + mImportWindow->getRectangle().height/2;
+		GUIAnimation::move(mImportWindow, 100, sf::FloatRect(x, y, 0, 0), mImportWindow->getRectangle());
 		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mImportWindow->getChildVector().size(); ++i)
 		{
-			GUIAnimation::move(mImportWindow->getChildVector()[i], 200, sf::FloatRect(mImportWindow->getX() + mImportWindow->getRectangle().width/2, mImportWindow->getY() + mImportWindow->getRectangle().height/2, 0, 0), mImportWindow->getChildVector()[i]->getRectangle());
+			
+			GUIAnimation::move(mImportWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mImportWindow->getChildVector()[i]->getRectangle());
 		}
 
 	});
@@ -1679,6 +1700,7 @@ void Capitalist::initializeGuiFunctions()
 		mExportedTechPrice = stringToInt(mExportTechCost->getText());
 	});
 
+
 	/*nästa runda*/
 	//mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	//{ 
@@ -1697,12 +1719,30 @@ void Capitalist::initializeGuiFunctions()
 	//});
 
 	/*Stänger ner Taxes fönstret*/
-	mTaxesCloseButton->setOnClickFunction([=]()					
+	mTaxesCloseButton->setOnClickFunction([&]()					
 	{ 
 		mCapitalistMainWindow->setEnabled(true, true);
+		mTaxesWindow->setEnabled(false, true);
+		mTaxesWindow->setVisible(false);
 		mTaxes = stringToInt(mTaxValueText->getText());
-		mTaxesWindow->setVisible(false); 
+		
 		mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);//ändrar textur till orginal
+
+		/*std::shared_ptr<GUIWindow> _window = mTaxesWindow;
+		sf::FloatRect rect = mTaxesWindow->getRectangle();
+		float x = mTaxesWindow->getX() + mTaxesWindow->getRectangle().width/2;
+		float y = mTaxesWindow->getY() + mTaxesWindow->getRectangle().height/2;
+		GUIAnimation::move(mTaxesWindow, 100, mTaxesWindow->getRectangle(), sf::FloatRect(x, y, 0, 0));
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mTaxesWindow->getChildVector().size(); ++i)
+		{
+			std::shared_ptr<GUIElement> element = mTaxesWindow->getChildVector()[i];
+			GUIAnimation::move(element, 100, element->getRectangle(), sf::FloatRect(x, y, 0, 0));
+		}
+		Timer::setTimer([=]()
+		{ 
+			_window->setVisible(false);
+			_window->setRectangle(rect);
+		}, 500, 1);*/
 	});
 
 	/*Stänger ner resources fönstret "Okay-knappen"*/
@@ -1754,15 +1794,15 @@ void Capitalist::initializeGuiFunctions()
 
 		//mChoosePresidentWindow->setVisible(false); 
 		//mPickedPresidentWindow->setVisible(true); 
-		setPresident(mFirstPresident);
+		mPickedPresident = 1;
 
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentButton->getRectangle(), mPresident->getTexture()));
+			(mPickedPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
 
-		mPresidentBiography->setText(mPresident->getBiography());
+		mPresidentBiography->setText(mFirstPresident->getBiography());
 	});
 
 	/*Val av president bild 2*/
@@ -1770,22 +1810,26 @@ void Capitalist::initializeGuiFunctions()
 	{ 
 		//mChoosePresidentWindow->setVisible(false); 
 		//mPickedPresidentWindow->setVisible(true); 
-		setPresident(mSecondPresident);
+		mPickedPresident = 2;
 		
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentButton->getRectangle(), mPresident->getTexture()));
+			(mPickedPresidentButton->getRectangle(), mSecondPresident->getTexture()));
 
 		mPickedPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mPresident)));
+			(mPickedPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
 
-		mPresidentBiography->setText(mPresident->getBiography());
+		mPresidentBiography->setText(mSecondPresident->getBiography());
 	});		
 
 	/*När en president har blivit vald*/
 	mClosePresidentWindow->setOnClickFunction([=]()				
 	{ 
+		if(mPickedPresident == 1)
+			setPresident(mFirstPresident);
+		else if(mPickedPresident == 2)
+			setPresident(mSecondPresident);
 		/*om ingen president blivit vald går det inte att stänga fönstret*/
-		if(mPresident != 0) 
+		if(mPresident != 0 && mPickedPresident > 0) 
 		{
 			mChoosePresidentWindow->setVisible(false);
 			mPickedPresidentWindow->setVisible(true);
@@ -1794,6 +1838,7 @@ void Capitalist::initializeGuiFunctions()
 			int yearsElected = mPresident->getYearsElected();
 
 			mPresident->setYearsElected(yearsElected + 1);
+			mPickedPresident = 0;
 		}
 	});
 
@@ -1810,7 +1855,44 @@ void Capitalist::initializeGuiFunctions()
 
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
-	{ 
+	{
+		int foodBought = mFood - mFoodPreviousRound;
+		int goodsBought = mGoods - mGoodsPreviousRound;
+		int techBought = mTech - mTechPreviousRound;
+		if(foodBought > goodsBought && foodBought > techBought)
+		{
+			foodCost += 1;
+			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+		}
+		else if(goodsBought > foodBought && goodsBought > techBought)
+		{
+			goodsCost += 1;
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+		}
+		else if(techBought > foodBought && techBought > goodsBought)
+		{
+			techCost += 1;
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+		}
+		else
+		{
+			int rand = Randomizer::getInstance()->randomNr(3, 0);
+			if(rand == 0)
+			{
+				foodCost += 1;
+				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+			}
+			else if(rand == 1)
+			{
+			goodsCost += 1;
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			}
+			else
+			{
+			techCost += 1;
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			}
+		}
 		mIncreasedResourcesPriceWindow->setVisible(true);
 		mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
 	});
@@ -1818,6 +1900,9 @@ void Capitalist::initializeGuiFunctions()
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
 		mIncreasedResourcesPriceWindow->setVisible(false);
+
+		updateFood(mPopulationEatsFoodText);
+
 		mPopulationEatsFoodWindow->setVisible(true);
 	});
 
@@ -1872,7 +1957,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
-	playMusic();
+	//playMusic();
 }
 
 void Capitalist::hideGUI()

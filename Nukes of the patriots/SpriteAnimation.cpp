@@ -73,9 +73,9 @@ bool SpriteAnimation::endOfSpriteAnimation()
 	return mEndOfSpriteAnimation;
 }
 
-void SpriteAnimation::tick()
+bool SpriteAnimation::tick()
 {
-
+	return true;
 }
 
 

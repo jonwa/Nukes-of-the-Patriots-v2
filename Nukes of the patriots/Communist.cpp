@@ -12,6 +12,7 @@
 #include "GameManager.h"
 #include <sstream>
 #include "Timer.h"
+#include "GUIAnimation.h"
 
 static int foodCost			= 10;
 static int goodsCost		= 20;
@@ -37,7 +38,6 @@ Communist::Communist() :
 	
 	fiveYearInitialize();
 	propagandaInitialize();
-	initializeCityImages();
 	mUpdateGUIThread = new sf::Thread(&Communist::updateGUI, this);
 	mUpdateGUIThread->launch();
 }
@@ -83,7 +83,7 @@ void Communist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " millions");
+			mPopulationText->setText(intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
@@ -131,6 +131,7 @@ void Communist::playMusic()
 	std::shared_ptr<sf::Music> music = CommunistMusic["CommunistMainTheme"];
 	music->setVolume(100);
 	//music->play();
+	//music->setLoop(true);
 }
 //Stoppar musiken
 void Communist::stopMusic()
@@ -367,15 +368,15 @@ void Communist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFood - (mExportedFood - mExportedFoodPreviousRound);
-	int exportedGoodsChange = mExportedGoods - (mExportedGoods - mExportedGoodsPreviousRound);
-	int exportedTechChange = mExportedTech - (mExportedTech - mExportedTechPreviousRound);
+	int exportedFoodChange = mExportedFood;
+	int exportedGoodsChange = mExportedGoods;
+	int exportedTechChange = mExportedTech;
 	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFood() - (enemy->getExportedFood() - enemy->getExportedFoodPreviousRound());
-	int enemyGoodsExported = enemy->getExportedFood() - (enemy->getExportedGoods() - enemy->getExportedGoodsPreviousRound());
-	int enemyTechExported = enemy->getExportedFood() - (enemy->getExportedTech() - enemy->getExportedTechPreviousRound());
+	int enemyFoodExported = enemy->getExportedFood();
+	int enemyGoodsExported = enemy->getExportedFood();
+	int enemyTechExported = enemy->getExportedFood();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
@@ -798,30 +799,32 @@ void Communist::initializeCommunistWindow()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadCommunistMusic();
+	initializeCityImages();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
 	mCommunistBorderTop				= GUIWindow::create(CommunistWindows["CommunistBorderTop"], mCommunistMainWindow);
-	mChangeCityImage				= GUIButton::create(CommunistButtons["CityImages"], mCommunistMainWindow);
+	mChangeCityImage				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
+									  (CommunistButtons["CityImages"].first, CityImages[0]), mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
-	mLeftPanel						= GUIButton::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
-	mRightPanel						= GUIButton::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
+	mLeftPanel						= GUIImage::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
+	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 
 	
-	mPopulationText						= GUIText::create(sf::FloatRect(697, 18, 228, 36), intToString(mPopulation) + " million", mCommunistMainWindow);
-	mPopulationText->setScale(0.5, 0.5);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 20, 0, 0), intToString(mPopulation) + " million", mCommunistMainWindow);
+	mPopulationText->setScale(0.7, 0.7);
 
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(361, 14, 228, 36), intToString(mCurrency), mCommunistMainWindow);
-	mCurrencyText->setScale(0.5, 0.5);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 14, 0, 0), intToString(mCurrency), mCommunistMainWindow);
+	mCurrencyText->setScale(0.7, 0.7);
 	mCurrencyText->setAlignment("middle");
-	mPatriotismText						= GUIText::create(sf::FloatRect(520, 50, 156, 36), intToString(mPatriotism), mCommunistMainWindow);
-	mPatriotismText->setScale(0.5, 0.5);
+	mPatriotismText						= GUIText::create(sf::FloatRect(530, 53, 0, 0), intToString(mPatriotism), mCommunistMainWindow);
+	mPatriotismText->setScale(0.7, 0.7);
 	mPatriotismText->setAlignment("middle");
 
 	mPopulationText->setColor(sf::Color::White);
@@ -1198,7 +1201,7 @@ void Communist::initializeCityImages()
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom3")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom4")));
 	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Communist/kom5")));
-	mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
+	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
 void Communist::chooseLeader()
@@ -1398,6 +1401,15 @@ void Communist::initializeGuiFunctions()
 
 		mFiveYearPlanWindow->setVisible(true); 
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+
+		float x = mFiveYearPlanWindow->getX() + mFiveYearPlanWindow->getRectangle().width/2;
+		float y = mFiveYearPlanWindow->getY() + mFiveYearPlanWindow->getRectangle().height/2;
+		GUIAnimation::move(mFiveYearPlanWindow, 100, sf::FloatRect(x, y, 0, 0), mFiveYearPlanWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mFiveYearPlanWindow->getChildVector().size(); ++i)
+		{
+			
+			GUIAnimation::move(mFiveYearPlanWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mFiveYearPlanWindow->getChildVector()[i]->getRectangle());
+		}
 	});
 	/*Propaganda knappen på interface*/
 	mCommunistPropagandaButton->setOnClickFunction([=]()		
@@ -1414,6 +1426,16 @@ void Communist::initializeGuiFunctions()
 
 		mPropagandaWindowFirst->setVisible(true); 
 		mCommunistPropagandaButton->setTexture(CommunistButtons["PropagandaIsPressed"]);
+
+		float x = mPropagandaWindowFirst->getX() + mPropagandaWindowFirst->getRectangle().width/2;
+		float y = mPropagandaWindowFirst->getY() + mPropagandaWindowFirst->getRectangle().height/2;
+		GUIAnimation::move(mPropagandaWindowFirst, 100, sf::FloatRect(x, y, 0, 0), mPropagandaWindowFirst->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mPropagandaWindowFirst->getChildVector().size(); ++i)
+		{
+			
+			GUIAnimation::move(mPropagandaWindowFirst->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mPropagandaWindowFirst->getChildVector()[i]->getRectangle());
+		}
+
 	});
 	/*Upgrade knappen på interface*/
 	mCommunistUpgradeButton->setOnClickFunction([=]()			
@@ -1431,6 +1453,15 @@ void Communist::initializeGuiFunctions()
 		mCommunistUpgradeButton->setTexture(CommunistButtons["UpgradeIsPressed"]);
 
 		upgradeWindowText();
+
+		float x = mUpgradeWindow->getX() + mUpgradeWindow->getRectangle().width/2;
+		float y = mUpgradeWindow->getY() + mUpgradeWindow->getRectangle().height/2;
+		GUIAnimation::move(mUpgradeWindow, 100, sf::FloatRect(x, y, 0, 0), mUpgradeWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mUpgradeWindow->getChildVector().size(); ++i)
+		{
+			
+			GUIAnimation::move(mUpgradeWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mUpgradeWindow->getChildVector()[i]->getRectangle());
+		}
 	});
 	
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
@@ -1466,9 +1497,16 @@ void Communist::initializeGuiFunctions()
 		mPropagandaWindowFirst->setEnabled(false, true);
 		mPropagandaWindowSecond->setVisible(true);
 
+		float x = mPropagandaBuyFoodButton->getX() + mPropagandaBuyFoodButton->getRectangle().width/2;
+		float y = mPropagandaBuyFoodButton->getY() + mPropagandaBuyFoodButton->getRectangle().height/2;
+		GUIAnimation::move(mPropagandaWindowSecond, 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mPropagandaWindowSecond->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
+		}
 		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyFoodButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
+		//mShowBoughtPropaganda->setScale(0.8, 0.8);
 	});
 
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
@@ -1479,9 +1517,17 @@ void Communist::initializeGuiFunctions()
 		mPropagandaWindowFirst->setEnabled(false, true);
 		mPropagandaWindowSecond->setVisible(true);
 
+		float x = mPropagandaBuyGoodsButton->getX() + mPropagandaBuyGoodsButton->getRectangle().width/2;
+		float y = mPropagandaBuyGoodsButton->getY() + mPropagandaBuyGoodsButton->getRectangle().height/2;
+		GUIAnimation::move(mPropagandaWindowSecond, 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mPropagandaWindowSecond->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
+		}
+
 		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyGoodsButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
+		//mShowBoughtPropaganda->setScale(0.8, 0.8);
 		//std::cout << "Goods: " << mGoods << std::endl;
 	});
 	mPropagandaBuyTechButton->setOnClickFunction([=]()
@@ -1492,9 +1538,17 @@ void Communist::initializeGuiFunctions()
 		mPropagandaWindowFirst->setEnabled(false, true);
 		mPropagandaWindowSecond->setVisible(true);
 
+		float x = mPropagandaBuyTechButton->getX() + mPropagandaBuyTechButton->getRectangle().width/2;
+		float y = mPropagandaBuyTechButton->getY() + mPropagandaBuyTechButton->getRectangle().height/2;
+		GUIAnimation::move(mPropagandaWindowSecond, 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mPropagandaWindowSecond->getChildVector().size(); ++i)
+		{
+			GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
+		}
+
 		mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyTechButton->getTexture()));
-		mShowBoughtPropaganda->setScale(0.7, 0.7);
+		//mShowBoughtPropaganda->setScale(0.8, 0.8);
 		//std::cout << "Tech: " << mTech << std::endl;
 	});
 
@@ -1623,10 +1677,18 @@ void Communist::initializeGuiFunctions()
 	/*När en general har blivit vald*/
 	mCloseGeneralWindow->setOnClickFunction([=]()
 	{
-		mChooseGeneralWindow->setVisible(false);
-		mPickedGeneralWindow->setVisible(true);
-		
-		mPickedGeneralWindow->setEnabled(true, true);
+		//GUIAnimation::fadeToColor(mChooseGeneralWindow, 1000, mChooseGeneralWindow->getColor(), sf::Color(255, 255, 255, 0));
+		std::shared_ptr<GUIWindow> _chooseWindow = mChooseGeneralWindow;
+		std::shared_ptr<GUIWindow> _pickedWindow = mPickedGeneralWindow;
+		Timer::setTimer([=]()
+		{
+			_chooseWindow->setVisible(false);
+			_pickedWindow->setEnabled(true, true);
+		}, 1000, 1);
+			_pickedWindow->setVisible(true);
+			
+			GUIAnimation::fadeToColor(_pickedWindow, 1000, sf::Color(255, 255, 255, 0), _pickedWindow->getColor());
+		//}, 500, 1);
 
 		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
 
@@ -1658,6 +1720,14 @@ void Communist::initializeGuiFunctions()
 		mImportWindow->setVisible(true); 
 		mCommunistTradeButton->setTexture(CommunistButtons["ExportIsPressed"]);
 
+		float x = mImportWindow->getX() + mImportWindow->getRectangle().width/2;
+		float y = mImportWindow->getY() + mImportWindow->getRectangle().height/2;
+		GUIAnimation::move(mImportWindow, 100, sf::FloatRect(x, y, 0, 0), mImportWindow->getRectangle());
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mImportWindow->getChildVector().size(); ++i)
+		{
+			
+			GUIAnimation::move(mImportWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mImportWindow->getChildVector()[i]->getRectangle());
+		}
 	});
 
 	sf::Texture *minusTexture[3];
@@ -1793,7 +1863,9 @@ void Communist::initializeGuiFunctions()
 
 	/*nästa runda*/
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
-	{ 
+	{
+		updateFood(mPopulationEatsFoodText);
+
 		mPopulationEatsFoodWindow->setVisible(true);
 		mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
 	});
@@ -1864,7 +1936,7 @@ void Communist::updateAllResources()
 void Communist::showGUI()
 {
 	mCommunistMainWindow->setVisible(true);
-	playMusic();
+	//playMusic();
 }
 
 void Communist::hideGUI()

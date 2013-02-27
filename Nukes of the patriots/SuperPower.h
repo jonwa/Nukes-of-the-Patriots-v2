@@ -2,6 +2,9 @@
 #define SUPERPOWER_H
 
 #include <memory>
+#include <sstream>
+
+class GUIText;
 
 enum PoliticalType
 {
@@ -50,7 +53,7 @@ public:
 	void		setRound(int round);
 
 	void		getTaxIncome();
-	void		updateFood();
+	void		updateFood(std::shared_ptr<GUIText> text);
 	bool		enoughFood();
 
 	void		setExportedFood(int food)	{ mExportedFood = food; };
@@ -76,6 +79,20 @@ public:
 	virtual void		newYearStart() = 0;
 	virtual void		reset();
 protected:
+	std::string intToString(int i)
+	{
+		std::stringstream converter;
+		converter << i;
+		return converter.str();
+	}
+
+	int stringToInt(std::string str)
+	{
+		if(str.size() == 0)
+			return 0;
+		return atoi(str.c_str());
+	}
+
 	PoliticalType mType;
 
 	int mRound;
