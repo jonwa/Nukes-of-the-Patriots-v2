@@ -42,6 +42,41 @@ Communist::Communist() :
 	mUpdateGUIThread->launch();
 }
 
+void Communist::reset()
+{
+	static int foodCost			= 10;
+	static int goodsCost		= 20;
+	static int techCost			= 30;
+	static int propagandaCost	= 100;
+	static int taxChange		= 5;
+	static int currentGoods		= 0;
+	static int currentTech		= 0;
+	static bool activateWindow	= false;
+
+	static int generalCount = 0;
+	mRound = 0;
+	mCount = 0;
+	mIncreasePopulation = false;
+
+	mGeneral = nullptr;
+	mChooseGeneralWindow->setVisible(true);
+	
+	mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
+	mCommunistFiveYearPlanButton->setSize(CommunistButtons["FiveYearPlan"].first.width, CommunistButtons["FiveYearPlan"].first.height);
+	mCommunistPropagandaButton->setTexture(CommunistButtons["Propaganda"]);
+	mCommunistPropagandaButton->setSize(CommunistButtons["Propaganda"].first.width, CommunistButtons["Propaganda"].first.height);
+	mCommunistUpgradeButton->setTexture(CommunistButtons["Upgrade"]);
+	mCommunistUpgradeButton->setSize(CommunistButtons["Upgrade"].first.width, CommunistButtons["Upgrade"].first.height);
+	mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
+	mCommunistTradeButton->setSize(CommunistButtons["Export"].first.width, CommunistButtons["Export"].first.height);
+
+
+	mCommunistGeneralButton->setTexture(CommunistButtons["General"]);
+	mCommunistGeneralButton->setSize(CommunistButtons["General"].first.width, CommunistButtons["General"].first.height);
+	SuperPower::reset();
+	
+}
+
 void Communist::updateGUI()
 {
 	Timer::setTimer([=]()
@@ -89,53 +124,6 @@ Communist::~Communist()
 	
 }
 
-
-void Communist::clear()
-{
-	mYearVector.clear();
-	mResourcesFoodButtons.clear();
-	mResourcesGoodsButtons.clear();
-	mResourcesTechButtons.clear();
-	CommunistMusic.clear();
-
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CommunistButtons.begin(); it != CommunistButtons.end(); it++)
-	{
-		delete (*it).second.second;
-	}
-	CommunistButtons.clear();
-
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = CommunistWindows.begin(); it != CommunistWindows.end(); it++)
-	{
-		delete (*it).second.second;
-	}
-	CommunistWindows.clear();
-	
-	for(std::vector<sf::Texture*>::iterator it = CityImages.begin(); it != CityImages.end(); it++)
-	{
-		delete (*it);
-	}
-	CityImages.clear();
-
-	for(std::vector<sf::Texture*>::iterator it = PropagandaFood.begin(); it != PropagandaFood.end(); it++)
-	{
-		delete (*it);
-	}
-	PropagandaFood.clear();
-
-	for(std::vector<sf::Texture*>::iterator it = PropagandaGoods.begin(); it != PropagandaGoods.end(); it++)
-	{
-		delete (*it);
-	}
-	PropagandaGoods.clear();
-
-	for(std::vector<sf::Texture*>::iterator it = PropagandaTech.begin(); it != PropagandaTech.end(); it++)
-	{
-		delete (*it);
-	}
-	PropagandaTech.clear();
-
-
-}
 
 //spelar upp musiken samt loopar den
 void Communist::playMusic()
@@ -417,6 +405,7 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
+	
 	if(mRound > 1)
 	{
 		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
@@ -1741,16 +1730,25 @@ void Communist::initializeGuiFunctions()
 		}
 	});
 
-	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus"));
-	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus"));
+	sf::Texture *minusTexture[3];
+	minusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus1"));
+	minusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus5"));
+	minusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus10"));
+
+	sf::Texture *plusTexture[3];
+	plusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus1"));
+	plusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus5"));
+	plusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus10"));
+
 	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
 	{
 		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
 		for(int h = 0; h < 3; h++)
 		{
+
 			mImportBuyButtonMinus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
-				minusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture[h]->getSize().x, y, minusTexture[h]->getSize().x, minusTexture[h]->getSize().y),
+				minusTexture[h]),
 				mImportWindow);
 			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
 			{
@@ -1766,8 +1764,8 @@ void Communist::initializeGuiFunctions()
 			});
 
 			mImportBuyButtonPlus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
-				plusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture[h]->getSize().x, y, plusTexture[h]->getSize().x, plusTexture[h]->getSize().y),
+				plusTexture[h]),
 				mImportWindow);
 			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
 			{
@@ -1803,8 +1801,8 @@ void Communist::initializeGuiFunctions()
 		for(int h = 0; h < 3; h++)
 		{
 			mExportButtonMinus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
-				minusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture[h]->getSize().x, y, minusTexture[h]->getSize().x, minusTexture[h]->getSize().y),
+				minusTexture[h]),
 				mExportWindow);
 			mExportButtonMinus[i][h]->setOnClickFunction([=]()
 			{
@@ -1818,8 +1816,8 @@ void Communist::initializeGuiFunctions()
 			});
 
 			mExportButtonPlus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
-				plusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture[h]->getSize().x, y, plusTexture[h]->getSize().x, plusTexture[h]->getSize().y),
+				plusTexture[h]),
 				mExportWindow);
 			mExportButtonPlus[i][h]->setOnClickFunction([=]()
 			{
@@ -1869,6 +1867,7 @@ void Communist::initializeGuiFunctions()
 		updateFood(mPopulationEatsFoodText);
 
 		mPopulationEatsFoodWindow->setVisible(true);
+		mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
 	});
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()

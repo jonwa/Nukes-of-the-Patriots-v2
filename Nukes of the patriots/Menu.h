@@ -30,7 +30,11 @@ public:
 	Menu(sf::RenderWindow &window);
 	~Menu();
 	void clear();
-	void setInGameMenuVisible();
+
+	void update(sf::Event &event);
+
+	void setMainMenuVisible();
+	void resetChooseTeamValues();
 
 private:
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;

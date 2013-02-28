@@ -11,6 +11,7 @@
 #include "Timer.h"
 #include "TimerHandler.h"
 #include "GUIAnimation.h"
+#include "AnimationHandler.h"
 #include "Menu.h"
 
 GameManager* GameManager::mInstance = NULL;
@@ -24,87 +25,92 @@ GameManager* GameManager::getInstance()
 	return mInstance;
 }
 
-GameManager::GameManager() : 
-		mVecPlayersLeft(),
-		mRound(0)
-{
+GameManager::GameManager() : 		
+	mVecPlayersLeft(),		
+	mRound(0),
+	mLoaded(false)
+{	
 	initializeGuiElement();
 	initializeGuiFunctions();
 }
 
-
 GameManager::~GameManager()
-{}
-
-//clear them MF containers 
-void GameManager::clear()
 {
-	getCap()->clear();
-	getCom()->clear();
+	
+}
 
-	mVecSuperPowers.clear();
-	mVecPlayersLeft.clear();
-	mPresidentVector.clear();
-	mGeneralVector.clear();
 
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = BetweenTurnsWindow.begin(); it != BetweenTurnsWindow.end(); it++)
+void GameManager::reset()
+{
+	mRound = 0;
+	mYear = 1952;
+	mYearText->setText("1952");
+	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
-		delete (*it).second.second;
+		(*it)->reset();
 	}
-	BetweenTurnsWindow.clear();
-
-	for(std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> >::iterator it = BetweenTurnsButton.begin(); it != BetweenTurnsButton.end(); it++)
-	{
-		delete (*it).second.second;
-	}
-	BetweenTurnsButton.clear();
-
-	for(std::map<std::shared_ptr<President>, sf::Texture*>::iterator it = mPresidentPlaqueMap.begin(); it != mPresidentPlaqueMap.end(); it++)
-	{
-		delete (*it).second;
-	}
-	mPresidentPlaqueMap.clear();
-
-	for(std::map<std::shared_ptr<President>, sf::Texture*>::iterator it = mGeneralPlaqueMap.begin(); it != mGeneralPlaqueMap.end(); it++)
-	{
-		delete (*it).second;
-	}
-	mGeneralPlaqueMap.clear();
-
+	AnimationHandler::getInstance()->reset();
 }
 
 void GameManager::init(int year)
 {
-	getInstance()->setYear(year);
-	loadPresidents();
-	mVecSuperPowers.push_back(std::make_shared<Capitalist>());
-	mVecSuperPowers.push_back(std::make_shared<Communist>());
-	mVecPlayersLeft = mVecSuperPowers;
 
-	/*Skriver ut året på interface*/
-	mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
-	mYearText->setScale(0.6, 0.6);
-	mYearText->setAlignment("middle");
-	mYearText->setColor(sf::Color::White);
-	GUIManager::getInstance()->addGUIElement(mYearText);
+	if(!mLoaded)
+	{
+		getInstance()->setYear(year);
+		loadPresidents();
+		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
+		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		mVecPlayersLeft = mVecSuperPowers;
+
+		/*Skriver ut året på interface*/
+		mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
+		mYearText->setScale(0.6, 0.6);
+		mYearText->setAlignment("middle");
+		mYearText->setColor(sf::Color::White);
+		GUIManager::getInstance()->addGUIElement(mYearText);
 	
-	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
-		(*it)->chooseLeader();
-	}*/
-	mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
-	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
-	{
-		if((*it) == mCurrentPlayer)
+		getInstance()->setYear(year);
+		loadPresidents();
+		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
+		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		mVecPlayersLeft = mVecSuperPowers;
+	
+		/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
-			mVecPlayersLeft.erase(it);
-			break;
+			(*it)->chooseLeader();
+		}*/
+		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
 		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+		//startRound();
+		mLoaded = true;
 	}
-	mCurrentPlayer->setRound(1);
-	mCurrentPlayer->showGUI();
-	//startRound();
-
+	else
+	{
+		mVecPlayersLeft = mVecSuperPowers;
+		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
+		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+	}
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()
@@ -119,14 +125,13 @@ std::shared_ptr<SuperPower> GameManager::getCommunist()
 
 std::shared_ptr<Capitalist> GameManager::getCap()
 {
-	std::shared_ptr<Capitalist> cap = std::static_pointer_cast<Capitalist> (mVecSuperPowers[0]);
-	return cap;
+	return /*std::shared_ptr<Capitalist> cap = */std::static_pointer_cast<Capitalist> (mVecSuperPowers[0]);
 }
 
 std::shared_ptr<Communist> GameManager::getCom()
 {
-	std::shared_ptr<Communist> com = std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
-	return com;
+	//std::shared_ptr<Communist> com = std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
+	return std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
 }
 
 void GameManager::loadPresidents()

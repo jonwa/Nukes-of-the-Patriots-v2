@@ -13,8 +13,14 @@ GUIManager* GUIManager::getInstance()
 
 GUIManager::~GUIManager()
 {
+	clear();
+}
+
+void GUIManager::clear()
+{
 	mGuiElements.clear();
 }
+
 
 void GUIManager::setWindow(sf::RenderWindow *window)
 {
@@ -94,4 +100,30 @@ void GUIManager::tick()
 	{
 		mGuiElements[i]->tick();
 	}
+}
+
+void GUIManager::setOnTop(std::shared_ptr<GUIElement> element)
+{
+	mGuiElements.push_back(element);
+	for(std::vector<std::shared_ptr<GUIElement> >::iterator it = mGuiElements.begin(); it != mGuiElements.end(); ++it)
+	{
+		if(*it == element)
+		{
+			mGuiElements.erase(it);
+			break;
+		}
+	}
+
+	//bool lastPos = false;
+
+	//for(std::vector<std::shared_ptr<GUIElement> >::size_type it = 0; it < mGuiElements.size(); ++it)
+	//{
+	//	if(mGuiElements[it] == element)
+	//	{
+	//		if(it == mGuiElements.size()-1)
+	//			lastPos = true;
+	//		break;
+	//	}
+	//}
+	//std::cout<<"Is furthest back in vector: "<<(lastPos ? "yes" : "no noob")<<std::endl;
 }

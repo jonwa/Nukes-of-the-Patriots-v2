@@ -294,7 +294,7 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
-		<image>Capitalist/kap_texture_button_export</image>
+		<image>Capitalist/kap_texture_button_trade</image>
 	</button>
 	<button>
 		<name>ExportIsPressed</name>
@@ -302,7 +302,7 @@
 		<yPos>636</yPos>
 		<width>200</width>
 		<height>132</height>
-		<image>Capitalist/kap_texture_button_invert_export</image>
+		<image>Capitalist/kap_texture_button_invert_trade</image>
 	</button>
 	<button>
 		<name>LowerFood</name>

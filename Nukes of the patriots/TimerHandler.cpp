@@ -14,10 +14,6 @@ void TimerHandler::addTimer(Timer* timer)
 
 void TimerHandler::clear()
 {
-	for(std::vector<Timer*>::iterator it = mVecTimers.begin(); it != mVecTimers.end(); it++)
-	{
-		delete (*it);
-	}
 	mVecTimers.clear();
 }
 

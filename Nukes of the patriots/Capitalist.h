@@ -38,7 +38,8 @@ public:
 	std::shared_ptr<President>	getPresident();
 	void						setPresident(std::shared_ptr<President>);
 
-	void clear();
+	void reset();
+
 
 	bool upgradeNuclearWeapon(int value);
 	bool upgradeSpaceProgram(int value);
@@ -68,6 +69,21 @@ private:
 	sf::Thread *mUpdateGUIThread;
 
 
+	std::string intToString(int i)
+	{
+		std::stringstream converter;
+		converter << i;
+		return converter.str();
+	}
+
+	int stringToInt(std::string str)
+	{
+		if(str.size() == 0)
+			return 0;
+		return atoi(str.c_str());
+	}
+
+
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
 	std::shared_ptr<President> mSecondPresident;
@@ -80,7 +96,7 @@ private:
 																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistWindows;
-	std::map<std::string, std::shared_ptr<sf::Music> > CapitalistMusic;
+	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
 	void loadButtonPosition();
 	void loadWindowPosition();

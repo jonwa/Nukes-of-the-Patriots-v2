@@ -36,6 +36,39 @@ SuperPower::SuperPower() :
 {
 }
 
+void SuperPower::reset()
+{
+	mPopulation								= 50;			//Befolkning i miljoner
+	mPatriotism								= 20;
+	mCurrency								= 500;
+	mTaxes									= 30;
+	mFood									= 0;
+	mExportedFood							= 0;
+	mExportedFoodPrice						= 0;
+	mTech									= 100;
+	mExportedTech							= 0;
+	mExportedTechPrice						= 0;
+	mGoods									= 100;
+	mExportedGoods							= 0;
+	mExportedGoodsPrice						= 0;
+	mSpyNetwork								= 0;
+	mSpaceProgram							= 0;
+	mNuclearWeapon							= 10;
+	mTaxDecreased							= false;
+	mPatriotismPreviousRound				= mPatriotism;
+	mCurrencyPreviousRound                  = mCurrency;
+	mPopulationPreviousRound				= mPopulation;
+	mFoodPreviousRound						= mFood;
+	mGoodsPreviousRound						= mGoods;
+	mTechPreviousRound					    = mTech;
+	mExportedFoodPreviousRound				= mExportedFood;
+	mExportedGoodsPreviousRound				= mExportedGoods;
+	mExportedTechPreviousRound				= mExportedTech;
+	mTaxesPreviousRound						= mTaxes;
+	mSpyNetworkPreviousRound				= mSpyNetwork;
+	mNuclearWeaponPreviousRound				= mNuclearWeapon;
+	mSpaceProgramPreviousRound				= mSpaceProgram;
+}
 
 SuperPower::~SuperPower()
 {

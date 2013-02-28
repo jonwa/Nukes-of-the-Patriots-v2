@@ -5,7 +5,7 @@
 #include <SFML\Graphics\Sprite.hpp>
 #include <SFML\Audio\Sound.hpp>
 #include <SFML\Audio\SoundBuffer.hpp>
-
+#include <SFML\Audio\Music.hpp>
 
 class GUIButton: public GUIElement
 {
@@ -28,8 +28,8 @@ private:
 	GUIButton(const GUIButton &guiButton);
 	GUIButton& operator=(const GUIButton &guiButton);
 	sf::Sprite mSprite;
-	sf::Sound onClickSound;
-	sf::SoundBuffer onClickSoundBuff;
+
+	std::shared_ptr<sf::Music> mOnClickSound;
 };
 
 #endif
