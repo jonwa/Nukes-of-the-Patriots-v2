@@ -22,8 +22,6 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
-
-	mOnClickFunction = [=](){std::cout << "X: " << getX() << " Y: " << getY() << std::endl << "OriginX: " << mText.getOrigin().x << " OriginY: " <<mText.getOrigin().y << std::endl;};
 }
 
 void GUIText::setText(std::string text)
@@ -90,23 +88,17 @@ bool GUIText::render(sf::RenderWindow *window)
 			mText.setPosition(getX(), getY());
 			//mText.setOrigin(mText.getGlobalBounds().width, mText.getGlobalBounds().height);
 		}
-			//posX += 0;
 		else if(mAlignment == "middle")
 		{
 			mText.setPosition(getX(), getY());
 			mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height);
-			/*posX -= mText.getGlobalBounds().width/2;
-			posY -= mText.getGlobalBounds().height/2;*/
 		}
 		else if(mAlignment == "right")
 		{
 			mText.setPosition(getX(), getY());
 			mText.setOrigin(mText.getLocalBounds().width, mText.getLocalBounds().height);
 		}
-			//posX -= mText.getGlobalBounds().width;
-
 		
-		//mText.setPosition(posX, posY);
 		window->draw(mText);
 	}
 
