@@ -50,7 +50,7 @@ public:
 	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	bool			onClick(sf::RenderWindow *window);
 	bool			onMove(sf::RenderWindow *window);
-	virtual bool	render(sf::RenderWindow *window) = 0;
+	virtual bool	render(sf::RenderWindow *window, sf::RenderStates &states) = 0;
 	virtual void	onGUIClick(int mouseX, int mouseY){};
 	virtual void	onGUIHover(int mouseX, int mouseY){};
 	void			tick();

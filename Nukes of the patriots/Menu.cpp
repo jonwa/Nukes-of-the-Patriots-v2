@@ -11,24 +11,60 @@
 #include "Timer.h"
 #include "TcpServer.h"
 #include "TcpClient.h"
+#include "UdpServer.h"
+#include "UdpClient.h"
+#include "Event.h"
 
 
  /*Konstruktorn kör initialize-funktionen*/
 Menu::Menu(sf::RenderWindow &window) : 
 	mWindow(window),
 	mCapitalistTeamChosen(false),
-	mCommunistTeamChosen(false)
+	mCommunistTeamChosen(false),
 	mTcpServer(nullptr),
-	mTcpClient(nullptr)
+	mTcpClient(nullptr),
+	mUdpServer(nullptr),
+	mUdpClient(nullptr),
+	mShowTeamChooseAnimation(false)
 { 
-	mTcpServer = new sf::TcpServer(55001);
-	mTcpClient = new sf::TcpClient(55001, sf::IpAddress::LocalHost);
+	//mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
+	Event::addEventHandler("serverAwaitingConnection", [=](sf::Packet packet)
+	{
+		char serverAddress[1024];
+		unsigned short serverPort;
+		packet>>serverAddress>>serverPort;
+		std::cout<<"Server open: "<<serverAddress<<" port: "<<serverPort<<std::endl;
+		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
+	});
+	sf::Packet packet;
+	packet<<sf::IpAddress::getLocalAddress().toString();
+	//mUdpClient->triggerServerEvent("onPlayerConnect", packet);
 	initialize(); 
 	initializeGuiFuctions();
+	//loadTeamAnimation();
+	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
 	//MenuMusic["MainMenuTrack"]->play();
 	//MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){}
+
+void Menu::loadTeamAnimation()
+{
+	for(int i = 0; i < 150; i++)
+	{
+		std::stringstream s;
+		s<<"teamAnimation/teamsign_animation."<<i+1<<".png";
+		//std::cout<<"teamAnimation/teamsign_animation."<<i+1<<".png"<<std::endl;
+		mTeamAnimationFrames[i].loadFromFile(s.str());
+	}
+	std::cout<<"done loading animation!"<<std::endl;
+}
+
+void Menu::connectToServer(unsigned short port, sf::IpAddress ipAddress)
+{
+	if(mTcpClient == nullptr)
+		mTcpClient = new sf::TcpClient(port, ipAddress);
+}
 
 void Menu::clear()
 {
@@ -308,11 +344,39 @@ void Menu::initialize()
 
 	  Av: Jon Wahlström  2013-01-29
 																	*/
+
+void Menu::tick()
+{
+	if(mShowTeamChooseAnimation)
+	{
+		float timeleft = 0;
+		float duration = 1;
+		if(Timer::isTimer(mTeamAnimationTimer))
+		{
+			timeleft = mTeamAnimationTimer->getTimeLeft();
+			duration = mTeamAnimationTimer->getTimerDuration();
+		}
+
+		float progress = 1 - (timeleft / duration);
+
+		int frame = progress * 149; //149 = number of frames in the animation
+		sf::Sprite sprite(mTeamAnimationFrames[frame]);
+		sprite.setPosition(mWindow.getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow.getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
+		mWindow.draw(sprite);
+	}
+}
+
 void Menu::initializeGuiFuctions()
 {
 	mStartNewGameButton->setMouseEnterFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGameHover"]); });
 	mStartNewGameButton->setMouseLeaveFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGame"]); });
-	mStartNewGameButton->setOnClickFunction([=]()		{ mMainMenuWindow->setVisible(false); mChooseTeamWindow->setVisible(true); });
+	mStartNewGameButton->setOnClickFunction([=]()		
+	{ 
+		mMainMenuWindow->setVisible(false);
+		//mShowTeamChooseAnimation = true;
+		//mTeamAnimationTimer->resetTimer();
+		mChooseTeamWindow->setVisible(true); 
+	});
 
 	mMultiPlayerButton->setMouseEnterFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayerHover"]); });
 	mMultiPlayerButton->setMouseLeaveFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayer"]); });

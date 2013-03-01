@@ -5,7 +5,7 @@
 SuperPower::SuperPower() : 
 	mPopulation(50),			//Befolkning i miljoner
 	mPatriotism(20),
-	mCurrency(500),
+	mCurrency(1500),
 	mTaxes(30),
 	mFood(0),
 	mExportedFood(0),

@@ -38,7 +38,9 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu menu(window);
-
+	sf::Shader grayscale;
+	grayscale.loadFromFile("effects/grayscale.frag", sf::Shader::Fragment);
+	grayscale.setParameter("texture", sf::Shader::CurrentTexture);
 
 	while (window.isOpen())
     {
@@ -69,8 +71,12 @@ int main()
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();
         window.clear();
-		GUIManager::getInstance()->render();
+		//grayscale.setParameter("mousePos", sf::Vector2f(mousePos.x, window.getSize().y - mousePos.y));
+		sf::RenderStates states;
+		//states.shader = &grayscale;
+		GUIManager::getInstance()->render(states);
 		TimerHandler::getInstance()->tick();
+		menu.tick();
 		window.draw(cursor);
         window.display();
 		

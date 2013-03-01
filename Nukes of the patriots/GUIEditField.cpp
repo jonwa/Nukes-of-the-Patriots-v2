@@ -14,7 +14,7 @@ std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, Type type
 GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, EDIT_FIELD),
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
-	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1)
+	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1),mMaxCharacters(0)
 {
 	mFont.loadFromFile("Font/georgia.ttf");
 	mText.setFont(mFont);
@@ -82,7 +82,7 @@ void GUIEditField::setScale(float width, float height)
 	//setHeight(static_cast<int>(boundBox.height));
 }
 
-bool GUIEditField::render(sf::RenderWindow *window)
+bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
@@ -101,7 +101,7 @@ bool GUIEditField::render(sf::RenderWindow *window)
 	//mText.setPosition((sf::Vector2f(x, y)));
 	mText.setColor(sf::Color::Color(255, 255, 255, 255));
 	//mRenderTexture.draw(mSprite);
-	mRenderTexture.draw(mText);
+	mRenderTexture.draw(mText, states);
 	if(isSelected())
 	{
 		if(mSelectedCaret != -1)
@@ -111,14 +111,14 @@ bool GUIEditField::render(sf::RenderWindow *window)
 			mSelectedShape.setFillColor(sf::Color::Color(0, 0, 255, 150));
 			mSelectedShape.setPosition(caretPos);
 			mSelectedShape.setSize(sf::Vector2f(caretSelectedPos.x - caretPos.x, getHeight()));
-			mRenderTexture.draw(mSelectedShape);
+			mRenderTexture.draw(mSelectedShape, states);
 		}
 		if(mCaretVisible)
 		{
 			mCaretShape.setFillColor(sf::Color::Color(0, 0, 0, 255));
 			mCaretShape.setSize(sf::Vector2f(2.5, getHeight()));
 			mCaretShape.setPosition(mText.findCharacterPos(mSelectedCaret != -1 ? mSelectedCaret : mCaretIndex));
-			mRenderTexture.draw(mCaretShape);
+			mRenderTexture.draw(mCaretShape, states);
 		}
 	}
 	mRenderTexture.display();
@@ -126,14 +126,14 @@ bool GUIEditField::render(sf::RenderWindow *window)
 	sf::Sprite sprite(mRenderTexture.getTexture());
 	sprite.setPosition(sf::Vector2f(x + 8*mOffsetX, y + 8*mOffsetY));
 	mSprite.setPosition(getX(), getY());
-	window->draw(mSprite);
-	window->draw(sprite);
+	window->draw(mSprite, states);
+	window->draw(sprite, states);
 
 	if(!mChilds.empty())
 	{
 		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->render(window);
+			mChilds[i]->render(window, states);
 		}
 	}
 	return true;
@@ -256,7 +256,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				mSelectedCaret = -1;
 			}
 		}
-		if(event.type == sf::Event::TextEntered)
+		if(event.type == sf::Event::TextEntered && (mMaxCharacters == 0 || getText().size() < mMaxCharacters))
 		{
 			mCaretTimer->resetTimer();
 			mCaretVisible = true;
@@ -333,7 +333,6 @@ void GUIEditField::onGUIClick(int mouseX, int mouseY)
 	std::shared_ptr<GUIElement> parent = getParent();
 	mouseX -= x;
 	mouseY -= y;
-	std::cout<<"mouseX: "<<mouseX<<" mouseY: "<<mouseY<<std::endl;
 	mSelectedCaret = -1;
 	mCaretTimer->resetTimer();
 	mCaretVisible = true;

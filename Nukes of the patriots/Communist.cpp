@@ -255,7 +255,6 @@ int Communist::getYearlyTaxes(int round)
 
 void Communist::newYearStart()
 {
-	mTaxesIncomeWindow->setVisible(true);
 	getTaxIncome();
 	//communist title: 745, 90
 	//capitalist title: 241, 90
@@ -410,6 +409,7 @@ void Communist::newYearStart()
 	mCurrentTaxesText[1]->setText(mTaxes);
 	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
 	std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
+	mTaxesIncomeWindow->setVisible(true);
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 	mPatriotism += totalPatriotismChange;
@@ -417,7 +417,8 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
-	if(mRound > 1)
+	std::cout<<"communist mRound: "<<mRound<<std::endl;
+	if(mRound > 0)
 	{
 		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
 
@@ -862,7 +863,8 @@ void Communist::initializeCommunistWindow()
 
 
 	/*Taxes fönster med knappar*/
-	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);	
+	mFiveYearPlanWindow				= GUIWindow::create(CommunistWindows["FiveYearPlanWindow"], mCommunistMainWindow);
+	mFiveYearPlanWindow->setVisible(false);
 	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mFiveYearPlanWindow);	
 	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mFiveYearPlanWindow);	
 	mYearTwoLowerTaxesButton		= GUIButton::create(CommunistButtons["YearTwoLowerTaxes"], mFiveYearPlanWindow);	
@@ -1162,7 +1164,7 @@ void Communist::initializeCommunistWindow()
     mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 74, 0, 0), "Tax income ", mTaxesIncomeWindow);
 	mTaxesIncomeText[0]->setScale(0.8, 0.8);
 	mTaxesIncomeText[0]->setAlignment("left");
-	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 74, 0, 0), "0", mTaxesIncomeWindow);
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 74, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
 	mTaxesIncomeText[1]->setScale(0.8, 0.8);
 	mTaxesIncomeText[1]->setAlignment("left");
 

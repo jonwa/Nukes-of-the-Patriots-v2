@@ -8,9 +8,12 @@
 #include "GUIText.h"
 #include <memory>
 #include <map>
+#include "Timer.h"
 
 #include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
+#include <SFML/Network.hpp>
 
 class Capitalist;
 class Communist;
@@ -19,6 +22,8 @@ namespace sf
 {
 class TcpServer;
 class TcpClient;
+class UdpServer;
+class UdpClient;
 }
 
 class Menu
@@ -29,6 +34,9 @@ public:
 	~Menu();
 	void clear();
 	void setInGameMenuVisible();
+	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
+	void loadTeamAnimation();
+	void tick();
 
 private:
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
@@ -41,6 +49,10 @@ private:
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void loadMenuMusic();
+
+	sf::Texture mTeamAnimationFrames[150];
+	Timer *mTeamAnimationTimer;
+	bool mShowTeamChooseAnimation;
 
 	void resetPickTeamValues();
 
@@ -83,6 +95,9 @@ private:
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;
+
+	sf::UdpServer* mUdpServer;
+	sf::UdpClient* mUdpClient;
 };
 
 #endif

@@ -190,7 +190,9 @@ private:
 	
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
+	std::shared_ptr<GUIText> mExportPriceText[3];
 	std::shared_ptr<GUIText> mExportTotalPriceText[3];
+	std::shared_ptr<GUIText> mExportTotalPriceAllText;
 	std::shared_ptr<GUIImage> mExportQuantityBackground[3];
 	std::shared_ptr<GUIText> mExportQuantityText[3];
 	std::shared_ptr<GUIButton> mExportButtonMinus[3][3];
@@ -202,10 +204,11 @@ private:
 
 	std::shared_ptr<GUIWindow> mImportWindow;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
-	std::shared_ptr<GUIText> mImportPriceText[3];
 	std::shared_ptr<GUIText> mImportBuyQuantityText[3];
 	std::shared_ptr<GUIImage> mImportBuyQuantityBackground[3];
-	std::shared_ptr<GUIText> mImportCostText[3];
+	std::shared_ptr<GUIText> mImportPriceText[3];
+	std::shared_ptr<GUIText> mImportTotalPriceText[3];
+	std::shared_ptr<GUIText> mImportTotalPriceAllText;
 	std::shared_ptr<GUIButton> mImportBuyButtonMinus[3][3];
 	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
 	std::shared_ptr<GUIButton> mImportGotoExportButton;

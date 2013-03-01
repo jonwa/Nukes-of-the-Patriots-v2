@@ -54,7 +54,7 @@ void GUIText::setScale(float width, float height)
 	setHeight(boundBox.height);
 }
 
-bool GUIText::render(sf::RenderWindow *window)
+bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
@@ -85,7 +85,7 @@ bool GUIText::render(sf::RenderWindow *window)
 
 		mText.setPosition(sf::Vector2f(posX, posY));
 
-		window->draw(mText);
+		window->draw(mText, states);
 	}
 
 	
@@ -94,7 +94,7 @@ bool GUIText::render(sf::RenderWindow *window)
 	{
 		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->render(window);
+			mChilds[i]->render(window, states);
 		}
 	}
 	return true;

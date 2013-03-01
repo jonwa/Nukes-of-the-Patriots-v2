@@ -12,7 +12,7 @@ public:
 	GUIManager();
 	void init(sf::RenderWindow *window);
 	void addGUIElement(std::shared_ptr<GUIElement> guiElement);
-	void render();
+	void render(sf::RenderStates states = sf::RenderStates::Default);
 	void update(sf::Event event);
 	void tick();
 

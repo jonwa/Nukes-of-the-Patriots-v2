@@ -33,7 +33,7 @@ GUIImage::GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr
 
 }
 
-bool GUIImage::render(sf::RenderWindow *window)
+bool GUIImage::render(sf::RenderWindow *window, sf::RenderStates &states)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
@@ -52,14 +52,14 @@ bool GUIImage::render(sf::RenderWindow *window)
 
 	{
 		mSprite.setPosition(x, y);
-		window->draw(mSprite);
+		window->draw(mSprite, states);
 	}
 
 	if(!mChilds.empty())
 	{
 		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->render(window);
+			mChilds[i]->render(window, states);
 		}
 	}
 	return true;

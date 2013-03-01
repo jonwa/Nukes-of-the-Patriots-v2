@@ -51,13 +51,13 @@ void GUIManager::addGUIElement(std::shared_ptr<GUIElement> guiElement)
 	}*/
 }
 
-void GUIManager::render()
+void GUIManager::render(sf::RenderStates states)
 {
 	for(std::vector<std::shared_ptr<GUIElement> >::iterator it = mGuiElements.begin(); it != mGuiElements.end(); ++it)
 	{
 		if((*it)->getVisible())
 		{
-			(*it)->render(mWindow);
+			(*it)->render(mWindow, states);
 		}
 	}
 }

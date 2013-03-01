@@ -16,10 +16,12 @@ public:
 				GUIEditField(sf::FloatRect rect, Type type, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
 	std::string getText()const{ return mText.getString(); }
 	bool		getCaretVisible();
+	int			getMaxCharacters(){ return mMaxCharacters; }
 	void		setCaretVisible(bool visible);
 	void		setText(std::string text);
 	void		setScale(float width, float height);
-	bool		render(sf::RenderWindow *window);
+	void		setMaxCharacters(int maxCharacters){ mMaxCharacters = maxCharacters; }
+	bool		render(sf::RenderWindow *window, sf::RenderStates &states);
 
 	void				setOnGuiChangeFunction(std::function<void()>);
 	virtual bool		update(sf::RenderWindow *window, sf::Event event);
@@ -33,7 +35,7 @@ private:
 	sf::RenderTexture mRenderTexture;
 	Timer *mCaretTimer;
 	bool mCaretVisible, mOnlyNumbers;
-	int mCaretIndex, mSelectedCaret;
+	int mCaretIndex, mSelectedCaret, mMaxCharacters;
 	float mOffsetX, mOffsetY;
 	sf::RectangleShape mCaretShape, mSelectedShape;
 	sf::Sprite mSprite;
