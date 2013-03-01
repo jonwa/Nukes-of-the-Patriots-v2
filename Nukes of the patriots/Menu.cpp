@@ -49,8 +49,8 @@ Menu::Menu(sf::RenderWindow &window) :
 	mUdpClient->triggerServerEvent("onPlayerConnect", packet);
 	initialize(); 
 	initializeGuiFuctions();
-	MenuMusic["MainMenuTrack"]->play();
-	MenuMusic["MainMenuTrack"]->setLoop(true);
+	//MenuMusic["MainMenuTrack"]->play();
+	//MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){ }
 

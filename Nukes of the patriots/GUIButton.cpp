@@ -21,7 +21,9 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 	//setSize((pair.first.width == 0) ? pair.second->getSize().x : pair.first.width, (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height);
 
-	mOnClickSound = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_normal_buttons"));
+	mSuccessSound = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_normal_buttons"));
+	mFailedSound  = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_failed"));
+	mOnClickSound = mSuccessSound;
 }
 
 
@@ -66,9 +68,7 @@ bool GUIButton::render(sf::RenderWindow *window)
 
 void GUIButton::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)
 {
-	std::cout << "New texture: " << pair.second << std::endl;
 	mSprite.setTexture(*pair.second);
-	std::cout << "mSprite texture: " << mSprite.getTexture() << std::endl;
 	mSprite.setPosition(pair.first.left, pair.first.top);
 	mSprite.setTextureRect(sf::IntRect(0, 0, pair.second->getSize().x, pair.second->getSize().y));
 }
@@ -100,6 +100,20 @@ void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
 	mOnClickSound->setVolume(15);
 	mOnClickSound->play();
+}
+
+void GUIButton::canClick(bool i)
+{
+	if(i)
+	{
+		if(mOnClickSound != mSuccessSound)
+			mOnClickSound = mSuccessSound;
+	}
+	else
+	{
+		if(mOnClickSound != mFailedSound)
+			mOnClickSound = mFailedSound;
+	}
 }
 
 void GUIButton::setColor(sf::Color color)

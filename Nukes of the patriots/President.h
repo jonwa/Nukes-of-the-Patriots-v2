@@ -22,6 +22,7 @@ public:
 
 	void initializeImages(std::string &path);
 	sf::Texture* getTexture();
+	sf::Texture* getClickedTexture();
 
 	float getFoodPriceModifier();
 	float getGoodsPriceModifier();
@@ -34,6 +35,7 @@ public:
 
 	int getYearsElected() { return mYearsElected; }
 	void setYearsElected(int years) { mYearsElected = years; }
+	void playSlogan();
 
 	std::string& getFirstPositiveStat();
 	std::string& getSecondPositiveStat();
@@ -44,6 +46,7 @@ private:
 	void randomStatFunc();
 	int mYearsElected;
 	sf::Sprite mPortrait;
+	sf::Texture* mClickedPortraitTexture;
 	sf::Texture* mTexture;
 	std::map <std::string, float> mValues;
 	std::vector<std::string> mPositiveStats;

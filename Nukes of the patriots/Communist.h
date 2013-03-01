@@ -294,10 +294,10 @@ private:
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton> mPickedGeneralButton;
+	std::shared_ptr<GUIButton>  mPickedGeneralButton;
 
 	std::shared_ptr<GUIButton> mFirstGeneralButton;
-	std::shared_ptr<GUIImage>  mFirstGeneralPlaque;
+	std::shared_ptr<GUIButton> mFirstGeneralPlaque;
 	std::shared_ptr<GUIImage>  mPickedGeneralPlaque;
 
 	std::shared_ptr<GUIButton> mGoToNextPortraitButton;

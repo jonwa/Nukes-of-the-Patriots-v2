@@ -70,9 +70,4 @@ void GUIWindow::setColor(sf::Color color)
 {
 	mSprite.setColor(color);
 	GUIElement::setColor(color);
-
-	for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
-	{
-		mChilds[i]->setColor(color);
-	}
 }

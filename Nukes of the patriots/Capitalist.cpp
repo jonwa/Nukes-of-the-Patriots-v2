@@ -715,33 +715,26 @@ void Capitalist::initializeCapitalistWindow()
 	mPatriotismText->setScale(0.7, 0.7);
 	mPatriotismText->setColor(sf::Color::White);
 	mPatriotismText->setAlignment("middle");
-	
-	
-
-	
-
-	
-
 	mCapitalistMainWindow->setVisible(false);
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
 
-	mNuclearText						= GUIText::create(sf::FloatRect(843, 15, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 17, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
 	mNuclearText->setAlignment("middle");
 	mNuclearText->setScale(0.9, 0.9);
-	mSpaceText							= GUIText::create(sf::FloatRect(843, 227, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 229, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
 	mSpaceText->setAlignment("middle");
 	mSpaceText->setScale(0.9, 0.9);
-	mSpyText							= GUIText::create(sf::FloatRect(843, 439, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(843, 441, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
 	mSpyText->setAlignment("middle");
 	mSpyText->setScale(0.9, 0.9);
-	mFoodText							= GUIText::create(sf::FloatRect(31, 15, 0, 0), intToString(getFood()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(31, 17, 0, 0), intToString(getFood()), mCapitalistMainWindow);
 	mFoodText->setAlignment("middle");
 	mFoodText->setScale(0.9, 0.9);
-	mGoodsText							= GUIText::create(sf::FloatRect(31, 227, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 229, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
 	mGoodsText->setAlignment("middle");
 	mGoodsText->setScale(0.9, 0.9);
-	mTechText							= GUIText::create(sf::FloatRect(31, 439, 0, 0), intToString(getTech()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(31, 441, 0, 0), intToString(getTech()), mCapitalistMainWindow);
 	mTechText->setAlignment("middle");
 	mTechText->setScale(0.9, 0.9);
 
@@ -783,11 +776,11 @@ void Capitalist::initializeCapitalistWindow()
 	mResourceTechPriceText				= GUIText::create(sf::FloatRect(375, 100, 40, 40), intToString(techCost) + " §", mResourceWindow);
 
 	
-	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 70, 0, 0), "0",mResourceWindow);
+	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 73, 0, 0), "0",mResourceWindow);
 	mBuyFoodText->setAlignment("middle");
-	mBuyGoodsText						= GUIText::create(sf::FloatRect(285, 70, 40, 40), "0", mResourceWindow);
+	mBuyGoodsText						= GUIText::create(sf::FloatRect(285, 73, 40, 40), "0", mResourceWindow);
 	mBuyGoodsText->setAlignment("middle");
-	mBuyTechText						= GUIText::create(sf::FloatRect(465, 70, 40, 40), "0", mResourceWindow);
+	mBuyTechText						= GUIText::create(sf::FloatRect(465, 73, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
 	mFoodCost							= GUIText::create(sf::FloatRect(105, 40, 40, 40), "0 §", mResourceWindow);
 	mFoodCost->setAlignment("middle");
@@ -812,17 +805,17 @@ void Capitalist::initializeCapitalistWindow()
 	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/space_panel"))), mUpgradeWindow);
 	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/nuclear_panel"))), mUpgradeWindow);
 
-	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 150, 22, 22), "0", mUpgradeWindow);
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 152, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");
 	mBuyNuclearText->setScale(0.9, 0.9);
 	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 95, 20, 20), "0", mUpgradeWindow);
 	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 60, 20, 20), "0", mUpgradeWindow);
-	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(210, 112, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(210, 114, 22, 22), "0", mUpgradeWindow);
 	mBuySpaceProgramText->setAlignment("middle");
 	mBuySpaceProgramText->setScale(0.9, 0.9);
 	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 60, 20, 20), "0", mUpgradeWindow);
 	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 25, 20, 20), "0", mUpgradeWindow);
-	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 75, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 77, 22, 22), "0", mUpgradeWindow);
 	mBuySpyNetworkText->setAlignment("middle");
 	mBuySpyNetworkText->setScale(0.9, 0.9);
 	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 10, 20, 20), "0", mUpgradeWindow);
@@ -899,13 +892,13 @@ void Capitalist::initializeCapitalistWindow()
 	mChoosePresidentWindow				= GUIWindow::create(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
 	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
 	mFirstPresidentButton				= GUIButton::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
-	mFirstPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, 0, 0),
+	mFirstPresidentPlaque				= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, 180, 65),
 		&GameManager::getInstance()->getPresidentPlaque(mFirstPresident)), mChoosePresidentWindow);
 
 	mSecondPresidentButton				= GUIButton::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
-	mSecondPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
-		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, 0, 0),
+	mSecondPresidentPlaque				= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
+		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, 180, 65),
 		&GameManager::getInstance()->getPresidentPlaque(mSecondPresident)), mChoosePresidentWindow);
 
 	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
@@ -976,7 +969,7 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxChangeValue->setAlignment("left");
 	mTaxChangeValue->setScale(0.5, 0.5);
 
-	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 260, 0, 0), "", mPickedPresidentWindow);
+	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 290, 0, 0), "", mPickedPresidentWindow);
 	mPresidentBiography->setScale(0.6, 0.6);
 	mPresidentPositiveText[0]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
 	mPresidentPositiveText[1]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
@@ -1504,21 +1497,24 @@ void Capitalist::initializeGuiFunctions()
 		int nuclearTechPrice	= 5  * mPresident->getNuclearPriceModifier();
 		int amount = stringToInt(mBuyNuclearText->getText());
 		
-		if(currentGoods >= nuclearGoodsPrice && currentTech >= nuclearTechPrice)
+		if(mGoods >= nuclearGoodsPrice && mTech >= nuclearTechPrice)
 		{
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
-			currentGoods -= nuclearGoodsPrice;
-			currentTech  -= nuclearTechPrice;
+			mGoods -= nuclearGoodsPrice;
+			mTech  -= nuclearTechPrice;
 		}
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
+		int nuclearGoodsPrice	= 10 * mPresident->getNuclearPriceModifier();
+		int nuclearTechPrice	= 5  * mPresident->getNuclearPriceModifier();
 		int difference = stringToInt(mBuyNuclearText->getText()) - stringToInt(mNuclearText->getText());
-		currentGoods += stringToInt(mNuclearGoodsCost->getText()) * difference;
-		currentTech	 += stringToInt(mNuclearTechCost->getText()) * difference;
+		mGoods += nuclearGoodsPrice * difference;
+		mTech  += nuclearTechPrice * difference;
 		mBuyNuclearText->setText(mNuclearText->getText());
+
 		upgradeWindowText();
 		
 	});
@@ -1529,22 +1525,24 @@ void Capitalist::initializeGuiFunctions()
 		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5 * mPresident->getSpacePriceModifier();
 		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
 		int amount = stringToInt(mBuySpaceProgramText->getText());
-		if(currentGoods >= spaceProgramGoodsPrice && currentTech >= spaceProgramTechPrice)
+		if(mGoods >= spaceProgramGoodsPrice && mTech >= spaceProgramTechPrice)
 		{
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
-			currentGoods -= spaceProgramGoodsPrice;
-			currentTech -= spaceProgramTechPrice;
+			mGoods -= spaceProgramGoodsPrice;
+			mTech  -= spaceProgramTechPrice;
 		}
 	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
+		int spaceProgramGoodsPrice  = 5 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier();
 		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
 		for(int i = 0; i < difference; ++i)
 		{
-			currentGoods += (stringToInt(mSpaceText->getText()) + i + 1) * 5 * mPresident->getSpacePriceModifier();
-			currentTech += (stringToInt(mSpaceText->getText()) + i + 1) * 10 * mPresident->getSpacePriceModifier();
+			mGoods += spaceProgramGoodsPrice * (i + 1);
+			mTech  += spaceProgramTechPrice * (i + 1);
 		}
 		mBuySpaceProgramText->setText(mSpaceText->getText());
 		upgradeWindowText();
@@ -1554,10 +1552,10 @@ void Capitalist::initializeGuiFunctions()
 	{
 		int spyNetworkTechPrice = (stringToInt(mBuySpyNetworkText->getText()) + 1) * 10 * mPresident->getSpyPriceModifier();
 		int amount = stringToInt(mBuySpyNetworkText->getText());
-		if(currentTech >= spyNetworkTechPrice)
+		if(mTech >= spyNetworkTechPrice)
 		{
 			++amount;
-			currentTech -= spyNetworkTechPrice;
+			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
 			upgradeWindowText();
 		}
@@ -1565,10 +1563,11 @@ void Capitalist::initializeGuiFunctions()
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
+		int spyNetworkTechPrice = 10 * mPresident->getSpyPriceModifier();
 		int difference = stringToInt(mBuySpyNetworkText->getText()) - stringToInt(mSpyText->getText());
 		for(int i = 0; i < difference; ++i)
 		{
-			currentTech += (stringToInt(mSpyText->getText()) + i + 1) * 10 * mPresident->getSpyPriceModifier();
+			mTech += spyNetworkTechPrice * (i + 1);
 		}
 		mBuySpyNetworkText->setText(mSpyText->getText());
 		upgradeWindowText();
@@ -1805,6 +1804,9 @@ void Capitalist::initializeGuiFunctions()
 		//mPickedPresidentWindow->setVisible(true); 
 		mPickedPresident = 1;
 
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getClickedTexture()));
+
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 
@@ -1821,6 +1823,9 @@ void Capitalist::initializeGuiFunctions()
 		//mPickedPresidentWindow->setVisible(true); 
 		mPickedPresident = 2;
 		
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getClickedTexture()));
+
 		mPickedPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(mPickedPresidentButton->getRectangle(), mSecondPresident->getTexture()));
 
@@ -1844,6 +1849,7 @@ void Capitalist::initializeGuiFunctions()
 			mPickedPresidentWindow->setVisible(true);
 
 			mPickedPresidentWindow->setEnabled(true, true);
+			//mPresident->playSlogan();
 			int yearsElected = mPresident->getYearsElected();
 
 			mPresident->setYearsElected(yearsElected + 1);

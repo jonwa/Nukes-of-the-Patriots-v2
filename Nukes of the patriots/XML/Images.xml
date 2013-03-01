@@ -202,6 +202,33 @@
 	<image filename="president-Olga.png"/>
 	<image filename="president-SiB.png"/>
 </images>
+<images directory="PickedLeaders">
+	<image filename="president-Blingfaster-picked.png"/>
+	<image filename="president-Bob-picked.png"/>
+	<image filename="president-Burt-picked.png"/>
+	<image filename="president-Carl-picked.png"/>
+	<image filename="president-Dhelma-picked.png"/>
+	<image filename="president-Flaire-picked.png"/>
+	<image filename="president-Frank-picked.png"/>
+	<image filename="president-Frankie-picked.png"/>
+	<image filename="president-Gramma-picked.png"/>
+	<image filename="president-Hans-picked.png"/>
+	<image filename="president-Heinrich-picked.png"/>
+	<image filename="president-Hugo-picked.png"/>
+	<image filename="president-Ludo-picked.png"/>
+	<image filename="president-Nojiko-picked.png"/>
+	<image filename="president-no-nose-picked.png"/>
+	<image filename="president-Sam-picked.png"/>
+	<image filename="president-Sarah-picked.png"/>
+	<image filename="president-Stieg-picked.png"/>
+	<image filename="president-Sture-picked.png"/>
+	<image filename="president-Will-picked.png"/>
+	<image filename="president-Alva-picked.png"/>
+	<image filename="president-Boris-picked.png"/>
+	<image filename="president-Gustav-picked.png"/>
+	<image filename="president-Olga-picked.png"/>
+	<image filename="president-SiB-picked.png"/>
+</images>
 <images directory="BetweenTurns">
 	<image filename="stats_menu.png"/>
 	<image filename="spynetwork_menu.png"/>
