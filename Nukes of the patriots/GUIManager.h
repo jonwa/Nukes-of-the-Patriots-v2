@@ -7,6 +7,7 @@
 class GUIManager
 {
 public:
+	void clear();
 	static GUIManager* getInstance();
 
 	GUIManager();
@@ -15,6 +16,8 @@ public:
 	void render(sf::RenderStates states = sf::RenderStates::Default);
 	void update(sf::Event event);
 	void tick();
+
+	void setOnTop(std::shared_ptr<GUIElement> element);
 
 		~GUIManager();
 private:

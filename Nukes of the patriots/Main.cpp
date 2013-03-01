@@ -38,28 +38,29 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu menu(window);
+
 	sf::Shader grayscale;
 	grayscale.loadFromFile("effects/grayscale.frag", sf::Shader::Fragment);
 	grayscale.setParameter("texture", sf::Shader::CurrentTexture);
+	
+	menu.setMainMenuVisible();
+
 
 	while (window.isOpen())
     {
 		sf::Event event;
-
 		while (window.pollEvent(event))
 		{
 			GUIManager::getInstance()->update(event);
+		
 			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
 				GameManager::getInstance()->nextRound();
 			if (event.type == sf::Event::Closed/* || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)*/)
 				window.close();
-			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
-			{
-				GameManager::getInstance()->getCurrentPlayer()->hideGUI();
-				std::cout<<"in game menu is visible"<<std::endl;
-				menu.setInGameMenuVisible();
-			}
+
+			menu.update(event);
 		}
+
 		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
 			cursor.setTexture(cursorClickedTexture);
 		else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)

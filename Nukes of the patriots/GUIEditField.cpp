@@ -131,7 +131,7 @@ bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window, states);
 		}

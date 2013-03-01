@@ -38,7 +38,8 @@ public:
 	std::shared_ptr<President>	getPresident();
 	void						setPresident(std::shared_ptr<President>);
 
-	void clear();
+	void reset();
+
 
 	bool upgradeNuclearWeapon(int value);
 	bool upgradeSpaceProgram(int value);
@@ -68,6 +69,21 @@ private:
 	sf::Thread *mUpdateGUIThread;
 
 
+	std::string intToString(int i)
+	{
+		std::stringstream converter;
+		converter << i;
+		return converter.str();
+	}
+
+	int stringToInt(std::string str)
+	{
+		if(str.size() == 0)
+			return 0;
+		return atoi(str.c_str());
+	}
+
+
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
 	std::shared_ptr<President> mSecondPresident;
@@ -80,7 +96,7 @@ private:
 																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistWindows;
-	std::map<std::string, std::shared_ptr<sf::Music> > CapitalistMusic;
+	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
 	void loadButtonPosition();
 	void loadWindowPosition();
@@ -93,7 +109,7 @@ private:
 	void initializeCityImages();
 	
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	//President	*mPresident;
 
@@ -215,12 +231,12 @@ private:
 
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
-	std::shared_ptr<GUIButton> mFirstPresidentButton;
-	std::shared_ptr<GUIImage>  mFirstPresidentPlaque;
-	std::shared_ptr<GUIButton> mSecondPresidentButton;
-	std::shared_ptr<GUIImage>  mSecondPresidentPlaque;
-	std::shared_ptr<GUIButton> mPickedPresidentButton;
-	std::shared_ptr<GUIImage>  mPickedPresidentPlaque;
+	std::shared_ptr<GUIButton>  mFirstPresidentButton;
+	std::shared_ptr<GUIButton> mFirstPresidentPlaque;
+	std::shared_ptr<GUIButton>  mSecondPresidentButton;
+	std::shared_ptr<GUIButton> mSecondPresidentPlaque;
+	std::shared_ptr<GUIButton>  mPickedPresidentButton;
+	std::shared_ptr<GUIImage> mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 
@@ -233,8 +249,8 @@ private:
 	std::shared_ptr<GUIText>   mSecondPositiveStat[2];
 	std::shared_ptr<GUIText>   mSecondNegativeStat;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>   mCapitalistHeadLine;
 

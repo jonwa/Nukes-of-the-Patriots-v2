@@ -21,9 +21,6 @@ ResourceHandler::~ResourceHandler() { clear(); }
 
 void ResourceHandler::clear()
 {
-	//Images.clear();
-	//Music.clear();
-	//Sounds.clear();
 }
 
 /*********************	

@@ -19,13 +19,7 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 
 GUIElement::~GUIElement()
 {
-	while(!mChilds.empty())
-	{
-		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < mChilds.size(); ++i)
-		{
-			mChilds.erase(mChilds.begin() + i);
-		}
-	}
+	mChilds.clear();
 }
 
 
@@ -159,7 +153,7 @@ void GUIElement::setHeight(float height)
 
 void GUIElement::setRectangle(sf::FloatRect rect)
 {
-	mRectangle = rect;
+	mRectangle = sf::FloatRect(rect);
 }
 
 void GUIElement::setVisible(bool visible)

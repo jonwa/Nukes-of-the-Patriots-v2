@@ -18,15 +18,16 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setColor(sf::Color::Black);
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
 }
 
 void GUIText::setText(std::string text)
 {
-	mText.setString(sf::String(text.c_str()));
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	mText.setString(text);
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
 }
@@ -40,8 +41,8 @@ std::string GUIText::intToString(int i)
 
 void GUIText::setText(int value)
 {
-	mText.setString(sf::String(intToString(value).c_str()));
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	mText.setString(intToString(value));
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
 }
@@ -49,9 +50,19 @@ void GUIText::setText(int value)
 void GUIText::setScale(float width, float height)
 {
 	mText.setScale(width, height);
-	sf::FloatRect boundBox = mText.getGlobalBounds();
+	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+}
+
+void GUIText::setSize(float width, float height)
+{
+	/*float scaleX = width / mText.getLocalBounds().width;
+	float scaleY = height / mText.getLocalBounds().height;
+	std::cout << "Scale X: " << scaleX << " Scale Y: " << scaleY << std::endl;
+	mText.setScale(scaleX, scaleY);
+	setWidth(width);
+	setHeight(height);*/
 }
 
 bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
@@ -70,20 +81,23 @@ bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
 		parent = parent->getParent();
 	}
 	if(visible)
-	{
-
+	{		
 		float posX = x, posY = y;
 		if(mAlignment == "left")
-			posX += 0;
+		{
+			mText.setPosition(getX(), getY());
+			//mText.setOrigin(mText.getGlobalBounds().width, mText.getGlobalBounds().height);
+		}
 		else if(mAlignment == "middle")
 		{
-			posX -= mText.getGlobalBounds().width/2;
-			posY -= mText.getGlobalBounds().height;
+			mText.setPosition(getX(), getY());
+			mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height);
 		}
 		else if(mAlignment == "right")
-			posX -= mText.getGlobalBounds().width;
-
-		mText.setPosition(sf::Vector2f(posX, posY));
+		{
+			mText.setPosition(getX(), getY());
+			mText.setOrigin(mText.getLocalBounds().width, mText.getLocalBounds().height);
+		}
 
 		window->draw(mText, states);
 	}
@@ -92,7 +106,7 @@ bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
 			mChilds[i]->render(window, states);
 		}

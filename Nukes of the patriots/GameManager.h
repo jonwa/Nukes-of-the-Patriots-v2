@@ -23,7 +23,7 @@ public:
 	
 	~GameManager();
 
-	void clear();
+
 
 	int											getYear()const;
 	std::shared_ptr<SuperPower> 				getCurrentPlayer()const;
@@ -48,6 +48,7 @@ public:
 	std::shared_ptr<SuperPower>					getCommunist();
 	std::shared_ptr<Capitalist>					getCap();
 	std::shared_ptr<Communist>					getCom();
+	void										reset();
 	
 	std::shared_ptr<GUIWindow>					getStatsWindow();
 
@@ -73,6 +74,7 @@ private:
 
 	int mYear;
 	int mRound;
+	bool mLoaded;
 
 	std::shared_ptr<GUIText> mYearText;
 	// Theoretically you should be able to play with x amount of players - instead of only 2
@@ -103,6 +105,9 @@ private:
 	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
+
+	std::shared_ptr<GUIText>   mCommunistHeadline[2];
+	std::shared_ptr<GUIText>   mCapitalistHeadline[2];
 
 };
 

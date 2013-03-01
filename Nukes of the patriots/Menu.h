@@ -38,6 +38,11 @@ public:
 	void loadTeamAnimation();
 	void tick();
 
+	void update(sf::Event &event);
+
+	void setMainMenuVisible();
+	void resetChooseTeamValues();
+
 private:
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
