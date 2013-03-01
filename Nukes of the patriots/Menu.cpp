@@ -312,6 +312,8 @@ void Menu::initialize()
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
 	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
 	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
+	mCapitalistNameField->setMaxCharacters(15);
+	mCommunistNameField->setMaxCharacters(15);
 	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
 	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkay"].first.width, ButtonPos["CapitalistOkay"].first.height);
 	mCommunistOkayButton		= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);

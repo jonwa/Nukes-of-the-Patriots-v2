@@ -130,8 +130,8 @@ void Communist::playMusic()
 {
 	std::shared_ptr<sf::Music> music = CommunistMusic["CommunistMainTheme"];
 	music->setVolume(100);
-	//music->play();
-	//music->setLoop(true);
+	music->play();
+	music->setLoop(true);
 }
 //Stoppar musiken
 void Communist::stopMusic()
@@ -160,6 +160,11 @@ void Communist::openFiveYearPlan()
 		mFiveYearPlanWindow->setEnabled(true, true);
 		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 		mFiveYearPlanWindow->setVisible(true);
+	}
+	else
+	{
+		getTaxIncome();
+		resourceIncome();
 	}
 }
 
@@ -243,7 +248,6 @@ int Communist::getYearlyTaxes(int round)
 
 void Communist::newYearStart()
 {
-	getTaxIncome();
 	//communist title: 745, 90
 	//capitalist title: 241, 90
 	int statsPosX = 125, statsPosY = 177;   //communist 628, 177
@@ -396,7 +400,7 @@ void Communist::newYearStart()
 	mCurrentPopulationText[1]->setText(mPopulation);
 	mCurrentTaxesText[1]->setText(mTaxes);
 	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
-	std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
+	//std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 	mTaxesIncomeWindow->setVisible(true);
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
@@ -452,7 +456,7 @@ void Communist::update()
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
-	/*openFiveYearPlan();*/
+	openFiveYearPlan();
 
 	changeCityImage();
 }
@@ -868,14 +872,6 @@ void Communist::initializeCommunistWindow()
 	mFiveYearPlanWindow->setVisible(false);
 	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mFiveYearPlanWindow);	
 	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mFiveYearPlanWindow);	
-	/*mYearTwoLowerTaxesButton		= GUIButton::create(CommunistButtons["YearTwoLowerTaxes"], mFiveYearPlanWindow);	
-	mYearTwoRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearTwoRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearThreeLowerTaxesButton		= GUIButton::create(CommunistButtons["YearThreeLowerTaxes"], mFiveYearPlanWindow);	
-	mYearThreeRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearThreeRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearFourLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFourLowerTaxes"], mFiveYearPlanWindow);	
-	mYearFourRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFourRaiseTaxes"], mFiveYearPlanWindow);	
-	mYearFiveLowerTaxesButton		= GUIButton::create(CommunistButtons["YearFiveLowerTaxes"], mFiveYearPlanWindow);	
-	mYearFiveRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearFiveRaiseTaxes"], mFiveYearPlanWindow);*/
 
 	mFiveYearTotalCostText			= GUIText::create(sf::FloatRect(305, 17, 0, 0), "Cost", mFiveYearPlanWindow);
 	mFiveYearTotalCostText->setScale(0.8, 0.8);
@@ -987,9 +983,9 @@ void Communist::initializeCommunistWindow()
 	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	
-	mSpyPanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(358, 60, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/spy_panel"))), mUpgradeWindow);
-	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/space_panel"))), mUpgradeWindow);
-	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/nuclear_panel"))), mUpgradeWindow);
+	mSpyPanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(358, 60, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/spy_panel"))), mUpgradeWindow);
+	mSpacePanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/space_panel"))), mUpgradeWindow);
+	mNuclearPanel						= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Communist/nuclear_panel"))), mUpgradeWindow);
 
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 152, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");
@@ -1153,10 +1149,13 @@ void Communist::initializeCommunistWindow()
 	mTaxChangeValue->setScale(0.5, 0.5);
 
 	mResourceIncomeWindow				= GUIWindow::create(CommunistWindows["ResourceIncome"], mCommunistMainWindow);
-	mCloseResourceIncomeWindow			= GUIButton::create(CommunistWindows["CloseResourceIncome"], mResourceIncomeWindow);
-	mFoodIncome							= GUIText::create(sf::FloatRect(50, 31, 0, 0), "", mResourceIncomeWindow);
-	mGoodsIncome						= GUIText::create(sf::FloatRect(50, 70, 0, 0), "", mResourceIncomeWindow);
-	mTechIncome							= GUIText::create(sf::FloatRect(50, 109, 0, 0), "", mResourceIncomeWindow);
+	mCloseResourceIncomeWindow			= GUIButton::create(CommunistButtons["CloseResourceIncome"], mResourceIncomeWindow);
+	mFoodIncome							= GUIText::create(sf::FloatRect(50, 21, 0, 0), "", mResourceIncomeWindow);
+	mFoodIncome->setScale(0.8, 0.8);
+	mGoodsIncome						= GUIText::create(sf::FloatRect(50, 60, 0, 0), "", mResourceIncomeWindow);
+	mGoodsIncome->setScale(0.8, 0.8);
+	mTechIncome							= GUIText::create(sf::FloatRect(50, 99, 0, 0), "", mResourceIncomeWindow);
+	mTechIncome->setScale(0.8, 0.8);
 	mResourceIncomeWindow->setVisible(false);
 
 	mTaxesIncomeWindow					= GUIWindow::create(CommunistWindows["TaxesIncome"], mCommunistMainWindow);
@@ -1299,6 +1298,9 @@ void Communist::fiveYearGuiFunctions()
 
 	for(int i = 0; i < 5; ++i)
 	{
+		foodFields[i]->setMaxCharacters(4);
+		goodsFields[i]->setMaxCharacters(4);
+		techFields[i]->setMaxCharacters(4);
 		foodFields[i]->setOnGuiChangeFunction([=]()
 		{
 			int foodAmount = stringToInt(foodFields[i]->getText());
@@ -1438,8 +1440,10 @@ void Communist::initializeGuiFunctions()
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
 	{
 		mCommunistMainWindow->setEnabled(false, true);
+		mFiveYearPlanCloseButton->setEnabled(true, false);
 
-		mFiveYearPlanWindow->setVisible(true); 
+		mFiveYearPlanWindow->setVisible(true);
+		
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 
 		float x = mFiveYearPlanWindow->getX() + mFiveYearPlanWindow->getRectangle().width/2;
@@ -1501,18 +1505,23 @@ void Communist::initializeGuiFunctions()
 	});
 	
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
-	{ 
-		mCommunistMainWindow->setEnabled(true, true);
-		
+	{		
 		mFiveYearPlanWindow->setVisible(false);
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
+		
 		if(mFiveYearPlanWindow->isEnabled())
 		{
 			updateAllResources();
+			getTaxIncome();
+			resourceIncome();
+			mCurrentPopulationText[1]->setText(mPopulation);
+			mCurrentTaxesText[1]->setText(mTaxes);
+			mTaxesIncomeText[1]->setText(intToString(mTaxes*mPopulation));
 			mTaxesIncomeWindow->setVisible(true);
 			mTaxesIncomeWindow->setEnabled(true, true);
-			mFiveYearPlanWindow->setEnabled(false);
+			mFiveYearPlanWindow->setEnabled(false, true);
 		}
+		mCommunistMainWindow->setEnabled(true, true);
 	});
 	/*Stänger propagandafönster nummer ett*/
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
@@ -1995,23 +2004,83 @@ void Communist::updateAllResources()
 	setYearlyResources(5, "goods", stringToInt(mYearFiveGoods->getText()));
 	setYearlyResources(5, "tech", stringToInt(mYearFiveTech->getText()));
 	setYearlyResources(5, "taxes", stringToInt(mYearFiveTaxesText->getText()));
-	
 }
 
 void Communist::resourceIncome()
 {
-	mFood  += getYearlyFood(mRound);
-	mGoods += getYearlyGoods(mRound);
-	mTech  += getYearlyTech(mRound);
-	mFoodIncome->setText("You get " + intToString(getYearlyFood(mRound)) + " food");
-	mGoodsIncome->setText("You get " + intToString(getYearlyGoods(mRound)) + " goods");
-	mTechIncome->setText("You get " + intToString(getYearlyTech(mRound)) + " tech");
+	int totalCost = getYearlyFood(mRound) * foodCost;
+	totalCost += getYearlyGoods(mRound) * goodsCost;
+	totalCost += getYearlyTech(mRound) * techCost;
+	
+	int moneyDifference = mCurrency - totalCost;
+	if(mCurrency >= totalCost)
+	{
+		mCurrency -= totalCost;
+		mFood  += getYearlyFood(mRound);
+		mGoods += getYearlyGoods(mRound);
+		mTech  += getYearlyTech(mRound);
+		mFoodIncome->setText("You get " + intToString(getYearlyFood(mRound)) + " food");
+		mGoodsIncome->setText("You get " + intToString(getYearlyGoods(mRound)) + " goods");
+		mTechIncome->setText("You get " + intToString(getYearlyTech(mRound)) + " tech");
+	}
+	else
+	{
+		int food = 0, goods = 0, tech = 0;
+		while(moneyDifference < 0)
+		{
+			std::vector<int> resourceCosts;
+			std::vector<std::string> resourceType;
+			if(mCurrency >= foodCost)
+			{
+				resourceCosts.push_back(foodCost);
+				resourceType.push_back("food");
+			}
+			if(mCurrency >= goodsCost)
+			{
+				resourceCosts.push_back(goodsCost);
+				resourceType.push_back("goods");
+			}
+			if(mCurrency >= techCost)
+			{
+				resourceCosts.push_back(techCost);
+				resourceType.push_back("tech");
+			}
+			if(resourceCosts.empty())
+				break;
+			int rand = Randomizer::getInstance()->randomNr(resourceCosts.size(), 0);
+			mCurrency -= resourceCosts[rand];
+
+			if(resourceType[rand] == "food")
+			{
+				mFood++;
+				food++;
+				moneyDifference += foodCost;
+			}
+			else if(resourceType[rand] == "goods")
+			{
+				mGoods++;
+				goods++;
+				moneyDifference += goodsCost;
+			}
+			else if(resourceType[rand] == "tech")
+			{
+				mTech++;
+				tech++;
+				moneyDifference += techCost;
+			}
+		}
+		mFoodIncome->setText("You get " + intToString(food) + " food");
+		mGoodsIncome->setText("You get " + intToString(goods) + " goods");
+		mTechIncome->setText("You get " + intToString(tech) + " tech");
+	}
+	
+	mTaxes  = getYearlyTaxes(mRound);
 }
 
 void Communist::showGUI()
 {
 	mCommunistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Communist::hideGUI()

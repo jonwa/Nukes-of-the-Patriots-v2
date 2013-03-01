@@ -316,11 +316,10 @@ void Capitalist::newYearStart()
 	}
 
 
-	mCurrentPopulationText[1]->setText(mPopulation);
-	mCurrentTaxesText[1]->setText(mTaxes);
-	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
-	std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
-	mTaxesIncomeWindow->setVisible(true);
+	//mCurrentPopulationText[1]->setText(mPopulation);
+	//mCurrentTaxesText[1]->setText(mTaxes);
+	//mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
+	//std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 	mPatriotism += totalPatriotismChange;
@@ -378,10 +377,20 @@ void Capitalist::update()
 	//std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
 	//std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 
-	/*if((mRound-1) % 4 == 0 ) 
+	if((mRound-1) % 4 == 0 ) 
 	{
 		chooseLeader();
-	}*/
+	}
+	else
+	{
+		getTaxIncome();
+		mCurrentPopulationText[1]->setText(mPopulation);
+		mCurrentTaxesText[1]->setText(mTaxes);
+		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
+		mTaxesIncomeWindow->setVisible(true);
+		mCapitalistMainWindow->setEnabled(false, true);
+		mTaxesIncomeWindow->setEnabled(true, true);
+	}
 
 	changeCityImage();
 }
@@ -1028,7 +1037,7 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxesIncomeText[1]->setAlignment("left");
 
 	mCloseTaxesIncomeWindow				= GUIButton::create(CapitalistButtons["CloseTaxesIncome"], mTaxesIncomeWindow);
-	//mTaxesIncomeWindow->setVisible(false);
+	mTaxesIncomeWindow->setVisible(false);
 
 	mIncreasedResourcesPriceWindow		= GUIWindow::create(CapitalistWindows["IncreasedResources"], mCapitalistMainWindow);
 	mIncreasedResourcesText				= GUIText::create(sf::FloatRect(50, 50, 0, 0), "", mIncreasedResourcesPriceWindow);
@@ -1062,7 +1071,7 @@ void Capitalist::initializeCapitalistWindow()
 	 	vilket är alla GUIElement som finns i denna klass som har 
 	 	mCapitalistMainWindow som parent-argument i dess konstruktor
 																		*/
-	//chooseLeader();
+	chooseLeader();
 
 	GUIManager::getInstance()->addGUIElement(mCapitalistMainWindow);
 }
@@ -1902,10 +1911,14 @@ void Capitalist::initializeGuiFunctions()
 	mClosePickedPresidentWindow->setOnClickFunction([=]()				
 	{ 
 		mPickedPresidentWindow->setVisible(false);
-				
+		getTaxIncome();
+		mCurrentPopulationText[1]->setText(mPopulation);
+		mCurrentTaxesText[1]->setText(mTaxes);
+		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
 		mCapitalistPresident->setScale(0.63, 0.68);
-		mCapitalistMainWindow->setEnabled(true, true);
+		mTaxesIncomeWindow->setVisible(true);
+		mTaxesIncomeWindow->setEnabled(true, true);
 
 	});
 
@@ -1979,10 +1992,7 @@ void Capitalist::initializeGuiFunctions()
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
 	{
 		mTaxesIncomeWindow->setVisible(false);
-		if((mRound-1) % 4 == 0 ) 
-		{
-			chooseLeader();
-		}
+		mCapitalistMainWindow->setEnabled(true, true);
 	});
 
 
