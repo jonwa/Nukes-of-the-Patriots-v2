@@ -94,6 +94,7 @@ private:
 	void fiveYearInitialize();
 	void setYearlyResources(int year, std::string, int value);
 	void updateAllResources();
+	void resourceIncome();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
 
@@ -225,31 +226,14 @@ private:
 	/*GUI-pekare för propaganda*/
 	std::shared_ptr<GUIWindow> mPropagandaWindowFirst;
 	std::shared_ptr<GUIWindow> mPropagandaWindowSecond;
+	std::shared_ptr<GUIText>   mPropagandaCostText;
+	std::shared_ptr<GUIText>   mBoughtPropagandaText;
 	
 	std::shared_ptr<GUIButton> mPropagandaBuyFoodButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyGoodsButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyTechButton;
 	std::shared_ptr<GUIButton> mShowBoughtPropaganda;
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFirstYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFirstYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFristYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodSecondYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsSecondYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechSecondYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodThirdYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsThirdYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechThirdYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFourthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFourthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFourthYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFifthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFifthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFifthYearButton;
-
+	
 	std::shared_ptr<GUIButton> mPropagandaWindowFirstCloseButton;
 	std::shared_ptr<GUIButton> mPropagandaWindowSecondCloseButton;
 
@@ -330,6 +314,11 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
+	std::shared_ptr<GUIWindow> mResourceIncomeWindow;
+	std::shared_ptr<GUIButton> mCloseResourceIncomeWindow;
+	std::shared_ptr<GUIText>   mFoodIncome;
+	std::shared_ptr<GUIText>   mGoodsIncome;
+	std::shared_ptr<GUIText>   mTechIncome;
 
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];

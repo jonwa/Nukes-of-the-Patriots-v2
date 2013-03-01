@@ -54,6 +54,14 @@
 	<image filename="space_panel.png"/>
 	<image filename="spy_panel.png"/>
 	
+	<image filename="kap_texture_button_plus.png"/>
+	<image filename="kap_texture_button_plus5.png"/>
+	<image filename="kap_texture_button_plus10.png"/>
+
+	<image filename="kap_texture_button_minus.png"/>
+	<image filename="kap_texture_button_minus5.png"/>
+	<image filename="kap_texture_button_minus10.png"/>
+	
 	<image filename="kap_texture_button_trade.png"/>
 	<image filename="kap_texture_button_invert_trade.png"/>
 </images>

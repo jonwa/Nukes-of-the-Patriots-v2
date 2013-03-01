@@ -98,9 +98,7 @@ bool GUIEditField::render(sf::RenderWindow *window)
 		parent = parent->getParent();
 	}
 	mRenderTexture.clear(sf::Color::Color(255, 255, 255, 0));
-	//mText.setPosition((sf::Vector2f(x, y)));
-	mText.setColor(sf::Color::Color(255, 255, 255, 255));
-	//mRenderTexture.draw(mSprite);
+	mText.setColor(sf::Color::Color(255, 255, 255, 255));;
 	mRenderTexture.draw(mText);
 	if(isSelected())
 	{

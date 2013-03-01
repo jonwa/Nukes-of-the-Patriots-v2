@@ -512,9 +512,9 @@ bool Capitalist::upgradeSpyNetwork(int value)
 
 void Capitalist::resetResourcesValues()
 {
-	mFoodCost->setText(0);
-	mGoodsCost->setText(0);
-	mTechCost->setText(0);
+	mFoodCost->setText("0 §");
+	mGoodsCost->setText("0 §");
+	mTechCost->setText("0 §");
 	mBuyFoodText->setText(0);
 	mBuyGoodsText->setText(0);
 	mBuyTechText->setText(0);
@@ -1593,8 +1593,15 @@ void Capitalist::initializeGuiFunctions()
 
 	});
 	
-	sf::Texture *minusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus"));
-	sf::Texture *plusTexture = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus"));
+	sf::Texture *minusTexture[3];
+	minusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus"));
+	minusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus5"));
+	minusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_minus10"));
+
+	sf::Texture *plusTexture[3];
+	plusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus"));
+	plusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus5"));
+	plusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_texture_button_plus10"));
 	
 	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
 	{
@@ -1602,8 +1609,8 @@ void Capitalist::initializeGuiFunctions()
 		for(int h = 0; h < 3; h++)
 		{
 			mImportBuyButtonMinus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
-				minusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture[h]->getSize().x, y, minusTexture[h]->getSize().x, minusTexture[h]->getSize().y),
+				minusTexture[h]),
 				mImportWindow);
 			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
 			{
@@ -1619,8 +1626,8 @@ void Capitalist::initializeGuiFunctions()
 			});
 
 			mImportBuyButtonPlus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
-				plusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture[h]->getSize().x, y, plusTexture[h]->getSize().x, plusTexture[h]->getSize().y),
+				plusTexture[h]),
 				mImportWindow);
 			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
 			{
@@ -1656,8 +1663,8 @@ void Capitalist::initializeGuiFunctions()
 		for(int h = 0; h < 3; h++)
 		{
 			mExportButtonMinus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture->getSize().x, y, minusTexture->getSize().x, minusTexture->getSize().y),
-				minusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture[h]->getSize().x, y, minusTexture[h]->getSize().x, minusTexture[h]->getSize().y),
+				minusTexture[h]),
 				mExportWindow);
 			mExportButtonMinus[i][h]->setOnClickFunction([=]()
 			{
@@ -1671,8 +1678,8 @@ void Capitalist::initializeGuiFunctions()
 			});
 
 			mExportButtonPlus[i][h] = GUIButton::create(
-				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture->getSize().x, y, plusTexture->getSize().x, plusTexture->getSize().y),
-				plusTexture),
+				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x + mImportBuyQuantityBackground[i]->getWidth() + h*plusTexture[h]->getSize().x, y, plusTexture[h]->getSize().x, plusTexture[h]->getSize().y),
+				plusTexture[h]),
 				mExportWindow);
 			mExportButtonPlus[i][h]->setOnClickFunction([=]()
 			{
