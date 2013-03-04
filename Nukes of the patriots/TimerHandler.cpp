@@ -5,9 +5,16 @@
 TimerHandler::TimerHandler() :
 	mVecTimers(){}
 
+TimerHandler::~TimerHandler(){ clear(); }
+
 void TimerHandler::addTimer(Timer* timer)
 {
 	mVecTimers.push_back(timer);
+}
+
+void TimerHandler::clear()
+{
+	mVecTimers.clear();
 }
 
 void TimerHandler::removeTimer(Timer* timer)

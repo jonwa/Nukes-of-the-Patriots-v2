@@ -14,7 +14,15 @@
 		<yPos>0</yPos>
 		<width>0</width>
 		<height>0</height>
-		<image>Menu/3_bg</image>
+		<image>Menu/Background</image>
+	</window>
+	<window>
+		<name>InGameMenu</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>0</width>
+		<height>0</height>
+		<image>Menu/Background</image>
 	</window>
 	<window>
 		<name>InGameMenu</name>
@@ -47,5 +55,13 @@
 		<width>0</width>
 		<height>0</height>
 		<image>Menu/7_kap_window_president1</image>
+	</window>
+	<window>
+		<name>LanPlayWindow</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>0</width>
+		<height>0</height>
+		<image>Menu/lan_window_background</image>
 	</window>
 </windows>

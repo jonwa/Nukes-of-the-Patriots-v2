@@ -193,9 +193,20 @@ void President::initializeImages(std::string &path)
 	ResourceHandler* handler = ResourceHandler::getInstance();
 	mTexture = &handler->getTexture(path);
 	mPortrait.setTexture(*mTexture);
+	mClickedPortraitTexture = &handler->getTexture("PickedLeaders/president-" + mName + "-picked");
+}
+
+void President::playSlogan()
+{
+	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
 }
 
 sf::Texture* President::getTexture()
 {
 	return mTexture;
+}
+
+sf::Texture* President::getClickedTexture()
+{
+	return mClickedPortraitTexture;
 }

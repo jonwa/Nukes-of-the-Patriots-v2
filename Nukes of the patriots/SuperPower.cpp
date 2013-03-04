@@ -1,18 +1,19 @@
 #include "SuperPower.h"
+#include "GUIText.h"
 
 
 SuperPower::SuperPower() : 
 	mPopulation(50),			//Befolkning i miljoner
 	mPatriotism(20),
-	mCurrency(500),
+	mCurrency(0),
 	mTaxes(30),
 	mFood(0),
 	mExportedFood(0),
 	mExportedFoodPrice(0),
-	mTech(100),
+	mTech(0),
 	mExportedTech(0),
 	mExportedTechPrice(0),
-	mGoods(100),
+	mGoods(0),
 	mExportedGoods(0),
 	mExportedGoodsPrice(0),
 	mSpyNetwork(0),
@@ -35,6 +36,39 @@ SuperPower::SuperPower() :
 {
 }
 
+void SuperPower::reset()
+{
+	mPopulation								= 50;			//Befolkning i miljoner
+	mPatriotism								= 20;
+	mCurrency								= 500;
+	mTaxes									= 30;
+	mFood									= 0;
+	mExportedFood							= 0;
+	mExportedFoodPrice						= 0;
+	mTech									= 100;
+	mExportedTech							= 0;
+	mExportedTechPrice						= 0;
+	mGoods									= 100;
+	mExportedGoods							= 0;
+	mExportedGoodsPrice						= 0;
+	mSpyNetwork								= 0;
+	mSpaceProgram							= 0;
+	mNuclearWeapon							= 10;
+	mTaxDecreased							= false;
+	mPatriotismPreviousRound				= mPatriotism;
+	mCurrencyPreviousRound                  = mCurrency;
+	mPopulationPreviousRound				= mPopulation;
+	mFoodPreviousRound						= mFood;
+	mGoodsPreviousRound						= mGoods;
+	mTechPreviousRound					    = mTech;
+	mExportedFoodPreviousRound				= mExportedFood;
+	mExportedGoodsPreviousRound				= mExportedGoods;
+	mExportedTechPreviousRound				= mExportedTech;
+	mTaxesPreviousRound						= mTaxes;
+	mSpyNetworkPreviousRound				= mSpyNetwork;
+	mNuclearWeaponPreviousRound				= mNuclearWeapon;
+	mSpaceProgramPreviousRound				= mSpaceProgram;
+}
 
 SuperPower::~SuperPower()
 {
@@ -144,39 +178,37 @@ bool SuperPower::enoughFood()
 	return mFood >= mPopulation;
 }
 
-void SuperPower::updateFood()
+void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 {
 	/*	Om mängden mat är tillräcklig blir mängden mat subtraherad med antalet befolkningen i miljoner
 		Populationen ökar och om landet har mer eller lika mycket pengar som befolkning blir mIncreasePopulation true.
 		Den används sedan för att ge möjligheten att betala en viss summa för att öka befolkningen*/
 	if(enoughFood())
 	{
-		mFood -= mPopulation;
-		++mPopulation;
 		if(mCurrency >= mPopulation)
 		{
+			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation + 1) +" million.");
 			mIncreasePopulation = true;
 		}
 	}
 	/*	Om mängden mat är mindre än häflten av befolkningen tilldelas mFood noll
 		mPatriotism subtraheras även med två*/
-	else if(mFood <= mPopulation / 2)
+	else if(mFood == 0)
 	{
-		mFood = 0;
-		mPatriotism -= 2;
+		text->setText("There is no food at all for the population.\n\nThis is upsetting.");
+		
 	}
 	/*	Om det inte finns tillräckligt med mat och mFood inte är lika med noll
 		ökar inte patriotismen men mFood tilldelas noll*/
-	else if(!enoughFood() && mFood != 0)
+	/*else if(!enoughFood() && mFood != 0)
 	{
-		mFood = 0;
-	}
+		text->setText("There is not quite enough food for \nthe population.");
+	}*/
 	/*	Om inga av det överstående stämmer, innebär det att maten är lika med noll och befolkningen inte fått någon mat
 		Detta ger minus fyra i patriotism*/
 	else
 	{
-		mFood = 0;
-		mPatriotism -= 4;
+		text->setText("There is very little food for the population.\n\nThey starve and grumble.");
 	}
 }
 /*Kontrollerar ifall det är möjligt att öka sin population*/

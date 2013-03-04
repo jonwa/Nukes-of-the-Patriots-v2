@@ -30,6 +30,7 @@ public:
 	void			setY(float y);
 	void			setWidth(float width);
 	void			setHeight(float height);
+	void			setRectangle(sf::FloatRect rect);
 	virtual void	setSize(float width, float height){};
 	void			setVisible(bool visible);
 	virtual void	setColor(sf::Color color);
@@ -49,13 +50,13 @@ public:
 	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	bool			onClick(sf::RenderWindow *window);
 	bool			onMove(sf::RenderWindow *window);
-	virtual bool	render(sf::RenderWindow *window) = 0;
+	virtual bool	render(sf::RenderWindow *window, sf::RenderStates &states) = 0;
 	virtual void	onGUIClick(int mouseX, int mouseY){};
 	virtual void	onGUIHover(int mouseX, int mouseY){};
 	void			tick();
 	virtual			~GUIElement();
 protected:
-	sf::FloatRect mRectangle;
+	sf::FloatRect mRectangle, mLocalRectangle;
 	sf::Color mColor;
 	bool mVisible, mMouseInside, mEnabled, mSelected;
 	std::shared_ptr<GUIElement> mParent;

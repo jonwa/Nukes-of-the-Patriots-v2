@@ -13,19 +13,21 @@ sf::TcpClient::TcpClient(unsigned short serverPort, sf::IpAddress serverAddress)
 
 void sf::TcpClient::connect()
 {
-	//while(mTcpSocket.getRemoteAddress() == sf::IpAddress::None)
-	//{
+	bool connected = false;
+	while(!connected)
+	{
+		std::cout<<"attempting to connect..."<<std::endl;
 		sf::Socket::Status status = mTcpSocket.connect(mServerAddress, mServerPort);
 		switch(status)
 		{
 			case(sf::Socket::Done):
+				connected = true;
 				std::cout<<"You connected to the server!"<<std::endl;
 				break;
 			default:
 				std::cout<<"Error code ("<<status<<")"<<std::endl;
-				break;
 		}
-	//}
+	}
 }
 
 void sf::TcpClient::tick()

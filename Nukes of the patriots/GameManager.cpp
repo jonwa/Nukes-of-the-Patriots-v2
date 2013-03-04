@@ -11,6 +11,8 @@
 #include "Timer.h"
 #include "TimerHandler.h"
 #include "GUIAnimation.h"
+#include "AnimationHandler.h"
+#include "Menu.h"
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -23,49 +25,98 @@ GameManager* GameManager::getInstance()
 	return mInstance;
 }
 
-GameManager::GameManager() : 
-		mVecPlayersLeft(),
-		mRound(0)
-{
+GameManager::GameManager() : 		
+	mVecPlayersLeft(),		
+	mRound(0),
+	mLoaded(false)
+{	
 	initializeGuiElement();
 	initializeGuiFunctions();
 }
 
-
 GameManager::~GameManager()
-{}
+{
+	
+}
+
+
+void GameManager::reset()
+{
+	mRound = 0;
+	mYear = 1952;
+	mYearText->setText("1952");
+	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	{
+		(*it)->reset();
+	}
+	AnimationHandler::getInstance()->reset();
+}
 
 void GameManager::init(int year)
 {
-	getInstance()->setYear(year);
-	loadPresidents();
-	mVecSuperPowers.push_back(std::make_shared<Capitalist>());
-	mVecSuperPowers.push_back(std::make_shared<Communist>());
-	mVecPlayersLeft = mVecSuperPowers;
 
-	/*Skriver ut året på interface*/
-	mYearText = GUIText::create(sf::FloatRect(512, 15, 40, 40), intToString(mYear));
-	mYearText->setScale(0.5, 0.5);
-	mYearText->setAlignment("middle");
-	mYearText->setColor(sf::Color::White);
-	GUIManager::getInstance()->addGUIElement(mYearText);
+	if(!mLoaded)
+	{
+		getInstance()->setYear(year);
+		loadPresidents();
+		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
+		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		mVecPlayersLeft = mVecSuperPowers;
+
+		/*Skriver ut året på interface*/
+		mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
+		mYearText->setScale(0.6, 0.6);
+		mYearText->setAlignment("middle");
+		mYearText->setColor(sf::Color::White);
+		GUIManager::getInstance()->addGUIElement(mYearText);
 	
-	/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
-		(*it)->chooseLeader();
-	}*/
-	mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
-	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
-	{
-		if((*it) == mCurrentPlayer)
+		getInstance()->setYear(year);
+		loadPresidents();
+		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
+		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		mVecPlayersLeft = mVecSuperPowers;
+	
+		/*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
-			mVecPlayersLeft.erase(it);
-			break;
+			(*it)->chooseLeader();
+		}*/
+		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
 		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+		//startRound();
+		mLoaded = true;
 	}
+	else
+	{
+		mVecPlayersLeft = mVecSuperPowers;
+		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
+		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+	}
+<<<<<<< HEAD
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
 	//startRound();
+=======
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()
@@ -76,6 +127,17 @@ std::shared_ptr<SuperPower> GameManager::getCapitalist()
 std::shared_ptr<SuperPower> GameManager::getCommunist()
 {
 	return mVecSuperPowers[1];
+}
+
+std::shared_ptr<Capitalist> GameManager::getCap()
+{
+	return /*std::shared_ptr<Capitalist> cap = */std::static_pointer_cast<Capitalist> (mVecSuperPowers[0]);
+}
+
+std::shared_ptr<Communist> GameManager::getCom()
+{
+	//std::shared_ptr<Communist> com = std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
+	return std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
 }
 
 void GameManager::loadPresidents()
@@ -183,6 +245,7 @@ void GameManager::startRound()
 	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
 
 	mCurrentPlayer->update();
+
 	mCurrentPlayer->showGUI();
 }
 
@@ -221,8 +284,8 @@ void GameManager::selectStartingPlayer(std::shared_ptr<SuperPower> startingPlaye
 	mStatsWindow[1]->setVisible(false);
 	mFirstDecideWhoStartWindow->setEnabled(true, true);
 	mSecondDecideWhoStartWindow->setEnabled(true, true);
-	mSecondCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
-	mSecondCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+	mSecondCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+	mSecondCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
 }
 
 void GameManager::setYear(int year)
@@ -237,6 +300,7 @@ void GameManager::updateStatsWindow()
 
 void GameManager::nextRound()
 {
+
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		(*it)->hideGUI();
@@ -306,8 +370,8 @@ void GameManager::nextRound()
 				mStatsWindow[1]->setVisible(false);
 				//mNextWindowToShow = mFirstDecideWhoStartWindow;
 				mFirstDecideWhoStartWindow->setEnabled(true, true);
-				mFirstCapitalistSpyNetworkText->setText(intToString(getCapitalist()->getSpyNetwork()));
-				mFirstCommunistSpyNetworkText->setText(intToString(getCommunist()->getSpyNetwork()));
+				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
 			} 
 		});
 	}
@@ -451,15 +515,27 @@ void GameManager::initializeGuiElement()
 
 	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
 	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
-	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mFirstDecideWhoStartWindow);
-	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCapitalistSpyNetworkText->setScale(0.4, 0.4);
+	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
+	mFirstCommunistSpyNetworkText->setScale(0.4, 0.4);
+	mCapitalistHeadline[0]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mFirstDecideWhoStartWindow);
+	mCapitalistHeadline[0]->setScale(0.5, 0.5);
+	mCommunistHeadline[0]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mFirstDecideWhoStartWindow);
+	mCommunistHeadline[0]->setScale(0.5, 0.5);
 	mFirstDecideWhoStartWindow->setVisible(false);
 
 	mSecondDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsDiffSpy"]);
 	mCapitalistButton					= GUIButton::create(BetweenTurnsButton["Capitalist"], mSecondDecideWhoStartWindow);
 	mCommunistButton					= GUIButton::create(BetweenTurnsButton["Communist"], mSecondDecideWhoStartWindow);
-	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 120, 40, 40), "0", mSecondDecideWhoStartWindow);
-    mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(500, 170, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCapitalistSpyNetworkText->setScale(0.4, 0.4);
+    mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
+	mSecondCommunistSpyNetworkText->setScale(0.4, 0.4);
+	mCapitalistHeadline[1]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mSecondDecideWhoStartWindow);
+	mCapitalistHeadline[1]->setScale(0.5, 0.5);
+	mCommunistHeadline[1]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mSecondDecideWhoStartWindow);
+	mCommunistHeadline[1]->setScale(0.5, 0.5);
 	mSecondDecideWhoStartWindow->setVisible(false);
 
 	mStatsWindow[0]						= GUIWindow::create(BetweenTurnsWindow["Stats"]);     //icke inzoomat, tidsbaserad inzoomning på detta sm leder till "mStatsWindow[1]"
@@ -504,3 +580,4 @@ void GameManager::initializeGuiFunctions()
 		startRound();
 	});
 }
+	

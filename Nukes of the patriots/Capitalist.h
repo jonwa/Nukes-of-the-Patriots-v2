@@ -19,12 +19,13 @@ class President;
 class Randomizer;
 class Communist;
 
+
 #include "SuperPower.h"
 #include <vector>
 #include <memory>
 #include <map>
-#include <sstream>
 #include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML\Window\Event.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
 
@@ -36,6 +37,8 @@ public:
 
 	std::shared_ptr<President>	getPresident();
 	void						setPresident(std::shared_ptr<President>);
+
+	void reset();
 
 
 	bool upgradeNuclearWeapon(int value);
@@ -65,6 +68,7 @@ private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
 
+
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -83,6 +87,7 @@ private:
 	std::shared_ptr<President> mPresident;
 	std::shared_ptr<President> mFirstPresident;
 	std::shared_ptr<President> mSecondPresident;
+	int	mPickedPresident;
 
 	/*Skapar två std::map. En dit alla knappar för kapitalisternas läggs in i samt 
 	  en dit alla kapitalisternas fönster läggs in i. Detta sker via hämtade värden
@@ -91,7 +96,7 @@ private:
 																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistWindows;
-	std::map<std::string, std::shared_ptr<sf::Music> > CapitalistMusic;
+	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
 	void loadButtonPosition();
 	void loadWindowPosition();
@@ -104,7 +109,7 @@ private:
 	void initializeCityImages();
 	
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	//President	*mPresident;
 
@@ -201,7 +206,9 @@ private:
 	
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
+	std::shared_ptr<GUIText> mExportPriceText[3];
 	std::shared_ptr<GUIText> mExportTotalPriceText[3];
+	std::shared_ptr<GUIText> mExportTotalPriceAllText;
 	std::shared_ptr<GUIImage> mExportQuantityBackground[3];
 	std::shared_ptr<GUIText> mExportQuantityText[3];
 	std::shared_ptr<GUIButton> mExportButtonMinus[3][3];
@@ -213,22 +220,23 @@ private:
 
 	std::shared_ptr<GUIWindow> mImportWindow;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
-	std::shared_ptr<GUIText> mImportPriceText[3];
 	std::shared_ptr<GUIText> mImportBuyQuantityText[3];
 	std::shared_ptr<GUIImage> mImportBuyQuantityBackground[3];
-	std::shared_ptr<GUIText> mImportCostText[3];
+	std::shared_ptr<GUIText> mImportPriceText[3];
+	std::shared_ptr<GUIText> mImportTotalPriceText[3];
+	std::shared_ptr<GUIText> mImportTotalPriceAllText;
 	std::shared_ptr<GUIButton> mImportBuyButtonMinus[3][3];
 	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
 	std::shared_ptr<GUIButton> mImportGotoExportButton;
 
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
-	std::shared_ptr<GUIButton> mFirstPresidentButton;
-	std::shared_ptr<GUIImage>  mFirstPresidentPlaque;
-	std::shared_ptr<GUIButton> mSecondPresidentButton;
-	std::shared_ptr<GUIImage>  mSecondPresidentPlaque;
-	std::shared_ptr<GUIButton> mPickedPresidentButton;
-	std::shared_ptr<GUIImage>  mPickedPresidentPlaque;
+	std::shared_ptr<GUIButton>  mFirstPresidentButton;
+	std::shared_ptr<GUIButton> mFirstPresidentPlaque;
+	std::shared_ptr<GUIButton>  mSecondPresidentButton;
+	std::shared_ptr<GUIButton> mSecondPresidentPlaque;
+	std::shared_ptr<GUIButton>  mPickedPresidentButton;
+	std::shared_ptr<GUIImage> mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
 
@@ -241,8 +249,8 @@ private:
 	std::shared_ptr<GUIText>   mSecondPositiveStat[2];
 	std::shared_ptr<GUIText>   mSecondNegativeStat;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>   mCapitalistHeadLine;
 
@@ -265,8 +273,6 @@ private:
 	std::shared_ptr<GUIText>   mNuclearWeaponChangeValue;
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
-
-
 
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];

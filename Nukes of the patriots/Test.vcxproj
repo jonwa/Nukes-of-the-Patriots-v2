@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationHandler.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="GUIAnimation.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
     <ClCompile Include="Capitalist.cpp" />
@@ -32,13 +33,18 @@
     <ClCompile Include="Randomizer.cpp" />
     <ClCompile Include="SuperPower.cpp" />
     <ClCompile Include="ResourceHandler.cpp" />
+    <ClCompile Include="TcpClient.cpp" />
+    <ClCompile Include="TcpServer.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerHandler.cpp" />
     <ClCompile Include="tinyxml2.cpp" />
+    <ClCompile Include="UdpClient.cpp" />
+    <ClCompile Include="UdpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationHandler.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="GUIAnimation.h" />
     <ClInclude Include="SpriteAnimation.h" />
     <ClInclude Include="Capitalist.h" />
@@ -57,9 +63,13 @@
     <ClInclude Include="Randomizer.h" />
     <ClInclude Include="SuperPower.h" />
     <ClInclude Include="ResourceHandler.h" />
+    <ClInclude Include="TcpClient.h" />
+    <ClInclude Include="TcpServer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerHandler.h" />
     <ClInclude Include="tinyxml2.h" />
+    <ClInclude Include="UdpClient.h" />
+    <ClInclude Include="UdpServer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B74A280D-2E50-470B-B8E2-7E4FDB97756A}</ProjectGuid>

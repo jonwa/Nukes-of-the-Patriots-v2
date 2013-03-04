@@ -21,17 +21,22 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 	//setSize((pair.first.width == 0) ? pair.second->getSize().x : pair.first.width, (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height);
 
-	onClickSoundBuff.loadFromFile("Music/click_sound_normal_buttons.wav");
-	onClickSound.setBuffer(onClickSoundBuff);
+	mSuccessSound = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_normal_buttons"));
+	mFailedSound  = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_failed"));
+	mOnClickSound = mSuccessSound;
 }
 
-bool GUIButton::render(sf::RenderWindow *window)
+bool GUIButton::render(sf::RenderWindow *window, sf::RenderStates &states)
 {
 	bool visible = getVisible();
-	if(!visible)return false;
+	if(!visible) 
+		return false;
 	std::shared_ptr<GUIElement> parent = getParent();
+	float x = getLocalX(), y = getLocalY();
 	while(parent != NULL)
 	{
+		x += parent->getLocalX();
+		y += parent->getLocalY();
 		visible = parent->getVisible();
 		if(!visible)
 			return false;
@@ -40,20 +45,20 @@ bool GUIButton::render(sf::RenderWindow *window)
 	if(visible)
 	{
 		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
-		rect.setPosition(getX(), getY());
+		rect.setPosition(x, y);
 		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
 		//window->draw(rect);
-		
-		window->draw(mSprite);
+		mSprite.setPosition(x, y);
+		window->draw(mSprite, states);
 
 	}
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->render(window);
+			mChilds[i]->render(window, states);
 		}
 	}
 	return true;
@@ -85,13 +90,34 @@ void GUIButton::setSize(float width, float height)
 {
 	float scaleX = width / mSprite.getTexture()->getSize().x;
 	float scaleY = height / mSprite.getTexture()->getSize().y;
-	mSprite.setScale(scaleX, scaleY); 
+	mSprite.setScale(scaleX, scaleY);
 	setWidth(width);
 	setHeight(height);
 }
 
 void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
-	onClickSound.play();
-	onClickSound.setVolume(15);
+	mOnClickSound->setVolume(15);
+	mOnClickSound->play();
+}
+
+void GUIButton::canClick(bool i)
+{
+	if(i)
+	{
+		if(mOnClickSound != mSuccessSound)
+			mOnClickSound = mSuccessSound;
+	}
+	else
+	{
+		if(mOnClickSound != mFailedSound)
+			mOnClickSound = mFailedSound;
+	}
+}
+
+void GUIButton::setColor(sf::Color color)
+{
+	mSprite.setColor(color);
+	GUIElement::setColor(color);
+
 }

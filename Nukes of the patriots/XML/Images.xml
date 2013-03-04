@@ -53,6 +53,17 @@
 	<image filename="nuclear_panel.png"/>
 	<image filename="space_panel.png"/>
 	<image filename="spy_panel.png"/>
+	
+	<image filename="kap_texture_button_plus.png"/>
+	<image filename="kap_texture_button_plus5.png"/>
+	<image filename="kap_texture_button_plus10.png"/>
+
+	<image filename="kap_texture_button_minus.png"/>
+	<image filename="kap_texture_button_minus5.png"/>
+	<image filename="kap_texture_button_minus10.png"/>
+	
+	<image filename="kap_texture_button_trade.png"/>
+	<image filename="kap_texture_button_invert_trade.png"/>
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
@@ -70,12 +81,15 @@
 	<image filename="7_kom_window_imp.png" />
 	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
-	<image filename="kom_texture_button_plus.png"/>
+	
+	<image filename="kom_texture_button_plus1.png"/>
 	<image filename="kom_texture_button_plus5.png"/>
-	<image filename="button_plu10.png"/>
-	<image filename="kom_texture_button_minus.png"/>
+	<image filename="kom_texture_button_plus10.png"/>
+
+	<image filename="kom_texture_button_minus1.png"/>
 	<image filename="kom_texture_button_minus5.png"/>
-	<image filename="button_min10.png"/>
+	<image filename="kom_texture_button_minus10.png"/>
+
 	<image filename="button_no.png"/>
 	<image filename="kom_texture_button_smallupgrade.png"/>
 	<image filename="button_yes.png"/>
@@ -84,6 +98,7 @@
 	<image filename="7_kom_window_propaganda1.png"/>
 	<image filename="7_kom_window_propaganda2.png"/>
 	<image filename="kom_texture_button_endturn.png"/>
+	<image filename="kom_texture_button_invert_endturn.png"/>
 	<image filename="7_kom_window_president1.png"/>
 	<image filename="7_kom_window_president2.png"/>
 	<image filename="kom_texture_button_elect.png"/>
@@ -122,6 +137,9 @@
 	<image filename="nuclear_panel.png"/>
 	<image filename="space_panel.png"/>
 	<image filename="spy_panel.png"/>
+	
+	<image filename="kom_texture_button_trade.png"/>
+	<image filename="kom_texture_button_invert_trade.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>
@@ -149,12 +167,19 @@
 	<image filename="credits-poster.png"/>
 	<image filename="exit-poster.png"/>
 	
+	<image filename="Resume.png"/>
+	<image filename="ResumeHover.png"/>
+	<image filename="Restart.png"/>
+	<image filename="RestartHover.png"/>
+	
 	<image filename="play-poster-red.png"/>
 	<image filename="multiplayer-poster-red.png"/>
 	<image filename="load-poster-red.png"/>
 	<image filename="options-poster-red.png"/>
 	<image filename="credits-poster-red.png"/>
 	<image filename="exit-poster-red.png"/>
+	<image filename="lan_window_background.png" />
+	<image filename="lan_quick_connect.png" />
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>
@@ -185,10 +210,36 @@
 	<image filename="president-Olga.png"/>
 	<image filename="president-SiB.png"/>
 </images>
+<images directory="PickedLeaders">
+	<image filename="president-Blingfaster-picked.png"/>
+	<image filename="president-Bob-picked.png"/>
+	<image filename="president-Burt-picked.png"/>
+	<image filename="president-Carl-picked.png"/>
+	<image filename="president-Dhelma-picked.png"/>
+	<image filename="president-Flaire-picked.png"/>
+	<image filename="president-Frank-picked.png"/>
+	<image filename="president-Frankie-picked.png"/>
+	<image filename="president-Gramma-picked.png"/>
+	<image filename="president-Hans-picked.png"/>
+	<image filename="president-Heinrich-picked.png"/>
+	<image filename="president-Hugo-picked.png"/>
+	<image filename="president-Ludo-picked.png"/>
+	<image filename="president-Nojiko-picked.png"/>
+	<image filename="president-no-nose-picked.png"/>
+	<image filename="president-Sam-picked.png"/>
+	<image filename="president-Sarah-picked.png"/>
+	<image filename="president-Stieg-picked.png"/>
+	<image filename="president-Sture-picked.png"/>
+	<image filename="president-Will-picked.png"/>
+	<image filename="president-Alva-picked.png"/>
+	<image filename="president-Boris-picked.png"/>
+	<image filename="president-Gustav-picked.png"/>
+	<image filename="president-Olga-picked.png"/>
+	<image filename="president-SiB-picked.png"/>
+</images>
 <images directory="BetweenTurns">
 	<image filename="stats_menu.png"/>
-	<image filename="BetweenTurns.png"/>
-	<image filename="BetweenTurns1.png"/>
+	<image filename="spynetwork_menu.png"/>
 	<image filename="yes.png"/>
 	<image filename="no.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>

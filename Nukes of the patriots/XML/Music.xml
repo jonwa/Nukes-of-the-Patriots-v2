@@ -8,6 +8,24 @@
 <tracks directory ="Communist">
 	<music filename="Kommunist.ogg"/>
 </tracks>
-<tracks directory ="">
+<tracks directory ="Other">
 	<music filename="click_sound_normal_buttons.wav"/>
+	<music filename="click_sound_failed.wav"/>
 </tracks>
+<tracks directory="Slogans">
+	<music filename="Alva.wav"/>
+	<music filename="Blingfaster.wav"/>
+	<music filename="Bob.wav"/>
+	<music filename="Boris.wav"/>
+	<music filename="Frank.wav"/>
+	<music filename="Gustav.wav"/>
+	<music filename="Henrich.wav"/>
+	<music filename="Hugo.wav"/>
+	<music filename="Nojiko.wav"/>
+	<music filename="no-nose.wav"/>
+	<music filename="Sam.wav"/>
+	<music filename="SiB.wav"/>
+	<music filename="Stieg.wav"/>
+	<music filename="Sture.wav"/>
+</tracks>
+

@@ -11,7 +11,6 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 
 #include "SuperPower.h"
 #include <memory>
-#include <sstream>
 #include <map>
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
@@ -33,7 +32,9 @@ public:
 	Communist();
 	~Communist();
 
-	void		updateFood();
+
+	void		reset();
+
 	bool		enoughFood();
 
 	bool		setFood(int value);
@@ -69,20 +70,6 @@ public:
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
-
-	std::string intToString(int i)
-	{
-		std::stringstream converter;
-		converter << i;
-		return converter.str();
-	}
-
-	int stringToInt(std::string str)
-	{
-		if(str.size() == 0)
-			return 0;
-		return atoi(str.c_str());
-	}
 	
 	std::vector<sf::Texture*> PropagandaFood;
 	std::vector<sf::Texture*> PropagandaGoods;
@@ -107,6 +94,7 @@ private:
 	void fiveYearInitialize();
 	void setYearlyResources(int year, std::string, int value);
 	void updateAllResources();
+	void resourceIncome();
 	void fiveYearGuiFunctions();
 	void openFiveYearPlan();
 
@@ -126,7 +114,7 @@ private:
 	void loadCommunistMusic();
 
 	std::vector<sf::Texture*> CityImages; 
-	std::shared_ptr<GUIButton> mChangeCityImage;
+	std::shared_ptr<GUIImage> mChangeCityImage;
 
 	std::shared_ptr<President> mGeneral;
 	std::shared_ptr<President> mFirstGeneral;
@@ -238,31 +226,14 @@ private:
 	/*GUI-pekare för propaganda*/
 	std::shared_ptr<GUIWindow> mPropagandaWindowFirst;
 	std::shared_ptr<GUIWindow> mPropagandaWindowSecond;
+	std::shared_ptr<GUIText>   mPropagandaCostText;
+	std::shared_ptr<GUIText>   mBoughtPropagandaText;
 	
 	std::shared_ptr<GUIButton> mPropagandaBuyFoodButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyGoodsButton;
 	std::shared_ptr<GUIButton> mPropagandaBuyTechButton;
 	std::shared_ptr<GUIButton> mShowBoughtPropaganda;
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFirstYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFirstYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFristYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodSecondYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsSecondYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechSecondYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodThirdYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsThirdYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechThirdYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFourthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFourthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFourthYearButton;
-	//
-	//std::shared_ptr<GUIButton> mPropagandaBuyFoodFifthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyGoodsFifthYearButton;
-	//std::shared_ptr<GUIButton> mPropagandaBuyTechFifthYearButton;
-
+	
 	std::shared_ptr<GUIButton> mPropagandaWindowFirstCloseButton;
 	std::shared_ptr<GUIButton> mPropagandaWindowSecondCloseButton;
 
@@ -307,10 +278,10 @@ private:
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton> mPickedGeneralButton;
+	std::shared_ptr<GUIButton>  mPickedGeneralButton;
 
 	std::shared_ptr<GUIButton> mFirstGeneralButton;
-	std::shared_ptr<GUIImage>  mFirstGeneralPlaque;
+	std::shared_ptr<GUIButton> mFirstGeneralPlaque;
 	std::shared_ptr<GUIImage>  mPickedGeneralPlaque;
 
 	std::shared_ptr<GUIButton> mGoToNextPortraitButton;
@@ -318,8 +289,8 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-	std::shared_ptr<GUIButton> mLeftPanel;
-	std::shared_ptr<GUIButton> mRightPanel;
+	std::shared_ptr<GUIImage> mLeftPanel;
+	std::shared_ptr<GUIImage> mRightPanel;
 
 	std::shared_ptr<GUIText>    mCommunistHeadLine;
 
@@ -343,6 +314,11 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramMoreThanEnemyTextValue;
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
+	std::shared_ptr<GUIWindow> mResourceIncomeWindow;
+	std::shared_ptr<GUIButton> mCloseResourceIncomeWindow;
+	std::shared_ptr<GUIText>   mFoodIncome;
+	std::shared_ptr<GUIText>   mGoodsIncome;
+	std::shared_ptr<GUIText>   mTechIncome;
 
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
@@ -354,9 +330,9 @@ private:
 	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
 	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
 
-	std::shared_ptr<GUIImage>  mFoodImage[2];
-	std::shared_ptr<GUIImage>  mGoodsImage[2];
-	std::shared_ptr<GUIImage>  mTechImage[2];
+	std::shared_ptr<GUIImage>  mFoodImage[3];
+	std::shared_ptr<GUIImage>  mGoodsImage[3];
+	std::shared_ptr<GUIImage>  mTechImage[3];
 
 	std::shared_ptr<GUIImage>  mNuclearPanel;
 	std::shared_ptr<GUIImage>  mSpacePanel;

@@ -17,8 +17,11 @@ ResourceHandler* ResourceHandler::getInstance()
 ResourceHandler::ResourceHandler() {	}
 
 //Destruktor, kör internalClear funktionen för att rensa mapparna
-ResourceHandler::~ResourceHandler() { }
+ResourceHandler::~ResourceHandler() { clear(); }
 
+void ResourceHandler::clear()
+{
+}
 
 /*********************	
  *	IMAGE FUNKTIONER *

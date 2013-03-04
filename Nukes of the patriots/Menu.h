@@ -8,12 +8,23 @@
 #include "GUIText.h"
 #include <memory>
 #include <map>
+#include "Timer.h"
 
 #include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
+#include <SFML/Network.hpp>
 
 class Capitalist;
 class Communist;
+
+namespace sf
+{
+class TcpServer;
+class TcpClient;
+class UdpServer;
+class UdpClient;
+}
 
 class Menu
 {
@@ -21,6 +32,16 @@ public:
 	Menu();
 	Menu(sf::RenderWindow &window);
 	~Menu();
+	void clear();
+	void setInGameMenuVisible();
+	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
+	void loadTeamAnimation();
+	void tick();
+
+	void update(sf::Event &event);
+
+	void setMainMenuVisible();
+	void resetChooseTeamValues();
 
 private:
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
@@ -34,8 +55,15 @@ private:
 	void loadWindowPosition();
 	void loadMenuMusic();
 
+	sf::Texture mTeamAnimationFrames[150];
+	Timer *mTeamAnimationTimer;
+	bool mShowTeamChooseAnimation;
+
+	void resetPickTeamValues();
+
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
+	std::shared_ptr<GUIWindow> mInGameMenuWindow;
 	//std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
 	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
@@ -49,9 +77,15 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
+<<<<<<< HEAD
 	std::shared_ptr<GUIWindow> mInGameMenuWindow;
 	std::shared_ptr<GUIButton> mResumeButton;
 	//std::shared_ptr<GUIBUtton> mSaveGameButton;
+=======
+	std::shared_ptr<GUIButton> mResumeGameButton;
+	std::shared_ptr<GUIButton> mRestartGameButton;
+	std::shared_ptr<GUIButton> mSaveGameButton;
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;
@@ -64,7 +98,17 @@ private:
 	std::shared_ptr<GUIButton> mTeamCapitalistIsPicked;
 
 
+	std::shared_ptr<GUIWindow> mLanPlayWindow;
+	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
+
+
 	sf::RenderWindow &mWindow;
+
+	sf::TcpServer* mTcpServer;
+	sf::TcpClient* mTcpClient;
+
+	sf::UdpServer* mUdpServer;
+	sf::UdpClient* mUdpClient;
 };
 
 #endif

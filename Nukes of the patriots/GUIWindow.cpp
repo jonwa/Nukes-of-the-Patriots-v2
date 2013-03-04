@@ -19,7 +19,7 @@ GUIWindow::GUIWindow(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 }
 
-bool GUIWindow::render(sf::RenderWindow *window)
+bool GUIWindow::render(sf::RenderWindow *window, sf::RenderStates &states)
 {
 	bool visible = getVisible();
 	if(!visible)return false;
@@ -38,15 +38,15 @@ bool GUIWindow::render(sf::RenderWindow *window)
 		rect.setFillColor(sf::Color::Color(255, 0, 0, 100));
 		//window.draw(rect);
 		mSprite.setPosition(getX(), getY());
-		window->draw(mSprite);
+		window->draw(mSprite, states);
 	}
 
 
 	if(!mChilds.empty())
 	{
-		for(std::vector<GUIElement*>::size_type i = 0; i < mChilds.size(); ++i)
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
 		{
-			mChilds[i]->render(window);
+			mChilds[i]->render(window, states);
 		}
 	}
 	return true;
@@ -59,6 +59,11 @@ void GUIWindow::setSize(float width, float height)
 	mSprite.setScale(scaleX, scaleY); 
 	setWidth(width);
 	setHeight(height);
+
+	/*for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mChilds.size(); ++i)
+	{
+		mChilds[i]->setScale(scaleX,scaleY);
+	}*/
 }
 
 void GUIWindow::setColor(sf::Color color)
