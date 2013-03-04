@@ -66,7 +66,6 @@ void GameManager::init(int year)
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
 	//startRound();
-
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()

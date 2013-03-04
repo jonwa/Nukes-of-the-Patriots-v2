@@ -10,7 +10,6 @@
 #include "GameManager.h"
 #include "Timer.h"
 
-
  /*Konstruktorn kör initialize-funktionen*/
 Menu::Menu(sf::RenderWindow &window) : 
 	mWindow(window),
@@ -209,9 +208,11 @@ void Menu::initialize()
 	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
 	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
-	//mMainMenuWindow->setVisible(true);
-
-
+	
+	//InGameMenu
+	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"], mParentWindow);
+	mResumeButton			= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
+	mInGameMenuWindow->setVisible(false);
 
 	/*Fönstret och dess barn för SETTINGS MENU*/
 	//mSettingsMenuWindow	= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);

@@ -49,6 +49,14 @@
 		<image>Menu/exit-poster</image>
 	</button>
 	<button>
+		<name>Resume</name>
+		<xPos>397</xPos>
+		<yPos>49</yPos>
+		<width>54</width>
+		<height>144</height>
+		<image>Menu/play-poster</image>
+	</button>
+	<button>
 		<name>TeamCapitalist</name>
 		<xPos>43</xPos>
 		<yPos>32</yPos>

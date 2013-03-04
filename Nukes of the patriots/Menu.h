@@ -49,6 +49,10 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
+	std::shared_ptr<GUIWindow> mInGameMenuWindow;
+	std::shared_ptr<GUIButton> mResumeButton;
+	//std::shared_ptr<GUIBUtton> mSaveGameButton;
+
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;
 	std::shared_ptr<GUIButton> mCapitalistOkayButton;

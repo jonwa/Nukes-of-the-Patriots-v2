@@ -22,7 +22,7 @@ using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!");//, sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
@@ -45,7 +45,7 @@ int main()
 			GUIManager::getInstance()->update(event);
 			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
 				GameManager::getInstance()->nextRound();
-			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			if (event.type == sf::Event::Closed)// || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 		}
 		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
