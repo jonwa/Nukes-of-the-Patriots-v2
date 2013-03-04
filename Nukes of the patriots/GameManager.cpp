@@ -112,9 +112,12 @@ void GameManager::init(int year)
 		mCurrentPlayer->showGUI();
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	mCurrentPlayer->setRound(1);
 	mCurrentPlayer->showGUI();
 	//startRound();
+=======
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 =======
 >>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 }
@@ -580,4 +583,8 @@ void GameManager::initializeGuiFunctions()
 		startRound();
 	});
 }
+<<<<<<< HEAD
 	
+=======
+	
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443

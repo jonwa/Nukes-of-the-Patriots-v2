@@ -24,12 +24,18 @@ using namespace std;
 int main()
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "SFML works!");//, sf::Style::Fullscreen);
 =======
+=======
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
 
 
+<<<<<<< HEAD
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
+=======
 >>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
@@ -60,7 +66,11 @@ int main()
 			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
 				GameManager::getInstance()->nextRound();
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if (event.type == sf::Event::Closed)// || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+=======
+			if (event.type == sf::Event::Closed/* || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)*/)
+>>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 =======
 			if (event.type == sf::Event::Closed/* || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)*/)
 >>>>>>> 8255a43f3354203c054432fac9493f29c7382443
