@@ -697,6 +697,7 @@ void Capitalist::initializeCapitalistWindow()
 	mCapitalistMainTheme				= Sound::create(CapitalistMusic["CapitalistMainTheme"]);
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
+	mCapitalistButtonFrame				= GUIWindow::create(CapitalistWindows["InterfaceButtonsFrame"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorderTop"], mCapitalistMainWindow);
 	mChangeCityImage					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>

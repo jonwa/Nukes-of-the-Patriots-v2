@@ -66,6 +66,20 @@
 	
 	<image filename="kap_texture_button_trade.png"/>
 	<image filename="kap_texture_button_invert_trade.png"/>
+	
+	
+	<image filename="capitalist_frame.png"/>
+	<image filename="resources_normal.png"/>
+	<image filename="resources_pressed.png"/>
+	
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	
+	<image filename="taxes_normal.png"/>
+	<image filename="taxes_pressed.png"/>
+	
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>

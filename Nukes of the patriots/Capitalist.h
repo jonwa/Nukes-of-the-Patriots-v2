@@ -143,6 +143,7 @@ private:
 	/*GUI-pekare för kapitalisternas interface*/
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIWindow> mCapitalistBorder;
+	std::shared_ptr<GUIWindow> mCapitalistButtonFrame;
 	std::shared_ptr<GUIWindow> mCapitalistBorderTop;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
