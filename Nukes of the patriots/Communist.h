@@ -15,6 +15,8 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Audio\Music.hpp>
+#include "Sound.h"
+
 
 class President;
 class GUIElement;
@@ -89,7 +91,7 @@ private:
 	std::vector<std::shared_ptr<GUIButton> > mResourcesGoodsButtons;
 	std::vector<std::shared_ptr<GUIButton> > mResourcesTechButtons;
 
-
+	std::shared_ptr<Sound> mCommunistMainTheme;
 
 	void fiveYearInitialize();
 	void setYearlyResources(int year, std::string, int value);
@@ -341,7 +343,6 @@ private:
 	std::shared_ptr<GUIImage>  mNuclearPanel;
 	std::shared_ptr<GUIImage>  mSpacePanel;
 	std::shared_ptr<GUIImage>  mSpyPanel;
-
 };
 
 #endif

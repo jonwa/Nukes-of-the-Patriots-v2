@@ -137,15 +137,13 @@ void Capitalist::updateGUI()
 
 void Capitalist::playMusic()
 {
-	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
-	music->setVolume(60);
-	//music->play();
-	//music->setLoop(true);
+	mCapitalistMainTheme->playSound(true);
+	mCapitalistMainTheme->setVolume(60);
 }
 
 void Capitalist::stopMusic()
 {
-	CapitalistMusic["CapitalistMainTheme"]->stop();
+	mCapitalistMainTheme->stopSound();
 }
 
 std::shared_ptr<President> Capitalist::getPresident()
@@ -695,6 +693,8 @@ void Capitalist::initializeCapitalistWindow()
 	loadWindowPosition();
 	loadCapitalistMusic();
 	initializeCityImages();
+
+	mCapitalistMainTheme				= Sound::create(CapitalistMusic["CapitalistMainTheme"]);
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistBorder					= GUIWindow::create(CapitalistWindows["CapitalistBorder"], mCapitalistMainWindow);
@@ -2057,16 +2057,28 @@ void Capitalist::initializeGuiFunctions()
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
+		mCapitalistMainTheme->fadeToVolume(CapitalistMusic["CapitalistMainTheme"], 2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
-		/*if(mTaxes < mCurrentTax)
-			setPatriotism(getPatriotism() + 2);
-		else if(mTaxes > mCurrentTax)
-			setPatriotism(getPatriotism() - 3);*/
+		std::shared_ptr<Sound> music = mCapitalistMainTheme;
+		std::shared_ptr<GUIButton> endTurn = mCapitalistEndTurnButton;
+		sf::FloatRect rect = sf::FloatRect(CapitalistButtons["EndTurn"].first);
+		sf::Texture* texture = CapitalistButtons["EndTurn"].second;
+		Timer::setTimer([=]()
+		{	
+			/*if(mTaxes < mCurrentTax)
+				setPatriotism(getPatriotism() + 2);
+			else if(mTaxes > mCurrentTax)
+				setPatriotism(getPatriotism() - 3);*/
 		
-		
-		//mTaxes = mCurrentTax;
-		GameManager::getInstance()->nextRound();  
-		stopMusic();
+			//mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
+			//mTaxes = mCurrentTax;
+
+			GameManager::getInstance()->nextRound(); 
+			music->stopSound();
+			endTurn->setTexture(std::pair<sf::FloatRect, sf::Texture*>(rect, texture));
+				//	//mTaxes = mCurrentTax;	
+
+			}, 2000, 1);
 	});
 	
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
@@ -2103,7 +2115,7 @@ void Capitalist::upgradeWindowText()
 void Capitalist::showGUI()
 {
 	mCapitalistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Capitalist::hideGUI()

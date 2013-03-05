@@ -14,6 +14,8 @@
 #include "Timer.h"
 #include "GUIAnimation.h"
 
+#include <SFML\Audio\Listener.hpp>
+
 static int foodCost			= 10;
 static int goodsCost		= 20;
 static int techCost			= 30;
@@ -22,7 +24,7 @@ static int taxChange		= 5;
 static int currentGoods		= 0;
 static int currentTech		= 0;
 static bool activateWindow	= false;
-
+static float volumeChange	= 10.f;
 static int generalCount = 0;
 
 Communist::Communist() : 
@@ -128,15 +130,13 @@ Communist::~Communist()
 //spelar upp musiken samt loopar den
 void Communist::playMusic()
 {
-	std::shared_ptr<sf::Music> music = CommunistMusic["CommunistMainTheme"];
-	music->setVolume(100);
-	music->play();
-	music->setLoop(true);
+	mCommunistMainTheme->playSound(true);
+	mCommunistMainTheme->setVolume(60);
 }
 //Stoppar musiken
 void Communist::stopMusic()
 {
-	CommunistMusic["CommunistMainTheme"]->stop();
+	mCommunistMainTheme->stopSound();
 }
 
 void Communist::fiveYearInitialize()
@@ -803,6 +803,8 @@ void Communist::initializeCommunistWindow()
 	loadWindowPosition();
 	loadCommunistMusic();
 	initializeCityImages();
+
+	mCommunistMainTheme				= Sound::create(CommunistMusic["CommunistMainTheme"]); 
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
@@ -1985,7 +1987,14 @@ void Communist::initializeGuiFunctions()
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
+		mCommunistMainTheme->fadeToVolume(CommunistMusic["CommunistMainTheme"], 2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
+		std::shared_ptr<GUIButton> endTurn = mCommunistEndTurnButton;
+		sf::FloatRect rect = sf::FloatRect(CommunistButtons["EndTurn"].first);
+		sf::Texture* texture = CommunistButtons["EndTurn"].second;
+		std::shared_ptr<Sound> music = mCommunistMainTheme;
+		Timer::setTimer([=]()
+		{	
 		/*if(mTaxes < mCurrentTax)
 			setPatriotism(getPatriotism() + 2);
 		else if(mTaxes > mCurrentTax)
@@ -1993,8 +2002,13 @@ void Communist::initializeGuiFunctions()
 		
 		//mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
 		//mTaxes = mCurrentTax;
-		GameManager::getInstance()->nextRound();  
-		stopMusic();
+
+		GameManager::getInstance()->nextRound(); 
+		music->stopSound();
+		endTurn->setTexture(std::pair<sf::FloatRect, sf::Texture*>(rect, texture));
+			//	//mTaxes = mCurrentTax;
+
+		}, 2000, 1);
 	});
 
 }

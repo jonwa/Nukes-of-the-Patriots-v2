@@ -184,6 +184,10 @@
 	<image filename="exit-poster-red.png"/>
 	<image filename="lan_window_background.png" />
 	<image filename="lan_quick_connect.png" />
+	
+	<image filename="Lower.png"/>
+	<image filename="Raise.png"/>
+	<image filename="Esc.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

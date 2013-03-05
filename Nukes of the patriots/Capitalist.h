@@ -29,6 +29,8 @@ class Communist;
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
 
+#include "Sound.h"
+
 class Capitalist : public SuperPower 
 {
 public:
@@ -89,15 +91,12 @@ private:
 	std::shared_ptr<President> mSecondPresident;
 	int	mPickedPresident;
 
-	/*Skapar två std::map. En dit alla knappar för kapitalisternas läggs in i samt 
-	  en dit alla kapitalisternas fönster läggs in i. Detta sker via hämtade värden
-	  från XML dokument samt genom ResourceHandler  
-	  Av: Jon Wahlström 2013-01-31
-																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistWindows;
 	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
+	std::shared_ptr<Sound> mCapitalistMainTheme; // capitalist main theme music
+
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void loadCapitalistMusic();
