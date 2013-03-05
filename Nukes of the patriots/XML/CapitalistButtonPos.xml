@@ -490,7 +490,7 @@
 	</button>
 	<button>
 		<name>IncreasePopulation</name>
-		<xPos>328</xPos>
+		<xPos>142</xPos>
 		<yPos>400</yPos>
 		<width>100</width>
 		<height>40</height>
@@ -498,7 +498,7 @@
 	</button>
 	<button>
 		<name>DoNotIncreasePopulation</name>
-		<xPos>142</xPos>
+		<xPos>328</xPos>
 		<yPos>400</yPos>
 		<width>100</width>
 		<height>40</height>

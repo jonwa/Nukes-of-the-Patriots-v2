@@ -14,7 +14,7 @@ GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElemen
 	mAlignment("left"),
 	mFont(sf::Font::getDefaultFont())
 {
-	mFont.loadFromFile("Font/georgia.ttf");
+	mFont.loadFromFile("Font/MyriadPro-Regular.otf");
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setColor(sf::Color::Black);

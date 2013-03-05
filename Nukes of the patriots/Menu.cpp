@@ -410,7 +410,7 @@ void Menu::initializeGuiFuctions()
 
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
-	{ 
+	{
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -474,7 +474,9 @@ void Menu::initializeGuiFuctions()
 			Timer::setTimer([=]()
 			{
 				_parentWindow->setVisible(false);
+
 				_music.at("MainMenuTrack")->stop(); 
+
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}

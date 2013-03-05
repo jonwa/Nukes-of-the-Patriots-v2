@@ -1927,22 +1927,26 @@ void Capitalist::initializeGuiFunctions()
 		int foodBought = mFood - mFoodPreviousRound;
 		int goodsBought = mGoods - mGoodsPreviousRound;
 		int techBought = mTech - mTechPreviousRound;
+		int totalBought = foodBought + goodsBought + techBought;
 		if(foodBought > goodsBought && foodBought > techBought)
 		{
 			foodCost += 1;
 			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(goodsBought > foodBought && goodsBought > techBought)
 		{
 			goodsCost += 1;
 			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(techBought > foodBought && techBought > goodsBought)
 		{
 			techCost += 1;
 			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		else
+		else if(totalBought != 0)
 		{
 			int rand = Randomizer::getInstance()->randomNr(3, 0);
 			if(rand == 0)
@@ -1960,8 +1964,23 @@ void Capitalist::initializeGuiFunctions()
 			techCost += 1;
 			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
 			}
+			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		mIncreasedResourcesPriceWindow->setVisible(true);
+		else
+		{
+			updateFood(mPopulationEatsFoodText);
+
+			mPopulationEatsFoodWindow->setVisible(true);
+			if(mIncreasePopulation)
+			{
+				mClosePopulationEatsFoodWindow->setVisible(false);
+			}
+			else
+			{
+				mDoIncreasePopulation->setVisible(false);
+				mDoNotIncreasePopulation->setVisible(false);
+			}
+		}
 		mCapitalistEndTurnButton->setTexture(CapitalistButtons["EndTurnIsPressed"]);
 	});
 	
@@ -1987,7 +2006,7 @@ void Capitalist::initializeGuiFunctions()
 	{
 		mCurrency -= mPopulation;
 		mPopulation += 1;
-		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation - 1) + " to " + intToString(mPopulation));
+		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation) + " to " + intToString(mPopulation + 1));
 		mDoIncreasePopulation->setVisible(false);
 		mDoNotIncreasePopulation->setVisible(false);
 		mClosePopulationEatsFoodWindow->setVisible(true);
