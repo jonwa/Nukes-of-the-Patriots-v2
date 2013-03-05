@@ -311,8 +311,8 @@ void Menu::initialize()
 	//mTeamCommunistIsPicked	= GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
 	mTeamCapitalist				= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
-	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
-	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
+	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "", false, mChooseTeamWindow);
+	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "", false, mChooseTeamWindow);
 	mCapitalistNameField->setMaxCharacters(15);
 	mCommunistNameField->setMaxCharacters(15);
 	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
@@ -405,7 +405,7 @@ void Menu::initializeGuiFuctions()
 	mExitButton->setOnClickFunction([=]()				{ mWindow.close(); });
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
-	{ 
+	{
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -426,7 +426,7 @@ void Menu::initializeGuiFuctions()
 	});
 
 	mCommunistOkayButton->setOnClickFunction([=]()		
-	{ 
+	{
 		mCommunistTeamChosen = true;
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -440,7 +440,7 @@ void Menu::initializeGuiFuctions()
 			Timer::setTimer([=]()
 			{
 				_parentWindow->setVisible(false);
-				 _music.at("MainMenuTrack")->stop(); 
+					_music.at("MainMenuTrack")->stop(); 
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}

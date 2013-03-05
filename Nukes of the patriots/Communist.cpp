@@ -1927,7 +1927,7 @@ void Communist::initializeGuiFunctions()
 	{
 		mCurrency -= mPopulation;
 		mPopulation += 1;
-		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation - 1) + " to " + intToString(mPopulation));
+		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation) + " to " + intToString(mPopulation + 1));
 		mDoIncreasePopulation->setVisible(false);
 		mDoNotIncreasePopulation->setVisible(false);
 		mClosePopulationEatsFoodWindow->setVisible(true);
