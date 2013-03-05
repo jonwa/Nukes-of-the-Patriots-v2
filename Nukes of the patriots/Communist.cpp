@@ -371,15 +371,15 @@ void Communist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFood;
-	int exportedGoodsChange = mExportedGoods;
-	int exportedTechChange = mExportedTech;
+	int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
+	int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
+	int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
 	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedFood();
-	int enemyTechExported = enemy->getExportedFood();
+	int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
+	int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoodsPreviousRound();
+	int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
 	if(exportedTotal > enemyExportedTotal)
@@ -1003,9 +1003,9 @@ void Communist::initializeCommunistWindow()
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
 
-	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "1", mImportWindow);
-	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "1", mImportWindow);
-	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "1", mImportWindow);
+	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "0", mExportWindow);
+	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "0", mExportWindow);
+	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "0", mExportWindow);
 	
 	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string(""));
 
@@ -1710,18 +1710,25 @@ void Communist::initializeGuiFunctions()
 	/*När en general har blivit vald*/
 	mCloseGeneralWindow->setOnClickFunction([=]()
 	{
-		//GUIAnimation::fadeToColor(mChooseGeneralWindow, 1000, mChooseGeneralWindow->getColor(), sf::Color(255, 255, 255, 0));
 		std::shared_ptr<GUIWindow> _chooseWindow = mChooseGeneralWindow;
 		std::shared_ptr<GUIWindow> _pickedWindow = mPickedGeneralWindow;
+		GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+		for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
+		{
+			sf::Color color = (*it)->getColor();
+			color.a = 255;
+			GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
+		}
+		_chooseWindow->setEnabled(false, true);
+		_pickedWindow->setEnabled(false, true);
+		_pickedWindow->setVisible(true);
 		Timer::setTimer([=]()
 		{
 			_chooseWindow->setVisible(false);
+			_chooseWindow->setColor(sf::Color(255, 255, 255, 255));
 			_pickedWindow->setEnabled(true, true);
 		}, 1000, 1);
-			_pickedWindow->setVisible(true);
 			
-			GUIAnimation::fadeToColor(_pickedWindow, 1000, sf::Color(255, 255, 255, 0), _pickedWindow->getColor());
-		//}, 500, 1);
 
 		mGeneral = GameManager::getInstance()->getGeneral(generalCount);
 
@@ -1829,6 +1836,11 @@ void Communist::initializeGuiFunctions()
 	resourcesAvailable.push_back(&mGoods);
 	resourcesAvailable.push_back(&mTech);
 
+	std::vector<std::shared_ptr<GUIEditField>> exportResourceCost;
+	exportResourceCost.push_back(mExportFoodCost);
+	exportResourceCost.push_back(mExportGoodsCost);
+	exportResourceCost.push_back(mExportTechCost);
+
 	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
 	{
 		float x = mExportQuantityBackground[i]->getLocalX(), y = mExportQuantityBackground[i]->getLocalY();
@@ -1845,8 +1857,8 @@ void Communist::initializeGuiFunctions()
 				if(quantity < 0)
 					quantity = 0;
 				mExportQuantityText[i]->setText(intToString(quantity));
-				//int cost = quantity * (foodAvailable * foodPrice);
-				//mImportCostText[i]->setText(intToString(cost));
+				int cost = quantity * stringToInt(exportResourceCost[i]->getText());
+				mExportTotalPriceText[i]->setText(cost);
 			});
 
 			mExportButtonPlus[i][h] = GUIButton::create(
@@ -1855,17 +1867,47 @@ void Communist::initializeGuiFunctions()
 				mExportWindow);
 			mExportButtonPlus[i][h]->setOnClickFunction([=]()
 			{
-				int foodAvailable = mFood;
 				int quantity = stringToInt(mExportQuantityText[i]->getText());
 				quantity += (h == 0) ? 1 : (h*5);
 				if(quantity > *resourcesAvailable[i])
 					quantity = *resourcesAvailable[i];
 				mExportQuantityText[i]->setText(intToString(quantity));
-				//int cost = quantity * (foodAvailable * foodPrice);
-				//mImportCostText[i]->setText(intToString(cost));
+				int cost = quantity * stringToInt(exportResourceCost[i]->getText());
+				mExportTotalPriceText[i]->setText(cost);
 			});
 		}
 	}
+
+	mExportFoodCost->setOnGuiChangeFunction([&]()
+	{
+		int exportFoodCost = stringToInt(mExportFoodCost->getText());
+		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
+		if(exportFoodCost > totalAllowedCost)
+			exportFoodCost = totalAllowedCost;
+		mExportFoodCost->setText(intToString(exportFoodCost));
+		int foodQuantity = stringToInt(mExportQuantityText[0]->getText());
+		mExportTotalPriceText[0]->setText(foodQuantity*exportFoodCost);
+	});
+	mExportGoodsCost->setOnGuiChangeFunction([&]()
+	{
+		int exportGoodsCost = stringToInt(mExportGoodsCost->getText());
+		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
+		if(exportGoodsCost > totalAllowedCost)
+			exportGoodsCost = totalAllowedCost;
+		mExportGoodsCost->setText(intToString(exportGoodsCost));
+		int goodsQuantity = stringToInt(mExportQuantityText[1]->getText());
+		mExportTotalPriceText[1]->setText(goodsQuantity*exportGoodsCost);
+	});
+	mExportTechCost->setOnGuiChangeFunction([&]()
+	{
+		int exportTechCost = stringToInt(mExportTechCost->getText());
+		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
+		if(exportTechCost > totalAllowedCost)
+			exportTechCost = totalAllowedCost;
+		mExportTechCost->setText(intToString(exportTechCost));
+		int techQuantity = stringToInt(mExportQuantityText[2]->getText());
+		mExportTotalPriceText[2]->setText(techQuantity*exportTechCost);
+	});
 
 	mExportConfirmButton->setOnClickFunction(
 		[=]()

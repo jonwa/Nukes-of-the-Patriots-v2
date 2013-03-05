@@ -86,17 +86,17 @@ bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
 		if(mAlignment == "left")
 		{
 			mText.setPosition(getX(), getY());
-			//mText.setOrigin(mText.getGlobalBounds().width, mText.getGlobalBounds().height);
+			mText.setOrigin(0, 0);
 		}
 		else if(mAlignment == "middle")
 		{
 			mText.setPosition(getX(), getY());
-			mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height);
+			mText.setOrigin(mText.getLocalBounds().width/2, 0);
 		}
 		else if(mAlignment == "right")
 		{
 			mText.setPosition(getX(), getY());
-			mText.setOrigin(mText.getLocalBounds().width, mText.getLocalBounds().height);
+			mText.setOrigin(mText.getLocalBounds().width, 0);
 		}
 
 		window->draw(mText, states);
