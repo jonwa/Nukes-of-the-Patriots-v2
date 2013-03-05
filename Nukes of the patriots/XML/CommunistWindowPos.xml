@@ -11,7 +11,7 @@
 	<window>
 		<name>ChooseGeneral</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>
@@ -19,7 +19,7 @@
 	<window>
 		<name>PickedGeneral</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>	
@@ -27,7 +27,7 @@
 	<window>
 		<name>FiveYearPlanWindow</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>
@@ -35,7 +35,7 @@
 	<window>
 		<name>CommunistResourcesWindow</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>168</height>
 		<image>Communist/7_kom_window_res</image>
@@ -43,7 +43,7 @@
 	<window>
 		<name>CommunistPropagandaWindowFirst</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>
@@ -59,7 +59,7 @@
 	<window>
 		<name>CommunistUpgradeWindow</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>
@@ -115,7 +115,7 @@
 	<window>
 		<name>PopulationEatsFood</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Communist/Communist_Window_big</image>

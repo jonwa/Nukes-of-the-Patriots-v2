@@ -121,6 +121,14 @@
 		<image>Menu/Ok-knapp-aktiv</image>
 	</button>
 	<button>
+		<name>CapitalistOkayIsPressed</name>
+		<xPos>91</xPos>
+		<yPos>352</yPos>
+		<width>133</width>
+		<height>40</height>	
+		<image>Menu/Ok-knapp-inaktiv</image>
+	</button>
+	<button>
 		<name>CommunistName</name>
 		<xPos>628</xPos>
 		<yPos>474</yPos>
@@ -135,6 +143,14 @@
 		<width>133</width>
 		<height>40</height>		
 		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
+	<button>
+		<name>CommunistOkayIsPressed</name>
+		<xPos>477</xPos>
+		<yPos>352</yPos>
+		<width>133</width>
+		<height>40</height>		
+		<image>Menu/Ok-knapp-inaktiv</image>
 	</button>
 	<button>
 		<name>StartGameHover</name>
