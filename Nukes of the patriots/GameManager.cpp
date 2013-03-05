@@ -64,7 +64,7 @@ void GameManager::init(int year)
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
-		mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
+		mYearText = GUIText::create(sf::FloatRect(512, 4, 0, 0), intToString(mYear));
 		mYearText->setScale(0.6, 0.6);
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);

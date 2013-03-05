@@ -21,6 +21,7 @@ public:
 	void		setText(std::string text);
 	void		setScale(float width, float height);
 	void		setMaxCharacters(int maxCharacters){ mMaxCharacters = maxCharacters; }
+	void		setPlaceHolderText(std::string string);
 	bool		render(sf::RenderWindow *window, sf::RenderStates &states);
 
 	void				setOnGuiChangeFunction(std::function<void()>);
@@ -30,7 +31,7 @@ public:
 	void				setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 				~GUIEditField(){}
 private:
-	sf::Text mText;
+	sf::Text mText, mPlaceHolderText;
 	sf::Font mFont;
 	sf::RenderTexture mRenderTexture;
 	Timer *mCaretTimer;
