@@ -256,7 +256,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				mSelectedCaret = -1;
 			}
 		}
-		if(event.type == sf::Event::TextEntered && (mMaxCharacters == 0 || getText().size() < mMaxCharacters))
+		if(event.type == sf::Event::TextEntered)
 		{
 			mCaretTimer->resetTimer();
 			mCaretVisible = true;
@@ -266,6 +266,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				if(event.text.unicode < 128 && event.text.unicode != 13 && event.text.unicode != 8)
 				{
 					sf::String str = mText.getString();
+					if(mCaretIndex > str.getSize())
+						mCaretIndex = str.getSize();
 					if(mSelectedCaret != -1)
 					{
 						int characters = mSelectedCaret - mCaretIndex;
@@ -276,7 +278,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 							mCaretIndex -= std::abs(characters);
 						str.insert(mCaretIndex, key);
 					}
-					else
+					else if(mMaxCharacters == 0 || str.getSize() < mMaxCharacters)
 						str.insert(mCaretIndex, key);
 					mCaretIndex++;
 					mText.setString(str);
@@ -315,6 +317,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 			mSelectedCaret = newCaret;
 			if(mSelectedCaret == mCaretIndex)
 				mSelectedCaret = -1;
+			if(mCaretIndex > str.getSize())
+				mCaretIndex = str.getSize();
 		}
 	}
 	GUIElement::update(window, event);
