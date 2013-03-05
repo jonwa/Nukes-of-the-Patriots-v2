@@ -17,6 +17,7 @@
 #include "UdpClient.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
+#include <SFML\Audio\Listener.hpp>
 
 
  /*Konstruktorn kör initialize-funktionen*/
@@ -46,8 +47,8 @@ Menu::Menu(sf::RenderWindow &window) :
 	initializeGuiFuctions();
 	//loadTeamAnimation();
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
-	//MenuMusic["MainMenuTrack"]->play();
-	//MenuMusic["MainMenuTrack"]->setLoop(true);
+	MenuMusic["MainMenuTrack"]->play();
+	MenuMusic["MainMenuTrack"]->setLoop(true);
 }
 Menu::~Menu(){ }
 
@@ -268,18 +269,15 @@ void Menu::initialize()
 	loadWindowPosition();
 	loadMenuMusic();
 
-	/*Förälder-fönstret för alla menyer*/
 	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
 
 	/*Fönstret och dess barn för LOGOMENU*/
 	//mLogoMenuWindow		= GUIWindow::create(WindowPos["LogoScreen"], mParentWindow);
 
-
 	/*Fönstret och dess barn för SPLASHSCREEN*/
 	//mSplashScreenWindow = GUIWindow::create(WindowPos["SplashScreen"], mParentWindow);
 	//mSplashScreenWindow->setVisible(false);
 
-	/*Fönstret och dess barn för MAIN MENU*/
 	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
 	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
@@ -287,34 +285,35 @@ void Menu::initialize()
 	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
 	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
-
 	mMainMenuWindow->setVisible(false);
 
-	//InGameMenu with buttons. 
 	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"]);
 	mResumeGameButton		= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
 	mRestartGameButton		= GUIButton::create(ButtonPos["Restart"], mInGameMenuWindow);
 	mSaveGameButton			= GUIButton::create(ButtonPos["SaveGame"], mInGameMenuWindow);
-
 	mInGameMenuWindow->setVisible(false);
 
-	
-	/*Fönstret och dess barn för SETTINGS MENU*/
-	//mSettingsMenuWindow	= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
-	//mSettingsMenuWindow->setVisible(false);
+	mSettingsMenuWindow		= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
+	mVolumeText				= GUIText::create(sf::FloatRect(300, 40, 40, 40), "Volume", mSettingsMenuWindow);
+	mVolumeText->setColor(sf::Color::White);
+	mLowerVolume			= GUIButton::create(ButtonPos["LowerVolume"], mSettingsMenuWindow);
+	mRaiseVolume			= GUIButton::create(ButtonPos["RaiseVolume"], mSettingsMenuWindow);
+	mWindowSizeText			= GUIText::create(sf::FloatRect(300, 200, 40, 40), "Window size", mSettingsMenuWindow);
+	mWindowSizeText->setColor(sf::Color::White);
+	mCloseSettingsWindow	= GUIButton::create(ButtonPos["Esc"], mSettingsMenuWindow);
+	mSettingsMenuWindow->setVisible(false);
 
-	/*Fönstret och dess barn för CREDITS MENU*/
 	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"]);
 	mCreditsMenuWindow->setVisible(false);
 
-	/*Fönstret och dess barn för att välja lag*/
 	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
 	mTeamCommunist				= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
-	//mTeamCommunistIsPicked	= GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
 	mTeamCapitalist				= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
 	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
 	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
+
 	mCapitalistNameField->setMaxCharacters(15);
 	mCommunistNameField->setMaxCharacters(15);
 	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkayIsPressed"], mChooseTeamWindow);
@@ -330,19 +329,11 @@ void Menu::initialize()
 	mLanPlayQuickConnect	= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
 	mLanPlayWindow->setVisible(false);
 
-
-	/*Lägger in fönstrerna i vektorn för GUIElement*/
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 	
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 }
 
- /*
-	Initierar lambda funktioner för GUIknapparna. Alltså vad som skall
-	hända då dessa har blivit tryckta på. 
-
-	  Av: Jon Wahlström  2013-01-29
-																	*/
 
 void Menu::tick()
 {
@@ -397,16 +388,32 @@ void Menu::initializeGuiFuctions()
 	
 	mSettingsButton->setMouseEnterFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["SettingsHover"]); });
 	mSettingsButton->setMouseLeaveFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["Settings"]); });
-	mSettingsButton->setOnClickFunction([=]()			{ });
+	mSettingsButton->setOnClickFunction([=]()			
+	{ 
+		//mMainMenuWindow->setVisible(false);
+		mMainMenuWindow->setEnabled(false, true);
+		mSettingsMenuWindow->setVisible(true);
+		mSettingsMenuWindow->setEnabled(true, true);
+	});
 
-	mCreditsButton->setMouseEnterFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
-	mCreditsButton->setMouseLeaveFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
+	mLowerVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() - 10); });
+	mRaiseVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() + 10); });	
+	mCloseSettingsWindow->setOnClickFunction([=]()		
+	{ 
+		mSettingsMenuWindow->setVisible(false);
+		mSettingsMenuWindow->setEnabled(false, true);
+		//mMainMenuWindow->setVisible(true); 
+		mMainMenuWindow->setEnabled(true, true);
+	});	
+
+	mCreditsButton->setMouseEnterFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
+	mCreditsButton->setMouseLeaveFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
 	
-	mCreditsButton->setOnClickFunction([=]()			{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
+	mCreditsButton->setOnClickFunction([=]()	{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
 	
-	mExitButton->setMouseEnterFunction([=]()			{ mExitButton->setTexture(ButtonPos["ExitHover"]); });
-	mExitButton->setMouseLeaveFunction([=]()			{ mExitButton->setTexture(ButtonPos["Exit"]); });
-	mExitButton->setOnClickFunction([=]()				{ mWindow.close(); });
+	mExitButton->setMouseEnterFunction([=]()	{ mExitButton->setTexture(ButtonPos["ExitHover"]); });
+	mExitButton->setMouseLeaveFunction([=]()	{ mExitButton->setTexture(ButtonPos["Exit"]); });
+	mExitButton->setOnClickFunction([=]()		{ mWindow.close(); });
 
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		

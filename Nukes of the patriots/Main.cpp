@@ -17,7 +17,8 @@
 #include "GameManager.h"
 #include "TimerHandler.h"
 #include "AnimationHandler.h"
-
+#include <SFML\Audio\Listener.hpp>
+#include "SoundHandler.h"
 
 using namespace std;
 
@@ -25,7 +26,6 @@ int main()
 {
 
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
-
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
@@ -71,6 +71,7 @@ int main()
 		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();
+		SoundHandler::getInstance()->tick();
         window.clear();
 		//grayscale.setParameter("mousePos", sf::Vector2f(mousePos.x, window.getSize().y - mousePos.y));
 		sf::RenderStates states;
