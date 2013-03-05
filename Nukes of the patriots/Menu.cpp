@@ -17,10 +17,6 @@
 #include "UdpClient.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
-<<<<<<< HEAD
-=======
-
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 
 
  /*Konstruktorn kör initialize-funktionen*/
@@ -71,7 +67,6 @@ void Menu::connectToServer(unsigned short port, sf::IpAddress ipAddress)
 {
 	if(mTcpClient == nullptr)
 		mTcpClient = new sf::TcpClient(port, ipAddress);
-<<<<<<< HEAD
 }
 
 void Menu::clear()
@@ -95,31 +90,6 @@ void Menu:: update(sf::Event &event)
 	}
 }
 
-=======
-}
-
-void Menu::clear()
-{
-	MenuMusic.clear();
-	ButtonPos.clear();
-	WindowPos.clear();
-}
-
-
-void Menu:: update(sf::Event &event)
-{
-	if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
-	{
-		//GameManager::getInstance()->getCurrentPlayer()->hideGUI();
-		std::cout<<"in game menu is visible"<<std::endl;
-
-		GUIManager::getInstance()->setOnTop(mInGameMenuWindow);
-
-		mInGameMenuWindow->setVisible(true);
-	}
-}
-
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 void Menu::resetChooseTeamValues()
 {
 	mCapitalistTeamChosen = false;
@@ -315,15 +285,7 @@ void Menu::initialize()
 	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
 	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-	//InGameMenu
-	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"], mParentWindow);
-	mResumeButton			= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
-=======
-=======
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
+
 	mMainMenuWindow->setVisible(false);
 
 	//InGameMenu with buttons. 
@@ -331,10 +293,7 @@ void Menu::initialize()
 	mResumeGameButton		= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
 	mRestartGameButton		= GUIButton::create(ButtonPos["Restart"], mInGameMenuWindow);
 	mSaveGameButton			= GUIButton::create(ButtonPos["SaveGame"], mInGameMenuWindow);
-<<<<<<< HEAD
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
-=======
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
+
 	mInGameMenuWindow->setVisible(false);
 
 	

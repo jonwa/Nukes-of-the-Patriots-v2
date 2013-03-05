@@ -77,21 +77,13 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 	std::shared_ptr<GUIWindow> mInGameMenuWindow;
-	std::shared_ptr<GUIButton> mResumeButton;
-	//std::shared_ptr<GUIBUtton> mSaveGameButton;
-=======
+
 	std::shared_ptr<GUIButton> mResumeGameButton;
 	std::shared_ptr<GUIButton> mRestartGameButton;
 	std::shared_ptr<GUIButton> mSaveGameButton;
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
-=======
-	std::shared_ptr<GUIButton> mResumeGameButton;
-	std::shared_ptr<GUIButton> mRestartGameButton;
-	std::shared_ptr<GUIButton> mSaveGameButton;
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
+
 
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;

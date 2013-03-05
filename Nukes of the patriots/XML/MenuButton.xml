@@ -54,12 +54,6 @@
 		<yPos>49</yPos>
 		<width>54</width>
 		<height>144</height>
-<<<<<<< HEAD
-<<<<<<< HEAD
-		<image>Menu/play-poster</image>
-=======
-=======
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 		<image>Menu/Resume</image>
 	</button>
 	<button>
@@ -77,10 +71,6 @@
 		<width>61</width>
 		<height>135</height>
 		<image>Menu/load-poster</image>
-<<<<<<< HEAD
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
-=======
->>>>>>> 8255a43f3354203c054432fac9493f29c7382443
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
