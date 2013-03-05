@@ -63,7 +63,6 @@ private:
 
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
-	std::shared_ptr<GUIWindow> mInGameMenuWindow;
 	//std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
 	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
@@ -77,6 +76,9 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
+
+
+	std::shared_ptr<GUIWindow> mInGameMenuWindow;
 
 	std::shared_ptr<GUIButton> mResumeGameButton;
 	std::shared_ptr<GUIButton> mRestartGameButton;
