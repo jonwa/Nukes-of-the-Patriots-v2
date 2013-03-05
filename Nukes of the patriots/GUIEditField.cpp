@@ -18,6 +18,7 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 {
 	mFont.loadFromFile("Font/MyriadPro-Regular.otf");
 	mText.setFont(mFont);
+	mPlaceHolderText.setFont(mFont);
 	sf::Texture *texture;
 	switch(type)
 	{
@@ -47,9 +48,10 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	rect.width = (rect.width == 0) ? (*texture).getSize().x : rect.width;
 	rect.height = (rect.height == 0) ? (*texture).getSize().y : rect.height;
 	mSprite.setScale(scaleX, scaleY);
-	mText.setFont(mFont);
-	mText.setString(sf::String(text.c_str()));
+	mText.setString("");
+	mPlaceHolderText.setString(sf::String(text.c_str()));
 	mText.setScale(scaleY, scaleY);
+	mPlaceHolderText.setScale(scaleX, scaleY);
 	//sf::FloatRect boundBox = mText.getGlobalBounds();
 	//setWidth(static_cast<int>(boundBox.width));
 	//setHeight(static_cast<int>(boundBox.height));
@@ -58,6 +60,11 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 bool GUIEditField::getCaretVisible()
 {
 	return mCaretVisible;
+}
+
+void GUIEditField::setPlaceHolderText(std::string string)
+{
+	mPlaceHolderText.setString(string.c_str());
 }
 
 void GUIEditField::setCaretVisible(bool visible)
@@ -102,6 +109,10 @@ bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 	mText.setColor(sf::Color::Color(255, 255, 255, 255));
 	//mRenderTexture.draw(mSprite);
 	mRenderTexture.draw(mText, states);
+	if(mPlaceHolderText.getString().getSize() > 0 && mText.getString().getSize() == 0 && !mSelected)
+	{
+		mRenderTexture.draw(mPlaceHolderText, states);
+	}
 	if(isSelected())
 	{
 		if(mSelectedCaret != -1)

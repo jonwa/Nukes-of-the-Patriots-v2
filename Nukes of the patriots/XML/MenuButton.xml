@@ -224,4 +224,28 @@
 		<height>137</height>
 		<image>Menu/RestartHover</image>
 	</button>	
+	<button>
+		<name>LowerVolume</name>
+		<xPos>230</xPos>
+		<yPos>90</yPos>
+		<width>40</width>
+		<height>20</height>
+		<image>Menu/Lower</image>
+	</button>	
+	<button>
+		<name>RaiseVolume</name>
+		<xPos>430</xPos>
+		<yPos>90</yPos>
+		<width>40</width>
+		<height>20</height>
+		<image>Menu/Raise</image>
+	</button>		
+	<button>
+		<name>Esc</name>
+		<xPos>661</xPos>
+		<yPos>23</yPos>
+		<width>10</width>
+		<height>10</height>
+		<image>Menu/Esc</image>
+	</button>
 </menu>

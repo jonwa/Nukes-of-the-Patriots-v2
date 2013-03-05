@@ -63,7 +63,7 @@ private:
 
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
-	//std::shared_ptr<GUIWindow> mSettingsMenuWindow;
+	std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
 	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
 	//std::shared_ptr<GUIWindow> mSplashScreenWindow;
@@ -76,14 +76,16 @@ private:
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton;
 
-
+	std::shared_ptr<GUIText>   mVolumeText;
+	std::shared_ptr<GUIButton> mLowerVolume;
+	std::shared_ptr<GUIButton> mRaiseVolume;
+	std::shared_ptr<GUIText>   mWindowSizeText;
+	std::shared_ptr<GUIButton> mCloseSettingsWindow;
 
 	std::shared_ptr<GUIWindow> mInGameMenuWindow;
-
 	std::shared_ptr<GUIButton> mResumeGameButton;
 	std::shared_ptr<GUIButton> mRestartGameButton;
 	std::shared_ptr<GUIButton> mSaveGameButton;
-
 
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;
@@ -95,18 +97,16 @@ private:
 	std::shared_ptr<GUIButton> mTeamCapitalist;
 	std::shared_ptr<GUIButton> mTeamCapitalistIsPicked;
 
-
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
-
-
-	sf::RenderWindow &mWindow;
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;
 
 	sf::UdpServer* mUdpServer;
 	sf::UdpClient* mUdpClient;
+
+	sf::RenderWindow &mWindow;
 };
 
 #endif
