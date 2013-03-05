@@ -811,9 +811,9 @@ void Capitalist::initializeCapitalistWindow()
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CapitalistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	mUpgradeCloseButton					= GUIButton::create(CapitalistButtons["CloseUpgrade"], mUpgradeWindow);
 
-	mSpyPanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(358, 60, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/spy_panel"))), mUpgradeWindow);
-	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(179, 97, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/space_panel"))), mUpgradeWindow);
-	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 135, 212, 212), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/nuclear_panel"))), mUpgradeWindow);
+	mSpyPanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(359, 60, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/spy_panel"))), mUpgradeWindow);
+	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/space_panel"))), mUpgradeWindow);
+	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/nuclear_panel"))), mUpgradeWindow);
 
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 152, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");

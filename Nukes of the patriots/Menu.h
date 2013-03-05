@@ -78,8 +78,6 @@ private:
 	std::shared_ptr<GUIButton> mExitButton;
 
 
-	std::shared_ptr<GUIWindow> mInGameMenuWindow;
-
 	std::shared_ptr<GUIButton> mResumeGameButton;
 	std::shared_ptr<GUIButton> mRestartGameButton;
 	std::shared_ptr<GUIButton> mSaveGameButton;
