@@ -418,16 +418,16 @@
 	</button>
 	<button>
 		<name>ImportGotoExport</name>
-		<xPos>191</xPos>
-		<yPos>272</yPos>
-		<width>199</width>
-		<height>44</height>
-		<image>Capitalist/kap_texture_button_ok</image>	
+		<xPos>228</xPos>
+		<yPos>264</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_export</image>	
 	</button>
 	<button>
 		<name>ExportConfirm</name>
-		<xPos>191</xPos>
-		<yPos>272</yPos>
+		<xPos>228</xPos>
+		<yPos>264</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>	

@@ -21,6 +21,7 @@ private:
 	sf::FloatRect mStartRect, mEndRect;
 	sf::Color mStartColor, mEndColor;
 	Timer* mMoveTimer, *mColorFadeTimer;
+	bool m_animateMovement, m_animateColor;
 };
 
 #endif

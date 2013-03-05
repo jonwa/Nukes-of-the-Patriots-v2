@@ -16,7 +16,7 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1),mMaxCharacters(0)
 {
-	mFont.loadFromFile("Font/georgia.ttf");
+	mFont.loadFromFile("Font/MyriadPro-Regular.otf");
 	mText.setFont(mFont);
 	sf::Texture *texture;
 	switch(type)
