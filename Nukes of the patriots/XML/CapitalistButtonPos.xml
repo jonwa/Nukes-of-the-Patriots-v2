@@ -488,4 +488,20 @@
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
+	<button>
+		<name>IncreasePopulation</name>
+		<xPos>328</xPos>
+		<yPos>400</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_yes</image>
+	</button>
+	<button>
+		<name>DoNotIncreasePopulation</name>
+		<xPos>142</xPos>
+		<yPos>400</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_no</image>
+	</button>
 </buttons>
