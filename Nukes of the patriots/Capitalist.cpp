@@ -139,8 +139,8 @@ void Capitalist::playMusic()
 {
 	std::shared_ptr<sf::Music> music = CapitalistMusic["CapitalistMainTheme"];
 	music->setVolume(60);
-	//music->play();
-	//music->setLoop(true);
+	music->play();
+	music->setLoop(true);
 }
 
 void Capitalist::stopMusic()
@@ -166,7 +166,6 @@ void Capitalist::changeCityImage()
 
 void Capitalist::newYearStart()
 {
-	getTaxIncome();
 	//communist title: 745, 90
 	//capitalist title: 241, 90
 	int statsPosY = 177;   //communist 628, 177
@@ -233,11 +232,13 @@ void Capitalist::newYearStart()
 	int nuclearDifference = mNuclearWeapon - enemyNuclearWeapon;
 	int spaceProgramDifference = mSpaceProgram - enemySpaceProgram;
 	bool spaceProgramIncreased = (mSpaceProgram > mSpaceProgramPreviousRound);
+	int spaceProgramAmount = 0;
 	if(spaceProgramIncreased)
 	{
+		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText("+1");
+		mSpaceProgramIncreasedTextValue->setText(spaceProgramAmount);
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -250,16 +251,16 @@ void Capitalist::newYearStart()
 	int nuclearWeaponChange = 0;
 	int spaceProgramChange = 0;
 	int exportedChange = 0;
-	if(nuclearDifference > enemyNuclearWeapon*2)
+	if(mNuclearWeapon >= enemyNuclearWeapon*2)
 	{
-		mNuclearWeaponChange->setText("Nuclear weapon double as much as the enemy");
+		mNuclearWeaponChange->setText("Double enemies nuclear weapon");
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
 		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
-	else if(nuclearDifference > enemyNuclearWeapon)
+	else if(mNuclearWeapon > enemyNuclearWeapon)
 	{
 		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
 		nuclearWeaponChange = 1;
@@ -274,7 +275,7 @@ void Capitalist::newYearStart()
 		mNuclearWeaponChangeValue->setText("");
 	}
 
-	if(spaceProgramDifference > enemySpaceProgram)
+	if(mSpaceProgram > enemySpaceProgram)
 	{
 		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
 		spaceProgramChange = 1;
@@ -322,7 +323,7 @@ void Capitalist::newYearStart()
 	//mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
 	//std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 
-	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
+	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + spaceProgramAmount + exportedChange;
 	mPatriotism += totalPatriotismChange;
 	
 	mPatriotismChange->setText("Total patriotism change: " + intToString(totalPatriotismChange));
@@ -710,15 +711,15 @@ void Capitalist::initializeCapitalistWindow()
 	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(698, 20, 0, 0), intToString(mPopulation) + " million", mCapitalistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.7, 0.7);
 	mPopulationText->setColor(sf::Color::White);
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(362, 14, 0, 0), intToString(mCurrency), mCapitalistMainWindow);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 4, 0, 0), intToString(mCurrency), mCapitalistMainWindow);
 	mCurrencyText->setScale(0.7, 0.7);
 	mCurrencyText->setColor(sf::Color::White);
 	mCurrencyText->setAlignment("middle");
-	mPatriotismText						= GUIText::create(sf::FloatRect(530, 53, 0, 0), intToString(mPatriotism), mCapitalistMainWindow);
+	mPatriotismText						= GUIText::create(sf::FloatRect(530, 42, 0, 0), intToString(mPatriotism), mCapitalistMainWindow);
 	mPatriotismText->setScale(0.7, 0.7);
 	mPatriotismText->setColor(sf::Color::White);
 	mPatriotismText->setAlignment("middle");
@@ -726,30 +727,30 @@ void Capitalist::initializeCapitalistWindow()
 
 	/*GUI text för utskrift av värden på komunisternas interface*/
 
-	mNuclearText						= GUIText::create(sf::FloatRect(843, 17, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
+	mNuclearText						= GUIText::create(sf::FloatRect(843, 3, 0, 0), intToString(getNuclearWeapon()), mCapitalistMainWindow);
 	mNuclearText->setAlignment("middle");
 	mNuclearText->setScale(0.9, 0.9);
-	mSpaceText							= GUIText::create(sf::FloatRect(843, 229, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
+	mSpaceText							= GUIText::create(sf::FloatRect(843, 215, 0, 0), intToString(getSpaceProgram()), mCapitalistMainWindow);
 	mSpaceText->setAlignment("middle");
 	mSpaceText->setScale(0.9, 0.9);
-	mSpyText							= GUIText::create(sf::FloatRect(843, 441, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
+	mSpyText							= GUIText::create(sf::FloatRect(843, 427, 0, 0), intToString(getSpyNetwork()), mCapitalistMainWindow);
 	mSpyText->setAlignment("middle");
 	mSpyText->setScale(0.9, 0.9);
-	mFoodText							= GUIText::create(sf::FloatRect(31, 17, 0, 0), intToString(getFood()), mCapitalistMainWindow);
+	mFoodText							= GUIText::create(sf::FloatRect(31, 3, 0, 0), intToString(getFood()), mCapitalistMainWindow);
 	mFoodText->setAlignment("middle");
 	mFoodText->setScale(0.9, 0.9);
-	mGoodsText							= GUIText::create(sf::FloatRect(31, 229, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
+	mGoodsText							= GUIText::create(sf::FloatRect(31, 215, 0, 0), intToString(getGoods()), mCapitalistMainWindow);
 	mGoodsText->setAlignment("middle");
 	mGoodsText->setScale(0.9, 0.9);
-	mTechText							= GUIText::create(sf::FloatRect(31, 441, 0, 0), intToString(getTech()), mCapitalistMainWindow);
+	mTechText							= GUIText::create(sf::FloatRect(31, 427, 0, 0), intToString(getTech()), mCapitalistMainWindow);
 	mTechText->setAlignment("middle");
 	mTechText->setScale(0.9, 0.9);
 
 	mTaxesWindow						= GUIWindow::create(CapitalistWindows["CapitalistTaxesWindow"], mCapitalistMainWindow);
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
-	mTaxValueText						= GUIText::create(sf::FloatRect(105, 78, 0, 0), intToString(mTaxes), mTaxesWindow);
+	mTaxValueText						= GUIText::create(sf::FloatRect(105, 58, 0, 0), intToString(mTaxes), mTaxesWindow);
 	mTaxValueText->setAlignment("middle");
-	mTaxText							= GUIText::create(sf::FloatRect(105, 38, 0, 0), "Tax", mTaxesWindow);
+	mTaxText							= GUIText::create(sf::FloatRect(105, 18, 0, 0), "Tax", mTaxesWindow);
 	mTaxText->setAlignment("middle");
 	mTaxesPatriotismChange				= GUIText::create(sf::FloatRect(230, 50, 0, 0), "Patriotism: 0", mTaxesWindow);
 	mTaxesPatriotismChange->setScale(0.8, 0.8);
@@ -785,17 +786,17 @@ void Capitalist::initializeCapitalistWindow()
 	mResourceTechPriceText				= GUIText::create(sf::FloatRect(375, 100, 40, 40), intToString(techCost) + " §", mResourceWindow);
 
 	
-	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 73, 0, 0), "0",mResourceWindow);
+	mBuyFoodText						= GUIText::create(sf::FloatRect(104, 58, 0, 0), "0",mResourceWindow);
 	mBuyFoodText->setAlignment("middle");
-	mBuyGoodsText						= GUIText::create(sf::FloatRect(285, 73, 40, 40), "0", mResourceWindow);
+	mBuyGoodsText						= GUIText::create(sf::FloatRect(285, 58, 40, 40), "0", mResourceWindow);
 	mBuyGoodsText->setAlignment("middle");
-	mBuyTechText						= GUIText::create(sf::FloatRect(465, 73, 40, 40), "0", mResourceWindow);
+	mBuyTechText						= GUIText::create(sf::FloatRect(465, 58, 40, 40), "0", mResourceWindow);
 	mBuyTechText->setAlignment("middle");
-	mFoodCost							= GUIText::create(sf::FloatRect(105, 40, 40, 40), "0 §", mResourceWindow);
+	mFoodCost							= GUIText::create(sf::FloatRect(105, 18, 40, 40), "0 §", mResourceWindow);
 	mFoodCost->setAlignment("middle");
-	mGoodsCost							= GUIText::create(sf::FloatRect(285, 40, 40, 40), "0 §", mResourceWindow);
+	mGoodsCost							= GUIText::create(sf::FloatRect(285, 18, 40, 40), "0 §", mResourceWindow);
 	mGoodsCost->setAlignment("middle");
-	mTechCost							= GUIText::create(sf::FloatRect(465, 40, 40, 40), "0 §", mResourceWindow);
+	mTechCost							= GUIText::create(sf::FloatRect(465, 18, 40, 40), "0 §", mResourceWindow);
 	mTechCost->setAlignment("middle");
 
 	//mTotalResourcesCost				= GUIText::create( sf::FloatRect(20, 30, 40, 40), "0", mResourceWindow);
@@ -814,17 +815,17 @@ void Capitalist::initializeCapitalistWindow()
 	mSpacePanel		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/space_panel"))), mUpgradeWindow);
 	mNuclearPanel	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/nuclear_panel"))), mUpgradeWindow);
 
-	mBuyNuclearText						= GUIText::create(sf::FloatRect(31, 152, 22, 22), "0", mUpgradeWindow);
+	mBuyNuclearText						= GUIText::create(sf::FloatRect(39, 138, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");
 	mBuyNuclearText->setScale(0.9, 0.9);
 	mNuclearTechCost					= GUIText::create(sf::FloatRect(35, 95, 20, 20), "0", mUpgradeWindow);
 	mNuclearGoodsCost					= GUIText::create(sf::FloatRect(35, 60, 20, 20), "0", mUpgradeWindow);
-	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(210, 114, 22, 22), "0", mUpgradeWindow);
+	mBuySpaceProgramText				= GUIText::create(sf::FloatRect(214, 100, 22, 22), "0", mUpgradeWindow);
 	mBuySpaceProgramText->setAlignment("middle");
 	mBuySpaceProgramText->setScale(0.9, 0.9);
 	mSpaceProgramTechCost				= GUIText::create(sf::FloatRect(210, 60, 20, 20), "0", mUpgradeWindow);
 	mSpaceProgramGoodsCost				= GUIText::create(sf::FloatRect(210, 25, 20, 20), "0", mUpgradeWindow);
-	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 77, 22, 22), "0", mUpgradeWindow);
+	mBuySpyNetworkText					= GUIText::create(sf::FloatRect(389, 63, 22, 22), "0", mUpgradeWindow);
 	mBuySpyNetworkText->setAlignment("middle");
 	mBuySpyNetworkText->setScale(0.9, 0.9);
 	mSpyNetworkTechCost					= GUIText::create(sf::FloatRect(400, 10, 20, 20), "0", mUpgradeWindow);
@@ -1929,8 +1930,25 @@ void Capitalist::initializeGuiFunctions()
 		/*om ingen president blivit vald går det inte att stänga fönstret*/
 		if(mPresident != 0 && mPickedPresident > 0) 
 		{
-			mChoosePresidentWindow->setVisible(false);
-			mPickedPresidentWindow->setVisible(true);
+			std::shared_ptr<GUIWindow> _chooseWindow = mChoosePresidentWindow;
+			std::shared_ptr<GUIWindow> _pickedWindow = mPickedPresidentWindow;
+			GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+			for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
+			{
+				sf::Color color = (*it)->getColor();
+				color.a = 255;
+				GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
+			}
+			_chooseWindow->setEnabled(false, true);
+			_pickedWindow->setEnabled(false, true);
+			_pickedWindow->setVisible(true);
+			Timer::setTimer([=]()
+			{
+				_chooseWindow->setVisible(false);
+				_chooseWindow->setColor(sf::Color(255, 255, 255, 255));
+				_pickedWindow->setEnabled(true, true);
+			}, 1000, 1);
+			
 
 			mPickedPresidentWindow->setEnabled(true, true);
 			//mPresident->playSlogan();
@@ -2089,7 +2107,13 @@ void Capitalist::upgradeWindowText()
 	int nuclearGoodsPrice		= 10 * mPresident->getNuclearPriceModifier();
 	int nuclearTechPrice		= 5  * mPresident->getNuclearPriceModifier();
 	int spaceProgramGoodsPrice  = (spaceProgram + 1) * 5 * mPresident->getSpacePriceModifier();
-	int spaceProgramTechPrice	= (spaceProgram + 1) * 10 * mPresident->getSpacePriceModifier();
+	int spaceProgramTechPrice	= 0;
+	if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+		spaceProgramTechPrice	= (spaceProgram + 1) * 10 * mPresident->getSpacePriceModifier() - (5 * spyNetwork);
+	else
+		spaceProgramTechPrice	= (spaceProgram + 1) * 10 * mPresident->getSpacePriceModifier();
+	if(spaceProgramTechPrice < 5)
+		spaceProgramTechPrice = 5;
 	int spyNetworkTechPrice		= (spyNetwork + 1) * 10 * mPresident->getSpyPriceModifier();
 
 	mNuclearGoodsCost->setText("Goods " +intToString(nuclearGoodsPrice));

@@ -313,8 +313,8 @@ void Menu::initialize()
 	//mTeamCommunistIsPicked	= GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
 	mTeamCapitalist				= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
-	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "", false, mChooseTeamWindow);
-	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "", false, mChooseTeamWindow);
+	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
+	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
 	mCapitalistNameField->setMaxCharacters(15);
 	mCommunistNameField->setMaxCharacters(15);
 	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkayIsPressed"], mChooseTeamWindow);
