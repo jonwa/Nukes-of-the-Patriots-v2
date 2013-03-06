@@ -198,8 +198,8 @@ void President::initializeImages(std::string &path)
 
 void President::playSlogan()
 {
-	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
-	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(20);
+	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
+	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(20);
 }
 
 sf::Texture* President::getTexture()
