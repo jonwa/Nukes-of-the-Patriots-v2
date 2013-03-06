@@ -230,9 +230,9 @@ void GameManager::startRound()
 	int techBought = 0;
 	int exports = 0;
 	// if nobody bought my exports - then it will be sold internationally
-	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 0 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
-	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
-	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 0 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
+	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 1 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
+	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 1 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
+	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 1 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
 	//// if international market tries to buy more resources than you have
 	if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
 	if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();

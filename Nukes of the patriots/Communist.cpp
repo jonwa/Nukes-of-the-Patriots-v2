@@ -457,6 +457,10 @@ void Communist::update()
 		mExportQuantityText[1]->setText(mExportedGoods);
 		mExportQuantityText[2]->setText(mExportedTech);
 
+		mExportFoodCost->setText(intToString(mExportedFoodPrice));
+		mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
+		mExportTechCost->setText(intToString(mExportedTechPrice));
+
 		mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
 		mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
 		mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
@@ -1942,15 +1946,24 @@ void Communist::initializeGuiFunctions()
 				quantity -= (h == 0) ? 1 : (h*5);
 				if(quantity < 0)
 					quantity = 0;
+				mImportBuyQuantityText[i]->setText(quantity);
+
+				int totalCost = 0;
+				int _foodCost = stringToInt(mImportPriceText[0]->getText());
+				int _foodQuantity = stringToInt(mImportBuyQuantityText[0]->getText());
+
+				int _goodsCost = stringToInt(mImportPriceText[1]->getText());
+				int _goodsQuantity = stringToInt(mImportBuyQuantityText[1]->getText());
+
+				int _techCost = stringToInt(mImportPriceText[2]->getText());
+				int _techQuantity = stringToInt(mImportBuyQuantityText[2]->getText());
+
+				totalCost = _foodCost*_foodQuantity + _goodsCost*_goodsQuantity + _techCost*_techQuantity;
+
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
 				int _resourceCost = quantity * _resourcePrice;
 				mImportTotalPriceText[i]->setText(_resourceCost);
 
-				int totalCost = 0;
-				for(int c = 0; c < 3; c++)
-				{
-					totalCost += stringToInt(mImportTotalPriceText[c]->getText());
-				}
 				mImportTotalCostText->setText(totalCost);
 			});
 
@@ -1966,15 +1979,37 @@ void Communist::initializeGuiFunctions()
 				quantity += (h == 0) ? 1 : (h*5);
 				if(quantity > _resourcesAvailable)
 					quantity = _resourcesAvailable;
+				mImportBuyQuantityText[i]->setText(quantity);
+
+				int totalCost = 0;
+				int _foodCost = stringToInt(mImportPriceText[0]->getText());
+				int _foodQuantity = stringToInt(mImportBuyQuantityText[0]->getText());
+
+				int _goodsCost = stringToInt(mImportPriceText[1]->getText());
+				int _goodsQuantity = stringToInt(mImportBuyQuantityText[1]->getText());
+
+				int _techCost = stringToInt(mImportPriceText[2]->getText());
+				int _techQuantity = stringToInt(mImportBuyQuantityText[2]->getText());
+
+				int _resourceQuantity[3];
+				for(int c = 0; c < 3; c++)
+				{
+					_resourceQuantity[c] = stringToInt(mImportBuyQuantityText[c]->getText());
+				}
+
+				totalCost = _foodCost*_foodQuantity + _goodsCost*_goodsQuantity + _techCost*_techQuantity;
+				int moneyDifference = mCurrency - totalCost;
+				if(moneyDifference < 0)
+				{
+					_resourceQuantity[i] -= std::ceilf((float)abs(moneyDifference)/(float)_resourcePrice);
+					totalCost = _foodCost*_resourceQuantity[0] + _goodsCost*_resourceQuantity[1] + _techCost*_resourceQuantity[2];
+				}
+				quantity = _resourceQuantity[i];
+
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
 				int _resourceCost = quantity * _resourcePrice;
 				mImportTotalPriceText[i]->setText(_resourceCost);
 
-				int totalCost = 0;
-				for(int c = 0; c < 3; c++)
-				{
-					totalCost += stringToInt(mImportTotalPriceText[c]->getText());
-				}
 				mImportTotalCostText->setText(totalCost);
 			});
 		}
@@ -1986,12 +2021,45 @@ void Communist::initializeGuiFunctions()
 		mImportWindow->setVisible(false);
 		mExportWindow->setVisible(true);
 		mExportWindow->setEnabled(true, true);
+
+		int _importedFoodQuantity = stringToInt(mImportBuyQuantityText[0]->getText());
+		int _importedGoodsQuantity = stringToInt(mImportBuyQuantityText[1]->getText());
+		int _importedTechQuantity = stringToInt(mImportBuyQuantityText[2]->getText());
+		mFood += _importedFoodQuantity;
+		mGoods += _importedGoodsQuantity;
+		mTech += _importedTechQuantity;
+
+		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
+		enemy->setExportedFood(enemy->getExportedFood() - _importedFoodQuantity);
+		enemy->setExportedGoods(enemy->getExportedGoods() - _importedGoodsQuantity);
+		enemy->setExportedTech(enemy->getExportedTech() - _importedTechQuantity);
+		mCurrency -= stringToInt(mImportTotalPriceText[0]->getText());
+		mCurrency -= stringToInt(mImportTotalPriceText[1]->getText());
+		mCurrency -= stringToInt(mImportTotalPriceText[2]->getText());
+
+		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+
+		for(int i = 0; i < 3; i++)
+		{
+			mImportBuyQuantityText[i]->setText("0");
+			mImportTotalPriceText[i]->setText("0");
+			if(stringToInt(mImportResourcesAvailableText[i]->getText()) == 0)
+				mImportPriceText[i]->setText("N/A");
+		}
+		mImportTotalCostText->setText("0");
 	});
 
 	std::vector<int*> resourcesAvailable;
 	resourcesAvailable.push_back(&mFood);
 	resourcesAvailable.push_back(&mGoods);
 	resourcesAvailable.push_back(&mTech);
+
+	std::vector<int*> exportValues;
+	exportValues.push_back(&mExportedFood);
+	exportValues.push_back(&mExportedGoods);
+	exportValues.push_back(&mExportedTech);
 
 	std::vector<std::shared_ptr<GUIEditField>> exportResourceCost;
 	exportResourceCost.push_back(mExportFoodCost);
@@ -2034,8 +2102,8 @@ void Communist::initializeGuiFunctions()
 				int foodAvailable = mFood;
 				int quantity = stringToInt(mExportQuantityText[i]->getText());
 				quantity += (h == 0) ? 1 : (h*5);
-				if(quantity > *resourcesAvailable[i])
-					quantity = *resourcesAvailable[i];
+				if(quantity > *resourcesAvailable[i] + *exportValues[i])
+					quantity = *resourcesAvailable[i] + *exportValues[i];
 				mExportQuantityText[i]->setText(intToString(quantity));
 				int cost = quantity * stringToInt(exportResourceCost[i]->getText());
 				mExportPriceText[i]->setText(cost);
@@ -2072,31 +2140,9 @@ void Communist::initializeGuiFunctions()
 		mGoods -= _exportedGoodsDiff;
 		mTech -= _exportedTechDiff;
 
-		mExportedFoodPrice = stringToInt(mExportFoodCost->getText()) / (mExportedFood == 0 ? 1 : mExportedFood);
-		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText()) / (mExportedGoods == 0 ? 1 : mExportedGoods);
-		mExportedTechPrice = stringToInt(mExportTechCost->getText()) / (mExportedTech == 0 ? 1 : mExportedTech);
-		
-		int _importedFoodQuantity = stringToInt(mImportBuyQuantityText[0]->getText());
-		int _importedGoodsQuantity = stringToInt(mImportBuyQuantityText[1]->getText());
-		int _importedTechQuantity = stringToInt(mImportBuyQuantityText[2]->getText());
-		mFood += _importedFoodQuantity;
-		mGoods += _importedGoodsQuantity;
-		mTech += _importedTechQuantity;
-
-		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
-		enemy->setExportedFood(enemy->getExportedFood() - _importedFoodQuantity);
-		enemy->setExportedGoods(enemy->getExportedGoods() - _importedGoodsQuantity);
-		enemy->setExportedTech(enemy->getExportedTech() - _importedTechQuantity);
-		mCurrency -= stringToInt(mImportTotalPriceText[0]->getText());
-		mCurrency -= stringToInt(mImportTotalPriceText[1]->getText());
-		mCurrency -= stringToInt(mImportTotalPriceText[2]->getText());
-
-		for(int i = 0; i < 3; i++)
-		{
-			mImportBuyQuantityText[i]->setText("0");
-			mImportTotalPriceText[i]->setText("0");
-		}
-		mImportTotalCostText->setText("0");
+		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+		mExportedTechPrice = stringToInt(mExportTechCost->getText());
 	});
 
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
