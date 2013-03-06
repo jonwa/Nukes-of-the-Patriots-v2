@@ -473,6 +473,14 @@
 		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
 	<button>
+		<name>CloseExportedResourcesIncome</name>
+		<xPos>235</xPos>
+		<yPos>110</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Capitalist/kap_texture_button_ok</image>
+	</button>
+	<button>
 		<name>CloseIncreasedResources</name>
 		<xPos>235</xPos>
 		<yPos>110</yPos>

@@ -230,6 +230,11 @@ private:
 	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
 	std::shared_ptr<GUIButton> mImportGotoExportButton;
 
+	std::shared_ptr<GUIWindow> mExportedResourcesWindow;
+	std::shared_ptr<GUIButton> mCloseExportedResourceWindow;
+	std::shared_ptr<GUIText>   mResourcesExportedText[3];
+	std::shared_ptr<GUIText>   mExportedIncomeText;
+
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
 	std::shared_ptr<GUIButton>  mFirstPresidentButton;

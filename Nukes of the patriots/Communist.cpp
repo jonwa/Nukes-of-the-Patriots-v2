@@ -271,7 +271,8 @@ void Communist::newYearStart()
 		statsPosY += mFoodChange->getHeight();
 	}
 	else if(mFood >= mPopulation)
-		mPopulation += 1;
+		//mPopulation += 1;
+		mPopulation = mPopulation;
 	else
 	{
 		mFoodChange->setText("");
@@ -1197,6 +1198,22 @@ void Communist::initializeCommunistWindow()
 	mImportGotoExportButton				= GUIButton::create(CommunistButtons["ImportGotoExport"], mImportWindow);
 	mImportWindow->setVisible(false);
 
+	mExportedResourcesWindow			= GUIWindow::create(CommunistWindows["ExportedResourcesWindow"], mCommunistMainWindow);
+	mCloseExportedResourceWindow		= GUIButton::create(CommunistButtons["CloseExportedResourcesButton"], mExportedResourcesWindow);
+	
+	int y = 20;
+	mResourcesExportedText[0]			= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mExportedResourcesWindow);
+	mResourcesExportedText[0]->setScale(0.8, 0.8);
+	y += mResourcesExportedText[0]->getHeight() + 5;
+	mResourcesExportedText[1]			= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mExportedResourcesWindow);
+	mResourcesExportedText[1]->setScale(0.8, 0.8);
+	y += mResourcesExportedText[1]->getHeight() + 5;
+	mResourcesExportedText[2]			= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mExportedResourcesWindow);
+	mResourcesExportedText[2]->setScale(0.8, 0.8);
+	y += mResourcesExportedText[2]->getHeight() + 5;
+	mExportedIncomeText					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mExportedResourcesWindow);
+	mExportedIncomeText->setScale(0.8, 0.8);
+	mExportedResourcesWindow->setVisible(false);
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
 	mPickedGeneralWindow				= GUIWindow::create(CommunistWindows["PickedGeneral"], mCommunistMainWindow);
@@ -1288,7 +1305,7 @@ void Communist::initializeCommunistWindow()
 
 	mResourceIncomeWindow				= GUIWindow::create(CommunistWindows["ResourceIncome"], mCommunistMainWindow);
 	mCloseResourceIncomeWindow			= GUIButton::create(CommunistButtons["CloseResourceIncome"], mResourceIncomeWindow);
-	int y = 20;
+	y = 20;
 	mFoodIncome							= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mResourceIncomeWindow);
 	mFoodIncome->setScale(0.8, 0.8);
 	y +=  mFoodIncome->getHeight() + 5;
@@ -2118,8 +2135,7 @@ void Communist::initializeGuiFunctions()
 		}
 	}
 
-	mExportConfirmButton->setOnClickFunction(
-		[=]()
+	mExportConfirmButton->setOnClickFunction([=]()
 	{
 		mExportWindow->setVisible(false);
 		mCommunistMainWindow->setEnabled(true, true);
@@ -2149,6 +2165,30 @@ void Communist::initializeGuiFunctions()
 	{
 		mTaxesIncomeWindow->setVisible(false);
 		mTaxesIncomeWindow->setEnabled(false, true);
+		if(mRound != 1)
+		{
+			int _exportedFood = mExportedFoodPreviousRound-mExportedFood;
+			int _exportedGoods = mExportedGoodsPreviousRound-mExportedGoods;
+			int _exportedTech = mExportedTechPreviousRound-mExportedTech;
+			mResourcesExportedText[0]->setText("You exported "+intToString(_exportedFood)+" food.");
+			mResourcesExportedText[1]->setText("You exported "+intToString(_exportedGoods)+" goods.");
+			mResourcesExportedText[2]->setText("You exported "+intToString(_exportedTech)+" tech.");
+			int exportedTotal = _exportedFood*mExportedFoodPrice + _exportedGoods*mExportedGoodsPrice + _exportedTech*mExportedTechPrice;
+			mExportedIncomeText->setText("You got " + intToString(exportedTotal) + " § from exports.");
+			mExportedResourcesWindow->setVisible(true);
+			mExportedResourcesWindow->setEnabled(true, true);
+		}
+		else
+		{
+			mResourceIncomeWindow->setVisible(true);
+			mResourceIncomeWindow->setEnabled(true, true);
+		}
+	});
+
+	mCloseExportedResourceWindow->setOnClickFunction([=]()
+	{
+		mExportedResourcesWindow->setVisible(false);
+		mExportedResourcesWindow->setEnabled(false, true);
 		mResourceIncomeWindow->setVisible(true);
 		mResourceIncomeWindow->setEnabled(true, true);
 	});
@@ -2183,7 +2223,7 @@ void Communist::initializeGuiFunctions()
 	{
 		mCurrency -= mPopulation;
 		mPopulation += 1;
-		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation) + " to " + intToString(mPopulation + 1));
+		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation - 1) + " to " + intToString(mPopulation));
 		mDoIncreasePopulation->setVisible(false);
 		mDoNotIncreasePopulation->setVisible(false);
 		mClosePopulationEatsFoodWindow->setVisible(true);
@@ -2222,7 +2262,6 @@ void Communist::initializeGuiFunctions()
 
 		}, 2000, 1);
 	});
-
 }
 
 void Communist::upgradeWindowText()

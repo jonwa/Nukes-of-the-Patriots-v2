@@ -221,9 +221,9 @@ void GameManager::startRound()
 	// Money internationally should be equal to everybodies money together
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
-		moneyIntFood += (*it)->getCurrency();
-		moneyIntGoods += (*it)->getCurrency();
-		moneyIntTech += (*it)->getCurrency();
+		moneyIntFood += (*it)->getPopulation();
+		moneyIntGoods += (*it)->getPopulation();
+		moneyIntTech += (*it)->getPopulation();
 	}
 	int foodBought = 0;
 	int goodsBought = 0;

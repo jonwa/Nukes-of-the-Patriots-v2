@@ -185,14 +185,16 @@ void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 		Den används sedan för att ge möjligheten att betala en viss summa för att öka befolkningen*/
 	if(enoughFood())
 	{
+		mPopulation++;
 		if(mCurrency >= mPopulation)
 		{
 			mIncreasePopulation = true;
-			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation + 1) +" million.\n\n"
-				"Do you want to stimulate the population growth\nfor " + intToString(mPopulation + 1) + " §?");
+			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.\n\n"
+				"Do you want to stimulate the population growth\nfor " + intToString(mPopulation) + " §?");
 		}
 		else
-			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation + 1) +" million.");
+			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.");
+		
 	}
 	/*	Om mängden mat är mindre än häflten av befolkningen tilldelas mFood noll
 		mPatriotism subtraheras även med två*/
