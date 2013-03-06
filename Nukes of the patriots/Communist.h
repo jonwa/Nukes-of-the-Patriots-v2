@@ -142,12 +142,14 @@ private:
 	std::shared_ptr<GUIWindow> mCommunistBorder;
 	std::shared_ptr<GUIWindow> mCommunistButtonFrame;
 	std::shared_ptr<GUIWindow> mCommunistBorderTop;
+	std::shared_ptr<GUIImage>  mGeneralFrame;
 	std::shared_ptr<GUIButton> mCommunistGeneralButton;
 	std::shared_ptr<GUIButton> mCommunistFiveYearPlanButton;		
 	std::shared_ptr<GUIButton> mCommunistPropagandaButton;	
 	std::shared_ptr<GUIButton> mCommunistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCommunistTradeButton;	
 	/*GUI-pekare för end turn*/
+	std::shared_ptr<GUIImage>  mEndTurnFrame;
 	std::shared_ptr<GUIButton> mCommunistEndTurnButton;
 
 	/*GUI-pekare för fem års planen*/

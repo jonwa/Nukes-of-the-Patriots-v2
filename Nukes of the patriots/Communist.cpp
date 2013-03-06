@@ -837,10 +837,12 @@ void Communist::initializeCommunistWindow()
 	mChangeCityImage				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 									  (CommunistButtons["CityImages"].first, CityImages[0]), mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
+	mGeneralFrame					= GUIImage::create(CommunistButtons["GeneralFrame"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
+	mEndTurnFrame					= GUIImage::create(CommunistButtons["EndTurnFrame"], mCommunistMainWindow);		
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 	mLeftPanel						= GUIImage::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
 	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 

@@ -9,6 +9,14 @@
 		<image>Communist/president-red-question-frame</image>
 	</button>
 	<button>
+		<name>GeneralFrame</name>
+		<xPos>0</xPos>
+		<yPos>636</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Communist/kom_president_frame</image>
+	</button>
+	<button>
 		<name>FiveYearPlan</name>
 		<xPos>147</xPos>
 		<yPos>665</yPos>
@@ -465,20 +473,28 @@
 		<image>Communist/kom_texture_button_ok</image>
 	</button>
 	<button>
-		<name>EndTurn</name>
+		<name>EndTurnFrame</name>
 		<xPos>912</xPos>
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_texture_button_endturn</image>
+		<image>Communist/kom_end_turn_frame</image>
+	</button>
+	<button>
+		<name>EndTurn</name>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Communist/kom_endturn_normal</image>
 	</button>
 	<button>
 		<name>EndTurnIsPressed</name>
-		<xPos>912</xPos>
-		<yPos>636</yPos>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_texture_button_invert_endturn</image>
+		<image>Communist/kom_endturn_pressed</image>
 	</button>
 	<button>
 		<name>FirstGeneral</name>

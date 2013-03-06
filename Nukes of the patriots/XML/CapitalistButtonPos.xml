@@ -9,6 +9,14 @@
 		<image>Capitalist/president-blue-question</image>
 	</button>
 	<button>
+		<name>PresidentFrame</name>
+		<xPos>0</xPos>
+		<yPos>636</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Capitalist/kap_president_frame</image>
+	</button>
+	<button>
 		<name>Taxes</name>
 		<xPos>147</xPos>
 		<yPos>665</yPos>
@@ -361,20 +369,28 @@
 		<image>Capitalist/kap_texture_button_ok</image>
 	</button>
 	<button>
-		<name>EndTurn</name>
+		<name>EndTurnFrame</name>
 		<xPos>912</xPos>
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Capitalist/kap_texture_button_endturn</image>
+		<image>Capitalist/kap_EndTurn_frame</image>
+	</button>
+	<button>
+		<name>EndTurn</name>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Capitalist/kap_endturn_normal</image>
 	</button>
 	<button>
 		<name>EndTurnIsPressed</name>
-		<xPos>912</xPos>
-		<yPos>636</yPos>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Capitalist/kap_texture_button_invert_endturn</image>
+		<image>Capitalist/kap_endturn_pressed</image>
 	</button>
 	<button>
 		<name>FirstPresident</name>

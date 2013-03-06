@@ -80,6 +80,11 @@
 	
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
+	<image filename="kap_president_frame.png"/>
+	<image filename="kap_EndTurn_frame.png"/>
+	<image filename="kap_endturn_normal.png"/>
+	<image filename="kap_endturn_pressed.png"/>
+	
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
@@ -168,6 +173,11 @@
 	<image filename="upgrade_pressed.png"/>
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
+	
+	<image filename="kom_end_turn_frame.png"/>
+	<image filename="kom_president_frame.png"/>
+	<image filename="kom_endturn_normal.png"/>
+	<image filename="kom_endturn_pressed.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>

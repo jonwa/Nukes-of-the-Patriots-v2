@@ -721,10 +721,12 @@ void Capitalist::initializeCapitalistWindow()
 	mChangeCityImage					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
+	mPresidentFrame						= GUIImage::create(CapitalistButtons["PresidentFrame"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
+	mEndTurnFrame						= GUIImage::create(CapitalistButtons["EndTurnFrame"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
 	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
