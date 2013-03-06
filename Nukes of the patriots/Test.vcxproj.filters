@@ -42,6 +42,12 @@
     <Filter Include="Source Files\Assets">
       <UniqueIdentifier>{49fa451c-c306-4439-9aa4-e2ffe278c661}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\network">
+      <UniqueIdentifier>{aab5ae21-4d57-4949-a65b-1124e2b2bf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network">
+      <UniqueIdentifier>{e65ba7ea-9004-406f-b9a8-3e7795fd5669}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -116,26 +122,26 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UdpClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UdpServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoundHandler.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpClient.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpClient.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpServer.cpp">
+      <Filter>Source Files\network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,26 +214,26 @@
     <ClInclude Include="Animation.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="UdpClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UdpServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SoundHandler.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="UdpServer.h">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpClient.h">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer.h">
+      <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="UdpClient.h">
+      <Filter>Header Files\network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

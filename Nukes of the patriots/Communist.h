@@ -140,6 +140,7 @@ private:
 	/*GUI-pekare för kommunisternas interface*/
 	std::shared_ptr<GUIWindow> mCommunistMainWindow;
 	std::shared_ptr<GUIWindow> mCommunistBorder;
+	std::shared_ptr<GUIWindow> mCommunistButtonFrame;
 	std::shared_ptr<GUIWindow> mCommunistBorderTop;
 	std::shared_ptr<GUIButton> mCommunistGeneralButton;
 	std::shared_ptr<GUIButton> mCommunistFiveYearPlanButton;		

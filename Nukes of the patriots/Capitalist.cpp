@@ -255,7 +255,7 @@ void Capitalist::newYearStart()
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
-		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(statsPosY);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
 	else if(mNuclearWeapon > enemyNuclearWeapon)
@@ -2038,13 +2038,16 @@ void Capitalist::initializeGuiFunctions()
 		{
 			std::shared_ptr<GUIWindow> _chooseWindow = mChoosePresidentWindow;
 			std::shared_ptr<GUIWindow> _pickedWindow = mPickedPresidentWindow;
-			GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+			/*GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
 			for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
 			{
 				sf::Color color = (*it)->getColor();
 				color.a = 255;
 				GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
-			}
+			}*/
+			sf::Color color = mPresidentBiography->getColor();
+			color.a = 255;
+			GUIAnimation::fadeToColor(mPresidentBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
 			_chooseWindow->setEnabled(false, true);
 			_pickedWindow->setEnabled(false, true);
 			_pickedWindow->setVisible(true);
@@ -2055,8 +2058,6 @@ void Capitalist::initializeGuiFunctions()
 				_pickedWindow->setEnabled(true, true);
 			}, 1000, 1);
 			
-
-			mPickedPresidentWindow->setEnabled(true, true);
 			//mPresident->playSlogan();
 			int yearsElected = mPresident->getYearsElected();
 

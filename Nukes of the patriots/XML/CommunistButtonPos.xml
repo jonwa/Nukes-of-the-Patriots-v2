@@ -10,19 +10,19 @@
 	</button>
 	<button>
 		<name>FiveYearPlan</name>
-		<xPos>112</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_plan</image>
+		<xPos>147</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>
+		<image>Communist/plan_normal</image>
 	</button>
 	<button>
 		<name>FiveYearPlanIsPressed</name>
-		<xPos>112</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_invert_plan</image>
+		<xPos>147</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>
+		<image>Communist/plan_pressed</image>
 	</button>
 	<button>
 		<name>YearOneLowerTaxes</name>
@@ -242,19 +242,19 @@
 	</button>
 	<button>
 		<name>Propaganda</name>
-		<xPos>312</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_propaganda</image>
+		<xPos>332</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/propaganda_normal</image>
 	</button>
 	<button>
 		<name>PropagandaIsPressed</name>
-		<xPos>312</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_invert_propaganda</image>
+		<xPos>332</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/propaganda_pressed</image>
 	</button>
 	<button>
 		<name>PropagandaCloseWindowFirst</name>
@@ -306,19 +306,19 @@
 	</button>
 	<button>
 		<name>Upgrade</name>
-		<xPos>512</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_upgrade</image>		
+		<xPos>516</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>			
+		<image>Communist/upgrade_normal</image>		
 	</button>
 	<button>
 		<name>UpgradeIsPressed</name>
-		<xPos>512</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_invert_upgrade</image>		
+		<xPos>516</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>		
+		<image>Communist/upgrade_pressed</image>		
 	</button>
 	<button>
 		<name>UpgradeNuclearWeapon</name>
@@ -378,19 +378,19 @@
 	</button>
 	<button>
 		<name>Export</name>
-		<xPos>712</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_trade</image>
+		<xPos>702</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/trade_normal</image>
 	</button>
 	<button>
 		<name>ExportIsPressed</name>
-		<xPos>712</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_invert_trade</image>		
+		<xPos>702</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/trade_pressed</image>		
 	</button>
 	<button>
 		<name>CommunistLowerFood</name>

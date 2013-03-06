@@ -158,6 +158,16 @@
 	
 	<image filename="kom_texture_button_trade.png"/>
 	<image filename="kom_texture_button_invert_trade.png"/>
+	
+	<image filename="kommunist_btns_placeholder.png"/>
+	<image filename="plan_normal.png"/>
+	<image filename="plan_pressed.png"/>
+	<image filename="propaganda_normal.png"/>
+	<image filename="propaganda_pressed.png"/>
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>

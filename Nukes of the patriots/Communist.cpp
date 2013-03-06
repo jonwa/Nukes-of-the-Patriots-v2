@@ -349,7 +349,7 @@ void Communist::newYearStart()
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
-		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(statsPosY);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
 	else
@@ -827,6 +827,7 @@ void Communist::initializeCommunistWindow()
 	mCommunistMainTheme				= Sound::create(CommunistMusic["CommunistMainTheme"]); 
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
+	mCommunistButtonFrame			= GUIWindow::create(CommunistWindows["InterfaceButtonsFrame"], mCommunistMainWindow);
 	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
 	mCommunistBorderTop				= GUIWindow::create(CommunistWindows["CommunistBorderTop"], mCommunistMainWindow);
 	mChangeCityImage				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
@@ -1856,16 +1857,19 @@ void Communist::initializeGuiFunctions()
 	{
 		std::shared_ptr<GUIWindow> _chooseWindow = mChooseGeneralWindow;
 		std::shared_ptr<GUIWindow> _pickedWindow = mPickedGeneralWindow;
-		GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+		/*GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
 		for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
 		{
 			sf::Color color = (*it)->getColor();
 			color.a = 255;
 			GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
-		}
+		}*/
+		sf::Color color = mGeneralBiography->getColor();
+		color.a = 255;
+		GUIAnimation::fadeToColor(mGeneralBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
 		_chooseWindow->setEnabled(false, true);
 		_pickedWindow->setEnabled(false, true);
-		_pickedWindow->setVisible(true);
+		mPickedGeneralWindow->setVisible(true);
 		Timer::setTimer([=]()
 		{
 			_chooseWindow->setVisible(false);
@@ -1883,7 +1887,7 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		//mGeneral->playSlogan();
+		mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/

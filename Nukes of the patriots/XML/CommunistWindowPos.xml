@@ -9,6 +9,14 @@
 		<image></image>
 	</window>
 	<window>
+		<name>InterfaceButtonsFrame</name>
+		<xPos>112</xPos>
+		<yPos>636</yPos>
+		<width>800</width>
+		<height>132</height>
+		<image>Communist/kommunist_btns_placeholder</image>
+	</window>
+	<window>
 		<name>ChooseGeneral</name>
 		<xPos>227</xPos>
 		<yPos>73</yPos>
