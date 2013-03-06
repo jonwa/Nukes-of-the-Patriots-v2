@@ -350,7 +350,7 @@ void Communist::newYearStart()
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
-		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(statsPosY);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
 	else
@@ -832,15 +832,18 @@ void Communist::initializeCommunistWindow()
 	mCommunistMainTheme				= Sound::create(CommunistMusic["CommunistMainTheme"]); 
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
+	mCommunistButtonFrame			= GUIWindow::create(CommunistWindows["InterfaceButtonsFrame"], mCommunistMainWindow);
 	mCommunistBorder				= GUIWindow::create(CommunistWindows["CommunistBorder"], mCommunistMainWindow);
 	mCommunistBorderTop				= GUIWindow::create(CommunistWindows["CommunistBorderTop"], mCommunistMainWindow);
 	mChangeCityImage				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 									  (CommunistButtons["CityImages"].first, CityImages[0]), mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
+	mGeneralFrame					= GUIImage::create(CommunistButtons["GeneralFrame"], mCommunistMainWindow);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
 	mCommunistTradeButton			= GUIButton::create(CommunistButtons["Export"], mCommunistMainWindow);
+	mEndTurnFrame					= GUIImage::create(CommunistButtons["EndTurnFrame"], mCommunistMainWindow);		
 	mCommunistEndTurnButton			= GUIButton::create(CommunistButtons["EndTurn"], mCommunistMainWindow);
 	mLeftPanel						= GUIImage::create(CommunistButtons["LeftPanel"], mCommunistMainWindow);
 	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
@@ -1217,7 +1220,7 @@ void Communist::initializeCommunistWindow()
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
 	mPickedGeneralWindow				= GUIWindow::create(CommunistWindows["PickedGeneral"], mCommunistMainWindow);
-	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
+	mPickedGeneralButton				= GUIImage::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
 	sf::FloatRect pickedRect			= CommunistButtons["PickedGeneral"].first;
 	mPickedGeneralPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, 0, 0),
@@ -1225,7 +1228,7 @@ void Communist::initializeCommunistWindow()
 
 	mPickedGeneralWindow->setVisible(false);
 
-	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
+	mFirstGeneralButton					= GUIImage::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
 	sf::FloatRect generalRect			= CommunistButtons["FirstGeneral"].first;
 	mFirstGeneralPlaque					= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, 0, 0),
@@ -1877,16 +1880,19 @@ void Communist::initializeGuiFunctions()
 	{
 		std::shared_ptr<GUIWindow> _chooseWindow = mChooseGeneralWindow;
 		std::shared_ptr<GUIWindow> _pickedWindow = mPickedGeneralWindow;
-		GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+		/*GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
 		for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
 		{
 			sf::Color color = (*it)->getColor();
 			color.a = 255;
 			GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
-		}
+		}*/
+		sf::Color color = mGeneralBiography->getColor();
+		color.a = 255;
+		GUIAnimation::fadeToColor(mGeneralBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
 		_chooseWindow->setEnabled(false, true);
 		_pickedWindow->setEnabled(false, true);
-		_pickedWindow->setVisible(true);
+		mPickedGeneralWindow->setVisible(true);
 		Timer::setTimer([=]()
 		{
 			_chooseWindow->setVisible(false);
@@ -1904,7 +1910,7 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		//mGeneral->playSlogan();
+		mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
@@ -2167,6 +2173,28 @@ void Communist::initializeGuiFunctions()
 		mTaxesIncomeWindow->setEnabled(false, true);
 		if(mRound != 1)
 		{
+			std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
+			int moneyIntFood = mPopulation + enemy->getPopulation();
+			int moneyIntGoods = mPopulation + enemy->getPopulation();
+			int moneyIntTech = mPopulation + enemy->getPopulation();
+			// Money internationally should be equal to everybodies money together
+			int foodBought = 0;
+			int goodsBought = 0;
+			int techBought = 0;
+			int exports = 0;
+			// if nobody bought my exports - then it will be sold internationally
+			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? 0 : moneyIntFood / getExportedFoodPrice();
+			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / getExportedGoodsPrice();
+			techBought =(getExportedTech() == 0 || getExportedTechPrice() == 0) ? 0 :  moneyIntTech / getExportedTechPrice();
+			//// if international market tries to buy more resources than you have
+			if(foodBought > getExportedFood()) foodBought = getExportedFood();
+			if(goodsBought > getExportedGoods()) goodsBought = getExportedGoods();
+			if(techBought > getExportedTech()) techBought = getExportedTech();
+			exports += (foodBought * getExportedFoodPrice()) + (goodsBought * getExportedGoodsPrice()) + (techBought * getExportedTechPrice());
+			setExportedFood(getExportedFood() - foodBought);
+			setExportedGoods(getExportedGoods() - goodsBought);
+			setExportedTech(getExportedTech() - techBought);
+			setCurrency(getCurrency() + exports);
 			int _exportedFood = mExportedFoodPreviousRound-mExportedFood;
 			int _exportedGoods = mExportedGoodsPreviousRound-mExportedGoods;
 			int _exportedTech = mExportedTechPreviousRound-mExportedTech;

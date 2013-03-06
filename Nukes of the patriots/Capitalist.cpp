@@ -255,7 +255,7 @@ void Capitalist::newYearStart()
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
-		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(statsPosY);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
 	else if(mNuclearWeapon > enemyNuclearWeapon)
@@ -721,10 +721,12 @@ void Capitalist::initializeCapitalistWindow()
 	mChangeCityImage					= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
+	mPresidentFrame						= GUIImage::create(CapitalistButtons["PresidentFrame"], mCapitalistMainWindow);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
 	mCapitalistTradeButton				= GUIButton::create(CapitalistButtons["Export"], mCapitalistMainWindow);
+	mEndTurnFrame						= GUIImage::create(CapitalistButtons["EndTurnFrame"], mCapitalistMainWindow);
 	mCapitalistEndTurnButton			= GUIButton::create(CapitalistButtons["EndTurn"], mCapitalistMainWindow);
 	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
@@ -1033,17 +1035,17 @@ void Capitalist::initializeCapitalistWindow()
 
 	mChoosePresidentWindow				= GUIWindow::create(CapitalistWindows["ChoosePresident"], mCapitalistMainWindow);
 	mPickedPresidentWindow				= GUIWindow::create(CapitalistWindows["PickedPresident"], mCapitalistMainWindow);
-	mFirstPresidentButton				= GUIButton::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
+	mFirstPresidentButton				= GUIImage::create(CapitalistButtons["FirstPresident"], mChoosePresidentWindow);
 	mFirstPresidentPlaque				= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(firstPresRect.left, firstPresRect.top + firstPresRect.height - 5, 180, 65),
 		&GameManager::getInstance()->getPresidentPlaque(mFirstPresident)), mChoosePresidentWindow);
 
-	mSecondPresidentButton				= GUIButton::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
+	mSecondPresidentButton				= GUIImage::create(CapitalistButtons["SecondPresident"], mChoosePresidentWindow);
 	mSecondPresidentPlaque				= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(secondPresRect.left, secondPresRect.top + secondPresRect.height - 5, 180, 65),
 		&GameManager::getInstance()->getPresidentPlaque(mSecondPresident)), mChoosePresidentWindow);
 
-	mPickedPresidentButton				= GUIButton::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
+	mPickedPresidentButton				= GUIImage::create(CapitalistButtons["PickedPresident"], mPickedPresidentWindow);
 	mPickedPresidentPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(pickedPresRect.left, pickedPresRect.top + pickedPresRect.height - 5, 0, 0),
 		&GameManager::getInstance()->getPresidentPlaque(mPresident)), mPickedPresidentWindow);
@@ -2099,13 +2101,16 @@ void Capitalist::initializeGuiFunctions()
 		{
 			std::shared_ptr<GUIWindow> _chooseWindow = mChoosePresidentWindow;
 			std::shared_ptr<GUIWindow> _pickedWindow = mPickedPresidentWindow;
-			GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
+			/*GUIAnimation::fadeToColor(_chooseWindow, 1000, _chooseWindow->getColor(), sf::Color(255, 255, 255, 0));
 			for(std::vector<std::shared_ptr<GUIElement>>::iterator it = _pickedWindow->getChildVector().begin(); it != _pickedWindow->getChildVector().end(); it++)
 			{
 				sf::Color color = (*it)->getColor();
 				color.a = 255;
 				GUIAnimation::fadeToColor(*it, 1000, sf::Color(color.r, color.g, color.b, 0), color);
-			}
+			}*/
+			sf::Color color = mPresidentBiography->getColor();
+			color.a = 255;
+			GUIAnimation::fadeToColor(mPresidentBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
 			_chooseWindow->setEnabled(false, true);
 			_pickedWindow->setEnabled(false, true);
 			_pickedWindow->setVisible(true);
@@ -2116,8 +2121,6 @@ void Capitalist::initializeGuiFunctions()
 				_pickedWindow->setEnabled(true, true);
 			}, 1000, 1);
 			
-
-			mPickedPresidentWindow->setEnabled(true, true);
 			//mPresident->playSlogan();
 			int yearsElected = mPresident->getYearsElected();
 
@@ -2272,6 +2275,28 @@ void Capitalist::initializeGuiFunctions()
 		mTaxesIncomeWindow->setEnabled(false, true);
 		if(mRound != 1)
 		{
+			std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
+			int moneyIntFood = mPopulation + enemy->getPopulation();
+			int moneyIntGoods = mPopulation + enemy->getPopulation();
+			int moneyIntTech = mPopulation + enemy->getPopulation();
+			// Money internationally should be equal to everybodies money together
+			int foodBought = 0;
+			int goodsBought = 0;
+			int techBought = 0;
+			int exports = 0;
+			// if nobody bought my exports - then it will be sold internationally
+			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? 0 : moneyIntFood / getExportedFoodPrice();
+			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / getExportedGoodsPrice();
+			techBought =(getExportedTech() == 0 || getExportedTechPrice() == 0) ? 0 :  moneyIntTech / getExportedTechPrice();
+			//// if international market tries to buy more resources than you have
+			if(foodBought > getExportedFood()) foodBought = getExportedFood();
+			if(goodsBought > getExportedGoods()) goodsBought = getExportedGoods();
+			if(techBought > getExportedTech()) techBought = getExportedTech();
+			exports += (foodBought * getExportedFoodPrice()) + (goodsBought * getExportedGoodsPrice()) + (techBought * getExportedTechPrice());
+			setExportedFood(getExportedFood() - foodBought);
+			setExportedGoods(getExportedGoods() - goodsBought);
+			setExportedTech(getExportedTech() - techBought);
+			setCurrency(getCurrency() + exports);
 			int _exportedFood = mExportedFoodPreviousRound-mExportedFood;
 			int _exportedGoods = mExportedGoodsPreviousRound-mExportedGoods;
 			int _exportedTech = mExportedTechPreviousRound-mExportedTech;
@@ -2287,6 +2312,7 @@ void Capitalist::initializeGuiFunctions()
 		{
 			mCapitalistMainWindow->setEnabled(true, true);
 		}
+		mCapitalistMainWindow->setEnabled(true, true);
 	});
 
 	mCloseExportedResourceWindow->setOnClickFunction([=]()

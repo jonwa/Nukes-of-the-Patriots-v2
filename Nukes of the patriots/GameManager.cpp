@@ -215,6 +215,7 @@ void GameManager::addSuperPower(std::shared_ptr<SuperPower> power)
 
 void GameManager::startRound()
 {
+	/*
 	int moneyIntFood = 0;
 	int moneyIntGoods = 0;
 	int moneyIntTech = 0;
@@ -242,6 +243,7 @@ void GameManager::startRound()
 	mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
 	mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
 	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+	*/
 
 	mCurrentPlayer->update();
 

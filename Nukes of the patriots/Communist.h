@@ -140,13 +140,16 @@ private:
 	/*GUI-pekare för kommunisternas interface*/
 	std::shared_ptr<GUIWindow> mCommunistMainWindow;
 	std::shared_ptr<GUIWindow> mCommunistBorder;
+	std::shared_ptr<GUIWindow> mCommunistButtonFrame;
 	std::shared_ptr<GUIWindow> mCommunistBorderTop;
+	std::shared_ptr<GUIImage>  mGeneralFrame;
 	std::shared_ptr<GUIButton> mCommunistGeneralButton;
 	std::shared_ptr<GUIButton> mCommunistFiveYearPlanButton;		
 	std::shared_ptr<GUIButton> mCommunistPropagandaButton;	
 	std::shared_ptr<GUIButton> mCommunistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCommunistTradeButton;	
 	/*GUI-pekare för end turn*/
+	std::shared_ptr<GUIImage>  mEndTurnFrame;
 	std::shared_ptr<GUIButton> mCommunistEndTurnButton;
 
 	/*GUI-pekare för fem års planen*/
@@ -290,9 +293,9 @@ private:
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton>  mPickedGeneralButton;
+	std::shared_ptr<GUIImage>  mPickedGeneralButton;
 
-	std::shared_ptr<GUIButton> mFirstGeneralButton;
+	std::shared_ptr<GUIImage>  mFirstGeneralButton;
 	std::shared_ptr<GUIButton> mFirstGeneralPlaque;
 	std::shared_ptr<GUIImage>  mPickedGeneralPlaque;
 

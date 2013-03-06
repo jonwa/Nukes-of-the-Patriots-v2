@@ -25,7 +25,7 @@ using namespace std;
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
@@ -37,10 +37,6 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu menu(window);
-
-	sf::Shader grayscale;
-	grayscale.loadFromFile("effects/grayscale.frag", sf::Shader::Fragment);
-	grayscale.setParameter("texture", sf::Shader::CurrentTexture);
 	
 	menu.setMainMenuVisible();
 

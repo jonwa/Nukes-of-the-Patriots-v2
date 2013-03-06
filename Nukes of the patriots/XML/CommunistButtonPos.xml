@@ -9,20 +9,28 @@
 		<image>Communist/president-red-question-frame</image>
 	</button>
 	<button>
-		<name>FiveYearPlan</name>
-		<xPos>112</xPos>
+		<name>GeneralFrame</name>
+		<xPos>0</xPos>
 		<yPos>636</yPos>
-		<width>200</width>
+		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_texture_button_plan</image>
+		<image>Communist/kom_president_frame</image>
+	</button>
+	<button>
+		<name>FiveYearPlan</name>
+		<xPos>147</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>
+		<image>Communist/plan_normal</image>
 	</button>
 	<button>
 		<name>FiveYearPlanIsPressed</name>
-		<xPos>112</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_invert_plan</image>
+		<xPos>147</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>
+		<image>Communist/plan_pressed</image>
 	</button>
 	<button>
 		<name>YearOneLowerTaxes</name>
@@ -242,19 +250,19 @@
 	</button>
 	<button>
 		<name>Propaganda</name>
-		<xPos>312</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_propaganda</image>
+		<xPos>332</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/propaganda_normal</image>
 	</button>
 	<button>
 		<name>PropagandaIsPressed</name>
-		<xPos>312</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_invert_propaganda</image>
+		<xPos>332</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/propaganda_pressed</image>
 	</button>
 	<button>
 		<name>PropagandaCloseWindowFirst</name>
@@ -306,19 +314,19 @@
 	</button>
 	<button>
 		<name>Upgrade</name>
-		<xPos>512</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_upgrade</image>		
+		<xPos>516</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>			
+		<image>Communist/upgrade_normal</image>		
 	</button>
 	<button>
 		<name>UpgradeIsPressed</name>
-		<xPos>512</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_invert_upgrade</image>		
+		<xPos>516</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>		
+		<image>Communist/upgrade_pressed</image>		
 	</button>
 	<button>
 		<name>UpgradeNuclearWeapon</name>
@@ -378,19 +386,19 @@
 	</button>
 	<button>
 		<name>Export</name>
-		<xPos>712</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>
-		<image>Communist/kom_texture_button_trade</image>
+		<xPos>702</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/trade_normal</image>
 	</button>
 	<button>
 		<name>ExportIsPressed</name>
-		<xPos>712</xPos>
-		<yPos>636</yPos>
-		<width>200</width>
-		<height>132</height>	
-		<image>Communist/kom_texture_button_invert_trade</image>		
+		<xPos>702</xPos>
+		<yPos>665</yPos>
+		<width>175</width>
+		<height>75</height>	
+		<image>Communist/trade_pressed</image>		
 	</button>
 	<button>
 		<name>CommunistLowerFood</name>
@@ -465,20 +473,28 @@
 		<image>Communist/kom_texture_button_ok</image>
 	</button>
 	<button>
-		<name>EndTurn</name>
+		<name>EndTurnFrame</name>
 		<xPos>912</xPos>
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_texture_button_endturn</image>
+		<image>Communist/kom_end_turn_frame</image>
+	</button>
+	<button>
+		<name>EndTurn</name>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
+		<width>112</width>
+		<height>132</height>
+		<image>Communist/kom_endturn_normal</image>
 	</button>
 	<button>
 		<name>EndTurnIsPressed</name>
-		<xPos>912</xPos>
-		<yPos>636</yPos>
+		<xPos>932</xPos>
+		<yPos>657</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_texture_button_invert_endturn</image>
+		<image>Communist/kom_endturn_pressed</image>
 	</button>
 	<button>
 		<name>FirstGeneral</name>
@@ -486,7 +502,7 @@
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
-		<image></image>
+		<image>Generals/president-Alva</image>
 	</button>
 	<button>
 		<name>GoToNextPortrait</name>
@@ -542,7 +558,7 @@
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
-		<image></image>
+		<image>Generals/president-Alva</image>
 	</button>
 	<button>
 		<name>CityImages</name>
