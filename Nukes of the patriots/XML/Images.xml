@@ -100,11 +100,11 @@
 	<image filename="kom_texture_button_yes.png"/>
 	<image filename="kom_texture_button_no.png"/>
 	
-	<image filename="kom_texture_button_plus1.png"/>
+	<image filename="kom_texture_button_plus.png"/>
 	<image filename="kom_texture_button_plus5.png"/>
 	<image filename="kom_texture_button_plus10.png"/>
 
-	<image filename="kom_texture_button_minus1.png"/>
+	<image filename="kom_texture_button_minus.png"/>
 	<image filename="kom_texture_button_minus5.png"/>
 	<image filename="kom_texture_button_minus10.png"/>
 

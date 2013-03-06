@@ -381,7 +381,7 @@ void Communist::newYearStart()
 
 	// Enemy exported resources
 	int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoodsPreviousRound();
+	int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoods();
 	int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
 	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
 
@@ -426,13 +426,17 @@ void Communist::update()
 		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
 		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
 
+		mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+		mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+		mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
 		mImportBuyQuantityText[0]->setText("0");
 		mImportBuyQuantityText[1]->setText("0");
 		mImportBuyQuantityText[2]->setText("0");
 
-		mImportCostText[0]->setText("0");
-		mImportCostText[1]->setText("0");
-		mImportCostText[2]->setText("0");
+		mImportTotalPriceText[0]->setText("0");
+		mImportTotalPriceText[1]->setText("0");
+		mImportTotalPriceText[2]->setText("0");
 
 		if(enemy->getExportedFood() == 0)
 			mImportPriceText[0]->setText("N/A");
@@ -448,6 +452,15 @@ void Communist::update()
 			mImportPriceText[2]->setText("N/A");
 		else
 			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+		mExportQuantityText[0]->setText(mExportedFood);
+		mExportQuantityText[1]->setText(mExportedGoods);
+		mExportQuantityText[2]->setText(mExportedTech);
+
+		mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
+		mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
+		mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
+		mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
 	}
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
@@ -1021,30 +1034,95 @@ void Communist::initializeCommunistWindow()
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
 
-	mExportTotalPriceText[0]			= GUIText::create(sf::FloatRect(221, 51, 56, 31), "0", mExportWindow);
-	mExportTotalPriceText[1]			= GUIText::create(sf::FloatRect(221, 110, 56, 31), "0", mExportWindow);
-	mExportTotalPriceText[2]			= GUIText::create(sf::FloatRect(221, 169, 56, 31), "0", mExportWindow);
+	mExportQuantityLabel				= GUIText::create(sf::FloatRect(164, 12, 200, 100), "Quantity", mExportWindow);
+	mExportQuantityLabel->setScale(0.7, 0.7);
+	mExportQuantityLabel->setAlignment("middle");
+	mExportCostLabel					= GUIText::create(sf::FloatRect(348, 12, 200, 100), "Cost", mExportWindow);
+	mExportCostLabel->setScale(0.7, 0.7);
+	mExportCostLabel->setAlignment("middle");
+	mExportPriceLabel					= GUIText::create(sf::FloatRect(502, 12, 200, 100), "Price", mExportWindow);
+	mExportPriceLabel->setScale(0.7, 0.7);
+	mExportPriceLabel->setAlignment("middle");
+	mExportTotalPriceLabel				= GUIText::create(sf::FloatRect(362, 231, 200, 100), "Total price:", mExportWindow);
+	mExportTotalPriceLabel->setScale(0.7, 0.7);
+	mExportTotalPriceLabel->setAlignment("middle");
+
+	mExportTotalPriceValue				= GUIText::create(sf::FloatRect(502, 231, 100, 31), "0", mExportWindow);
+	mExportTotalPriceValue->setScale(0.7, 0.7);
+	mExportTotalPriceValue->setAlignment("middle");
 	
-	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string(""));
+	sf::Texture *buyField = &ResourceHandler::getInstance()->getTexture(std::string("Communist/Communist_Edit_Field"));
 
-	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 56, 73, 27), buyField), mExportWindow);
-	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 111, 73, 27), buyField), mExportWindow);
-	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(130, 170, 73, 27), buyField), mExportWindow);
-
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(263, 52, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(263, 107, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(263, 166, 157, 28), GUIEditField::COM, "0", true, mExportWindow);
-
-	for(int i = 0; i < sizeof(mExportQuantityBackground)/sizeof(mExportQuantityBackground[0]); i++)
+	mExportQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(137, 53, 57, 40), buyField), mExportWindow);
+	mExportQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(137, 111, 57, 40), buyField), mExportWindow);
+	mExportQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(137, 170, 57, 40), buyField), mExportWindow);
+	for(int i = 0; i < 3; i++)
 	{
-		mExportQuantityText[i] = GUIText::create(
-			sf::FloatRect(mExportQuantityBackground[i]->getLocalX() + mExportQuantityBackground[i]->getWidth()/2, 
-			mExportQuantityBackground[i]->getLocalY() + mExportQuantityBackground[i]->getHeight()/2,
-			100, 50), "0", mExportWindow);
-		mExportQuantityText[i]->setAlignment("middle");
-
+		mExportQuantityBackground[i]->setSize(57, 40);		
 	}
 
+	mExportQuantityText[0] = GUIText::create(sf::FloatRect(mExportQuantityBackground[0]->getLocalX() + mExportQuantityBackground[0]->getWidth()/2, 62, 57, 40), "0", mExportWindow);
+	mExportQuantityText[1] = GUIText::create(sf::FloatRect(mExportQuantityBackground[1]->getLocalX() + mExportQuantityBackground[1]->getWidth()/2, 117, 57, 40), "0", mExportWindow);
+	mExportQuantityText[2] = GUIText::create(sf::FloatRect(mExportQuantityBackground[2]->getLocalX() + mExportQuantityBackground[2]->getWidth()/2, 176, 57, 40), "0", mExportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mExportQuantityText[i]->setScale(0.7, 0.7);
+		mExportQuantityText[i]->setAlignment("middle");
+	}
+
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 67, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
+
+	mExportFoodCost->setMaxCharacters(4);
+	mExportGoodsCost->setMaxCharacters(4);
+	mExportTechCost->setMaxCharacters(4);
+
+	mExportFoodCost->setOnGuiChangeFunction([=]()
+	{
+		int _foodCost = stringToInt(mExportFoodCost->getText());
+		int _foodQuantity = stringToInt(mExportQuantityText[0]->getText());
+		mExportPriceText[0]->setText(_foodCost * _foodQuantity);
+		int totalCost = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			totalCost += stringToInt(mExportPriceText[i]->getText());
+		}
+		mExportTotalPriceValue->setText(totalCost);
+	});
+	mExportGoodsCost->setOnGuiChangeFunction([=]()
+	{
+		int _goodsCost = stringToInt(mExportGoodsCost->getText());
+		int _goodsQuantity = stringToInt(mExportQuantityText[1]->getText());
+		mExportPriceText[1]->setText(_goodsCost * _goodsQuantity);
+		int totalCost = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			totalCost += stringToInt(mExportPriceText[i]->getText());
+		}
+		mExportTotalPriceValue->setText(totalCost);
+	});
+	mExportTechCost->setOnGuiChangeFunction([=]()
+	{
+		int _techCost = stringToInt(mExportTechCost->getText());
+		int _techQuantity = stringToInt(mExportQuantityText[2]->getText());
+		mExportPriceText[2]->setText(_techCost * _techQuantity);
+		int totalCost = 0;
+		for(int i = 0; i < 3; i++)
+		{
+			totalCost += stringToInt(mExportPriceText[i]->getText());
+		}
+		mExportTotalPriceValue->setText(totalCost);
+	});
+
+	mExportPriceText[0]			= GUIText::create(sf::FloatRect(502, 53, 100, 31), "0", mExportWindow);
+	mExportPriceText[1]			= GUIText::create(sf::FloatRect(502, 111, 100, 31), "0", mExportWindow);
+	mExportPriceText[2]			= GUIText::create(sf::FloatRect(502, 170, 100, 31), "0", mExportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mExportPriceText[i]->setScale(0.7, 0.7);
+		mExportPriceText[i]->setAlignment("middle");
+	}
 
 	mExportConfirmButton				= GUIButton::create(CommunistButtons["ExportConfirm"], mExportWindow);
 	mExportConfirmButton->setSize(CommunistButtons["ExportConfirm"].first.width, CommunistButtons["ExportConfirm"].first.height);
@@ -1052,34 +1130,67 @@ void Communist::initializeCommunistWindow()
 	
 	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
 	
-	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(150, 51, 56, 31), "0", mImportWindow);
-	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(150, 110, 56, 31), "0", mImportWindow);
-	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(150, 169, 56, 31), "0", mImportWindow);
-
-	mImportPriceText[0]					= GUIText::create(sf::FloatRect(221, 51, 56, 31), "N/A", mImportWindow);
-	mImportPriceText[1]					= GUIText::create(sf::FloatRect(221, 110, 56, 31), "N/A", mImportWindow);
-	mImportPriceText[2]					= GUIText::create(sf::FloatRect(221, 169, 56, 31), "N/A", mImportWindow);
-
-	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 51, 56, 31), buyField), mImportWindow);
-	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 110, 56, 31), buyField), mImportWindow);
-	mImportBuyQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(329, 169, 56, 31), buyField), mImportWindow);
+	mImportResourceLabel				= GUIText::create(sf::FloatRect(32, 12, 200, 100), "Res.", mImportWindow);
+	mImportResourceLabel->setScale(0.7, 0.7);
+	mImportPriceLabel					= GUIText::create(sf::FloatRect(164, 12, 200, 100), "Price", mImportWindow);
+	mImportPriceLabel->setScale(0.7, 0.7);
+	mImportPriceLabel->setAlignment("middle");
+	mImportQuantityLabel				= GUIText::create(sf::FloatRect(348, 12, 200, 100), "Quantity", mImportWindow);
+	mImportQuantityLabel->setScale(0.7, 0.7);
+	mImportQuantityLabel->setAlignment("middle");
+	mImportCostLabel					= GUIText::create(sf::FloatRect(502, 12, 200, 100), "Cost", mImportWindow);
+	mImportCostLabel->setScale(0.7, 0.7);
+	mImportCostLabel->setAlignment("middle");
+	mImportTotalCostLabel				= GUIText::create(sf::FloatRect(362, 231, 200, 100), "Total cost:", mImportWindow);
+	mImportTotalCostLabel->setScale(0.7, 0.7);
 	
-	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
-	{
-		mImportBuyQuantityText[i] = GUIText::create(
-			sf::FloatRect(mImportBuyQuantityBackground[i]->getLocalX() + mImportBuyQuantityBackground[i]->getWidth()/2, 
-			mImportBuyQuantityBackground[i]->getLocalY() + mImportBuyQuantityBackground[i]->getHeight()/2,
-			100, 50), "0", mImportWindow);
-		mImportBuyQuantityText[i]->setAlignment("middle");
+	mImportTotalCostText				= GUIText::create(sf::FloatRect(507, 231, 200, 100), "0", mImportWindow);
+	mImportTotalCostText->setScale(0.7, 0.7);
+	mImportTotalCostText->setAlignment("middle");
 
+	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(80, 58, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(80, 117, 56, 31), "0", mImportWindow);
+	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(80, 177, 56, 31), "0", mImportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mImportResourcesAvailableText[i]->setScale(0.7, 0.7);
 	}
 
-	mImportCostText[0]					= GUIText::create(sf::FloatRect(509, 51, 100, 50), "0", mImportWindow);
-	mImportCostText[1]					= GUIText::create(sf::FloatRect(509, 110, 100, 50), "0", mImportWindow);
-	mImportCostText[2]					= GUIText::create(sf::FloatRect(509, 169, 100, 50), "0", mImportWindow);
+	mImportPriceText[0]					= GUIText::create(sf::FloatRect(168, 58, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[1]					= GUIText::create(sf::FloatRect(168, 117, 56, 31), "N/A", mImportWindow);
+	mImportPriceText[2]					= GUIText::create(sf::FloatRect(168, 177, 56, 31), "N/A", mImportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mImportPriceText[i]->setScale(0.7, 0.7);
+		mImportPriceText[i]->setAlignment("middle");
+	}
+
+	mImportBuyQuantityBackground[0]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(320, 53, 57, 40), buyField), mImportWindow);
+	mImportBuyQuantityBackground[1]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(320, 111, 57, 40), buyField), mImportWindow);
+	mImportBuyQuantityBackground[2]		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(320, 170, 57, 40), buyField), mImportWindow);
+	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
+	{
+		mImportBuyQuantityBackground[i]->setSize(57, 40);
+	}
+	mImportBuyQuantityText[0] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[0]->getLocalX() + mImportBuyQuantityBackground[0]->getWidth()/2, 58, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[1] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[1]->getLocalX() + mImportBuyQuantityBackground[1]->getWidth()/2, 117, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[2] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[2]->getLocalX() + mImportBuyQuantityBackground[2]->getWidth()/2, 177, 57, 40), "0", mImportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mImportBuyQuantityText[i]->setScale(0.7, 0.7);
+		mImportBuyQuantityText[i]->setAlignment("middle");
+	}
+
+	mImportTotalPriceText[0]					= GUIText::create(sf::FloatRect(507, 58, 100, 50), "0", mImportWindow);
+	mImportTotalPriceText[1]					= GUIText::create(sf::FloatRect(507, 117, 100, 50), "0", mImportWindow);
+	mImportTotalPriceText[2]					= GUIText::create(sf::FloatRect(507, 177, 100, 50), "0", mImportWindow);
+	for(int i = 0; i < 3; i++)
+	{
+		mImportTotalPriceText[i]->setScale(0.7, 0.7);
+		mImportTotalPriceText[i]->setAlignment("middle");
+	}
 
 	mImportGotoExportButton				= GUIButton::create(CommunistButtons["ImportGotoExport"], mImportWindow);
-	mImportGotoExportButton->setSize(CommunistButtons["ImportGotoExport"].first.width, CommunistButtons["ImportGotoExport"].first.height);
 	mImportWindow->setVisible(false);
 
 
@@ -1219,16 +1330,16 @@ void Communist::initializeCommunistWindow()
 	mPopulationEatsFoodWindow->setVisible(false);
 
 	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(39, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mFiveYearPlanWindow);
-	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 51, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mImportWindow);
-	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 58, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mExportWindow);
+	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 53, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mImportWindow);
+	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 53, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mExportWindow);
 
 	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(140, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mFiveYearPlanWindow);
-	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 110, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mImportWindow);
-	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 113, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mExportWindow);
+	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 111, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mImportWindow);
+	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 111, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mExportWindow);
 
 	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
-	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(70, 169, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mImportWindow);
-	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(25, 173, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mExportWindow);
+	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mImportWindow);
+	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mExportWindow);
 
 	mGeneralBiography = GUIText::create(sf::FloatRect(40, 290, 0, 0), "", mPickedGeneralWindow);
 	mGeneralBiography->setScale(0.6, 0.6);
@@ -1805,36 +1916,42 @@ void Communist::initializeGuiFunctions()
 	});
 
 	sf::Texture *minusTexture[3];
-	minusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus1"));
+	minusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus"));
 	minusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus5"));
 	minusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_minus10"));
 
 	sf::Texture *plusTexture[3];
-	plusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus1"));
+	plusTexture[0] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus"));
 	plusTexture[1] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus5"));
 	plusTexture[2] = &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_texture_button_plus10"));
-
+	
 	for(int i = 0; i < sizeof(mImportBuyQuantityBackground)/sizeof(mImportBuyQuantityBackground[0]); i++)
 	{
 		float x = mImportBuyQuantityBackground[i]->getLocalX(), y = mImportBuyQuantityBackground[i]->getLocalY();
 		for(int h = 0; h < 3; h++)
 		{
-
 			mImportBuyButtonMinus[i][h] = GUIButton::create(
 				std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(x - (h+1)*minusTexture[h]->getSize().x, y, minusTexture[h]->getSize().x, minusTexture[h]->getSize().y),
 				minusTexture[h]),
 				mImportWindow);
 			mImportBuyButtonMinus[i][h]->setOnClickFunction([=]()
 			{
-				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
-				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int _resourcesAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int _resourcePrice = stringToInt(mImportPriceText[i]->getText());
 				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
 				quantity -= (h == 0) ? 1 : (h*5);
 				if(quantity < 0)
 					quantity = 0;
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
-				int cost = quantity * (foodAvailable * foodPrice);
-				mImportCostText[i]->setText(intToString(cost));
+				int _resourceCost = quantity * _resourcePrice;
+				mImportTotalPriceText[i]->setText(_resourceCost);
+
+				int totalCost = 0;
+				for(int c = 0; c < 3; c++)
+				{
+					totalCost += stringToInt(mImportTotalPriceText[c]->getText());
+				}
+				mImportTotalCostText->setText(totalCost);
 			});
 
 			mImportBuyButtonPlus[i][h] = GUIButton::create(
@@ -1843,15 +1960,22 @@ void Communist::initializeGuiFunctions()
 				mImportWindow);
 			mImportBuyButtonPlus[i][h]->setOnClickFunction([=]()
 			{
-				int foodAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
-				int foodPrice = stringToInt(mImportPriceText[i]->getText());
+				int _resourcesAvailable = stringToInt(mImportResourcesAvailableText[i]->getText());
+				int _resourcePrice = stringToInt(mImportPriceText[i]->getText());
 				int quantity = stringToInt(mImportBuyQuantityText[i]->getText());
 				quantity += (h == 0) ? 1 : (h*5);
-				if(quantity > foodAvailable)
-					quantity = foodAvailable;
+				if(quantity > _resourcesAvailable)
+					quantity = _resourcesAvailable;
 				mImportBuyQuantityText[i]->setText(intToString(quantity));
-				int cost = quantity * (foodAvailable * foodPrice);
-				mImportCostText[i]->setText(intToString(cost));
+				int _resourceCost = quantity * _resourcePrice;
+				mImportTotalPriceText[i]->setText(_resourceCost);
+
+				int totalCost = 0;
+				for(int c = 0; c < 3; c++)
+				{
+					totalCost += stringToInt(mImportTotalPriceText[c]->getText());
+				}
+				mImportTotalCostText->setText(totalCost);
 			});
 		}
 	}
@@ -1891,7 +2015,14 @@ void Communist::initializeGuiFunctions()
 					quantity = 0;
 				mExportQuantityText[i]->setText(intToString(quantity));
 				int cost = quantity * stringToInt(exportResourceCost[i]->getText());
-				mExportTotalPriceText[i]->setText(cost);
+				mExportPriceText[i]->setText(cost);
+
+				int totalCost = 0;
+				for(int c = 0; c < 3; c++)
+				{
+					totalCost += stringToInt(mExportPriceText[c]->getText());
+				}
+				mExportTotalPriceValue->setText(totalCost);
 			});
 
 			mExportButtonPlus[i][h] = GUIButton::create(
@@ -1900,47 +2031,24 @@ void Communist::initializeGuiFunctions()
 				mExportWindow);
 			mExportButtonPlus[i][h]->setOnClickFunction([=]()
 			{
+				int foodAvailable = mFood;
 				int quantity = stringToInt(mExportQuantityText[i]->getText());
 				quantity += (h == 0) ? 1 : (h*5);
 				if(quantity > *resourcesAvailable[i])
 					quantity = *resourcesAvailable[i];
 				mExportQuantityText[i]->setText(intToString(quantity));
 				int cost = quantity * stringToInt(exportResourceCost[i]->getText());
-				mExportTotalPriceText[i]->setText(cost);
+				mExportPriceText[i]->setText(cost);
+
+				int totalCost = 0;
+				for(int c = 0; c < 3; c++)
+				{
+					totalCost += stringToInt(mExportPriceText[c]->getText());
+				}
+				mExportTotalPriceValue->setText(totalCost);
 			});
 		}
 	}
-
-	mExportFoodCost->setOnGuiChangeFunction([&]()
-	{
-		int exportFoodCost = stringToInt(mExportFoodCost->getText());
-		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
-		if(exportFoodCost > totalAllowedCost)
-			exportFoodCost = totalAllowedCost;
-		mExportFoodCost->setText(intToString(exportFoodCost));
-		int foodQuantity = stringToInt(mExportQuantityText[0]->getText());
-		mExportTotalPriceText[0]->setText(foodQuantity*exportFoodCost);
-	});
-	mExportGoodsCost->setOnGuiChangeFunction([&]()
-	{
-		int exportGoodsCost = stringToInt(mExportGoodsCost->getText());
-		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
-		if(exportGoodsCost > totalAllowedCost)
-			exportGoodsCost = totalAllowedCost;
-		mExportGoodsCost->setText(intToString(exportGoodsCost));
-		int goodsQuantity = stringToInt(mExportQuantityText[1]->getText());
-		mExportTotalPriceText[1]->setText(goodsQuantity*exportGoodsCost);
-	});
-	mExportTechCost->setOnGuiChangeFunction([&]()
-	{
-		int exportTechCost = stringToInt(mExportTechCost->getText());
-		int totalAllowedCost = mCurrency + GameManager::getInstance()->getCapitalist()->getCurrency();
-		if(exportTechCost > totalAllowedCost)
-			exportTechCost = totalAllowedCost;
-		mExportTechCost->setText(intToString(exportTechCost));
-		int techQuantity = stringToInt(mExportQuantityText[2]->getText());
-		mExportTotalPriceText[2]->setText(techQuantity*exportTechCost);
-	});
 
 	mExportConfirmButton->setOnClickFunction(
 		[=]()
@@ -1948,20 +2056,47 @@ void Communist::initializeGuiFunctions()
 		mExportWindow->setVisible(false);
 		mCommunistMainWindow->setEnabled(true, true);
 		mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
-		//mCurrency -= stringToInt(mImportTotalCostText->getText());
 
+		int _exportedFoodPreviousValue = mExportedFood;
+		int _exportedGoodsPreviousValue = mExportedGoods;
+		int _exportedTechPreviousValue = mExportedTech;
 		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
 		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
 		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
-		mFood = mFoodPreviousRound - mExportedFood;
-		mGoods = mGoodsPreviousRound - mExportedGoods;
-		mTech = mTechPreviousRound - mExportedTech;
 
-		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
-		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
-		mExportedTechPrice = stringToInt(mExportTechCost->getText());
+		int _exportedFoodDiff = mExportedFood - _exportedFoodPreviousValue;
+		int _exportedGoodsDiff = mExportedGoods - _exportedGoodsPreviousValue;
+		int _exportedTechDiff = mExportedTech - _exportedTechPreviousValue;
 
-		std::cout<<"communist Exported goods: "<<mExportedGoods<<std::endl;
+		mFood -= _exportedFoodDiff;
+		mGoods -= _exportedGoodsDiff;
+		mTech -= _exportedTechDiff;
+
+		mExportedFoodPrice = stringToInt(mExportFoodCost->getText()) / (mExportedFood == 0 ? 1 : mExportedFood);
+		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText()) / (mExportedGoods == 0 ? 1 : mExportedGoods);
+		mExportedTechPrice = stringToInt(mExportTechCost->getText()) / (mExportedTech == 0 ? 1 : mExportedTech);
+		
+		int _importedFoodQuantity = stringToInt(mImportBuyQuantityText[0]->getText());
+		int _importedGoodsQuantity = stringToInt(mImportBuyQuantityText[1]->getText());
+		int _importedTechQuantity = stringToInt(mImportBuyQuantityText[2]->getText());
+		mFood += _importedFoodQuantity;
+		mGoods += _importedGoodsQuantity;
+		mTech += _importedTechQuantity;
+
+		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
+		enemy->setExportedFood(enemy->getExportedFood() - _importedFoodQuantity);
+		enemy->setExportedGoods(enemy->getExportedGoods() - _importedGoodsQuantity);
+		enemy->setExportedTech(enemy->getExportedTech() - _importedTechQuantity);
+		mCurrency -= stringToInt(mImportTotalPriceText[0]->getText());
+		mCurrency -= stringToInt(mImportTotalPriceText[1]->getText());
+		mCurrency -= stringToInt(mImportTotalPriceText[2]->getText());
+
+		for(int i = 0; i < 3; i++)
+		{
+			mImportBuyQuantityText[i]->setText("0");
+			mImportTotalPriceText[i]->setText("0");
+		}
+		mImportTotalCostText->setText("0");
 	});
 
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()
