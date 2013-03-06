@@ -2,6 +2,8 @@
 #include "ResourceHandler.h"
 #include <iostream>
 
+sf::Shader* GUIButton::mGlowEffect = nullptr;
+
 std::shared_ptr<GUIButton> GUIButton::create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent)
 {
 	std::shared_ptr<GUIButton> ret = std::make_shared<GUIButton>(pair, parent);
@@ -12,6 +14,12 @@ std::shared_ptr<GUIButton> GUIButton::create(std::pair<sf::FloatRect, sf::Textur
 GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent) :
 	GUIElement(pair.first, parent, BUTTON)
 {
+	if(mGlowEffect == nullptr)
+	{
+		mGlowEffect = new sf::Shader();
+		mGlowEffect->loadFromFile("effects/glow.frag", sf::Shader::Fragment);
+		mGlowEffect->setParameter("texture", sf::Shader::CurrentTexture);
+	}
 	if (pair.second)
 		mSprite.setTexture(*pair.second);
 	
@@ -44,14 +52,16 @@ bool GUIButton::render(sf::RenderWindow *window, sf::RenderStates &states)
 	}
 	if(visible)
 	{
-		sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
-		rect.setPosition(x, y);
-		rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
+		sf::RenderStates _state = states;
+		if(getMouseIsInside())
+			_state.shader = mGlowEffect;
+		//sf::RectangleShape rect(sf::Vector2f(getWidth(), getHeight()));
+		//rect.setPosition(x, y);
+		//rect.setFillColor(sf::Color::Color(255, 255, 255, 255));
 
 		//window->draw(rect);
 		mSprite.setPosition(x, y);
-		window->draw(mSprite, states);
-
+		window->draw(mSprite, _state);
 	}
 
 	if(!mChilds.empty())

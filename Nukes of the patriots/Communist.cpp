@@ -1203,7 +1203,7 @@ void Communist::initializeCommunistWindow()
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
 	mPickedGeneralWindow				= GUIWindow::create(CommunistWindows["PickedGeneral"], mCommunistMainWindow);
-	mPickedGeneralButton				= GUIButton::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
+	mPickedGeneralButton				= GUIImage::create(CommunistButtons["PickedGeneral"], mPickedGeneralWindow);
 	sf::FloatRect pickedRect			= CommunistButtons["PickedGeneral"].first;
 	mPickedGeneralPlaque				= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(pickedRect.left, pickedRect.top + pickedRect.height - 5, 0, 0),
@@ -1211,7 +1211,7 @@ void Communist::initializeCommunistWindow()
 
 	mPickedGeneralWindow->setVisible(false);
 
-	mFirstGeneralButton					= GUIButton::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
+	mFirstGeneralButton					= GUIImage::create(CommunistButtons["FirstGeneral"], mChooseGeneralWindow);
 	sf::FloatRect generalRect			= CommunistButtons["FirstGeneral"].first;
 	mFirstGeneralPlaque					= GUIButton::create(std::pair<sf::FloatRect, sf::Texture*>
 		(sf::FloatRect(generalRect.left, generalRect.top + generalRect.height - 5, 0, 0),
@@ -2157,6 +2157,28 @@ void Communist::initializeGuiFunctions()
 		mTaxesIncomeWindow->setEnabled(false, true);
 		mResourceIncomeWindow->setVisible(true);
 		mResourceIncomeWindow->setEnabled(true, true);
+		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
+		int moneyIntFood = mPopulation + enemy->getPopulation();
+		int moneyIntGoods = mPopulation + enemy->getPopulation();
+		int moneyIntTech = mPopulation + enemy->getPopulation();
+		// Money internationally should be equal to everybodies money together
+		int foodBought = 0;
+		int goodsBought = 0;
+		int techBought = 0;
+		int exports = 0;
+		// if nobody bought my exports - then it will be sold internationally
+		foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? 0 : moneyIntFood / getExportedFoodPrice();
+		goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / getExportedGoodsPrice();
+		techBought =(getExportedTech() == 0 || getExportedTechPrice() == 0) ? 0 :  moneyIntTech / getExportedTechPrice();
+		//// if international market tries to buy more resources than you have
+		if(foodBought > getExportedFood()) foodBought = getExportedFood();
+		if(goodsBought > getExportedGoods()) goodsBought = getExportedGoods();
+		if(techBought > getExportedTech()) techBought = getExportedTech();
+		exports += (foodBought * getExportedFoodPrice()) + (goodsBought * getExportedGoodsPrice()) + (techBought * getExportedTechPrice());
+		setExportedFood(getExportedFood() - foodBought);
+		setExportedGoods(getExportedGoods() - goodsBought);
+		setExportedTech(getExportedTech() - techBought);
+		setCurrency(getCurrency() + exports);
 	});
 
 	mCloseResourceIncomeWindow->setOnClickFunction([=]()

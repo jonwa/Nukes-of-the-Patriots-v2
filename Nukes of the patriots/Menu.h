@@ -7,6 +7,7 @@
 #include "GUIEditField.h"
 #include "GUIImage.h"
 #include "GUIText.h"
+#include "GUIImage.h"
 #include <memory>
 #include <map>
 #include "Timer.h"

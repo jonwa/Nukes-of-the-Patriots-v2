@@ -51,7 +51,7 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	mText.setString("");
 	mPlaceHolderText.setString(sf::String(text.c_str()));
 	mText.setScale(scaleY, scaleY);
-	mPlaceHolderText.setScale(scaleX, scaleY);
+	mPlaceHolderText.setScale(scaleY, scaleY);
 	//sf::FloatRect boundBox = mText.getGlobalBounds();
 	//setWidth(static_cast<int>(boundBox.width));
 	//setHeight(static_cast<int>(boundBox.height));

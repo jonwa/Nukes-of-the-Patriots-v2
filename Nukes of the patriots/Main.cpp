@@ -37,10 +37,6 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu menu(window);
-
-	sf::Shader grayscale;
-	grayscale.loadFromFile("effects/grayscale.frag", sf::Shader::Fragment);
-	grayscale.setParameter("texture", sf::Shader::CurrentTexture);
 	
 	menu.setMainMenuVisible();
 

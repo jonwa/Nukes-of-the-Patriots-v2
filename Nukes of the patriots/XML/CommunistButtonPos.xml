@@ -502,7 +502,7 @@
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
-		<image></image>
+		<image>Generals/president-Alva</image>
 	</button>
 	<button>
 		<name>GoToNextPortrait</name>
@@ -558,7 +558,7 @@
 		<yPos>22</yPos>
 		<width>180</width>
 		<height>194</height>
-		<image></image>
+		<image>Generals/president-Alva</image>
 	</button>
 	<button>
 		<name>CityImages</name>
