@@ -66,6 +66,25 @@
 	
 	<image filename="kap_texture_button_trade.png"/>
 	<image filename="kap_texture_button_invert_trade.png"/>
+	
+	
+	<image filename="capitalist_frame.png"/>
+	<image filename="resources_normal.png"/>
+	<image filename="resources_pressed.png"/>
+	
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	
+	<image filename="taxes_normal.png"/>
+	<image filename="taxes_pressed.png"/>
+	
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
+	<image filename="kap_president_frame.png"/>
+	<image filename="kap_EndTurn_frame.png"/>
+	<image filename="kap_endturn_normal.png"/>
+	<image filename="kap_endturn_pressed.png"/>
+	
 </images>
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
@@ -144,6 +163,21 @@
 	
 	<image filename="kom_texture_button_trade.png"/>
 	<image filename="kom_texture_button_invert_trade.png"/>
+	
+	<image filename="kommunist_btns_placeholder.png"/>
+	<image filename="plan_normal.png"/>
+	<image filename="plan_pressed.png"/>
+	<image filename="propaganda_normal.png"/>
+	<image filename="propaganda_pressed.png"/>
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
+	
+	<image filename="kom_end_turn_frame.png"/>
+	<image filename="kom_president_frame.png"/>
+	<image filename="kom_endturn_normal.png"/>
+	<image filename="kom_endturn_pressed.png"/>
 </images>
 <images directory ="Menu">
     <image filename="Background.png"/>

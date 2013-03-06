@@ -9,6 +9,14 @@
 		<image></image>
 	</window>
 	<window>
+		<name>InterfaceButtonsFrame</name>
+		<xPos>112</xPos>
+		<yPos>636</yPos>
+		<width>800</width>
+		<height>132</height>
+		<image>Capitalist/capitalist_frame</image>
+	</window>
+	<window>
 		<name>CapitalistTaxesWindow</name>
 		<xPos>227</xPos>
 		<yPos>264</yPos>

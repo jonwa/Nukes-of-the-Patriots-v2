@@ -5,6 +5,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIEditField.h"
+#include "GUIImage.h"
 #include "GUIText.h"
 #include "GUIImage.h"
 #include <memory>

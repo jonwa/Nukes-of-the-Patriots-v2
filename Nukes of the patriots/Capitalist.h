@@ -143,7 +143,9 @@ private:
 	/*GUI-pekare för kapitalisternas interface*/
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIWindow> mCapitalistBorder;
+	std::shared_ptr<GUIWindow> mCapitalistButtonFrame;
 	std::shared_ptr<GUIWindow> mCapitalistBorderTop;
+	std::shared_ptr<GUIImage>  mPresidentFrame;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
 	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
@@ -151,6 +153,7 @@ private:
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCapitalistTradeButton;	
 	/*GUI-pekare för end turn*/
+	std::shared_ptr<GUIImage>  mEndTurnFrame;
 	std::shared_ptr<GUIButton> mCapitalistEndTurnButton;
 
 	/*GUI-pekare för taxes */
