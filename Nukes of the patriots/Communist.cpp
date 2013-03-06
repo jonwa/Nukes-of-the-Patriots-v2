@@ -2170,7 +2170,7 @@ void Communist::resourceIncome()
 void Communist::showGUI()
 {
 	mCommunistMainWindow->setVisible(true);
-	//playMusic();
+	playMusic();
 }
 
 void Communist::hideGUI()
