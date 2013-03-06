@@ -6,6 +6,7 @@
 #include "GUIButton.h"
 #include "GUIEditField.h"
 #include "GUIText.h"
+#include "GUIImage.h"
 #include <memory>
 #include <map>
 #include "Timer.h"
@@ -92,10 +93,10 @@ private:
 	std::shared_ptr<GUIButton> mCapitalistOkayButton;
 	std::shared_ptr<GUIButton> mCommunistOkayButton;
 
-	std::shared_ptr<GUIButton> mTeamCommunist;
-	std::shared_ptr<GUIButton> mTeamCommunistIsPicked;
-	std::shared_ptr<GUIButton> mTeamCapitalist;
-	std::shared_ptr<GUIButton> mTeamCapitalistIsPicked;
+	std::shared_ptr<GUIImage> mTeamCommunist;
+	std::shared_ptr<GUIImage> mTeamCommunistIsPicked;
+	std::shared_ptr<GUIImage> mTeamCapitalist;
+	std::shared_ptr<GUIImage> mTeamCapitalistIsPicked;
 
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;

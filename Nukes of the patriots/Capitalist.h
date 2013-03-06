@@ -231,11 +231,11 @@ private:
 
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
-	std::shared_ptr<GUIButton>  mFirstPresidentButton;
+	std::shared_ptr<GUIImage>  mFirstPresidentButton;
 	std::shared_ptr<GUIButton> mFirstPresidentPlaque;
-	std::shared_ptr<GUIButton>  mSecondPresidentButton;
+	std::shared_ptr<GUIImage>  mSecondPresidentButton;
 	std::shared_ptr<GUIButton> mSecondPresidentPlaque;
-	std::shared_ptr<GUIButton>  mPickedPresidentButton;
+	std::shared_ptr<GUIImage>  mPickedPresidentButton;
 	std::shared_ptr<GUIImage> mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;
