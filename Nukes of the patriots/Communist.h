@@ -15,6 +15,8 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <iostream>
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Audio\Music.hpp>
+#include "Sound.h"
+
 
 class President;
 class GUIElement;
@@ -89,7 +91,7 @@ private:
 	std::vector<std::shared_ptr<GUIButton> > mResourcesGoodsButtons;
 	std::vector<std::shared_ptr<GUIButton> > mResourcesTechButtons;
 
-
+	std::shared_ptr<Sound> mCommunistMainTheme;
 
 	void fiveYearInitialize();
 	void setYearlyResources(int year, std::string, int value);
@@ -120,6 +122,8 @@ private:
 	std::shared_ptr<President> mFirstGeneral;
 	std::shared_ptr<GUIText>   mGeneralBiography;
 
+	std::shared_ptr<GUIText>   mWindowHeadlines[6];
+
  	std::shared_ptr<GUIText> mPopulationText;
 	std::shared_ptr<GUIText> mCurrencyText;
 	std::shared_ptr<GUIText> mPatriotismText;
@@ -138,13 +142,16 @@ private:
 	/*GUI-pekare för kommunisternas interface*/
 	std::shared_ptr<GUIWindow> mCommunistMainWindow;
 	std::shared_ptr<GUIWindow> mCommunistBorder;
+	std::shared_ptr<GUIWindow> mCommunistButtonFrame;
 	std::shared_ptr<GUIWindow> mCommunistBorderTop;
+	std::shared_ptr<GUIImage>  mGeneralFrame;
 	std::shared_ptr<GUIButton> mCommunistGeneralButton;
 	std::shared_ptr<GUIButton> mCommunistFiveYearPlanButton;		
 	std::shared_ptr<GUIButton> mCommunistPropagandaButton;	
 	std::shared_ptr<GUIButton> mCommunistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCommunistTradeButton;	
 	/*GUI-pekare för end turn*/
+	std::shared_ptr<GUIImage>  mEndTurnFrame;
 	std::shared_ptr<GUIButton> mCommunistEndTurnButton;
 
 	/*GUI-pekare för fem års planen*/
@@ -257,7 +264,8 @@ private:
 
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
-	std::shared_ptr<GUIText> mExportTotalPriceText[3];
+	std::shared_ptr<GUIText> mExportQuantityLabel, mExportCostLabel, mExportPriceLabel, mExportTotalPriceLabel, mExportTotalPriceValue;
+	std::shared_ptr<GUIText> mExportPriceText[3];
 	std::shared_ptr<GUIImage> mExportQuantityBackground[3];
 	std::shared_ptr<GUIText> mExportQuantityText[3];
 	std::shared_ptr<GUIButton> mExportButtonMinus[3][3];
@@ -268,20 +276,28 @@ private:
 	std::shared_ptr<GUIButton> mExportConfirmButton;
 
 	std::shared_ptr<GUIWindow> mImportWindow;
+	std::shared_ptr<GUIText> mImportResourceLabel, mImportPriceLabel, mImportQuantityLabel, mImportCostLabel, mImportTotalCostLabel;
+	std::shared_ptr<GUIText> mImportTotalCostText;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
-	std::shared_ptr<GUIText> mImportPriceText[3];
 	std::shared_ptr<GUIText> mImportBuyQuantityText[3];
 	std::shared_ptr<GUIImage> mImportBuyQuantityBackground[3];
-	std::shared_ptr<GUIText> mImportCostText[3];
+	std::shared_ptr<GUIText> mImportPriceText[3];
+	std::shared_ptr<GUIText> mImportTotalPriceText[3];
 	std::shared_ptr<GUIButton> mImportBuyButtonMinus[3][3];
 	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
 	std::shared_ptr<GUIButton> mImportGotoExportButton;
 
+	std::shared_ptr<GUIWindow> mExportedResourcesWindow;
+	std::shared_ptr<GUIButton> mCloseExportedResourceWindow;
+	std::shared_ptr<GUIText>   mResourcesExportedText[3];
+	std::shared_ptr<GUIText>   mExportedIncomeText;
+
+
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton> mPickedGeneralButton;
+	std::shared_ptr<GUIImage>  mPickedGeneralButton;
 
-	std::shared_ptr<GUIButton> mFirstGeneralButton;
+	std::shared_ptr<GUIImage>  mFirstGeneralButton;
 	std::shared_ptr<GUIButton> mFirstGeneralPlaque;
 	std::shared_ptr<GUIImage>  mPickedGeneralPlaque;
 
@@ -341,7 +357,6 @@ private:
 	std::shared_ptr<GUIImage>  mNuclearPanel;
 	std::shared_ptr<GUIImage>  mSpacePanel;
 	std::shared_ptr<GUIImage>  mSpyPanel;
-
 };
 
 #endif

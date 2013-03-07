@@ -17,19 +17,19 @@
 #include "UdpClient.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
+#include <SFML\Audio\Listener.hpp>
 
 
-
- /*Konstruktorn kör initialize-funktionen*/
-Menu::Menu(sf::RenderWindow &window) : 
-	mWindow(window),
+Menu::Menu() : 
+	mWindow(nullptr),
 	mCapitalistTeamChosen(false),
 	mCommunistTeamChosen(false),
 	mTcpServer(nullptr),
 	mTcpClient(nullptr),
 	mUdpServer(nullptr),
 	mUdpClient(nullptr),
-	mShowTeamChooseAnimation(false)
+	mShowTeamChooseAnimation(false),
+	fullscreen(true)
 { 
 	//mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
 	Event::addEventHandler("serverAwaitingConnection", [=](sf::Packet packet)
@@ -47,10 +47,76 @@ Menu::Menu(sf::RenderWindow &window) :
 	initializeGuiFuctions();
 	//loadTeamAnimation();
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
-	//MenuMusic["MainMenuTrack"]->play();
-	//MenuMusic["MainMenuTrack"]->setLoop(true);
+	MenuMusic["MainMenuTrack"]->play();
+	MenuMusic["MainMenuTrack"]->setLoop(true);
+}
+
+Menu* Menu::mInstance = NULL;
+Menu* Menu::getInstance()
+{
+	if(mInstance == NULL)
+		mInstance = new Menu();
+	return mInstance;
 }
 Menu::~Menu(){ }
+
+void Menu::setWindow(sf::RenderWindow& window)
+{
+	mWindow = &window;
+}
+
+sf::RenderWindow &Menu::getWindow()
+{
+	return *mWindow;
+}
+
+void Menu::saveConfig()
+{
+	tinyxml2::XMLDocument doc;
+	
+	//tinyxml2::XMLElement *config = doc.NewElement("Config");
+	//tinyxml2::XMLElement *window = doc.NewElement("Window");
+	//window->SetAttribute("mode", mWindowMode);
+	//config->InsertEndChild(window);
+
+	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
+	master->SetAttribute("value", sf::Listener::getGlobalVolume());
+	tinyxml2::XMLElement *windowMode = doc.NewElement("windowMode");
+	
+	doc.InsertEndChild(master);
+	doc.SaveFile("XML/Config.xml");
+}
+
+void Menu::loadConfig()
+{
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/Config.xml");
+
+	if(doc.Error())
+		std::cout << "error! unable to load configs";
+	
+	//tinyxml2::XMLElement *config = doc.FirstChildElement("Config");
+	//tinyxml2::XMLElement *window = config->FirstChildElement("Window");
+	//mWindowMode = atoi(window->Attribute("mode"));
+	tinyxml2::XMLElement *master = doc.FirstChildElement("MasterVolume");
+	sf::Listener::setGlobalVolume(atof(master->Attribute("value")));
+}
+
+//void Menu::setWindowMode()
+//{
+//	int mCount = 0;
+//	if(mCount %2 == 0)
+//		mWindowMode = sf::Style::Fullscreen;
+//	else
+//		mWindowMode = sf::Style::None;
+//
+//	mCount++;
+//}
+
+//int Menu::getWindowMode()
+//{
+//	return mWindowMode;
+//}
 
 void Menu::loadTeamAnimation()
 {
@@ -78,7 +144,7 @@ void Menu::clear()
 }
 
 
-void Menu:: update(sf::Event &event)
+void Menu::update(sf::Event &event)
 {
 	if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
 	{
@@ -267,57 +333,65 @@ void Menu::initialize()
 	loadWindowPosition();
 	loadMenuMusic();
 
-	/*Förälder-fönstret för alla menyer*/
 	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
 
 	/*Fönstret och dess barn för LOGOMENU*/
 	//mLogoMenuWindow		= GUIWindow::create(WindowPos["LogoScreen"], mParentWindow);
 
-
 	/*Fönstret och dess barn för SPLASHSCREEN*/
 	//mSplashScreenWindow = GUIWindow::create(WindowPos["SplashScreen"], mParentWindow);
 	//mSplashScreenWindow->setVisible(false);
 
-	/*Fönstret och dess barn för MAIN MENU*/
 	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
 	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
 	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
-	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
+	mSettingsButton[0]		= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
-	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
+	mExitButton[0]			= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
 	mMainMenuWindow->setVisible(false);
 
-	//InGameMenu with buttons. 
 	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"]);
 	mResumeGameButton		= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
 	mRestartGameButton		= GUIButton::create(ButtonPos["Restart"], mInGameMenuWindow);
 	mSaveGameButton			= GUIButton::create(ButtonPos["SaveGame"], mInGameMenuWindow);
+	mSettingsButton[1]		= GUIButton::create(ButtonPos["Settings"], mInGameMenuWindow);
+	mExitButton[1]			= GUIButton::create(ButtonPos["Exit"], mInGameMenuWindow);
 	mInGameMenuWindow->setVisible(false);
 
-	
-	/*Fönstret och dess barn för SETTINGS MENU*/
-	//mSettingsMenuWindow	= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
-	//mSettingsMenuWindow->setVisible(false);
+	mSettingsMenuWindow		= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
+	mVolumeText				= GUIText::create(sf::FloatRect(90, 120, 40, 40), "Volume: ", mSettingsMenuWindow);
+	mVolumeText->setColor(sf::Color::White);
+	mVolumeText->setAlignment("left");
+	mLowerVolume			= GUIButton::create(ButtonPos["LowerVolume"], mSettingsMenuWindow);
+	mRaiseVolume			= GUIButton::create(ButtonPos["RaiseVolume"], mSettingsMenuWindow);
+	mMuteSound				= GUIButton::create(ButtonPos["Mute"], mSettingsMenuWindow);
+	mWindowSizeText			= GUIText::create(sf::FloatRect(90, 260, 40, 40), "Fullscreen: ", mSettingsMenuWindow);
+	mWindowSizeText->setColor(sf::Color::White);
+	mWindowSizeText->setAlignment("left");
+	mCloseSettingsWindow	= GUIButton::create(ButtonPos["Esc"], mSettingsMenuWindow);
+	mWindowModeButton		= GUIButton::create(ButtonPos["Fullscreen"], mSettingsMenuWindow);
+	mSettingsMenuWindow->setVisible(false);
 
-	/*Fönstret och dess barn för CREDITS MENU*/
 	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"]);
 	mCreditsMenuWindow->setVisible(false);
 
-	/*Fönstret och dess barn för att välja lag*/
 	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
-	mTeamCommunist				= GUIButton::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
-	//mTeamCommunistIsPicked	= GUIButton::create(ButtonPos["TeamCommunistIsPressed"], mChooseTeamWindow);
-	mTeamCapitalist				= GUIButton::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+	mTeamCommunist				= GUIImage::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
+	mTeamCapitalist				= GUIImage::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
+
 	//mTeamCapitalistIsPicked	= GUIButton::create(ButtonPos["TeamCapitalistIsPressed"], mChooseTeamWindow);
-	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "'merica", false, mChooseTeamWindow);
-	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Soviet Union", false, mChooseTeamWindow);
+	mCapitalistNameField		= GUIEditField::create(sf::FloatRect(43 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
+	mCommunistNameField			= GUIEditField::create(sf::FloatRect(421 + 8, 269, 218, 41), GUIEditField::MENU, "Enter name here", false, mChooseTeamWindow);
+
 	mCapitalistNameField->setMaxCharacters(15);
 	mCommunistNameField->setMaxCharacters(15);
-	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkay"], mChooseTeamWindow);
-	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkay"].first.width, ButtonPos["CapitalistOkay"].first.height);
-	mCommunistOkayButton		= GUIButton::create(ButtonPos["CommunistOkay"], mChooseTeamWindow);
-	mCommunistOkayButton->setSize(ButtonPos["CommunistOkay"].first.width, ButtonPos["CommunistOkay"].first.height);
+	mCapitalistOkayButton		= GUIButton::create(ButtonPos["CapitalistOkayIsPressed"], mChooseTeamWindow);
+	mCapitalistOkayButton->setEnabled(false);
+	mCapitalistOkayButton->setSize(ButtonPos["CapitalistOkayIsPressed"].first.width, ButtonPos["CapitalistOkayIsPressed"].first.height);
+	mCommunistOkayButton		= GUIButton::create(ButtonPos["CommunistOkayIsPressed"], mChooseTeamWindow);
+	mCommunistOkayButton->setEnabled(false);
+	mCommunistOkayButton->setSize(ButtonPos["CommunistOkayIsPressed"].first.width, ButtonPos["CommunistOkayIsPressed"].first.height);
 	mChooseTeamWindow->setVisible(false);
 	
 	// Lan play ("Multi-player")
@@ -325,19 +399,11 @@ void Menu::initialize()
 	mLanPlayQuickConnect	= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
 	mLanPlayWindow->setVisible(false);
 
-
-	/*Lägger in fönstrerna i vektorn för GUIElement*/
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 	
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 }
 
- /*
-	Initierar lambda funktioner för GUIknapparna. Alltså vad som skall
-	hända då dessa har blivit tryckta på. 
-
-	  Av: Jon Wahlström  2013-01-29
-																	*/
 
 void Menu::tick()
 {
@@ -355,8 +421,8 @@ void Menu::tick()
 
 		int frame = progress * 149; //149 = number of frames in the animation
 		sf::Sprite sprite(mTeamAnimationFrames[frame]);
-		sprite.setPosition(mWindow.getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow.getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
-		mWindow.draw(sprite);
+		sprite.setPosition(mWindow->getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow->getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
+		mWindow->draw(sprite);
 	}
 }
 
@@ -390,21 +456,59 @@ void Menu::initializeGuiFuctions()
 	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
 	mLoadGameButton->setOnClickFunction([=]()			{ });
 	
-	mSettingsButton->setMouseEnterFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["SettingsHover"]); });
-	mSettingsButton->setMouseLeaveFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["Settings"]); });
-	mSettingsButton->setOnClickFunction([=]()			{ });
+	mSettingsButton[0]->setMouseEnterFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["SettingsHover"]); });
+	mSettingsButton[0]->setMouseLeaveFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["Settings"]); });
+	mSettingsButton[0]->setOnClickFunction([=]()			
+	{ 
+		mMainMenuWindow->setEnabled(false, true);
+		mSettingsMenuWindow->setVisible(true);
+		mSettingsMenuWindow->setEnabled(true, true);
+	});
 
-	mCreditsButton->setMouseEnterFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
-	mCreditsButton->setMouseLeaveFunction([=]()			{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
+	mSettingsButton[1]->setMouseEnterFunction([=]()		{ mSettingsButton[1]->setTexture(ButtonPos["SettingsHover"]); });
+	mSettingsButton[1]->setMouseLeaveFunction([=]()		{ mSettingsButton[1]->setTexture(ButtonPos["Settings"]); });
+	mSettingsButton[1]->setOnClickFunction([=]()			
+	{ 
+		mInGameMenuWindow->setEnabled(false, true);
+		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
+		mSettingsMenuWindow->setVisible(true);
+		mSettingsMenuWindow->setEnabled(true, true);
+	});
+
+	mLowerVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() - 10); });
+	mRaiseVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() + 10); });	
+	mMuteSound->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(0); });
+	mWindowModeButton->setOnClickFunction([=]()
+	{
+		fullscreen = !fullscreen;
+		mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", fullscreen ? sf::Style::Fullscreen : sf::Style::Resize|sf::Style::Close);
+		mWindow->setMouseCursorVisible(false);
+	});
+
+	mCloseSettingsWindow->setOnClickFunction([=]()		
+	{ 
+		mSettingsMenuWindow->setVisible(false);
+		mSettingsMenuWindow->setEnabled(false, true);
+		//mMainMenuWindow->setVisible(true); 
+		mMainMenuWindow->setEnabled(true, true);
+	});	
+
+	mCreditsButton->setMouseEnterFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
+	mCreditsButton->setMouseLeaveFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
 	
-	mCreditsButton->setOnClickFunction([=]()			{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
+	mCreditsButton->setOnClickFunction([=]()	{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
 	
-	mExitButton->setMouseEnterFunction([=]()			{ mExitButton->setTexture(ButtonPos["ExitHover"]); });
-	mExitButton->setMouseLeaveFunction([=]()			{ mExitButton->setTexture(ButtonPos["Exit"]); });
-	mExitButton->setOnClickFunction([=]()				{ mWindow.close(); });
+	mExitButton[0]->setMouseEnterFunction([=]()	{mExitButton[0]->setTexture(ButtonPos["ExitHover"]); });
+	mExitButton[0]->setMouseLeaveFunction([=]()	{ mExitButton[0]->setTexture(ButtonPos["Exit"]); });
+	mExitButton[0]->setOnClickFunction([=]()	{ mWindow->close(); });
+
+
+	mExitButton[1]->setMouseEnterFunction([=]()	{ mExitButton[1]->setTexture(ButtonPos["ExitHover"]); });
+	mExitButton[1]->setMouseLeaveFunction([=]()	{ mExitButton[1]->setTexture(ButtonPos["Exit"]); });
+	mExitButton[1]->setOnClickFunction([=]()	{ mWindow->close(); });
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
-	{ 
+	{
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -424,8 +528,37 @@ void Menu::initializeGuiFuctions()
 		}
 	});
 
+
+	mCapitalistNameField->setOnGuiChangeFunction([=]()	
+	{
+		if(!mCapitalistNameField->getText().empty())
+		{
+			mCapitalistOkayButton->setEnabled(true, true);
+			mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["CapitalistOkay"].second));
+		}
+		else
+		{
+			mCapitalistOkayButton->setEnabled(false, true);
+			mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["CapitalistOkayIsPressed"].second));
+		}
+	});
+
+	mCommunistNameField->setOnGuiChangeFunction([=]()	
+	{
+		if(!mCommunistNameField->getText().empty())
+		{
+			mCommunistOkayButton->setEnabled(true);
+			mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["CapitalistOkay"].second));
+		}
+		else
+		{
+			mCommunistOkayButton->setEnabled(false);
+			mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["CapitalistOkayIsPressed"].second));
+		}
+	});
+
 	mCommunistOkayButton->setOnClickFunction([=]()		
-	{ 
+	{
 		mCommunistTeamChosen = true;
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -439,7 +572,9 @@ void Menu::initializeGuiFuctions()
 			Timer::setTimer([=]()
 			{
 				_parentWindow->setVisible(false);
-				 _music.at("MainMenuTrack")->stop(); 
+
+				_music.at("MainMenuTrack")->stop(); 
+
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}
@@ -470,6 +605,7 @@ void Menu::initializeGuiFuctions()
 	mRestartGameButton->setMouseLeaveFunction([=]()			
 	{ 
 		mRestartGameButton->setTexture(ButtonPos["Restart"]); 
+		
 	});
 	mRestartGameButton->setOnClickFunction([=]()
 	{

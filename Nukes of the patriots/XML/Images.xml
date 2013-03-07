@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <images directory ="Capitalist">
-	<image filename="7_kom_pres.png"/>
 	<image filename="kap_texture_button_taxes.png"/>
 	<image filename="kap_texture_button_invert_taxes.png"/>
 	<image filename="kap_texture_button_resources.png"/>
@@ -10,29 +9,16 @@
 	<image filename="kap_texture_button_export.png"/>
 	<image filename="kap_texture_button_invert_export.png"/>
 	<image filename="kap_texture_button_ok.png"/>	
-	<image filename="7_kap_window_tax.png"/>
 	<image filename="kap_texture_button_cancel.png"/>
 	<image filename="kap_texture_button_yes.png"/>
 	<image filename="kap_texture_button_no.png"/>
-	<image filename="7_kap_window_res.png"/>
-	<image filename="7_kap_window_upg.png"/>
-	<image filename="7_kap_window_exp.png"/>
+
 	<image filename="kap_texture_button_plus.png"/>
 	<image filename="kap_texture_button_minus.png"/>
-	<image filename="button_no.png"/>
 	<image filename="kap_texture_button_smallupgrade.png"/>
-	<image filename="button_yes.png"/>
 	<image filename="kap_texture_button_endturn.png"/>
 	<image filename="kap_texture_button_invert_endturn.png"/>
-	<image filename="7_kap_window_president1.png"/>
-	<image filename="7_kap_window_president2.png"/>
-	<image filename="7_pr1.png"/>
-	<image filename="7_pr2.png"/>
-	<image filename="7_pr3.png"/>
 	<image filename="kap_texture_button_elect.png"/>
-	<image filename="button_ext.png" />
-	<image filename="button_prev.png" />
-	<image filename="7_kap_window_imp.png" />
 	<image filename="Capitalist_Window_Big.png"/>
 	<image filename="Capitalist_Window_Import_Export.png"/>
 	<image filename="Capitalist_Window_Small.png"/>
@@ -52,9 +38,9 @@
 	<image filename="nuclear_image.png"/>
 	<image filename="space_image.png"/>
 	<image filename="spy_image.png"/>
-	<image filename="nuclear_panel.png"/>
-	<image filename="space_panel.png"/>
-	<image filename="spy_panel.png"/>
+	<image filename="kap_nuke_upgrade.png"/>
+	<image filename="kap_space_upgrade.png"/>
+	<image filename="kap_spy_upgrade.png"/>
 	
 	<image filename="kap_texture_button_plus.png"/>
 	<image filename="kap_texture_button_plus5.png"/>
@@ -66,7 +52,29 @@
 	
 	<image filename="kap_texture_button_trade.png"/>
 	<image filename="kap_texture_button_invert_trade.png"/>
+	
+	<image filename="capitalist_frame.png"/>
+	<image filename="resources_normal.png"/>
+	<image filename="resources_pressed.png"/>
+	
+	<image filename="res_food_icon.png"/>
+	<image filename="res_goods_icon.png"/>
+	<image filename="res_tech_icon.png"/>
+	
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	
+	<image filename="taxes_normal.png"/>
+	<image filename="taxes_pressed.png"/>
+	
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
+	<image filename="kap_president_frame.png"/>
+	<image filename="kap_EndTurn_frame.png"/>
+	<image filename="kap_endturn_normal.png"/>
+	<image filename="kap_endturn_pressed.png"/>
 </images>
+
 <images directory ="Communist">
 	<image filename="kom_texture_button_plan.png"/>
 	<image filename="kom_texture_button_invert_plan.png"/>
@@ -76,36 +84,21 @@
 	<image filename="kom_texture_button_invert_upgrade.png"/>
 	<image filename="kom_texture_button_export.png"/>
 	<image filename="kom_texture_button_invert_export.png"/>
-	<image filename="7_kom_fiveYearPlan.png"/>
-	<image filename="7_kom_window_res.png"/>
-	<image filename="7_kom_window_upg.png"/>
-	<image filename="7_kom_window_exp.png"/>
-	<image filename="7_kom_window_imp.png" />
 	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
-	
+
 	<image filename="kom_texture_button_yes.png"/>
 	<image filename="kom_texture_button_no.png"/>
 	
-	<image filename="kom_texture_button_plus1.png"/>
+	<image filename="kom_texture_button_plus.png"/>
 	<image filename="kom_texture_button_plus5.png"/>
 	<image filename="kom_texture_button_plus10.png"/>
-
-	<image filename="kom_texture_button_minus1.png"/>
+	<image filename="kom_texture_button_minus.png"/>
 	<image filename="kom_texture_button_minus5.png"/>
 	<image filename="kom_texture_button_minus10.png"/>
-
-	<image filename="button_no.png"/>
 	<image filename="kom_texture_button_smallupgrade.png"/>
-	<image filename="button_yes.png"/>
-	<image filename="button_ext.png"/>
-	<image filename="button_prev.png"/>
-	<image filename="7_kom_window_propaganda1.png"/>
-	<image filename="7_kom_window_propaganda2.png"/>
 	<image filename="kom_texture_button_endturn.png"/>
 	<image filename="kom_texture_button_invert_endturn.png"/>
-	<image filename="7_kom_window_president1.png"/>
-	<image filename="7_kom_window_president2.png"/>
 	<image filename="kom_texture_button_elect.png"/>
 	<image filename="PropagandaFoodOne.png"/>
 	<image filename="PropagandaFoodTwo.png"/>
@@ -139,13 +132,27 @@
 	<image filename="nuclear_image.png"/>
 	<image filename="space_image.png"/>
 	<image filename="spy_image.png"/>
-	<image filename="nuclear_panel.png"/>
-	<image filename="space_panel.png"/>
-	<image filename="spy_panel.png"/>
-	
+	<image filename="kom_nuke_upgrade.png"/>
+	<image filename="kom_space_upgrade.png"/>
+	<image filename="kom_spy_upgrade.png"/>
 	<image filename="kom_texture_button_trade.png"/>
 	<image filename="kom_texture_button_invert_trade.png"/>
+	<image filename="kommunist_btns_placeholder.png"/>
+	<image filename="plan_normal.png"/>
+	<image filename="plan_pressed.png"/>
+	<image filename="propaganda_normal.png"/>
+	<image filename="propaganda_pressed.png"/>
+	<image filename="upgrade_normal.png"/>
+	<image filename="upgrade_pressed.png"/>
+	<image filename="trade_normal.png"/>
+	<image filename="trade_pressed.png"/>
+	
+	<image filename="kom_end_turn_frame.png"/>
+	<image filename="kom_president_frame.png"/>
+	<image filename="kom_endturn_normal.png"/>
+	<image filename="kom_endturn_pressed.png"/>
 </images>
+
 <images directory ="Menu">
     <image filename="Background.png"/>
     <image filename="5_bg.png"/>
@@ -185,6 +192,10 @@
 	<image filename="exit-poster-red.png"/>
 	<image filename="lan_window_background.png" />
 	<image filename="lan_quick_connect.png" />
+	
+	<image filename="Lower.png"/>
+	<image filename="Raise.png"/>
+	<image filename="Esc.png"/>
 </images>
 <images directory="President">
 	<image filename="president-Blingfaster.png"/>

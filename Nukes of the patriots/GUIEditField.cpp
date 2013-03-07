@@ -16,8 +16,9 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	mFont(sf::Font::getDefaultFont()),mRenderTexture(),mCaretVisible(true),mCaretIndex(0),mCaretShape(sf::Vector2f(0.0, 0.0)),mSelectedCaret(-1),mSelectedShape(sf::Vector2f(0.0, 0.0)),
 	mOnlyNumbers(onlyNumbers),mOffsetX(1),mOffsetY(1),mMaxCharacters(0)
 {
-	mFont.loadFromFile("Font/georgia.ttf");
+	mFont.loadFromFile("Font/MyriadPro-Regular.otf");
 	mText.setFont(mFont);
+	mPlaceHolderText.setFont(mFont);
 	sf::Texture *texture;
 	switch(type)
 	{
@@ -47,9 +48,10 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 	rect.width = (rect.width == 0) ? (*texture).getSize().x : rect.width;
 	rect.height = (rect.height == 0) ? (*texture).getSize().y : rect.height;
 	mSprite.setScale(scaleX, scaleY);
-	mText.setFont(mFont);
-	mText.setString(sf::String(text.c_str()));
+	mText.setString("");
+	mPlaceHolderText.setString(sf::String(text.c_str()));
 	mText.setScale(scaleY, scaleY);
+	mPlaceHolderText.setScale(scaleY, scaleY);
 	//sf::FloatRect boundBox = mText.getGlobalBounds();
 	//setWidth(static_cast<int>(boundBox.width));
 	//setHeight(static_cast<int>(boundBox.height));
@@ -58,6 +60,11 @@ GUIEditField::GUIEditField(sf::FloatRect rect, Type type, std::string text, bool
 bool GUIEditField::getCaretVisible()
 {
 	return mCaretVisible;
+}
+
+void GUIEditField::setPlaceHolderText(std::string string)
+{
+	mPlaceHolderText.setString(string.c_str());
 }
 
 void GUIEditField::setCaretVisible(bool visible)
@@ -102,6 +109,10 @@ bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 	mText.setColor(sf::Color::Color(255, 255, 255, 255));
 	//mRenderTexture.draw(mSprite);
 	mRenderTexture.draw(mText, states);
+	if(mPlaceHolderText.getString().getSize() > 0 && mText.getString().getSize() == 0 && !mSelected)
+	{
+		mRenderTexture.draw(mPlaceHolderText, states);
+	}
 	if(isSelected())
 	{
 		if(mSelectedCaret != -1)
@@ -256,7 +267,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				mSelectedCaret = -1;
 			}
 		}
-		if(event.type == sf::Event::TextEntered && (mMaxCharacters == 0 || getText().size() < mMaxCharacters))
+		if(event.type == sf::Event::TextEntered)
 		{
 			mCaretTimer->resetTimer();
 			mCaretVisible = true;
@@ -266,6 +277,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				if(event.text.unicode < 128 && event.text.unicode != 13 && event.text.unicode != 8)
 				{
 					sf::String str = mText.getString();
+					if(mCaretIndex > str.getSize())
+						mCaretIndex = str.getSize();
 					if(mSelectedCaret != -1)
 					{
 						int characters = mSelectedCaret - mCaretIndex;
@@ -276,7 +289,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 							mCaretIndex -= std::abs(characters);
 						str.insert(mCaretIndex, key);
 					}
-					else
+					else if(mMaxCharacters == 0 || str.getSize() < mMaxCharacters)
 						str.insert(mCaretIndex, key);
 					mCaretIndex++;
 					mText.setString(str);
@@ -315,6 +328,8 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 			mSelectedCaret = newCaret;
 			if(mSelectedCaret == mCaretIndex)
 				mSelectedCaret = -1;
+			if(mCaretIndex > str.getSize())
+				mCaretIndex = str.getSize();
 		}
 	}
 	GUIElement::update(window, event);

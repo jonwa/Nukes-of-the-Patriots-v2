@@ -54,6 +54,8 @@ public:
 
 	void										init(int year);
 private:
+
+
 	static GameManager* mInstance;
 	GameManager();
 	GameManager(const GameManager&){}

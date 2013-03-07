@@ -29,6 +29,8 @@ class Communist;
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
 
+#include "Sound.h"
+
 class Capitalist : public SuperPower 
 {
 public:
@@ -89,15 +91,12 @@ private:
 	std::shared_ptr<President> mSecondPresident;
 	int	mPickedPresident;
 
-	/*Skapar två std::map. En dit alla knappar för kapitalisternas läggs in i samt 
-	  en dit alla kapitalisternas fönster läggs in i. Detta sker via hämtade värden
-	  från XML dokument samt genom ResourceHandler  
-	  Av: Jon Wahlström 2013-01-31
-																				*/
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistButtons;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > CapitalistWindows;
 	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
+	std::shared_ptr<Sound> mCapitalistMainTheme; // capitalist main theme music
+
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void loadCapitalistMusic();
@@ -121,6 +120,8 @@ private:
 	std::shared_ptr<GUIText> mPatriotismText;
 
 	std::shared_ptr<GUIText> mStatsText[2][9];
+
+	std::shared_ptr<GUIText> mWindowHeadlines[6];
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -144,14 +145,16 @@ private:
 	/*GUI-pekare för kapitalisternas interface*/
 	std::shared_ptr<GUIWindow> mCapitalistMainWindow;
 	std::shared_ptr<GUIWindow> mCapitalistBorder;
+	std::shared_ptr<GUIWindow> mCapitalistButtonFrame;
 	std::shared_ptr<GUIWindow> mCapitalistBorderTop;
+	std::shared_ptr<GUIImage>  mPresidentFrame;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
-	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
 	std::shared_ptr<GUIButton> mCapitalistResourceButton;	
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCapitalistTradeButton;	
 	/*GUI-pekare för end turn*/
+	std::shared_ptr<GUIImage>  mEndTurnFrame;
 	std::shared_ptr<GUIButton> mCapitalistEndTurnButton;
 
 	/*GUI-pekare för taxes */
@@ -207,9 +210,8 @@ private:
 	
 	/*GUI-pekare för export*/
 	std::shared_ptr<GUIWindow> mExportWindow;
+	std::shared_ptr<GUIText> mExportQuantityLabel, mExportCostLabel, mExportPriceLabel, mExportTotalPriceLabel, mExportTotalPriceValue;
 	std::shared_ptr<GUIText> mExportPriceText[3];
-	std::shared_ptr<GUIText> mExportTotalPriceText[3];
-	std::shared_ptr<GUIText> mExportTotalPriceAllText;
 	std::shared_ptr<GUIImage> mExportQuantityBackground[3];
 	std::shared_ptr<GUIText> mExportQuantityText[3];
 	std::shared_ptr<GUIButton> mExportButtonMinus[3][3];
@@ -220,23 +222,29 @@ private:
 	std::shared_ptr<GUIButton> mExportConfirmButton;
 
 	std::shared_ptr<GUIWindow> mImportWindow;
+	std::shared_ptr<GUIText> mImportResourceLabel, mImportPriceLabel, mImportQuantityLabel, mImportCostLabel, mImportTotalCostLabel;
+	std::shared_ptr<GUIText> mImportTotalCostText;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
 	std::shared_ptr<GUIText> mImportBuyQuantityText[3];
 	std::shared_ptr<GUIImage> mImportBuyQuantityBackground[3];
 	std::shared_ptr<GUIText> mImportPriceText[3];
 	std::shared_ptr<GUIText> mImportTotalPriceText[3];
-	std::shared_ptr<GUIText> mImportTotalPriceAllText;
 	std::shared_ptr<GUIButton> mImportBuyButtonMinus[3][3];
 	std::shared_ptr<GUIButton> mImportBuyButtonPlus[3][3];
 	std::shared_ptr<GUIButton> mImportGotoExportButton;
 
+	std::shared_ptr<GUIWindow> mExportedResourcesWindow;
+	std::shared_ptr<GUIButton> mCloseExportedResourceWindow;
+	std::shared_ptr<GUIText>   mResourcesExportedText[3];
+	std::shared_ptr<GUIText>   mExportedIncomeText;
+
 	std::shared_ptr<GUIWindow> mChoosePresidentWindow;
 	std::shared_ptr<GUIWindow> mPickedPresidentWindow;
-	std::shared_ptr<GUIButton>  mFirstPresidentButton;
+	std::shared_ptr<GUIImage>  mFirstPresidentButton;
 	std::shared_ptr<GUIButton> mFirstPresidentPlaque;
-	std::shared_ptr<GUIButton>  mSecondPresidentButton;
+	std::shared_ptr<GUIImage>  mSecondPresidentButton;
 	std::shared_ptr<GUIButton> mSecondPresidentPlaque;
-	std::shared_ptr<GUIButton>  mPickedPresidentButton;
+	std::shared_ptr<GUIImage>  mPickedPresidentButton;
 	std::shared_ptr<GUIImage> mPickedPresidentPlaque;
 	std::shared_ptr<GUIButton> mClosePresidentWindow;
 	std::shared_ptr<GUIButton> mClosePickedPresidentWindow;

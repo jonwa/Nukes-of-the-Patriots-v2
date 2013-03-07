@@ -32,7 +32,8 @@ void ResourceHandler::loadTexture(const std::string &path, const std::string &ke
 {
 	if(Images.count(key) == NULL)
 	{
-		Images[key].loadFromFile(path);
+		if(!Images[key].loadFromFile(path))
+			std::cout<<"Failed to load image: "<<path<<std::endl;
 	}
 }
 

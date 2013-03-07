@@ -27,6 +27,7 @@ private:
 	sf::Text mText;
 	sf::Font mFont;
 	std::string mAlignment;
+	sf::FloatRect mOriginRectangle;
 };
 
 #endif

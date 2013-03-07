@@ -30,6 +30,7 @@ private:
 	GUIButton& operator=(const GUIButton &guiButton);
 	sf::Sprite mSprite;
 	bool mCanClick;
+	static sf::Shader *mGlowEffect;
 	std::shared_ptr<sf::Music> mOnClickSound;
 	std::shared_ptr<sf::Music> mFailedSound;
 	std::shared_ptr<sf::Music> mSuccessSound;

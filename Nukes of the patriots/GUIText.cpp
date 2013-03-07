@@ -12,16 +12,19 @@ std::shared_ptr<GUIText> GUIText::create(sf::FloatRect rect, std::string text, s
 GUIText::GUIText(sf::FloatRect rect, std::string text, std::shared_ptr<GUIElement> parent) :
 	GUIElement(rect, parent, TEXT),
 	mAlignment("left"),
-	mFont(sf::Font::getDefaultFont())
+	mFont(sf::Font::getDefaultFont()),
+	mOriginRectangle(rect)
 {
-	mFont.loadFromFile("Font/georgia.ttf");
+	mFont.loadFromFile("Font/MyriadPro-Regular.otf");
 	mText.setFont(mFont);
 	mText.setString(text);
 	mText.setColor(sf::Color::Black);
 
+	mColor = mText.getColor();
 	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+	mOriginRectangle = boundBox;
 }
 
 void GUIText::setText(std::string text)
@@ -45,6 +48,7 @@ void GUIText::setText(int value)
 	sf::FloatRect boundBox = mText.getLocalBounds();
 	setWidth(boundBox.width);
 	setHeight(boundBox.height);
+	mOriginRectangle = boundBox;
 }
 
 void GUIText::setScale(float width, float height)
@@ -57,12 +61,9 @@ void GUIText::setScale(float width, float height)
 
 void GUIText::setSize(float width, float height)
 {
-	/*float scaleX = width / mText.getLocalBounds().width;
-	float scaleY = height / mText.getLocalBounds().height;
-	std::cout << "Scale X: " << scaleX << " Scale Y: " << scaleY << std::endl;
-	mText.setScale(scaleX, scaleY);
-	setWidth(width);
-	setHeight(height);*/
+	/*float scaleX = width / mOriginRectangle.width;
+	float scaleY = height / mOriginRectangle.height;
+	setScale(scaleX, scaleY);*/
 }
 
 bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
@@ -86,17 +87,17 @@ bool GUIText::render(sf::RenderWindow *window, sf::RenderStates &states)
 		if(mAlignment == "left")
 		{
 			mText.setPosition(getX(), getY());
-			//mText.setOrigin(mText.getGlobalBounds().width, mText.getGlobalBounds().height);
+			mText.setOrigin(0, 0);
 		}
 		else if(mAlignment == "middle")
 		{
 			mText.setPosition(getX(), getY());
-			mText.setOrigin(mText.getLocalBounds().width/2, mText.getLocalBounds().height);
+			mText.setOrigin(mText.getLocalBounds().width/2, 0);
 		}
 		else if(mAlignment == "right")
 		{
 			mText.setPosition(getX(), getY());
-			mText.setOrigin(mText.getLocalBounds().width, mText.getLocalBounds().height);
+			mText.setOrigin(mText.getLocalBounds().width, 0);
 		}
 
 		window->draw(mText, states);

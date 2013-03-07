@@ -9,6 +9,14 @@
 		<image></image>
 	</window>
 	<window>
+		<name>InterfaceButtonsFrame</name>
+		<xPos>112</xPos>
+		<yPos>636</yPos>
+		<width>800</width>
+		<height>132</height>
+		<image>Capitalist/capitalist_frame</image>
+	</window>
+	<window>
 		<name>CapitalistTaxesWindow</name>
 		<xPos>227</xPos>
 		<yPos>264</yPos>
@@ -19,15 +27,15 @@
 	<window>
 		<name>CapitalistResourceWindow</name>
 		<xPos>227</xPos>
-		<yPos>264</yPos>
+		<yPos>279</yPos>
 		<width>570</width>
-		<height>168</height>
-		<image>Capitalist/Capitalist_Window_Small</image>
+		<height>334</height>
+		<image>Capitalist/Capitalist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>CapitalistUpgradeWindow</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Capitalist/Capitalist_Window_Big</image>
@@ -51,7 +59,7 @@
 	<window>
 		<name>ChoosePresident</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Capitalist/Capitalist_Window_Big</image>
@@ -59,7 +67,7 @@
 	<window>
 		<name>PickedPresident</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Capitalist/Capitalist_Window_Big</image>
@@ -97,6 +105,14 @@
 		<image>Capitalist/Capitalist_Window_Small</image>
 	</window>
 	<window>
+		<name>ExportedResourcesIncome</name>
+		<xPos>227</xPos>
+		<yPos>264</yPos>
+		<width>570</width>
+		<height>168</height>
+		<image>Capitalist/Capitalist_Window_Small</image>
+	</window>
+	<window>
 		<name>IncreasedResources</name>
 		<xPos>227</xPos>
 		<yPos>264</yPos>
@@ -107,7 +123,7 @@
 	<window>
 		<name>PopulationEatsFood</name>
 		<xPos>227</xPos>
-		<yPos>79</yPos>
+		<yPos>73</yPos>
 		<width>570</width>
 		<height>534</height>
 		<image>Capitalist/Capitalist_Window_Big</image>

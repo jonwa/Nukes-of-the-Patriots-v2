@@ -14,6 +14,9 @@
 #include "AnimationHandler.h"
 #include "Menu.h"
 
+static int width = 1024;
+static int height = 768;
+
 GameManager* GameManager::mInstance = NULL;
 
 GameManager* GameManager::getInstance()
@@ -39,7 +42,6 @@ GameManager::~GameManager()
 	
 }
 
-
 void GameManager::reset()
 {
 	mRound = 0;
@@ -64,7 +66,7 @@ void GameManager::init(int year)
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
-		mYearText = GUIText::create(sf::FloatRect(512, 18, 0, 0), intToString(mYear));
+		mYearText = GUIText::create(sf::FloatRect(512, 4, 0, 0), intToString(mYear));
 		mYearText->setScale(0.6, 0.6);
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);
@@ -91,8 +93,6 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 		//startRound();
 		mLoaded = true;
 	}
@@ -108,9 +108,12 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 	}
+
+	mCurrentPlayer->setRound(1);
+	mCurrentPlayer->showGUI();
+	//startRound();
+
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()
@@ -210,24 +213,25 @@ void GameManager::addSuperPower(std::shared_ptr<SuperPower> power)
 
 void GameManager::startRound()
 {
+	/*
 	int moneyIntFood = 0;
 	int moneyIntGoods = 0;
 	int moneyIntTech = 0;
 	// Money internationally should be equal to everybodies money together
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
-		moneyIntFood += (*it)->getCurrency();
-		moneyIntGoods += (*it)->getCurrency();
-		moneyIntTech += (*it)->getCurrency();
+		moneyIntFood += (*it)->getPopulation();
+		moneyIntGoods += (*it)->getPopulation();
+		moneyIntTech += (*it)->getPopulation();
 	}
 	int foodBought = 0;
 	int goodsBought = 0;
 	int techBought = 0;
 	int exports = 0;
 	// if nobody bought my exports - then it will be sold internationally
-	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 0 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
-	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
-	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 0 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
+	foodBought = (mCurrentPlayer->getExportedFood() == 0 || mCurrentPlayer->getExportedFoodPrice() == 0) ? 1 : moneyIntFood / mCurrentPlayer->getExportedFoodPrice();
+	goodsBought = (mCurrentPlayer->getExportedGoods() == 0 || mCurrentPlayer->getExportedGoodsPrice() == 0) ? 1 : moneyIntGoods / mCurrentPlayer->getExportedGoodsPrice();
+	techBought =(mCurrentPlayer->getExportedTech() == 0 || mCurrentPlayer->getExportedTechPrice() == 0) ? 1 :  moneyIntTech / mCurrentPlayer->getExportedTechPrice();
 	//// if international market tries to buy more resources than you have
 	if(foodBought > mCurrentPlayer->getExportedFood()) foodBought = mCurrentPlayer->getExportedFood();
 	if(goodsBought > mCurrentPlayer->getExportedGoods()) goodsBought = mCurrentPlayer->getExportedGoods();
@@ -237,6 +241,7 @@ void GameManager::startRound()
 	mCurrentPlayer->setExportedGoods(mCurrentPlayer->getExportedGoods() - goodsBought);
 	mCurrentPlayer->setExportedTech(mCurrentPlayer->getExportedTech() - techBought);
 	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
+	*/
 
 	mCurrentPlayer->update();
 
@@ -322,6 +327,12 @@ void GameManager::nextRound()
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
 			(*it)->newYearStart();
+		}
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+		{
+			(*it)->setExportedFoodSold(0);
+			(*it)->setExportedGoodsSold(0);
+			(*it)->setExportedTechSold(0);
 		}
 		updateStatsWindow();
 
@@ -574,4 +585,4 @@ void GameManager::initializeGuiFunctions()
 		startRound();
 	});
 }
-	
+
