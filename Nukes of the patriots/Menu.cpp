@@ -31,18 +31,11 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(true)
 { 
-	//mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
-	Event::addEventHandler("serverAwaitingConnection", [=](sf::Packet packet)
-	{
-		char serverAddress[1024];
-		unsigned short serverPort;
-		packet>>serverAddress>>serverPort;
-		std::cout<<"Server open: "<<serverAddress<<" port: "<<serverPort<<std::endl;
-		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
-	});
+	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString();
-	//mUdpClient->triggerServerEvent("onPlayerConnect", packet);
+	mUdpClient->triggerServerEvent("onPlayerConnect", packet);
+	mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.11.161.227"));
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
