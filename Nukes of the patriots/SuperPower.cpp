@@ -185,33 +185,37 @@ void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 		Den används sedan för att ge möjligheten att betala en viss summa för att öka befolkningen*/
 	if(enoughFood())
 	{
+		mPopulation++;
 		if(mCurrency >= mPopulation)
 		{
 			mIncreasePopulation = true;
-			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation + 1) +" million.\n\n"
-				"Do you want to stimulate the population growth\nfor " + intToString(mPopulation + 1) + " §?");
+			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.\n\n"
+				"Do you want to stimulate the population growth\nfor " + intToString(mPopulation) + " §?");
 		}
 		else
-			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation + 1) +" million.");
+			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.");
+		
 	}
 	/*	Om mängden mat är mindre än häflten av befolkningen tilldelas mFood noll
 		mPatriotism subtraheras även med två*/
 	else if(mFood == 0)
 	{
 		text->setText("There is no food at all for the population.\n\nThis is upsetting.");
-		
+		mIncreasePopulation = false;
 	}
 	/*	Om det inte finns tillräckligt med mat och mFood inte är lika med noll
 		ökar inte patriotismen men mFood tilldelas noll*/
 	else if(mFood > mPopulation / 2)
 	{
 		text->setText("There is not quite enough food for \nthe population.");
+		mIncreasePopulation = false;
 	}
 	/*	Om inga av det överstående stämmer, innebär det att maten är lika med noll och befolkningen inte fått någon mat
 		Detta ger minus fyra i patriotism*/
 	else
 	{
 		text->setText("There is very little food for the population.\n\nThey starve and grumble.");
+		mIncreasePopulation = false;
 	}
 }
 /*Kontrollerar ifall det är möjligt att öka sin population*/
