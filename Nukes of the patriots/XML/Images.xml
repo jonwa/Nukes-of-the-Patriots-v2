@@ -12,6 +12,8 @@
 	<image filename="kap_texture_button_ok.png"/>	
 	<image filename="7_kap_window_tax.png"/>
 	<image filename="kap_texture_button_cancel.png"/>
+	<image filename="kap_texture_button_yes.png"/>
+	<image filename="kap_texture_button_no.png"/>
 	<image filename="7_kap_window_res.png"/>
 	<image filename="7_kap_window_upg.png"/>
 	<image filename="7_kap_window_exp.png"/>
@@ -81,6 +83,9 @@
 	<image filename="7_kom_window_imp.png" />
 	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
+	
+	<image filename="kom_texture_button_yes.png"/>
+	<image filename="kom_texture_button_no.png"/>
 	
 	<image filename="kom_texture_button_plus1.png"/>
 	<image filename="kom_texture_button_plus5.png"/>

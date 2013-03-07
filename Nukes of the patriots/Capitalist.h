@@ -159,6 +159,7 @@ private:
 	std::shared_ptr<GUIButton> mLowerTaxesButton;
 	std::shared_ptr<GUIText>   mTaxValueText;
 	std::shared_ptr<GUIText>   mTaxText;
+	std::shared_ptr<GUIText>   mTaxesPatriotismChange;
 	std::shared_ptr<GUIButton> mRaiseTaxesButton;
 	std::shared_ptr<GUIButton> mTaxesCloseButton;
 	/*GUI-pekare för resources*/
@@ -255,6 +256,7 @@ private:
 	std::shared_ptr<GUIText>   mCapitalistHeadLine;
 
 	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mNewPatriotism;
 	std::shared_ptr<GUIText>   mPopulationChange;
 	std::shared_ptr<GUIText>   mFoodChange;
 	std::shared_ptr<GUIText>   mTechChange;
@@ -287,6 +289,8 @@ private:
 	std::shared_ptr<GUIWindow> mPopulationEatsFoodWindow;
 	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
 	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
+	std::shared_ptr<GUIButton> mDoIncreasePopulation;
+	std::shared_ptr<GUIButton> mDoNotIncreasePopulation;
 
 	std::shared_ptr<GUIImage>  mFoodImage[3];
 	std::shared_ptr<GUIImage>  mGoodsImage[3];

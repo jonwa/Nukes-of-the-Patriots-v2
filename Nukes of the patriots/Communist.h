@@ -182,6 +182,7 @@ private:
 	std::shared_ptr<GUIText>      mFiveYearTotalCostText;
 	std::shared_ptr<GUIText>	  mFiveYearIncomeText;
 	std::shared_ptr<GUIText>	  mFiveYearTaxText;
+	std::shared_ptr<GUIText>	  mTaxesPatriotismChange;
 
 	std::shared_ptr<GUIText>	  mYearOneFoodCost;
 	std::shared_ptr<GUIText>	  mYearTwoFoodCost;
@@ -278,7 +279,7 @@ private:
 
 	std::shared_ptr<GUIWindow> mChooseGeneralWindow;
 	std::shared_ptr<GUIWindow> mPickedGeneralWindow;
-	std::shared_ptr<GUIButton>  mPickedGeneralButton;
+	std::shared_ptr<GUIButton> mPickedGeneralButton;
 
 	std::shared_ptr<GUIButton> mFirstGeneralButton;
 	std::shared_ptr<GUIButton> mFirstGeneralPlaque;
@@ -289,12 +290,13 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-	std::shared_ptr<GUIImage> mLeftPanel;
-	std::shared_ptr<GUIImage> mRightPanel;
+	std::shared_ptr<GUIImage>  mLeftPanel;
+	std::shared_ptr<GUIImage>  mRightPanel;
 
-	std::shared_ptr<GUIText>    mCommunistHeadLine;
+	std::shared_ptr<GUIText>   mCommunistHeadLine;
 
 	std::shared_ptr<GUIText>   mPatriotismChange;
+	std::shared_ptr<GUIText>   mNewPatriotism;
 	std::shared_ptr<GUIText>   mPopulationChange;
 	std::shared_ptr<GUIText>   mFoodChange;
 	std::shared_ptr<GUIText>   mTechChange;
@@ -329,6 +331,8 @@ private:
 	std::shared_ptr<GUIWindow> mPopulationEatsFoodWindow;
 	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
 	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
+	std::shared_ptr<GUIButton> mDoIncreasePopulation;
+	std::shared_ptr<GUIButton> mDoNotIncreasePopulation;
 
 	std::shared_ptr<GUIImage>  mFoodImage[3];
 	std::shared_ptr<GUIImage>  mGoodsImage[3];

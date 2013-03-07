@@ -25,6 +25,7 @@ static int foodCost		= 10;
 static int goodsCost	= 20;
 static int techCost		= 30;
 static int taxChange	= 5;
+static int taxPatriotismChange = 0;
 static int currentGoods = 0;
 static int currentTech  = 0;
 static bool activateWindow = false;
@@ -323,6 +324,9 @@ void Capitalist::newYearStart()
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + exportedChange + (spaceProgramIncreased ? 1 : 0);
 	mPatriotism += totalPatriotismChange;
+
+	mPatriotismChange->setText("Total patriotism change: " + intToString(totalPatriotismChange));
+	mNewPatriotism->setText("Total patriotism: " + intToString(mPatriotism));
 }
 
 void Capitalist::update()
@@ -408,6 +412,7 @@ void Capitalist::setPresident(std::shared_ptr<President> president)
 	foodCost	+= president->getFoodPriceModifier();
 	goodsCost	+= president->getGoodsPriceModifier();
 	techCost	+= president->getTechPriceModifier();
+	taxPatriotismChange = president->getPatriotismTaxModifier();
 	if(foodCost < 1)foodCost = 1;
 	if(goodsCost < 1)goodsCost = 1;
 	if(techCost < 1)techCost = 1;
@@ -461,15 +466,12 @@ bool Capitalist::upgradeNuclearWeapon(int value)
 	int goodsNuclearPrice = 10 * mPresident->getNuclearPriceModifier() * value;
 	int techNuclearPrice = 5 * mPresident->getNuclearPriceModifier() * value;
 	
-	if(mGoods >= goodsNuclearPrice && mTech >= techNuclearPrice)
-	{
-		mNuclearWeapon += value;
-		mGoods -= goodsNuclearPrice;
-		mTech -= techNuclearPrice;
-		mNuclearText->setText(mNuclearWeapon);
-		return true;
-	}
-	return false;
+	mNuclearWeapon += value;
+	mGoods -= goodsNuclearPrice;
+	mTech -= techNuclearPrice;
+	mNuclearText->setText(mNuclearWeapon);
+	
+	return true;
 }
 
 /*	
@@ -486,15 +488,13 @@ bool Capitalist::upgradeSpaceProgram(int value)
 		goodsSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 5 * mPresident->getSpacePriceModifier();
 		techSpaceProgramPrice += (stringToInt(mSpaceText->getText()) + i + 1) * 10 * mPresident->getSpacePriceModifier();
 	}
-	if(mGoods >= goodsSpaceProgramPrice && mTech >= techSpaceProgramPrice)
-	{
-		mSpaceProgram += value;
-		mGoods -= goodsSpaceProgramPrice;
-		mTech -= techSpaceProgramPrice;
-		mSpaceText->setText(mSpaceProgram);
-		return true;
-	}
-	return false;
+	
+	mSpaceProgram += value;
+	mGoods -= goodsSpaceProgramPrice;
+	mTech -= techSpaceProgramPrice;
+	mSpaceText->setText(mSpaceProgram);
+	
+	return true;
 }
 
 /*	
@@ -509,14 +509,11 @@ bool Capitalist::upgradeSpyNetwork(int value)
 		spyNetworkPrice = (stringToInt(mSpyText->getText()) + i + 1) * 10 * mPresident->getSpyPriceModifier();
 	}
 
-	if(mTech >= spyNetworkPrice)
-	{
-		mSpyNetwork += value;
-		mTech -= spyNetworkPrice;
-		mSpyText->setText(mSpyNetwork);
-		return true;
-	}
-	return false;
+	mSpyNetwork += value;
+	mTech -= spyNetworkPrice;
+	mSpyText->setText(mSpyNetwork);
+	
+	return true;
 }
 
 
@@ -754,6 +751,8 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxValueText->setAlignment("middle");
 	mTaxText							= GUIText::create(sf::FloatRect(105, 38, 0, 0), "Tax", mTaxesWindow);
 	mTaxText->setAlignment("middle");
+	mTaxesPatriotismChange				= GUIText::create(sf::FloatRect(230, 50, 0, 0), "Patriotism: 0", mTaxesWindow);
+	mTaxesPatriotismChange->setScale(0.8, 0.8);
 
 	mRaiseTaxesButton					= GUIButton::create(CapitalistButtons["RaiseTaxes"], mTaxesWindow);
 	mTaxesCloseButton					= GUIButton::create(CapitalistButtons["CloseTaxes"], mTaxesWindow);
@@ -994,6 +993,14 @@ void Capitalist::initializeCapitalistWindow()
 	mTaxChangeValue	= GUIText::create(sf::FloatRect(350, statsPosY, 0, 0), "0", statsWindow);
 	mTaxChangeValue->setAlignment("left");
 	mTaxChangeValue->setScale(0.5, 0.5);
+	statsPosY += mTaxChange->getHeight();
+
+	mPatriotismChange					= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
+	mPatriotismChange->setScale(0.5, 0.5);
+	statsPosY += mPatriotismChange->getHeight();
+
+	mNewPatriotism						= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "", statsWindow);
+	mNewPatriotism->setScale(0.5, 0.5);
 
 	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 290, 0, 0), "", mPickedPresidentWindow);
 	mPresidentBiography->setScale(0.6, 0.6);
@@ -1051,6 +1058,8 @@ void Capitalist::initializeCapitalistWindow()
 	mPopulationEatsFoodText->setScale(0.8, 0.8);
 	mPopulationEatsFoodText->setAlignment("left");
 	mClosePopulationEatsFoodWindow		= GUIButton::create(CapitalistButtons["ClosePopulationEatsFood"], mPopulationEatsFoodWindow);
+	mDoIncreasePopulation				= GUIButton::create(CapitalistButtons["IncreasePopulation"], mPopulationEatsFoodWindow);
+	mDoNotIncreasePopulation			= GUIButton::create(CapitalistButtons["DoNotIncreasePopulation"], mPopulationEatsFoodWindow);
 	mPopulationEatsFoodWindow->setVisible(false);
 
 	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(23, 20, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/food_image"))), mResourceWindow);
@@ -1163,7 +1172,13 @@ void Capitalist::initializeGuiFunctions()
 	{
 		int newTax = stringToInt(mTaxValueText->getText()) - 5;
 		if(newTax < mTaxesPreviousRound - 5)
+		{
 			newTax = mTaxesPreviousRound - 5;
+		}
+		if(newTax < mTaxesPreviousRound)
+			mTaxesPatriotismChange->setText("Patriotism: +" + intToString(2 + taxPatriotismChange));
+		else
+			mTaxesPatriotismChange->setText("Patriotism: 0");
 		if(newTax < 0)
 			newTax = 0;
 		mTaxValueText->setText(newTax);
@@ -1173,7 +1188,13 @@ void Capitalist::initializeGuiFunctions()
 	{
 		int newTax = stringToInt(mTaxValueText->getText()) + 5;
 		if(newTax > mTaxesPreviousRound + 5)
+		{
 			newTax = mTaxesPreviousRound + 5;
+		}
+		if(newTax > mTaxesPreviousRound)
+			mTaxesPatriotismChange->setText("Patriotism: -3");
+		else
+			mTaxesPatriotismChange->setText("Patriotism: 0");
 		if(newTax > 95)
 			newTax = 95;
 		mTaxValueText->setText(newTax);
@@ -1973,6 +1994,33 @@ void Capitalist::initializeGuiFunctions()
 		updateFood(mPopulationEatsFoodText);
 
 		mPopulationEatsFoodWindow->setVisible(true);
+		if(mIncreasePopulation)
+		{
+			mClosePopulationEatsFoodWindow->setVisible(false);
+		}
+		else
+		{
+			mDoIncreasePopulation->setVisible(false);
+			mDoNotIncreasePopulation->setVisible(false);
+		}
+	});
+
+	mDoIncreasePopulation->setOnClickFunction([=]()
+	{
+		mCurrency -= mPopulation;
+		mPopulation += 1;
+		mPopulationEatsFoodText->setText("Population increased from " + intToString(mPopulation - 1) + " to " + intToString(mPopulation));
+		mDoIncreasePopulation->setVisible(false);
+		mDoNotIncreasePopulation->setVisible(false);
+		mClosePopulationEatsFoodWindow->setVisible(true);
+	});
+
+	mDoNotIncreasePopulation->setOnClickFunction([=]()
+	{
+		mPopulationEatsFoodText->setText("The population stays the same");
+		mDoIncreasePopulation->setVisible(false);
+		mDoNotIncreasePopulation->setVisible(false);
+		mClosePopulationEatsFoodWindow->setVisible(true);
 	});
 
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
