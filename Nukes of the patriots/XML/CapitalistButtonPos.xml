@@ -395,7 +395,7 @@
 	<button>
 		<name>FirstPresident</name>
 		<xPos>63</xPos>
-		<yPos>22</yPos>
+		<yPos>60</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image>President/president-Blingfaster</image>
@@ -403,7 +403,7 @@
 	<button>
 		<name>SecondPresident</name>
 		<xPos>327</xPos>
-		<yPos>22</yPos>
+		<yPos>60</yPos>
 		<width>180</width>
 		<height>194</height>	
 		<image>President/president-Blingfaster</image>
@@ -411,7 +411,7 @@
 	<button>
 		<name>PickedPresident</name>
 		<xPos>195</xPos>
-		<yPos>22</yPos>
+		<yPos>60</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image>President/president-Blingfaster</image>

@@ -1130,22 +1130,22 @@ void Capitalist::initializeCapitalistWindow()
 	mNewPatriotism						= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "", statsWindow);
 	mNewPatriotism->setScale(0.5, 0.5);
 
-	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 290, 0, 0), "", mPickedPresidentWindow);
+	mPresidentBiography					= GUIText::create(sf::FloatRect(40, 330, 0, 0), "", mPickedPresidentWindow);
 	mPresidentBiography->setScale(0.6, 0.6);
 	mPresidentPositiveText[0]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
 	mPresidentPositiveText[1]			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
 	mPresidentNegativeText				= GUIText::create(sf::FloatRect(0, 0, 0, 0), "", mPickedPresidentWindow);
-	mFirstPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 330, 0, 0), "", mChoosePresidentWindow);
 	mFirstPositiveStat[0]->setScale(0.6, 0.6);
-	mSecondPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[0]				= GUIText::create(sf::FloatRect(65, 380, 0, 0), "", mChoosePresidentWindow);
 	mSecondPositiveStat[0]->setScale(0.6, 0.6);
-	mFirstNegativeStat					= GUIText::create(sf::FloatRect(65, 390, 0, 0), "", mChoosePresidentWindow);
+	mFirstNegativeStat					= GUIText::create(sf::FloatRect(65, 430, 0, 0), "", mChoosePresidentWindow);
 	mFirstNegativeStat->setScale(0.6, 0.6);
-	mFirstPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 290, 0, 0), "", mChoosePresidentWindow);
+	mFirstPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 330, 0, 0), "", mChoosePresidentWindow);
 	mFirstPositiveStat[1]->setScale(0.6, 0.6);
-	mSecondPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 340, 0, 0), "", mChoosePresidentWindow);
+	mSecondPositiveStat[1]				= GUIText::create(sf::FloatRect(329, 380, 0, 0), "", mChoosePresidentWindow);
 	mSecondPositiveStat[1]->setScale(0.6, 0.6);
-	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 390, 0, 0), "", mChoosePresidentWindow);
+	mSecondNegativeStat					= GUIText::create(sf::FloatRect(329, 430, 0, 0), "", mChoosePresidentWindow);
 	mSecondNegativeStat->setScale(0.6, 0.6);
 
 
@@ -1202,6 +1202,11 @@ void Capitalist::initializeCapitalistWindow()
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 	
+	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Choose your leader!", mChoosePresidentWindow);
+	mWindowHeadlines[0]->setAlignment("middle");
+	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Your leader is...", mPickedPresidentWindow);
+	mWindowHeadlines[1]->setAlignment("middle");
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -2124,6 +2129,9 @@ void Capitalist::initializeGuiFunctions()
 			sf::Color color = mPresidentBiography->getColor();
 			color.a = 255;
 			GUIAnimation::fadeToColor(mPresidentBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
+			color = mWindowHeadlines[1]->getColor();
+			color.a = 255;
+			GUIAnimation::fadeToColor(mWindowHeadlines[1], 1000, sf::Color(color.r, color.g, color.b, 0), color);
 			_chooseWindow->setEnabled(false, true);
 			_pickedWindow->setEnabled(false, true);
 			_pickedWindow->setVisible(true);

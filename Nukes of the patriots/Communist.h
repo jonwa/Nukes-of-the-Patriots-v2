@@ -122,6 +122,8 @@ private:
 	std::shared_ptr<President> mFirstGeneral;
 	std::shared_ptr<GUIText>   mGeneralBiography;
 
+	std::shared_ptr<GUIText>   mWindowHeadlines[6];
+
  	std::shared_ptr<GUIText> mPopulationText;
 	std::shared_ptr<GUIText> mCurrencyText;
 	std::shared_ptr<GUIText> mPatriotismText;
