@@ -20,6 +20,9 @@ static int foodCost			= 10;
 static int goodsCost		= 20;
 static int techCost			= 30;
 static int propagandaCost	= 100;
+static int propagandaBoughtFood = 0;
+static int propagandaBoughtGoods = 0;
+static int propagandaBoughtTech = 0;
 static int taxChange		= 5;
 static int currentGoods		= 0;
 static int currentTech		= 0;
@@ -85,13 +88,13 @@ void Communist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " million");
+			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
-		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		int oldPatriotism = stringToInt(mPatriotismText->getText() + " §");
 		if(mPatriotism != oldPatriotism)
-			mPatriotismText->setText(intToString(mPatriotism));
+			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
 
 		/*GUI text för utskrift av värden på komunisternas interface*/
 		int oldNuclear = stringToInt(mNuclearText->getText());
@@ -377,16 +380,16 @@ void Communist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
-	int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
-	int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
-	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
+	//int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
+	//int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
+	//int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
+	int exportedTotal = getExportedFoodSold() + getExportedGoodsSold() + getExportedTechSold();
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoods();
-	int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
-	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
+	//int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
+	//int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoods();
+	//int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
+	int enemyExportedTotal = enemy->getExportedFoodSold() + enemy->getExportedGoodsSold() + enemy->getExportedTechSold();
 
 	if(exportedTotal > enemyExportedTotal)
 	{
@@ -477,18 +480,27 @@ void Communist::update()
 	mFoodPreviousRound = mFood;
 	mGoodsPreviousRound = mGoods;
 	mTechPreviousRound = mTech;
-	mExportedFoodPreviousRound = mExportedFood;
-	mExportedGoodsPreviousRound = mExportedGoods;
-	mExportedTechPreviousRound = mExportedTech;
 	mTaxesPreviousRound = mTaxes;
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
+
 	if((mRound-1) % 5 == 0 && mRound != 1)	
 		openFiveYearPlan();
 
+	mTaxesPatriotismChange->setText("Patriotism: 0");
+
+	//setExportedFoodSold(0);
+	//setExportedGoodsSold(0);
+	//setExportedTechSold(0);
+
+
+
 	changeCityImage();
+	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
+	
+	
 }
 
 //-----------------------------------------------------------
@@ -617,6 +629,12 @@ void Communist::buyPropagandaFood(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtFood += food;
+	if(propagandaBoughtFood > getYearlyFood(round))
+	{
+		food -= propagandaBoughtFood - getYearlyFood(round);
+	}
+
 	mFood += food;
 	mBoughtPropagandaText->setText("Your People got " + intToString(food) + " food");
 }
@@ -641,6 +659,11 @@ void Communist::buyPropagandaGoods(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtGoods += goods;
+	if(propagandaBoughtGoods > getYearlyGoods(round))
+	{
+		goods -= propagandaBoughtGoods - getYearlyGoods(round);
+	}
 	mGoods += goods;
 	mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
 }
@@ -665,6 +688,12 @@ void Communist::buyPropagandaTech(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtTech += tech;
+	if(propagandaBoughtTech > getYearlyTech(round))
+	{
+		tech -= propagandaBoughtTech - getYearlyTech(round);
+	}
+
 	mTech += tech;
 	mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
 }
@@ -1081,9 +1110,9 @@ void Communist::initializeCommunistWindow()
 		mExportQuantityText[i]->setAlignment("middle");
 	}
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 67, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 67, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
 
 	mExportFoodCost->setMaxCharacters(4);
 	mExportGoodsCost->setMaxCharacters(4);
@@ -1676,7 +1705,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyFoodButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0 && propagandaBoughtFood < getYearlyFood(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaFood(getRound());
@@ -1700,7 +1729,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0 && propagandaBoughtGoods < getYearlyGoods(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaGoods(getRound());
@@ -1723,7 +1752,7 @@ void Communist::initializeGuiFunctions()
 	});
 	mPropagandaBuyTechButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0 && propagandaBoughtTech < getYearlyTech(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaTech(getRound());
@@ -2062,6 +2091,13 @@ void Communist::initializeGuiFunctions()
 		enemy->setExportedFood(enemy->getExportedFood() - _importedFoodQuantity);
 		enemy->setExportedGoods(enemy->getExportedGoods() - _importedGoodsQuantity);
 		enemy->setExportedTech(enemy->getExportedTech() - _importedTechQuantity);
+
+		enemy->setExportedFoodSold(enemy->getExportedFoodSold() + _importedFoodQuantity);
+		enemy->setExportedGoodsSold(enemy->getExportedGoodsSold() + _importedGoodsQuantity);
+		enemy->setExportedTechSold(enemy->getExportedTechSold() + _importedTechQuantity);
+
+		enemy->setCurrency(enemy->getCurrency() + _importedFoodQuantity*enemy->getExportedFoodPrice() + _importedGoodsQuantity*enemy->getExportedGoodsPrice() + _importedTechQuantity*enemy->getExportedTechPrice());
+
 		mCurrency -= stringToInt(mImportTotalPriceText[0]->getText());
 		mCurrency -= stringToInt(mImportTotalPriceText[1]->getText());
 		mCurrency -= stringToInt(mImportTotalPriceText[2]->getText());
@@ -2189,8 +2225,8 @@ void Communist::initializeGuiFunctions()
 			int techBought = 0;
 			int exports = 0;
 			// if nobody bought my exports - then it will be sold internationally
-			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? 0 : moneyIntFood / getExportedFoodPrice();
-			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / getExportedGoodsPrice();
+			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? getExportedFood() : moneyIntFood / getExportedFoodPrice();
+			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? getExportedTech() : moneyIntGoods / getExportedGoodsPrice();
 			techBought =(getExportedTech() == 0 || getExportedTechPrice() == 0) ? 0 :  moneyIntTech / getExportedTechPrice();
 			//// if international market tries to buy more resources than you have
 			if(foodBought > getExportedFood()) foodBought = getExportedFood();
@@ -2204,13 +2240,60 @@ void Communist::initializeGuiFunctions()
 			int _exportedFood = mExportedFoodPreviousRound-mExportedFood;
 			int _exportedGoods = mExportedGoodsPreviousRound-mExportedGoods;
 			int _exportedTech = mExportedTechPreviousRound-mExportedTech;
-			mResourcesExportedText[0]->setText("You exported "+intToString(_exportedFood)+" food.");
-			mResourcesExportedText[1]->setText("You exported "+intToString(_exportedGoods)+" goods.");
-			mResourcesExportedText[2]->setText("You exported "+intToString(_exportedTech)+" tech.");
-			int exportedTotal = _exportedFood*mExportedFoodPrice + _exportedGoods*mExportedGoodsPrice + _exportedTech*mExportedTechPrice;
+			mResourcesExportedText[0]->setText("You exported "+intToString(foodBought)+" food.");
+			mResourcesExportedText[1]->setText("You exported "+intToString(goodsBought)+" goods.");
+			mResourcesExportedText[2]->setText("You exported "+intToString(techBought)+" tech.");
+			setExportedFoodSold(getExportedFoodSold() + foodBought);
+			setExportedGoodsSold(getExportedGoodsSold() + goodsBought);
+			setExportedTechSold(getExportedTechSold() + techBought);
+			int exportedTotal = foodBought*mExportedFoodPrice + goodsBought*mExportedGoodsPrice + techBought*mExportedTechPrice;
 			mExportedIncomeText->setText("You got " + intToString(exportedTotal) + " § from exports.");
 			mExportedResourcesWindow->setVisible(true);
 			mExportedResourcesWindow->setEnabled(true, true);
+
+			mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+			mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+			mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+
+			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+			mImportBuyQuantityText[0]->setText("0");
+			mImportBuyQuantityText[1]->setText("0");
+			mImportBuyQuantityText[2]->setText("0");
+
+			mImportTotalPriceText[0]->setText("0");
+			mImportTotalPriceText[1]->setText("0");
+			mImportTotalPriceText[2]->setText("0");
+
+			if(enemy->getExportedFood() == 0)
+				mImportPriceText[0]->setText("N/A");
+			else
+				mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+			if(enemy->getExportedGoods() == 0)
+				mImportPriceText[1]->setText("N/A");
+			else
+				mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+			if(enemy->getExportedTech() == 0)
+				mImportPriceText[2]->setText("N/A");
+			else
+				mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+			mExportQuantityText[0]->setText(mExportedFood);
+			mExportQuantityText[1]->setText(mExportedGoods);
+			mExportQuantityText[2]->setText(mExportedTech);
+
+			mExportFoodCost->setText(intToString(mExportedFoodPrice));
+			mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
+			mExportTechCost->setText(intToString(mExportedTechPrice));
+
+			mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
+			mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
+			mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
+			mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
 		}
 		else
 		{

@@ -32,7 +32,10 @@ SuperPower::SuperPower() :
 	mTaxesPreviousRound(mTaxes),
 	mSpyNetworkPreviousRound(mSpyNetwork),
 	mNuclearWeaponPreviousRound(mNuclearWeapon),
-	mSpaceProgramPreviousRound(mSpaceProgram)
+	mSpaceProgramPreviousRound(mSpaceProgram),
+	mExportedFoodSold(0), 
+	mExportedGoodsSold(0), 
+	mExportedTechSold(0)
 {
 }
 
@@ -68,6 +71,9 @@ void SuperPower::reset()
 	mSpyNetworkPreviousRound				= mSpyNetwork;
 	mNuclearWeaponPreviousRound				= mNuclearWeapon;
 	mSpaceProgramPreviousRound				= mSpaceProgram;
+	mExportedFoodSold						= 0;
+	mExportedGoodsSold						= 0;
+	mExportedTechSold						= 0;
 }
 
 SuperPower::~SuperPower()

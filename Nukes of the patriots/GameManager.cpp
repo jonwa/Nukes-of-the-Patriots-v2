@@ -93,8 +93,6 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 		//startRound();
 		mLoaded = true;
 	}
@@ -110,8 +108,6 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 	}
 
 	mCurrentPlayer->setRound(1);
@@ -331,6 +327,12 @@ void GameManager::nextRound()
 		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 		{
 			(*it)->newYearStart();
+		}
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+		{
+			(*it)->setExportedFoodSold(0);
+			(*it)->setExportedGoodsSold(0);
+			(*it)->setExportedTechSold(0);
 		}
 		updateStatsWindow();
 

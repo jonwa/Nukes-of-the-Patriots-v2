@@ -1,7 +1,8 @@
 #pragma once
 
 #include <SFML\System.hpp>
-#include <vector>
+#include <algorithm>
+#include <math.h>
 
 //SlumptalsGenerator av Joakim Stark
 //randomNr() returnerar en float mellan Max t.o.m Min argumentet.
@@ -26,8 +27,9 @@ protected:
 	Randomizer(const Randomizer&);
 	Randomizer& operator= (const Randomizer&);
 private:
-	Randomizer(){}
+	Randomizer():mRandom(0){}
 	static Randomizer* instance;
 	 sf::Clock randTimer;
+	 int mRandom;
 
 };

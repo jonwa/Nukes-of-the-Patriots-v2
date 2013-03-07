@@ -25,7 +25,9 @@ using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, Menu::getInstance()->getWindowMode());
+
+
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
@@ -40,20 +42,33 @@ int main()
 	Menu::getInstance()->setMainMenuVisible();
 	//Menu::getInstance()->loadConfig();
 	
+
+
+	bool sleeping = false;
+
+
 	while (window.isOpen())
     {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			GUIManager::getInstance()->update(event);
-		
-			if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::F1)
-				GameManager::getInstance()->nextRound();
+			if(!sleeping)
+			{
+				GUIManager::getInstance()->update(event);
+				Menu::getInstance()->update(event);
+			}
 
 			if (event.type == sf::Event::Closed)// || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
-
-			Menu::getInstance()->update(event);
+			if(event.type == sf::Event::LostFocus)
+				sleeping = true;
+			if(event.type == sf::Event::GainedFocus)
+				sleeping = false;
+		}
+		if(sleeping)
+		{
+			sf::sleep(sf::seconds(0.5f));
+			continue;
 		}
 		//std::cout << "Master volume " << sf::Listener::getGlobalVolume() << std::endl;
 		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
