@@ -20,6 +20,9 @@ static int foodCost			= 10;
 static int goodsCost		= 20;
 static int techCost			= 30;
 static int propagandaCost	= 100;
+static int propagandaBoughtFood = 0;
+static int propagandaBoughtGoods = 0;
+static int propagandaBoughtTech = 0;
 static int taxChange		= 5;
 static int currentGoods		= 0;
 static int currentTech		= 0;
@@ -486,6 +489,9 @@ void Communist::update()
 	openFiveYearPlan();
 
 	changeCityImage();
+	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
+	
+	
 }
 
 //-----------------------------------------------------------
@@ -614,6 +620,12 @@ void Communist::buyPropagandaFood(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtFood += food;
+	if(propagandaBoughtFood > getYearlyFood(round))
+	{
+		food -= propagandaBoughtFood - getYearlyFood(round);
+	}
+
 	mFood += food;
 	mBoughtPropagandaText->setText("Your People got " + intToString(food) + " food");
 }
@@ -638,6 +650,11 @@ void Communist::buyPropagandaGoods(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtGoods += goods;
+	if(propagandaBoughtGoods > getYearlyGoods(round))
+	{
+		goods -= propagandaBoughtGoods - getYearlyGoods(round);
+	}
 	mGoods += goods;
 	mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
 }
@@ -662,6 +679,12 @@ void Communist::buyPropagandaTech(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtTech += tech;
+	if(propagandaBoughtTech > getYearlyTech(round))
+	{
+		tech -= propagandaBoughtTech - getYearlyTech(round);
+	}
+
 	mTech += tech;
 	mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
 }
@@ -1672,7 +1695,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyFoodButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0 && propagandaBoughtFood < getYearlyFood(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaFood(getRound());
@@ -1696,7 +1719,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0 && propagandaBoughtGoods < getYearlyGoods(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaGoods(getRound());
@@ -1719,7 +1742,7 @@ void Communist::initializeGuiFunctions()
 	});
 	mPropagandaBuyTechButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0 && propagandaBoughtTech < getYearlyTech(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaTech(getRound());
