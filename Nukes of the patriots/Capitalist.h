@@ -120,6 +120,8 @@ private:
 	std::shared_ptr<GUIText> mPatriotismText;
 
 	std::shared_ptr<GUIText> mStatsText[2][9];
+
+	std::shared_ptr<GUIText> mWindowHeadlines[6];
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;

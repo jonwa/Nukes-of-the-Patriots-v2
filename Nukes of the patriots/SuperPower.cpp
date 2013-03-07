@@ -200,7 +200,6 @@ void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 		}
 		else
 			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.");
-		
 	}
 	/*	Om mängden mat är mindre än häflten av befolkningen tilldelas mFood noll
 		mPatriotism subtraheras även med två*/

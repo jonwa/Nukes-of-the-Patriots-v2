@@ -12,6 +12,7 @@
 	<image filename="kap_texture_button_cancel.png"/>
 	<image filename="kap_texture_button_yes.png"/>
 	<image filename="kap_texture_button_no.png"/>
+
 	<image filename="kap_texture_button_plus.png"/>
 	<image filename="kap_texture_button_minus.png"/>
 	<image filename="kap_texture_button_smallupgrade.png"/>
@@ -85,8 +86,10 @@
 	<image filename="kom_texture_button_invert_export.png"/>
 	<image filename="kom_texture_button_cancel.png"/>
 	<image filename="kom_texture_button_ok.png"/>	
+
 	<image filename="kom_texture_button_yes.png"/>
 	<image filename="kom_texture_button_no.png"/>
+	
 	<image filename="kom_texture_button_plus.png"/>
 	<image filename="kom_texture_button_plus5.png"/>
 	<image filename="kom_texture_button_plus10.png"/>
