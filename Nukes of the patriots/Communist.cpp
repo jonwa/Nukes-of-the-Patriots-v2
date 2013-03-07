@@ -482,6 +482,7 @@ void Communist::update()
 	//setExportedFoodSold(0);
 	//setExportedGoodsSold(0);
 	//setExportedTechSold(0);
+	mTaxesPatriotismChange->setText(0);
 
 	openFiveYearPlan();
 
@@ -2210,9 +2211,9 @@ void Communist::initializeGuiFunctions()
 			mResourcesExportedText[0]->setText("You exported "+intToString(foodBought)+" food.");
 			mResourcesExportedText[1]->setText("You exported "+intToString(goodsBought)+" goods.");
 			mResourcesExportedText[2]->setText("You exported "+intToString(techBought)+" tech.");
-			setExportedFoodSold(getExportedFoodSold() + _exportedFood);
-			setExportedGoodsSold(getExportedGoodsSold() + _exportedGoods);
-			setExportedTechSold(getExportedTechSold() + _exportedTech);
+			setExportedFoodSold(getExportedFoodSold() + foodBought);
+			setExportedGoodsSold(getExportedGoodsSold() + goodsBought);
+			setExportedTechSold(getExportedTechSold() + techBought);
 			int exportedTotal = foodBought*mExportedFoodPrice + goodsBought*mExportedGoodsPrice + techBought*mExportedTechPrice;
 			mExportedIncomeText->setText("You got " + intToString(exportedTotal) + " § from exports.");
 			mExportedResourcesWindow->setVisible(true);
