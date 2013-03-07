@@ -85,13 +85,13 @@ void Communist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " million");
+			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
 			mCurrencyText->setText(intToString(mCurrency));
-		int oldPatriotism = stringToInt(mPatriotismText->getText());
+		int oldPatriotism = stringToInt(mPatriotismText->getText() + " §");
 		if(mPatriotism != oldPatriotism)
-			mPatriotismText->setText(intToString(mPatriotism));
+			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
 
 		/*GUI text för utskrift av värden på komunisternas interface*/
 		int oldNuclear = stringToInt(mNuclearText->getText());
@@ -482,7 +482,7 @@ void Communist::update()
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
-	mTaxesPatriotismChange->setText(0);
+	mTaxesPatriotismChange->setText("Patriotism: 0");
 
 	openFiveYearPlan();
 

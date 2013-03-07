@@ -825,7 +825,7 @@ void Capitalist::initializeCapitalistWindow()
 	mTechCost->setScale(0.8, 0.8);
 	//mTechCost->setAlignment("middle");
 
-	mTotalResourcesCost				= GUIText::create( sf::FloatRect(192, 240, 40, 40), "Total cost: 0 §", mResourceWindow);
+	mTotalResourcesCost				= GUIText::create( sf::FloatRect(192, 230, 40, 40), "Total cost: 0 §", mResourceWindow);
 	mResourceWindow->setVisible(false);
 
 	mUpgradeWindow						= GUIWindow::create(CapitalistWindows["CapitalistUpgradeWindow"], mCapitalistMainWindow);
