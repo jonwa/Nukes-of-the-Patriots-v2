@@ -32,6 +32,14 @@
 		<height>159</height>
 		<image>Menu/options-poster</image>
 	</button>
+	<button>
+		<name>Fullscreen</name>
+		<xPos>250</xPos>
+		<yPos>260</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
 	<button>	
 		<name>Credits</name>
 		<xPos>375</xPos>
@@ -225,8 +233,16 @@
 		<image>Menu/RestartHover</image>
 	</button>	
 	<button>
+		<name>Mute</name>
+		<xPos>315</xPos>
+		<yPos>90</yPos>
+		<width>40</width>
+		<height>20</height>
+		<image>Menu/Lower</image>
+	</button>	
+	<button>
 		<name>LowerVolume</name>
-		<xPos>230</xPos>
+		<xPos>350</xPos>
 		<yPos>90</yPos>
 		<width>40</width>
 		<height>20</height>
@@ -234,7 +250,7 @@
 	</button>	
 	<button>
 		<name>RaiseVolume</name>
-		<xPos>430</xPos>
+		<xPos>600</xPos>
 		<yPos>90</yPos>
 		<width>40</width>
 		<height>20</height>

@@ -19,13 +19,13 @@
 #include "AnimationHandler.h"
 #include <SFML\Audio\Listener.hpp>
 #include "SoundHandler.h"
+#include "tinyxml2.h"
 
 using namespace std;
 
 int main()
 {
-
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, Menu::getInstance()->getWindowMode());
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	sf::Texture cursorTexture;
@@ -36,11 +36,10 @@ int main()
 	GUIManager::getInstance()->init(&window);
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
-	Menu menu(window);
+	Menu::getInstance()->setWindow(window);
+	Menu::getInstance()->setMainMenuVisible();
+	//Menu::getInstance()->loadConfig();
 	
-	menu.setMainMenuVisible();
-
-
 	while (window.isOpen())
     {
 		sf::Event event;
@@ -54,9 +53,9 @@ int main()
 			if (event.type == sf::Event::Closed)// || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 
-			menu.update(event);
+			Menu::getInstance()->update(event);
 		}
-
+		//std::cout << "Master volume " << sf::Listener::getGlobalVolume() << std::endl;
 		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
 			cursor.setTexture(cursorClickedTexture);
 		else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)
@@ -68,16 +67,16 @@ int main()
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();
 		SoundHandler::getInstance()->tick();
-        window.clear();
+		window.clear();
 		//grayscale.setParameter("mousePos", sf::Vector2f(mousePos.x, window.getSize().y - mousePos.y));
 		sf::RenderStates states;
 		//states.shader = &grayscale;
 		GUIManager::getInstance()->render(states);
 		TimerHandler::getInstance()->tick();
-		menu.tick();
+		Menu::getInstance()->tick();
 		window.draw(cursor);
-        window.display();
-		
+		window.display();
     }
+	Menu::getInstance()->saveConfig();
     return EXIT_SUCCESS;
 }
