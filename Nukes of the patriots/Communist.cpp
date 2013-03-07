@@ -157,18 +157,20 @@ void Communist::fiveYearInitialize()
 
 void Communist::openFiveYearPlan()
 {
-	if((mRound-1) % 5 == 0 && mRound != 1)
-	{
+	//if((mRound-1) % 5 == 0 && mRound != 1)
+	//{
 		mCommunistMainWindow->setEnabled(false, true);
 		mFiveYearPlanWindow->setEnabled(true, true);
-		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 		mFiveYearPlanWindow->setVisible(true);
-	}
-	else
-	{
+		mTaxesIncomeWindow->setVisible(false);
+		mTaxesIncomeWindow->setEnabled(false, true);
+	//}
+	//else
+	//{
 		if(mRound != 1)
 			resourceIncome();
-	}
+	//}
 }
 
 void Communist::changeCityImage()
@@ -483,6 +485,10 @@ void Communist::update()
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
+
+	if((mRound-1) % 5 == 0 && mRound != 1)	
+		openFiveYearPlan();
+
 	mTaxesPatriotismChange->setText("Patriotism: 0");
 
 	//setExportedFoodSold(0);
@@ -490,7 +496,6 @@ void Communist::update()
 	//setExportedTechSold(0);
 
 
-	openFiveYearPlan();
 
 	changeCityImage();
 	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
@@ -1043,9 +1048,9 @@ void Communist::initializeCommunistWindow()
 	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	
-	mSpyPanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(359, 60, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/spy_panel"))), mUpgradeWindow);
-	mSpacePanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/space_panel"))), mUpgradeWindow);
-	mNuclearPanel						= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/nuclear_panel"))), mUpgradeWindow);
+	mSpyPanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(359, 60, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_spy_upgrade"))), mUpgradeWindow);
+	mSpacePanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_space_upgrade"))), mUpgradeWindow);
+	mNuclearPanel						= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_nuke_upgrade"))), mUpgradeWindow);
 
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(39, 138, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");
@@ -1685,6 +1690,7 @@ void Communist::initializeGuiFunctions()
 			mTaxesIncomeText[1]->setText(mTaxes*mPopulation);
 		}
 		mCommunistMainWindow->setEnabled(true, true);
+
 	});
 	/*Stänger propagandafönster nummer ett*/
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	

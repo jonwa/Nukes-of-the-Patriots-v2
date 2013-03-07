@@ -31,9 +31,14 @@ class UdpClient;
 class Menu
 {
 public:
-	Menu();
-	Menu(sf::RenderWindow &window);
-	~Menu();
+	static Menu* getInstance();
+
+	void saveConfig();
+	void loadConfig();
+
+	void setWindow(sf::RenderWindow& window);
+	sf::RenderWindow& getWindow();
+
 	void clear();
 	void setInGameMenuVisible();
 	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
@@ -46,6 +51,15 @@ public:
 	void resetChooseTeamValues();
 
 private:
+	static Menu* mInstance;
+
+	bool fullscreen;
+
+	Menu();
+	//Menu(const Menu&){}
+	//Menu operator=(const Menu&){}
+	~Menu();
+
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > WindowPos;
@@ -63,6 +77,8 @@ private:
 
 	void resetPickTeamValues();
 
+	std::shared_ptr<GUIButton> mWindowModeButton;
+
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
 	std::shared_ptr<GUIWindow> mSettingsMenuWindow;
@@ -74,13 +90,14 @@ private:
 	std::shared_ptr<GUIButton> mStartNewGameButton;
 	std::shared_ptr<GUIButton> mMultiPlayerButton;
 	std::shared_ptr<GUIButton> mLoadGameButton;
-	std::shared_ptr<GUIButton> mSettingsButton;
+	std::shared_ptr<GUIButton> mSettingsButton[2];
 	std::shared_ptr<GUIButton> mCreditsButton;
-	std::shared_ptr<GUIButton> mExitButton;
+	std::shared_ptr<GUIButton> mExitButton[2];
 
 	std::shared_ptr<GUIText>   mVolumeText;
 	std::shared_ptr<GUIButton> mLowerVolume;
 	std::shared_ptr<GUIButton> mRaiseVolume;
+	std::shared_ptr<GUIButton> mMuteSound;
 	std::shared_ptr<GUIText>   mWindowSizeText;
 	std::shared_ptr<GUIButton> mCloseSettingsWindow;
 
@@ -108,7 +125,7 @@ private:
 	sf::UdpServer* mUdpServer;
 	sf::UdpClient* mUdpClient;
 
-	sf::RenderWindow &mWindow;
+	sf::RenderWindow* mWindow;
 };
 
 #endif

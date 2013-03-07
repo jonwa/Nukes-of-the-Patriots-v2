@@ -14,6 +14,9 @@
 #include "AnimationHandler.h"
 #include "Menu.h"
 
+static int width = 1024;
+static int height = 768;
+
 GameManager* GameManager::mInstance = NULL;
 
 GameManager* GameManager::getInstance()
@@ -38,7 +41,6 @@ GameManager::~GameManager()
 {
 	
 }
-
 
 void GameManager::reset()
 {
