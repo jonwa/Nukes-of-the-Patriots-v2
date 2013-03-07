@@ -326,6 +326,12 @@ void GameManager::nextRound()
 		{
 			(*it)->newYearStart();
 		}
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+		{
+			(*it)->setExportedFoodSold(0);
+			(*it)->setExportedGoodsSold(0);
+			(*it)->setExportedTechSold(0);
+		}
 		updateStatsWindow();
 
 		mStatsWindow[0]->setVisible(true);

@@ -72,6 +72,10 @@
 	<image filename="resources_normal.png"/>
 	<image filename="resources_pressed.png"/>
 	
+	<image filename="res_food_icon.png"/>
+	<image filename="res_goods_icon.png"/>
+	<image filename="res_tech_icon.png"/>
+	
 	<image filename="upgrade_normal.png"/>
 	<image filename="upgrade_pressed.png"/>
 	

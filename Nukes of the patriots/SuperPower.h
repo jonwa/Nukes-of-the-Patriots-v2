@@ -48,6 +48,10 @@ public:
 	int			getNuclearWeaponPreviousRound()		{ return mNuclearWeaponPreviousRound; };
 	int			getSpaceProgramPreviousRound()		{ return mSpaceProgramPreviousRound; };
 
+	int			getExportedFoodSold()				{ return mExportedFoodSold; };
+	int			getExportedGoodsSold()				{ return mExportedGoodsSold; };
+	int			getExportedTechSold()				{ return mExportedTechSold; };
+
 	PoliticalType	getType();
 
 	void		setRound(int round);
@@ -56,10 +60,13 @@ public:
 	void		updateFood(std::shared_ptr<GUIText> text);
 	bool		enoughFood();
 
-	void		setExportedFood(int food)	{ mExportedFood = food; };
-	void		setExportedGoods(int goods) { mExportedGoods = goods; };
-	void		setExportedTech(int tech)	{ mExportedTech = tech; };
-	void		setCurrency(int currency)	{ mCurrency = currency; };
+	void		setExportedFood(int food)						{ mExportedFood = food; };
+	void		setExportedGoods(int goods)						{ mExportedGoods = goods; };
+	void		setExportedTech(int tech)						{ mExportedTech = tech; };
+	void		setExportedFoodSold(int exportedFoodSold)		{ mExportedFoodSold = exportedFoodSold; };
+	void		setExportedGoodsSold(int exportedGoodsSold)		{ mExportedGoodsSold = exportedGoodsSold; };
+	void		setExportedTechSold(int exportedTechSold)		{ mExportedTechSold = exportedTechSold; };
+	void		setCurrency(int currency)						{ mCurrency = currency; };
 
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
@@ -103,6 +110,7 @@ protected:
 	int	mFood, mFoodPreviousRound, mExportedFood, mExportedFoodPreviousRound, mExportedFoodPrice;
 	int	mGoods, mGoodsPreviousRound, mExportedGoods,mExportedGoodsPreviousRound, mExportedGoodsPrice;
 	int	mTech, mTechPreviousRound, mExportedTech, mExportedTechPreviousRound, mExportedTechPrice;
+	int mExportedFoodSold, mExportedGoodsSold, mExportedTechSold;
 	int	mTaxes, mTaxesPreviousRound;
 	int	mSpyNetwork, mSpyNetworkPreviousRound;
 	int	mNuclearWeapon, mNuclearWeaponPreviousRound;
