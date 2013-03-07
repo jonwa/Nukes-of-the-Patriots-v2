@@ -482,6 +482,7 @@ void Communist::update()
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
+	mTaxesPatriotismChange->setText(0);
 
 	openFiveYearPlan();
 
