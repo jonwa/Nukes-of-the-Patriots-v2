@@ -6,10 +6,11 @@
  *
  *		Av : Jon Wahlström 
  *           Arvid Backman
+ *			
  *
  *		2013-01-22
  */
-#ifndef GUIIMAGE_H
+#ifndef GUIIMAGE_H 
 #define GUIIMAGE_H
 
 #include "GUIElement.h"
@@ -17,7 +18,7 @@
 class GUIImage : public GUIElement
 {
 public:
-	static std::shared_ptr<GUIImage> create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
+	static std::shared_ptr<GUIImage> create(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0); 
 	GUIImage(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent = 0);
 
 	~GUIImage(){}
@@ -25,7 +26,7 @@ public:
 	void		 setSize(float width, float height);
 	void		 setScale(float width, float height);
 	void		 setColor(sf::Color color);
-	void		 setImage(sf::Texture &texture);
+	void		 setImage(sf::Texture &texture); 
 	bool		 render (sf::RenderWindow *window, sf::RenderStates &states);
 	void		 setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair);
 	sf::Texture* getTexture();
@@ -33,7 +34,7 @@ public:
 private:
 	GUIImage(const GUIImage &guiImage);
 	GUIImage& operator=(const GUIImage &guiImage);
-	sf::Sprite mSprite;
+	sf::Sprite mSprite; 
 };
 
 #endif

@@ -235,5 +235,8 @@
     <ClInclude Include="UdpClient.h">
       <Filter>Header Files\network</Filter>
     </ClInclude>
+    <ClInclude Include="GUIScrollBar.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

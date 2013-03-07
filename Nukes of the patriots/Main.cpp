@@ -40,18 +40,16 @@ int main()
 	ResourceHandler::getInstance()->load();
 	Menu::getInstance()->setWindow(window);
 	Menu::getInstance()->setMainMenuVisible();
-	//Menu::getInstance()->loadConfig();
+	Menu::getInstance()->loadConfig();
 	
-
-
 	bool sleeping = false;
-
 
 	while (window.isOpen())
     {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
+
 			if(!sleeping)
 			{
 				GUIManager::getInstance()->update(event);

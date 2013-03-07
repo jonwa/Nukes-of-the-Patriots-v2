@@ -48,6 +48,7 @@
     <ClInclude Include="AnimationHandler.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="GUIAnimation.h" />
+    <ClInclude Include="GUIScrollBar.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="SpriteAnimation.h" />

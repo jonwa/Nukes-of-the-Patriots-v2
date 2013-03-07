@@ -243,7 +243,7 @@
 	<button>
 		<name>LowerVolume</name>
 		<xPos>350</xPos>
-		<yPos>90</yPos>
+		<yPos>100</yPos>
 		<width>40</width>
 		<height>20</height>
 		<image>Menu/Lower</image>
@@ -251,7 +251,7 @@
 	<button>
 		<name>RaiseVolume</name>
 		<xPos>600</xPos>
-		<yPos>90</yPos>
+		<yPos>100</yPos>
 		<width>40</width>
 		<height>20</height>
 		<image>Menu/Raise</image>

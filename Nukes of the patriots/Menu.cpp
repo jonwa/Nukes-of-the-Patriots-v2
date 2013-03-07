@@ -29,7 +29,7 @@ Menu::Menu() :
 	mUdpServer(nullptr),
 	mUdpClient(nullptr),
 	mShowTeamChooseAnimation(false),
-	fullscreen(true)
+	fullscreen(false)
 { 
 	//mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
 	Event::addEventHandler("serverAwaitingConnection", [=](sf::Packet packet)
@@ -82,8 +82,10 @@ void Menu::saveConfig()
 	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
 	master->SetAttribute("value", sf::Listener::getGlobalVolume());
 	tinyxml2::XMLElement *windowMode = doc.NewElement("windowMode");
+	windowMode->SetAttribute("value", fullscreen);
 	
 	doc.InsertEndChild(master);
+	doc.InsertEndChild(windowMode);
 	doc.SaveFile("XML/Config.xml");
 }
 
@@ -100,6 +102,8 @@ void Menu::loadConfig()
 	//mWindowMode = atoi(window->Attribute("mode"));
 	tinyxml2::XMLElement *master = doc.FirstChildElement("MasterVolume");
 	sf::Listener::setGlobalVolume(atof(master->Attribute("value")));
+	tinyxml2::XMLElement *windowMode = doc.FirstChildElement("windowMode");
+	fullscreen = atoi(windowMode->Attribute("value"));
 }
 
 //void Menu::setWindowMode()
@@ -400,7 +404,6 @@ void Menu::initialize()
 	mLanPlayWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
-	
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 }
 
@@ -469,10 +472,11 @@ void Menu::initializeGuiFuctions()
 	mSettingsButton[1]->setMouseLeaveFunction([=]()		{ mSettingsButton[1]->setTexture(ButtonPos["Settings"]); });
 	mSettingsButton[1]->setOnClickFunction([=]()			
 	{ 
-		mInGameMenuWindow->setEnabled(false, true);
 		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
+		mInGameMenuWindow->setEnabled(false, true);
 		mSettingsMenuWindow->setVisible(true);
 		mSettingsMenuWindow->setEnabled(true, true);
+		std::cout << "settingsmenu visible : " << mSettingsMenuWindow->getVisible() << std::endl;
 	});
 
 	mLowerVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() - 10); });
@@ -481,7 +485,7 @@ void Menu::initializeGuiFuctions()
 	mWindowModeButton->setOnClickFunction([=]()
 	{
 		fullscreen = !fullscreen;
-		mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", fullscreen ? sf::Style::Fullscreen : sf::Style::Resize|sf::Style::Close);
+		mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 		mWindow->setMouseCursorVisible(false);
 	});
 
