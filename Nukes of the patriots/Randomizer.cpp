@@ -1,5 +1,4 @@
 #include "Randomizer.h"
-#include <iostream>
 
 #define PI 3.1416
 
