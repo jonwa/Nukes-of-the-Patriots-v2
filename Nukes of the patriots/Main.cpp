@@ -20,6 +20,8 @@
 #include <SFML\Audio\Listener.hpp>
 #include "SoundHandler.h"
 #include "tinyxml2.h"
+#include "Randomizer.h"
+#include <sfeMovie\Movie.hpp>
 
 using namespace std;
 
@@ -28,6 +30,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
+	Randomizer::getInstance(); //Init randomizer singleton to start timer
 	sf::Texture cursorTexture;
 	sf::Texture	cursorClickedTexture;
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
@@ -40,6 +43,7 @@ int main()
 	Menu::getInstance()->setMainMenuVisible();
 	Menu::getInstance()->loadConfig();
 	
+	GameManager::getInstance();
 	bool sleeping = false;
 
 	while (window.isOpen())

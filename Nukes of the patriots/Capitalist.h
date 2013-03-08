@@ -28,7 +28,6 @@ class Communist;
 #include <SFML\Window\Event.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
-
 #include "Sound.h"
 
 class Capitalist : public SuperPower 
@@ -70,7 +69,7 @@ private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
 
-
+	sf::Clock KLOCKA;
 	std::string intToString(int i)
 	{
 		std::stringstream converter;

@@ -29,7 +29,7 @@ protected:
 private:
 	Randomizer():mRandom(0){}
 	static Randomizer* instance;
-	 sf::Clock randTimer;
-	 int mRandom;
+	sf::Clock randTimer;
+	unsigned long mRandom;
 
 };
