@@ -35,11 +35,11 @@ Capitalist::Capitalist() :
 	mCount(0),
 	mUpdateGUIThread(nullptr),
 	mPickedPresident(0)
+	
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
 	mType				= CAPITALIST;
-
 	initializeCapitalistWindow();
 	initializeGuiFunctions();
 
@@ -96,8 +96,22 @@ void Capitalist::updateGUI()
 		if(mPopulation != oldPopulation)
 			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
-		if(mCurrency != oldCurrency)
+		if(mCurrency != oldCurrency && stringToInt(mCurrencyText->getText()) != mCurrency)
+		{
+			/*int difference = mCurrency - oldCurrency;
+			int currencyChange = 100;
+			
+			std::cout << KLOCKA.getElapsedTime().asSeconds() << std::endl;
+			if(KLOCKA.getElapsedTime().asMilliseconds() > 0.2)
+			{
+				KLOCKA.restart();
+				if(difference < 0)
+					mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
+				else
+					mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
+			}*/
 			mCurrencyText->setText(intToString(mCurrency) + " §");
+		}
 		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
 			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));

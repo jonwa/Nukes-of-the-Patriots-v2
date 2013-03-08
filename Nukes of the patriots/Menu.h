@@ -15,18 +15,9 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-#include <SFML/Network.hpp>
 
 class Capitalist;
 class Communist;
-
-namespace sf
-{
-class TcpServer;
-class TcpClient;
-class UdpServer;
-class UdpClient;
-}
 
 class Menu
 {
@@ -41,7 +32,6 @@ public:
 
 	void clear();
 	void setInGameMenuVisible();
-	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
 	void loadTeamAnimation();
 	void tick();
 
@@ -119,11 +109,9 @@ private:
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
 
-	sf::TcpServer* mTcpServer;
-	sf::TcpClient* mTcpClient;
-
-	sf::UdpServer* mUdpServer;
-	sf::UdpClient* mUdpClient;
+	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
+	std::shared_ptr<GUIText>   mWaitingForClientText;
+	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
 	sf::RenderWindow* mWindow;
 };

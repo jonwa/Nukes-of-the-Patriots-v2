@@ -11,10 +11,6 @@
 #include "GameManager.h"
 #include "TimerHandler.h"
 #include "Timer.h"
-#include "TcpServer.h"
-#include "TcpClient.h"
-#include "UdpServer.h"
-#include "UdpClient.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
 #include <SFML\Audio\Listener.hpp>
@@ -24,28 +20,10 @@ Menu::Menu() :
 	mWindow(nullptr),
 	mCapitalistTeamChosen(false),
 	mCommunistTeamChosen(false),
-	mTcpServer(nullptr),
-	mTcpClient(nullptr),
-	mUdpServer(nullptr),
-	mUdpClient(nullptr),
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	Event::addEventHandler("onPlayerConnect", [=](sf::Packet packet)
-	{
-		char serverAddress[1024];
-		packet>>serverAddress;
-		std::cout<<"Server open: "<<serverAddress<<std::endl;
-		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
-	});
-	//mUdpServer = new sf::UdpServer(55005);
-	//mTcpServer = new sf::TcpServer(55006);
-	//mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.11.161.227"));
-
-	//mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
-	//sf::Packet packet;
-	//packet<<sf::IpAddress::getLocalAddress().toString();
-	//mUdpClient->triggerServerEvent("onPlayerConnect", packet);
+	
 
 	initialize(); 
 	initializeGuiFuctions();
@@ -136,12 +114,6 @@ void Menu::loadTeamAnimation()
 		mTeamAnimationFrames[i].loadFromFile(s.str());
 	}
 	std::cout<<"done loading animation!"<<std::endl;
-}
-
-void Menu::connectToServer(unsigned short port, sf::IpAddress ipAddress)
-{
-	if(mTcpClient == nullptr)
-		mTcpClient = new sf::TcpClient(port, ipAddress);
 }
 
 void Menu::clear()
@@ -403,8 +375,11 @@ void Menu::initialize()
 	mChooseTeamWindow->setVisible(false);
 	
 	// Lan play ("Multi-player")
-	mLanPlayWindow			= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
-	mLanPlayQuickConnect	= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
+	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mWaitingForClientWindow			= GUIWindow::create(WindowPos[""], mLanPlayWindow);
+	mWaitingForClientText			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "WAITING FOR PLAYER...", mWaitingForClientWindow);
+	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos[""], mWaitingForClientWindow);
 	mLanPlayWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
@@ -640,5 +615,23 @@ void Menu::initializeGuiFuctions()
 	mSaveGameButton->setOnClickFunction([=]()
 	{
 		
+	});
+
+	mLanPlayQuickConnect->setOnClickFunction([=]()
+	{
+		mLanPlayWindow->setEnabled(false, true);
+		mWaitingForClientWindow->setVisible(true);
+		mWaitingForClientWindow->setEnabled(true, true);
+
+		GameManager::getInstance()->searchForServers();
+		
+
+	});
+
+	mCloseWaitingForClientWindow->setOnClickFunction([=]()
+	{
+		mWaitingForClientWindow->setVisible(false);
+		mWaitingForClientWindow->setEnabled(false, true);
+		mLanPlayWindow->setEnabled(true, true);
 	});
 }	

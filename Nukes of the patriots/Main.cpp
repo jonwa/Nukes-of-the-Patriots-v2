@@ -21,6 +21,7 @@
 #include "SoundHandler.h"
 #include "tinyxml2.h"
 #include "Randomizer.h"
+#include <sfeMovie\Movie.hpp>
 
 using namespace std;
 
@@ -44,6 +45,7 @@ int main()
 	Menu::getInstance()->setMainMenuVisible();
 	Menu::getInstance()->loadConfig();
 	
+	GameManager::getInstance();
 	bool sleeping = false;
 
 	while (window.isOpen())
