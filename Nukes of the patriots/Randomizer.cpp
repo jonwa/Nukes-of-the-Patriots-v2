@@ -1,4 +1,5 @@
 #include "Randomizer.h"
+#include <iostream>
 
 #define PI 3.1416
 
@@ -6,9 +7,9 @@
 // 
 int Randomizer::randomNr(int Max, int Min)
 {
-	mRandom += randTimer.getElapsedTime().asMicroseconds();
-	mRandom = (int)((mRandom*sin((mRandom%90)*(PI/180))))%Max+Min;
-	return std::abs((int)mRandom);
+	mRandom += randTimer.getElapsedTime().asMicroseconds() + sin(mRandom*(PI/180))*7231;
+	int random = (mRandom%Max) + Min;
+	return random;
 }
 
 
