@@ -52,6 +52,9 @@ void GameManager::reset()
 		(*it)->reset();
 	}
 	AnimationHandler::getInstance()->reset();
+	getCap()->hideGUI();
+	getCom()->hideGUI();
+	mYearText->setVisible(false);
 }
 
 void GameManager::init(int year)
@@ -71,7 +74,6 @@ void GameManager::init(int year)
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);
 		GUIManager::getInstance()->addGUIElement(mYearText);
-	
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		getInstance()->setYear(year);
@@ -517,7 +519,6 @@ void GameManager::initializeGuiElement()
 {
 	loadButtonPosition();
 	loadWindowPosition();
-
 	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
 	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
 	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mFirstDecideWhoStartWindow);

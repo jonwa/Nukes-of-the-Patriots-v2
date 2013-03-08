@@ -33,9 +33,9 @@
 		<image>Menu/options-poster</image>
 	</button>
 	<button>
-		<name>Fullscreen</name>
-		<xPos>250</xPos>
-		<yPos>260</yPos>
+		<name>CloseSettings</name>
+		<xPos>300</xPos>
+		<yPos>350</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Menu/Ok-knapp-aktiv</image>
@@ -235,33 +235,26 @@
 	<button>
 		<name>Mute</name>
 		<xPos>315</xPos>
-		<yPos>90</yPos>
+		<yPos>120</yPos>
 		<width>40</width>
 		<height>20</height>
 		<image>Menu/Lower</image>
-	</button>	
-	<button>
-		<name>LowerVolume</name>
-		<xPos>350</xPos>
-		<yPos>100</yPos>
-		<width>40</width>
-		<height>20</height>
-		<image>Menu/Lower</image>
-	</button>	
-	<button>
-		<name>RaiseVolume</name>
-		<xPos>600</xPos>
-		<yPos>100</yPos>
-		<width>40</width>
-		<height>20</height>
-		<image>Menu/Raise</image>
 	</button>		
 	<button>
+		<name>Fullscreen</name>
+		<xPos>280</xPos>
+		<yPos>260</yPos>
+		<width>40</width>
+		<height>40</height>
+		<image>Menu/Menu_yes_no_box</image>
+	</button>	
+	<button>
 		<name>Esc</name>
-		<xPos>661</xPos>
-		<yPos>23</yPos>
-		<width>10</width>
-		<height>10</height>
+		<xPos>280</xPos>
+		<yPos>260</yPos>
+		<width>40</width>
+		<height>40</height>
 		<image>Menu/Esc</image>
 	</button>
+
 </menu>

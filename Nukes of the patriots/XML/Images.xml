@@ -154,6 +154,9 @@
 </images>
 
 <images directory ="Menu">
+	<image filename="movablePieceOfShit.png"/>
+	<image filename="Scrollbar.png"/>
+
     <image filename="Background.png"/>
     <image filename="5_bg.png"/>
     <image filename="6_bg.png"/>
@@ -192,7 +195,7 @@
 	<image filename="exit-poster-red.png"/>
 	<image filename="lan_window_background.png" />
 	<image filename="lan_quick_connect.png" />
-	
+	<image filename="Menu_yes_no_box.png"/>
 	<image filename="Lower.png"/>
 	<image filename="Raise.png"/>
 	<image filename="Esc.png"/>
