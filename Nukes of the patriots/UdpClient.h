@@ -13,9 +13,11 @@ public:
 						UdpClient(unsigned short port, unsigned short serverPort, sf::IpAddress serverAddress);
 	unsigned short		getPort()const{ return mUdpSocket.getLocalPort(); }
 	sf::IpAddress		getReceivingAddress()const{ return mServerAddress; }
+	unsigned short		getReceivingPort()const{ return mServerPort; }
 
 	void				setPort(unsigned short port){ mUdpSocket.bind(port); }
 	void				setReceivingAddress(std::string serverAddress){ mServerAddress = sf::IpAddress::IpAddress(serverAddress); }
+	void				setReceivingPort(unsigned short port){ mServerPort = port; }
 	void				tick();
 	void				triggerServerEvent(std::string eventName, sf::Packet packet);
 						~UdpClient(){delete mUdpThread;};

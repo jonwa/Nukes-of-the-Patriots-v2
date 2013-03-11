@@ -16,6 +16,7 @@ class President;
 class GUIText;
 class Event;
 class Timer;
+class RemoteClient;
 
 namespace sf
 {
@@ -27,6 +28,7 @@ class UdpClient;
 
 enum ServerState {WAITING, CLOSED, FULL};
 enum GameType {VERSUS, LAN};
+enum CommunicationRole { SERVER, CLIENT };
 
 class GameManager
 {
@@ -53,6 +55,9 @@ public:
 	void										createServer();
 	void										connectToServer(std::string ipAdress, unsigned short port);
 
+	void										tick(sf::RenderWindow &window);
+	void										update(sf::Event &event);
+
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
 
@@ -69,8 +74,6 @@ public:
 
 	void										init(int year);
 private:
-	std::string mIpAdress;
-	unsigned short mPort;
 
 	static GameManager* mInstance;
 	GameManager();
@@ -137,9 +140,15 @@ private:
 	Event *mConnectToServerEvent;
 	Timer *mCreateServerTimer;
 
-	ServerState mServerState;
-	GameType mGameType;
+	ServerState			mServerState;
+	GameType			mGameType;
+	CommunicationRole	mRole;
 
+	std::shared_ptr<RemoteClient> mRemoteClient;
+	std::string mRemoteIpAddress;
+	unsigned short mRemotePort;
+
+	int mPlayersTurn;
 };
 
 

@@ -418,6 +418,7 @@ void Menu::tick()
 
 void Menu::startGame()
 {
+	mLanPlayWindow->setVisible(false);
 	mMainMenuWindow->setVisible(false);
 	mChooseTeamWindow->setVisible(true); 
 }

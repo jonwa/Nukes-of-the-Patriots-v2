@@ -30,11 +30,6 @@ int main()
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	Randomizer::getInstance(); //Init randomizer singleton to start timer
-	sf::Texture cursorTexture;
-	sf::Texture	cursorClickedTexture;
-	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
-	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
-	sf::Sprite cursor(cursorTexture);
 	GUIManager::getInstance()->init(&window);
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
@@ -55,6 +50,7 @@ int main()
 			{
 				GUIManager::getInstance()->update(event);
 				Menu::getInstance()->update(event);
+				GameManager::getInstance()->update(event);
 			}
 
 			if (event.type == sf::Event::Closed)
@@ -70,13 +66,7 @@ int main()
 			continue;
 		}
 		//std::cout << "Master volume " << sf::Listener::getGlobalVolume() << std::endl;
-		if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
-			cursor.setTexture(cursorClickedTexture);
-		else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)
-			cursor.setTexture(cursorTexture);
-
-		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-		cursor.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
+	
 		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();
@@ -88,7 +78,7 @@ int main()
 		GUIManager::getInstance()->render(states);
 		TimerHandler::getInstance()->tick();
 		Menu::getInstance()->tick();
-		window.draw(cursor);
+		GameManager::getInstance()->tick(window);
 		window.display();
     }
 	Menu::getInstance()->saveConfig();

@@ -18,10 +18,15 @@
 #include "TcpServer.h"
 #include "UdpClient.h"
 #include "UdpServer.h"
+#include "RemoteClient.h"
 #include <SFML\Network.hpp>
 
 static int width = 1024;
 static int height = 768;
+
+static sf::Texture cursorTexture;
+static sf::Texture	cursorClickedTexture;
+static sf::Sprite cursor;
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -47,11 +52,18 @@ GameManager::GameManager() :
 	mLoaded(false),
 	mServerState(CLOSED),
 	mGameType(VERSUS),
-	mIpAdress(""),
-	mPort(0)
+	mRole(CLIENT),
+	mRemoteClient(std::make_shared<RemoteClient>()),
+	mRemoteIpAddress(""),
+	mRemotePort(0),
+	mPlayersTurn(0)
 {
+	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
+	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
+	cursor.setTexture(cursorTexture);
 
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
+	
 	mConnectToServerEvent = Event::addEventHandler("hereIam", 
 		[=](sf::Packet packet)
 	{
@@ -64,8 +76,18 @@ GameManager::GameManager() :
 	Event::addEventHandler("onClientConnected", 
 		[=](sf::Packet packet)
 	{
+		mPlayersTurn = 0;
+		packet>>mRemoteIpAddress>>mRemotePort;
 		mGameType = GameType::LAN;
 		Menu::getInstance()->startGame();
+	});
+
+	Event::addEventHandler("syncMousePosition",
+		[=](sf::Packet packet)
+	{
+		int mouseX = 0, mouseY = 0;
+		packet>>mouseX>>mouseY;
+		mRemoteClient->setMousePosition(sf::Vector2i(mouseX, mouseY));
 	});
 
 	initializeGuiElement();
@@ -624,6 +646,7 @@ void GameManager::initializeGuiFunctions()
 
 void GameManager::searchForServers()
 {
+	mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
 	mUdpClient->triggerServerEvent("clientSearchingForServers", packet);
@@ -643,7 +666,10 @@ void GameManager::createServer()
 	{
 		Menu::getInstance()->mWaitingForClientText->setText("Waiting for players to connect...");
 		std::cout<<"No server found... creating server"<<std::endl;
+		mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
 		mUdpServer = new sf::UdpServer(55005);
+		mRole = SERVER;
+		mServerState = WAITING;
 		Event::addEventHandler("heartBeat", [=](sf::Packet packet)
 		{
 			//char msg[1024];
@@ -659,8 +685,6 @@ void GameManager::createServer()
 		mCreateServerEvent = Event::addEventHandler("clientSearchingForServers", 
 			[=](sf::Packet packet)
 		{
-			if(mServerState == ServerState::CLOSED)
-				mServerState = ServerState::WAITING;
 			if(mServerState == ServerState::WAITING)
 			{
 				char ipAddress[1024];
@@ -681,8 +705,11 @@ void GameManager::createServer()
 			packet>>ipAddress>>port;
 			std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 			sf::Packet _packet;
-			_packet<<"Motherfucker you connected";
+			_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
+			mRemoteIpAddress = ipAddress;
+			mRemotePort = port;
 			mUdpServer->triggerClientEvent("onClientConnected", _packet, sf::IpAddress(ipAddress), port);
+			mPlayersTurn = 0;
 			mGameType = GameType::LAN;
 			Menu::getInstance()->startGame();
 		});
@@ -691,10 +718,41 @@ void GameManager::createServer()
 
 void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 {
-	mIpAdress = ipAdress;
-	mPort = port;
+	mUdpClient->setReceivingAddress(ipAdress);
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
 	mUdpClient->triggerServerEvent("connectToServer", packet);
 	mCreateServerTimer->killTimer();
+}
+
+void GameManager::tick(sf::RenderWindow &window)
+{
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+	if(mGameType == GameType::LAN)
+	{
+		sf::Packet packet;
+		packet<<mousePos.x<<mousePos.y;
+		if(mRole == CLIENT)
+			mUdpClient->triggerServerEvent("syncMousePosition", packet);
+		else if(mRole == SERVER)
+			mUdpServer->triggerClientEvent("syncMousePosition", packet, mRemoteIpAddress, mRemotePort);
+
+		sf::Sprite remoteCursor(cursorTexture);
+		sf::Vector2i remoteMousePos = mRemoteClient->getMousePosition();
+		remoteCursor.setPosition(remoteMousePos.x, remoteMousePos.y);
+		
+		if(mPlayersTurn == 0 && mRole == CLIENT || mPlayersTurn == 1 && mRole == SERVER)
+			window.draw(remoteCursor);
+	}
+	cursor.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
+	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
+		window.draw(cursor);
+}
+
+void GameManager::update(sf::Event &event)
+{
+	if(event.type == sf::Event::MouseButtonPressed && event.key.code == sf::Mouse::Left)
+		cursor.setTexture(cursorClickedTexture);
+	else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)
+		cursor.setTexture(cursorTexture);
 }
