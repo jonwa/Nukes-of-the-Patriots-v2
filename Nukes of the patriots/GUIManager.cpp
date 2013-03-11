@@ -1,5 +1,13 @@
+#include "GUIElement.h"
 #include "GUIManager.h"
 #include <iostream>
+
+GUIManager::GUIManager() :
+	mMouseDown(false),
+	mGuiElements(),
+	mIDIncrement(0)
+{
+}
 
 GUIManager* GUIManager::mInstance = NULL;
 GUIManager* GUIManager::getInstance()
@@ -30,12 +38,6 @@ void GUIManager::setWindow(sf::RenderWindow *window)
 void GUIManager::init(sf::RenderWindow *window)
 {
 	getInstance()->setWindow(window);
-}
-
-GUIManager::GUIManager() :
-	mMouseDown(false),
-	mGuiElements()
-{
 }
 
 void GUIManager::addGUIElement(std::shared_ptr<GUIElement> guiElement)
@@ -113,17 +115,34 @@ void GUIManager::setOnTop(std::shared_ptr<GUIElement> element)
 			break;
 		}
 	}
+}
 
-	//bool lastPos = false;
+int GUIManager::getUniqueID()
+{
+	return mIDIncrement++;
+}
 
-	//for(std::vector<std::shared_ptr<GUIElement> >::size_type it = 0; it < mGuiElements.size(); ++it)
-	//{
-	//	if(mGuiElements[it] == element)
-	//	{
-	//		if(it == mGuiElements.size()-1)
-	//			lastPos = true;
-	//		break;
-	//	}
-	//}
-	//std::cout<<"Is furthest back in vector: "<<(lastPos ? "yes" : "no noob")<<std::endl;
+std::shared_ptr<GUIElement> GUIManager::getElementByID(int id, std::shared_ptr<GUIElement> parent)
+{
+	if(parent == nullptr)
+	{
+		for(std::vector<std::shared_ptr<GUIElement> >::iterator it = mGuiElements.begin(); it != mGuiElements.end(); ++it)
+		{
+			std::shared_ptr<GUIElement> elementWithID = getElementByID(id, *it);
+			if(elementWithID != nullptr)
+				return elementWithID;
+		}
+	}
+	else
+	{
+		for(std::vector<std::shared_ptr<GUIElement> >::iterator it = parent->getChildVector().begin(); it != parent->getChildVector().end(); ++it)
+		{
+			std::shared_ptr<GUIElement> elementWithID = getElementByID(id, *it);
+			if(elementWithID != nullptr)
+				return elementWithID;
+		}
+	}
+	if(parent->getElementID() == id)
+		return parent;
+	return nullptr;
 }

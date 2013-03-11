@@ -1,8 +1,10 @@
 #ifndef _GUI_MANAGER_H
 #define _GUI_MANAGER_H
 
-#include "GUIElement.h"
 #include <functional>
+#include <SFML/Graphics.hpp>
+
+class GUIElement;
 
 class GUIManager
 {
@@ -16,6 +18,8 @@ public:
 	void render(sf::RenderStates states = sf::RenderStates::Default);
 	void update(sf::Event event);
 	void tick();
+	int getUniqueID();
+	std::shared_ptr<GUIElement> getElementByID(int id, std::shared_ptr<GUIElement> parent = nullptr);
 
 	void setOnTop(std::shared_ptr<GUIElement> element);
 
@@ -27,6 +31,7 @@ private:
 	sf::RenderWindow *mWindow;
 	std::vector<std::shared_ptr<GUIElement>> mGuiElements;
 	bool mMouseDown;
+	int mIDIncrement;
 };
 
 #endif

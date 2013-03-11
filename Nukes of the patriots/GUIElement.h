@@ -38,6 +38,7 @@ public:
 	void			setEnabled(bool enabled, bool effectChildren = false);
 	void			setSelected(bool selected);
 	sf::FloatRect	getRectangle();
+	int				getElementID();
 
 	void			addChild(std::shared_ptr<GUIElement> guiElement);
 	std::shared_ptr<GUIElement> getPtr();
@@ -56,6 +57,7 @@ public:
 	void			tick();
 	virtual			~GUIElement();
 protected:
+	int mElementID;
 	sf::FloatRect mRectangle, mLocalRectangle;
 	sf::Color mColor;
 	bool mVisible, mMouseInside, mEnabled, mSelected;

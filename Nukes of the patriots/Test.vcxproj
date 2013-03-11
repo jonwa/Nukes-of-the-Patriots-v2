@@ -16,6 +16,7 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GUIAnimation.cpp" />
     <ClCompile Include="GUIScrollBar.cpp" />
+    <ClCompile Include="RemoteClient.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="SpriteAnimation.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="GUIAnimation.h" />
     <ClInclude Include="GUIScrollBar.h" />
+    <ClInclude Include="RemoteClient.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="SpriteAnimation.h" />
@@ -117,14 +119,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-
       <AdditionalIncludeDirectories>..\..\..\SFML-2.0-rc\include</AdditionalIncludeDirectories>
-
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-
       <AdditionalLibraryDirectories>..\..\..\SFML-2.0-rc\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

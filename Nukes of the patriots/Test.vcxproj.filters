@@ -146,6 +146,9 @@
     <ClCompile Include="GUIScrollBar.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="RemoteClient.cpp">
+      <Filter>Source Files\network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUIButton.h">
@@ -240,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="GUIScrollBar.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteClient.h">
+      <Filter>Header Files\network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
