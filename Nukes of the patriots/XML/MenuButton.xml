@@ -25,6 +25,14 @@
 		<image>Menu/load-poster</image>
 	</button>
 	<button>
+		<name>CloseLoadGameWindow</name>
+		<xPos>281</xPos>
+		<yPos>350</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
+	<button>
 		<name>Settings</name>
 		<xPos>557</xPos>
 		<yPos>329</yPos>
@@ -79,6 +87,54 @@
 		<width>61</width>
 		<height>135</height>
 		<image>Menu/load-poster</image>
+	</button>
+	<button>
+		<name>SaveGame</name>
+		<xPos>382</xPos>
+		<yPos>236</yPos>
+		<width>61</width>
+		<height>135</height>
+		<image>Menu/save-poster</image>
+	</button>
+	<button>
+		<name>SaveGameHover</name>
+		<xPos>382</xPos>
+		<yPos>236</yPos>
+		<width>61</width>
+		<height>135</height>
+		<image>Menu/save-poster-red</image>	
+	</button>
+	<button>
+		<name>CloseSaveGameWindow</name>
+		<xPos>281</xPos>
+		<yPos>350</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
+	<button>
+		<name>FirstSlot</name>
+		<xPos>200</xPos>
+		<yPos>100</yPos>
+		<width>299</width>
+		<height>62</height>
+		<image>Menu/Namnruta-aktiv</image>	
+	</button>
+	<button>
+		<name>SecondSlot</name>
+		<xPos>200</xPos>
+		<yPos>170</yPos>
+		<width>299</width>
+		<height>62</height>
+		<image>Menu/Namnruta-aktiv</image>	
+	</button>	
+	<button>
+		<name>ThirdSlot</name>
+		<xPos>200</xPos>
+		<yPos>240</yPos>
+		<width>299</width>
+		<height>62</height>
+		<image>Menu/Namnruta-aktiv</image>	
 	</button>
 	<button>
 		<name>TeamCapitalist</name>
@@ -242,19 +298,19 @@
 	</button>		
 	<button>
 		<name>Fullscreen</name>
-		<xPos>280</xPos>
+		<xPos>260</xPos>
 		<yPos>260</yPos>
 		<width>40</width>
 		<height>40</height>
-		<image>Menu/Menu_yes_no_box</image>
+		<image>Menu/fullscreenbutton</image>
 	</button>	
 	<button>
-		<name>Esc</name>
-		<xPos>280</xPos>
+		<name>FullscreenClicked</name>
+		<xPos>260</xPos>
 		<yPos>260</yPos>
 		<width>40</width>
 		<height>40</height>
-		<image>Menu/Esc</image>
+		<image>Menu/fullscreenbutton_clicked</image>
 	</button>
 
 </menu>

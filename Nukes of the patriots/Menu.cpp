@@ -62,7 +62,7 @@ void Menu::saveConfig()
 	//config->InsertEndChild(window);
 
 	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
-	master->SetAttribute("value", mVolumeScrollBar->getValue());
+	master->SetAttribute("value", sf::Listener::getGlobalVolume()/*mVolumeScrollBar->getValue()*/);
 	tinyxml2::XMLElement *position = doc.NewElement("VolumePos");
 	position->SetAttribute("value", mVolumeScrollBar->getSprite()->getPosition().x);
 	tinyxml2::XMLElement *windowMode = doc.NewElement("windowMode");
@@ -86,7 +86,7 @@ void Menu::loadConfig()
 	//tinyxml2::XMLElement *window = config->FirstChildElement("Window");
 	//mWindowMode = atoi(window->Attribute("mode"));
 	tinyxml2::XMLElement *master = doc.FirstChildElement("MasterVolume");
-	sf::Listener::setGlobalVolume(atof(master->Attribute("value")));
+	sf::Listener::setGlobalVolume((float)atof(master->Attribute("value")));
 	tinyxml2::XMLElement *position = doc.FirstChildElement("VolumePos");
 	mVolumeScrollBar->getSprite()->setPosition((float)atof(position->Attribute("value")), mVolumeScrollBar->getY());
 	tinyxml2::XMLElement *windowMode = doc.FirstChildElement("windowMode");
@@ -142,16 +142,54 @@ void Menu::update(sf::Event &event)
 	}
 }
 
+void Menu::setLoadGameButtonText()
+{
+	int count = 0;
+	GameManager::SaveFilesVec& save = GameManager::getInstance()->getSaveFilesVec();
+	for(GameManager::SaveFilesVec::reverse_iterator i = save.rbegin(); i != save.rend(); i++)
+	{
+		if(count < 3)
+		{
+			mSavedGameText[count]->setText(*i);
+			
+			count++;
+		}
+		else 
+			break;
+		//mTestText->setRectangle(mTestText->getRectangle());
+	}
+		std::cout << "size of vector " << save.size() << std::endl << std::endl;
+}
+
+std::shared_ptr<GUIWindow> Menu::getWindows(std::string string)
+{
+	if(string == "MainMenu")
+		return mMainMenuWindow;
+	else if(string == "InGameMenu")
+		return mInGameMenuWindow;
+	else if(string == "SaveCanceled")
+		return mSaveGameWindow[0];
+	else if(string == "SaveSuccessful")
+		return mSaveGameWindow[1];
+}
+
+std::shared_ptr<GUIEditField> Menu::getEditField(std::string string)
+{
+	if(string == "SaveFileField")
+		return mSaveGameTextField;
+	else if(string == "CommunistNameField")
+		return mCommunistNameField;	
+	else if(string == "CapitalistNameField")
+		return mCapitalistNameField;
+}			   		
+
+
 void Menu::resetChooseTeamValues()
 {
 	mCapitalistTeamChosen = false;
 	mCommunistTeamChosen = false;
 }
 
-void Menu::setMainMenuVisible()
-{
-	mMainMenuWindow->setVisible(true);
-}
 
  /*Laddar in menyknapparnas positions- och storleksinformation
    från ett externbibliotek kallat tinyXML2
@@ -331,6 +369,25 @@ void Menu::initialize()
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
 	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
 	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
+	mLoadGameWindow			= GUIWindow::create(WindowPos["LoadGameWindow"]);
+	mSavedGameSlots[0]		= GUIButton::create(ButtonPos["FirstSlot"], mLoadGameWindow);
+	mSavedGameSlots[1]		= GUIButton::create(ButtonPos["SecondSlot"], mLoadGameWindow);
+	mSavedGameSlots[2]		= GUIButton::create(ButtonPos["ThirdSlot"], mLoadGameWindow);
+	
+	mLoadGameText			= GUIText::create(sf::FloatRect(200, 53, 100, 40), "< Select a file to load >", mLoadGameWindow);
+	mLoadGameText->setColor(sf::Color::White);
+	mSavedGameText[0]		= GUIText::create(sf::FloatRect(350, 110, 100, 40), " ", mLoadGameWindow);
+	mSavedGameText[0]->setColor(sf::Color::White);
+	mSavedGameText[0]->setAlignment("middle");
+	mSavedGameText[1]		= GUIText::create(sf::FloatRect(350, 180, 100, 40), " ", mLoadGameWindow);
+	mSavedGameText[1]->setColor(sf::Color::White);
+	mSavedGameText[1]->setAlignment("middle");
+	mSavedGameText[2]		= GUIText::create(sf::FloatRect(350, 250, 100, 40), " ", mLoadGameWindow);
+	mSavedGameText[2]->setColor(sf::Color::White);
+	mSavedGameText[2]->setAlignment("middle");
+	mCloseLoadGameWindow	= GUIButton::create(ButtonPos["CloseLoadGameWindow"], mLoadGameWindow);
+
+	mLoadGameWindow->setVisible(false);	
 	mSettingsButton[0]		= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
 	mExitButton[0]			= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
@@ -344,18 +401,29 @@ void Menu::initialize()
 	mExitButton[1]			= GUIButton::create(ButtonPos["Exit"], mInGameMenuWindow);
 	mInGameMenuWindow->setVisible(false);
 
+	mSaveGameWindow[0]			= GUIWindow::create(WindowPos["FirstSaveGameWindow"]);
+	mSaveGameWindow[1]			= GUIWindow::create(WindowPos["SecondSaveGameWindow"]);
+	mCloseSaveGameWindow[0]		= GUIButton::create(ButtonPos["CloseSaveGameWindow"], mSaveGameWindow[0]);
+	mSaveGameText[0]			= GUIText::create(sf::FloatRect(100, 63, 100, 40), "< Name your save-file and click okay >", mSaveGameWindow[0]);
+	mSaveGameText[1]			= GUIText::create(sf::FloatRect(230, 200, 100, 40), "< Save successful >", mSaveGameWindow[1]);
+	mSaveGameText[0]->setColor(sf::Color::White);
+	mSaveGameText[1]->setColor(sf::Color::White);
+	mSaveGameTextField			= GUIEditField::create(sf::FloatRect(200 + 8, 180, 300, 64), GUIEditField::MENU, "filename", false, mSaveGameWindow[0]);
+	mSaveGameWindow[0]->setVisible(false);
+	mSaveGameWindow[1]->setVisible(false);
+
 	mSettingsMenuWindow		= GUIWindow::create(WindowPos["SettingsMenu"]);
 	mVolumeText				= GUIText::create(sf::FloatRect(90, 120, 40, 40), "Volume: ", mSettingsMenuWindow);
 	mVolumeText->setColor(sf::Color::White);
 	mVolumeText->setAlignment("left");
-	mVolumeScrollBar		= GUIScrollBar::create(sf::FloatRect(250, 120, 400, 40), mSettingsMenuWindow);
+	mVolumeScrollBar		= GUIScrollBar::create(sf::FloatRect(260, 130, 400, 20), mSettingsMenuWindow);
 	//mMuteSound				= GUIButton::create(ButtonPos["Mute"], mSettingsMenuWindow);
 	mWindowSizeText			= GUIText::create(sf::FloatRect(90, 260, 40, 40), "Fullscreen: ", mSettingsMenuWindow);
 	mWindowSizeText->setColor(sf::Color::White);
 	mWindowSizeText->setAlignment("left");
 
 	mFullscreenModeButton			= GUIButton::create(ButtonPos["Fullscreen"], mSettingsMenuWindow);
-	mFullscreenImage				= GUIImage::create(ButtonPos["Esc"], mSettingsMenuWindow);
+	mFullscreenImage				= GUIImage::create(ButtonPos["FullscreenClicked"], mSettingsMenuWindow);
 	mCloseSettingsWindow			= GUIButton::create(ButtonPos["CloseSettings"], mSettingsMenuWindow);
 	mSettingsMenuWindow->setVisible(false);
 
@@ -391,6 +459,9 @@ void Menu::initialize()
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSettingsMenuWindow);
+	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[0]);
+	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[1]);
+	GUIManager::getInstance()->addGUIElement(mLoadGameWindow);
 }
 
 
@@ -651,10 +722,68 @@ void Menu::initializeGuiFuctions()
 
 	});
 
+	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
+	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
+	mLoadGameButton->setOnClickFunction([=]()			
+	{
+		setLoadGameButtonText();
+		GUIManager::getInstance()->setOnTop(mLoadGameWindow);
+		mLoadGameWindow->setVisible(true);
+		mMainMenuWindow->setEnabled(false, true);
+	});
+
+	mCloseLoadGameWindow->setOnClickFunction([=]()
+	{
+		mLoadGameWindow->setVisible(false);
+		mMainMenuWindow->setEnabled(true, true);
+	});
+
 	mCloseWaitingForClientWindow->setOnClickFunction([=]()
 	{
 		mWaitingForClientWindow->setVisible(false);
 		mWaitingForClientWindow->setEnabled(false, true);
 		mLanPlayWindow->setEnabled(true, true);
+	});
+
+	mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });
+	mSaveGameButton->setMouseLeaveFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGame"]); });
+	mSaveGameButton->setOnClickFunction([=]()
+	{
+		mInGameMenuWindow->setEnabled(false, true);
+		GUIManager::getInstance()->setOnTop(mSaveGameWindow[0]);
+		mSaveGameWindow[0]->setVisible(true);
+	});
+
+	mCloseSaveGameWindow[0]->setOnClickFunction([=]()
+	{
+		mSaveGameWindow[0]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mSaveGameWindow[1]);
+		mSaveGameWindow[1]->setVisible(true);
+		GameManager::getInstance()->setDocumentName(mSaveGameTextField->getText());
+				
+		std::shared_ptr<GUIWindow> _saveWindow = mSaveGameWindow[1];
+		std::shared_ptr<GUIWindow> _inGameWindow = mInGameMenuWindow;
+		Timer::setTimer([=]()
+		{
+			_saveWindow->setVisible(false);
+			_inGameWindow->setEnabled(true, true);
+
+		}, 2000, 1);
+	});
+
+
+	mSavedGameSlots[0]->setOnClickFunction([=]()
+	{
+		std::cout << mSavedGameText[0]->getText() << std::endl;
+	});
+	
+	mSavedGameSlots[1]->setOnClickFunction([=]()
+	{
+		std::cout << mSavedGameText[1]->getText() << std::endl;
+	});
+	
+	mSavedGameSlots[2]->setOnClickFunction([=]()
+	{
+		std::cout << mSavedGameText[2]->getText() << std::endl;
 	});
 }	

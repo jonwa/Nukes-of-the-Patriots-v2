@@ -64,4 +64,28 @@
 		<height>0</height>
 		<image>Menu/lan_window_background</image>
 	</window>
+	<window>
+		<name>FirstSaveGameWindow</name>
+		<xPos>162</xPos>
+		<yPos>50</yPos>
+		<width>700</width>
+		<height>456</height>
+		<image>Menu/choose_team</image>
+	</window>
+	<window>
+		<name>SecondSaveGameWindow</name>
+		<xPos>162</xPos>
+		<yPos>50</yPos>
+		<width>700</width>
+		<height>456</height>
+		<image>Menu/choose_team</image>
+	</window>
+	<window>
+		<name>LoadGameWindow</name>
+		<xPos>162</xPos>
+		<yPos>50</yPos>
+		<width>700</width>
+		<height>456</height>
+		<image>Menu/choose_team</image>
+	</window>
 </windows>

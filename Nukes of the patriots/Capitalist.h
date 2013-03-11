@@ -29,12 +29,16 @@ class Communist;
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
 #include "Sound.h"
+#include "tinyxml2.h"
 
 class Capitalist : public SuperPower 
 {
 public:
 	Capitalist();
 	~Capitalist();
+
+	void saveGame(tinyxml2::XMLDocument &doc);
+	void loadGame(tinyxml2::XMLDocument &doc);
 
 	std::shared_ptr<President>	getPresident();
 	void						setPresident(std::shared_ptr<President>);
@@ -284,6 +288,7 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
+	std::shared_ptr<GUIText>   mTaxesIncomeHeadLiner;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
 	std::shared_ptr<GUIText>   mCurrentTaxesText[2];
 	std::shared_ptr<GUIText>   mTaxesIncomeText[2];      

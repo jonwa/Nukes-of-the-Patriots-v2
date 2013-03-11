@@ -34,7 +34,15 @@ public:
 	
 	~GameManager();
 
-
+	typedef std::vector<std::string> SaveFilesVec;
+	void saveGame();
+	void loadGame();
+	void saveFileName();
+	void loadFileName();
+	void setDocumentName(std::string fileName);
+	void overwriteCurrentDocument(std::string fileName);
+	std::string getDocumentName() const;
+	SaveFilesVec& getSaveFilesVec();
 
 	int											getYear()const;
 	std::shared_ptr<SuperPower> 				getCurrentPlayer()const;
@@ -68,7 +76,8 @@ public:
 
 	void										init(int year);
 private:
-
+	std::string mFileName;
+	SaveFilesVec mSaveFiles;
 
 	static GameManager* mInstance;
 	GameManager();
@@ -124,6 +133,11 @@ private:
 
 	std::shared_ptr<GUIText>   mCommunistHeadline[2];
 	std::shared_ptr<GUIText>   mCapitalistHeadline[2];
+
+	std::shared_ptr<GUIWindow> mUnableToSaveWindow;
+	std::shared_ptr<GUIButton> mCancelSaveButton;
+	std::shared_ptr<GUIButton> mOverWriteButton;
+	std::shared_ptr<GUIText>   mUnableToSaveText;
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;

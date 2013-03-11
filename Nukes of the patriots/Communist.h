@@ -16,7 +16,7 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Audio\Music.hpp>
 #include "Sound.h"
-
+#include "tinyxml2.h"
 
 class President;
 class GUIElement;
@@ -34,6 +34,8 @@ public:
 	Communist();
 	~Communist();
 
+	void saveGame(tinyxml2::XMLDocument &doc);
+	void loadGame(tinyxml2::XMLDocument &doc);
 
 	void		reset();
 
@@ -333,12 +335,14 @@ private:
 	std::shared_ptr<GUIText>   mSpaceProgramIncreasedTextValue;
 
 	std::shared_ptr<GUIWindow> mResourceIncomeWindow;
+	std::shared_ptr<GUIText>   mResourcesIncomeHeadLiner;
 	std::shared_ptr<GUIButton> mCloseResourceIncomeWindow;
 	std::shared_ptr<GUIText>   mFoodIncome;
 	std::shared_ptr<GUIText>   mGoodsIncome;
 	std::shared_ptr<GUIText>   mTechIncome;
 
 	std::shared_ptr<GUIWindow> mTaxesIncomeWindow;
+	std::shared_ptr<GUIText>   mTaxesIncomeHeadLiner;
 	std::shared_ptr<GUIText>   mCurrentPopulationText[2];
 	std::shared_ptr<GUIText>   mCurrentTaxesText[2];
 	std::shared_ptr<GUIText>   mTaxesIncomeText[2];      

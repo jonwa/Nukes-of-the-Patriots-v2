@@ -21,13 +21,13 @@
 #include "SoundHandler.h"
 #include "tinyxml2.h"
 #include "Randomizer.h"
-#include <sfeMovie\Movie.hpp>
+
 
 using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	Randomizer::getInstance(); //Init randomizer singleton to start timer
@@ -40,10 +40,11 @@ int main()
 	ResourceHandler::getInstance()->loadImages();
 	ResourceHandler::getInstance()->load();
 	Menu::getInstance()->setWindow(window);
-	Menu::getInstance()->setMainMenuVisible();
+	Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
 	Menu::getInstance()->loadConfig();
-	
-	GameManager::getInstance();
+	GameManager::getInstance()->loadFileName();
+	//GameManager::getInstance();
+
 	bool sleeping = false;
 
 	while (window.isOpen())
@@ -93,5 +94,6 @@ int main()
 		window.display();
     }
 	Menu::getInstance()->saveConfig();
+	GameManager::getInstance()->saveFileName();
     return EXIT_SUCCESS;
 }

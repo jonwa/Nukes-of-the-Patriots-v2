@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <sstream>
+#include "tinyxml2.h"
 
 class GUIText;
 
@@ -33,7 +34,7 @@ public:
 	int			getSpyNetwork();
 	int			getCurrency();
 	int			getRound();
-
+	int			getPatriotism();
 	int			getPatriotismPreviousRound()		{ return mPatriotismPreviousRound; }; 
 	int			getCurrencyPreviousRound()			{ return mCurrencyPreviousRound; };
 	int			getPopulationPreviousRound()		{ return mPopulationPreviousRound; };
@@ -85,6 +86,9 @@ public:
 	virtual void		playMusic() {};
 	virtual void		newYearStart() = 0;
 	virtual void		reset();
+
+	virtual void		saveGame(tinyxml2::XMLDocument &doc){};
+	virtual void		loadGame(tinyxml2::XMLDocument &doc){};
 protected:
 	std::string intToString(int i)
 	{

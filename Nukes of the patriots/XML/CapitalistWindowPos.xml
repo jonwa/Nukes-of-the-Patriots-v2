@@ -14,7 +14,7 @@
 		<yPos>636</yPos>
 		<width>800</width>
 		<height>132</height>
-		<image>Capitalist/capitalist_frame</image>
+		<image>Capitalist/kap_button_panel</image>
 	</window>
 	<window>
 		<name>CapitalistTaxesWindow</name>
@@ -99,10 +99,10 @@
 	<window>
 		<name>TaxesIncome</name>
 		<xPos>227</xPos>
-		<yPos>264</yPos>
+		<yPos>171</yPos>
 		<width>570</width>
 		<height>168</height>
-		<image>Capitalist/Capitalist_Window_Small</image>
+		<image>Capitalist/Capitalist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>ExportedResourcesIncome</name>

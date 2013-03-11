@@ -28,19 +28,20 @@ public:
 	void saveConfig();
 	void loadConfig();
 
+	std::shared_ptr<GUIWindow> getWindows(std::string string);
+	std::shared_ptr<GUIEditField> getEditField(std::string string);
+
 	void setWindow(sf::RenderWindow& window);
 	sf::RenderWindow& getWindow();
 
 	void clear();
-	void setInGameMenuVisible();
 	void loadTeamAnimation();
 	void tick();
 	int mMasterVolume;
 	void update(sf::Event &event);
 
-	void setMainMenuVisible();
 	void resetChooseTeamValues();
-
+	void setLoadGameButtonText();
 private:
 	static Menu* mInstance;
 
@@ -55,6 +56,8 @@ private:
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > WindowPos;
 	std::map<std::string, std::shared_ptr<sf::Music> > MenuMusic;
+
+	std::vector<std::string> tempVec; //used for load game buttons
 
 	void initialize();
 	void initializeGuiFuctions();
@@ -80,6 +83,11 @@ private:
 	std::shared_ptr<GUIButton> mStartNewGameButton;
 	std::shared_ptr<GUIButton> mMultiPlayerButton;
 	std::shared_ptr<GUIButton> mLoadGameButton;
+	std::shared_ptr<GUIWindow> mLoadGameWindow;	
+	std::shared_ptr<GUIButton> mSavedGameSlots[3];
+	std::shared_ptr<GUIText>   mSavedGameText[3];
+	std::shared_ptr<GUIButton> mCloseLoadGameWindow;
+	std::shared_ptr<GUIText>   mLoadGameText;
 	std::shared_ptr<GUIButton> mSettingsButton[2];
 	std::shared_ptr<GUIButton> mCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton[2];
@@ -97,6 +105,10 @@ private:
 	std::shared_ptr<GUIButton> mResumeGameButton;
 	std::shared_ptr<GUIButton> mRestartGameButton;
 	std::shared_ptr<GUIButton> mSaveGameButton;
+	std::shared_ptr<GUIWindow> mSaveGameWindow[2];
+	std::shared_ptr<GUIButton> mCloseSaveGameWindow[2];
+	std::shared_ptr<GUIText>   mSaveGameText[2];
+	std::shared_ptr<GUIEditField> mSaveGameTextField;
 
 	std::shared_ptr<GUIEditField> mCapitalistNameField;
 	std::shared_ptr<GUIEditField> mCommunistNameField;
