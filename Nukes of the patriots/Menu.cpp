@@ -23,8 +23,6 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	
-
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
@@ -451,9 +449,10 @@ void Menu::initialize()
 	// Lan play ("Multi-player")
 	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
 	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
-	mWaitingForClientWindow			= GUIWindow::create(WindowPos[""], mLanPlayWindow);
-	mWaitingForClientText			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "WAITING FOR PLAYER...", mWaitingForClientWindow);
-	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos[""], mWaitingForClientWindow);
+	mWaitingForClientWindow			= GUIWindow::create(WindowPos["WaitingForClient"], mLanPlayWindow);
+	mWaitingForClientText			= GUIText::create(sf::FloatRect(100, 100, 0, 0), "Searching for servers...", mWaitingForClientWindow);
+	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos["CloseWaitingForClient"], mWaitingForClientWindow);
+	mWaitingForClientWindow->setVisible(false);
 	mLanPlayWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
@@ -486,16 +485,20 @@ void Menu::tick()
 	}
 }
 
+void Menu::startGame()
+{
+	mLanPlayWindow->setVisible(false);
+	mMainMenuWindow->setVisible(false);
+	mChooseTeamWindow->setVisible(true); 
+}
+
 void Menu::initializeGuiFuctions()
 {
 	mStartNewGameButton->setMouseEnterFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGameHover"]); });
 	mStartNewGameButton->setMouseLeaveFunction([=]()	{ mStartNewGameButton->setTexture(ButtonPos["StartGame"]); });
 	mStartNewGameButton->setOnClickFunction([=]()		
 	{ 
-		mMainMenuWindow->setVisible(false);
-		//mShowTeamChooseAnimation = true;
-		//mTeamAnimationTimer->resetTimer();
-		mChooseTeamWindow->setVisible(true); 
+		startGame();
 	});
 
 	mMultiPlayerButton->setMouseEnterFunction([=]()		{ mMultiPlayerButton->setTexture(ButtonPos["MultiPlayerHover"]); });
@@ -509,7 +512,10 @@ void Menu::initializeGuiFuctions()
 
 	mLanPlayQuickConnect->setOnClickFunction([=]()
 	{
-
+		mLanPlayWindow->setEnabled(false, true);
+		mWaitingForClientWindow->setEnabled(true, true);
+		mWaitingForClientWindow->setVisible(true);
+		GameManager::getInstance()->searchForServers();
 	});
 
 	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });

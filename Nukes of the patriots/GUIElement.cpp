@@ -1,5 +1,7 @@
 #include "GUIElement.h"
 #include <iostream>
+#include "GUIManager.h"
+#include "GameManager.h"
 
 GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, GUIType guiType) : 
 	mRectangle(rect),
@@ -13,7 +15,8 @@ GUIElement::GUIElement(sf::FloatRect rect, std::shared_ptr<GUIElement> parent, G
 	mCallMouseLeaveFunc(false),
 	mEnabled(true),
 	mSelected(false),
-	mColor(sf::Color(255, 255, 255, 255))
+	mColor(sf::Color(255, 255, 255, 255)),
+	mElementID(0)
 {
 }
 
@@ -31,6 +34,7 @@ void GUIElement::init()
 		setX(mRectangle.left + mParent->mRectangle.left);
 		setY(mRectangle.top + mParent->mRectangle.top);
 	}
+	mElementID = GUIManager::getInstance()->getUniqueID();
 }
 
 std::shared_ptr<GUIElement> GUIElement::getPtr()
@@ -122,6 +126,11 @@ bool GUIElement::isSelected()const
 sf::FloatRect GUIElement::getRectangle()
 {
 	return mRectangle;
+}
+
+int GUIElement::getElementID()
+{
+	return mElementID;
 }
 
 void GUIElement::setX(float x)
@@ -309,19 +318,37 @@ void GUIElement::tick()
 	{
 		mCallClickFunc = false;
 		if(mOnClickFunction != nullptr)
+		{
 			mOnClickFunction();
+			if(GameManager::getInstance()->getGameType() == LAN)
+			{
+				GameManager::getInstance()->syncGUIClick(shared_from_this());
+			}
+		}
 	}
 	if(mCallMouseEnterFunc)
 	{
 		mCallMouseEnterFunc = false;
 		if(mMouseEnterFunction != nullptr)
+		{
 			mMouseEnterFunction();
+			if(GameManager::getInstance()->getGameType() == LAN)
+			{
+				GameManager::getInstance()->syncGUIMouseEnter(shared_from_this());
+			}
+		}
 	}
 	if(mCallMouseLeaveFunc)
 	{
 		mCallMouseLeaveFunc = false;
 		if(mMouseLeaveFunction != nullptr)
+		{
 			mMouseLeaveFunction();
+			if(GameManager::getInstance()->getGameType() == LAN)
+			{
+				GameManager::getInstance()->syncGUIMouseLeave(shared_from_this());
+			}
+		}
 	}
 	if(!mChilds.empty())
 	{
