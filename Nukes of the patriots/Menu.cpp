@@ -23,8 +23,6 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	
-
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();

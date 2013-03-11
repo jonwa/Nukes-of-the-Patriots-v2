@@ -17,6 +17,7 @@ class GUIText;
 class Event;
 class Timer;
 class RemoteClient;
+class GUIElement;
 
 namespace sf
 {
@@ -73,6 +74,11 @@ public:
 	std::shared_ptr<GUIWindow>					getStatsWindow();
 
 	void										init(int year);
+
+	GameType									getGameType();
+	void										syncGUIClick(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
 private:
 
 	static GameManager* mInstance;
@@ -148,7 +154,7 @@ private:
 	std::string mRemoteIpAddress;
 	unsigned short mRemotePort;
 
-	int mPlayersTurn;
+	int mPlayersTurn; // 0 = servers turn
 };
 
 

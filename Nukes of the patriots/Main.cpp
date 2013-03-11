@@ -66,7 +66,7 @@ int main()
 			continue;
 		}
 		//std::cout << "Master volume " << sf::Listener::getGlobalVolume() << std::endl;
-	
+
 		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();

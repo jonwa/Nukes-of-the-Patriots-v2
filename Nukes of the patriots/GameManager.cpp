@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GUIManager.h"
+#include "GUIElement.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
@@ -20,6 +21,7 @@
 #include "UdpServer.h"
 #include "RemoteClient.h"
 #include <SFML\Network.hpp>
+#include "RemoteClient.h"
 
 static int width = 1024;
 static int height = 768;
@@ -88,6 +90,30 @@ GameManager::GameManager() :
 		int mouseX = 0, mouseY = 0;
 		packet>>mouseX>>mouseY;
 		mRemoteClient->setMousePosition(sf::Vector2i(mouseX, mouseY));
+	});
+
+	Event::addEventHandler("syncGUIClick",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		std::cout<<"gui click - GUIID: "<<id<<std::endl;
+	});
+
+	Event::addEventHandler("syncGUIMouseEnter",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		std::cout<<"gui mouse enter - GUIID: "<<id<<std::endl;
+	});
+
+	Event::addEventHandler("syncGUIMouseLeave",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		std::cout<<"gui mouse leave - GUIID: "<<id<<std::endl;
 	});
 
 	initializeGuiElement();
@@ -650,7 +676,6 @@ void GameManager::searchForServers()
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
 	mUdpClient->triggerServerEvent("clientSearchingForServers", packet);
-	
 	if(mCreateServerTimer == nullptr)
 	{
 		mCreateServerTimer = Timer::setTimer([=]()
@@ -679,10 +704,10 @@ void GameManager::createServer()
 		Timer::setTimer([=]()
 		{
 			sf::Packet packet;
-			packet<<"arvid";
+			packet<<"aleksi";
 			mUdpClient->triggerServerEvent("heartBeat", packet);
 		}, 1000, 0);
-		mCreateServerEvent = Event::addEventHandler("clientSearchingForServers", 
+		Event::addEventHandler("clientSearchingForServers", 
 			[=](sf::Packet packet)
 		{
 			if(mServerState == ServerState::WAITING)
@@ -740,11 +765,12 @@ void GameManager::tick(sf::RenderWindow &window)
 		sf::Sprite remoteCursor(cursorTexture);
 		sf::Vector2i remoteMousePos = mRemoteClient->getMousePosition();
 		remoteCursor.setPosition(remoteMousePos.x, remoteMousePos.y);
-		
+
 		if(mPlayersTurn == 0 && mRole == CLIENT || mPlayersTurn == 1 && mRole == SERVER)
 			window.draw(remoteCursor);
 	}
-	cursor.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
+	cursor.setPosition(mousePos.x, mousePos.y);
+
 	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
 		window.draw(cursor);
 }
@@ -755,4 +781,39 @@ void GameManager::update(sf::Event &event)
 		cursor.setTexture(cursorClickedTexture);
 	else if(event.type == sf::Event::MouseButtonReleased && event.key.code == sf::Mouse::Left)
 		cursor.setTexture(cursorTexture);
+}
+
+GameType GameManager::getGameType()
+{
+	return mGameType;
+}
+
+void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIClick", packet);
+	if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIClick", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIMouseEnter", packet);
+	if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIMouseEnter", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
+	if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
 }
