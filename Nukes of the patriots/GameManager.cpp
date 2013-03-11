@@ -18,7 +18,7 @@
 #include "TcpServer.h"
 #include "UdpClient.h"
 #include "UdpServer.h"
-#include "SFML\Network.hpp"
+#include <SFML\Network.hpp>
 
 static int width = 1024;
 static int height = 768;
@@ -45,26 +45,28 @@ GameManager::GameManager() :
 	mVecPlayersLeft(),		
 	mRound(0),
 	mLoaded(false),
-	mServerState(CLOSED)
+	mServerState(CLOSED),
+	mGameType(VERSUS),
+	mIpAdress(""),
+	mPort(0)
 {
-	Event::addEventHandler("heartBeat", [=](sf::Packet packet)
-	{
-		char msg[1024];
-		packet>>msg;
-		std::cout<<"client: "<<msg<<std::endl;
-		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
-	});
-	mUdpServer = new sf::UdpServer(55005);
-	//mTcpServer = new sf::TcpServer(55006);
-	//mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.11.161.227"));
 
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
-	Timer::setTimer([=]()
+	mConnectToServerEvent = Event::addEventHandler("hereIam", 
+		[=](sf::Packet packet)
 	{
-		sf::Packet packet;
-		packet<<"arvid";
-		mUdpClient->triggerServerEvent("heartBeat", packet);
-	}, 1000, 0);
+		char ipAddress[1024];
+		unsigned short port;
+		packet>>ipAddress>>port;
+		connectToServer(ipAddress, port);
+	});
+
+	Event::addEventHandler("onClientConnected", 
+		[=](sf::Packet packet)
+	{
+		mGameType = GameType::LAN;
+		Menu::getInstance()->startGame();
+	});
 
 	initializeGuiElement();
 	initializeGuiFunctions();
@@ -629,40 +631,70 @@ void GameManager::searchForServers()
 	if(mCreateServerTimer == nullptr)
 	{
 		mCreateServerTimer = Timer::setTimer([=]()
-			{
-				createServer();
-			}, 5000, 1);
-	}
-
-	if(mConnectToServerEvent == nullptr)
-	{
-		mConnectToServerEvent = Event::addEventHandler("hereIam", 
-				[=](sf::Packet packet)
-			{
-				connectToServer();
-			});
+		{
+			createServer();
+		}, 5000, 1);
 	}
 }
 
 void GameManager::createServer()
 {
-	if(mCreateServerEvent == nullptr)
+	if(mUdpServer == nullptr)
 	{
+		Menu::getInstance()->mWaitingForClientText->setText("Waiting for players to connect...");
+		std::cout<<"No server found... creating server"<<std::endl;
+		mUdpServer = new sf::UdpServer(55005);
+		Event::addEventHandler("heartBeat", [=](sf::Packet packet)
+		{
+			//char msg[1024];
+			//packet>>msg;
+			//std::cout<<"client: "<<msg<<std::endl;
+		});
+		Timer::setTimer([=]()
+		{
+			sf::Packet packet;
+			packet<<"arvid";
+			mUdpClient->triggerServerEvent("heartBeat", packet);
+		}, 1000, 0);
 		mCreateServerEvent = Event::addEventHandler("clientSearchingForServers", 
 			[=](sf::Packet packet)
 		{
+			if(mServerState == ServerState::CLOSED)
+				mServerState = ServerState::WAITING;
+			if(mServerState == ServerState::WAITING)
+			{
+				char ipAddress[1024];
+				unsigned short port;
+				packet>>ipAddress>>port;
+				std::cout<<"client searching for server: "<<ipAddress<<":"<<port<<std::endl;
+				sf::Packet _packet;
+				_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
+				mUdpServer->triggerClientEvent("hereIam", _packet, sf::IpAddress(ipAddress), port);
+			}
+		});
+		Event::addEventHandler("connectToServer", 
+			[=](sf::Packet packet)
+		{
+			mServerState = ServerState::FULL;
 			char ipAddress[1024];
 			unsigned short port;
-			packet<<ipAddress<<port;
-			std::cout<<"client searching for server: "<<ipAddress<<":"<<port<<std::endl;
+			packet>>ipAddress>>port;
+			std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 			sf::Packet _packet;
-			_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
-			mUdpServer->triggerClientEvent("hereIam", packet, sf::IpAddress(ipAddress), port);
+			_packet<<"Motherfucker you connected";
+			mUdpServer->triggerClientEvent("onClientConnected", _packet, sf::IpAddress(ipAddress), port);
+			mGameType = GameType::LAN;
+			Menu::getInstance()->startGame();
 		});
 	}
 }
 
-void GameManager::connectToServer()
+void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 {
+	mIpAdress = ipAdress;
+	mPort = port;
+	sf::Packet packet;
+	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
+	mUdpClient->triggerServerEvent("connectToServer", packet);
 	mCreateServerTimer->killTimer();
 }

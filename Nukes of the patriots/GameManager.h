@@ -26,6 +26,7 @@ class UdpClient;
 }
 
 enum ServerState {WAITING, CLOSED, FULL};
+enum GameType {VERSUS, LAN};
 
 class GameManager
 {
@@ -50,7 +51,7 @@ public:
 	
 	void										searchForServers();
 	void										createServer();
-	void										connectToServer();
+	void										connectToServer(std::string ipAdress, unsigned short port);
 
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
@@ -68,7 +69,8 @@ public:
 
 	void										init(int year);
 private:
-
+	std::string mIpAdress;
+	unsigned short mPort;
 
 	static GameManager* mInstance;
 	GameManager();
@@ -136,6 +138,7 @@ private:
 	Timer *mCreateServerTimer;
 
 	ServerState mServerState;
+	GameType mGameType;
 
 };
 

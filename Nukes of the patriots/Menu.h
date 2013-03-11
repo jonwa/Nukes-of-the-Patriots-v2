@@ -37,9 +37,14 @@ public:
 	void tick();
 	int mMasterVolume;
 	void update(sf::Event &event);
+	void startGame();
 
 	void setMainMenuVisible();
 	void resetChooseTeamValues();
+public:
+	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
+	std::shared_ptr<GUIText>   mWaitingForClientText;
+	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
 private:
 	static Menu* mInstance;
@@ -110,10 +115,6 @@ private:
 
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
-
-	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
-	std::shared_ptr<GUIText>   mWaitingForClientText;
-	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
 	sf::RenderWindow* mWindow;
 };

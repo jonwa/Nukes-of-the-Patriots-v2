@@ -256,5 +256,13 @@
 		<height>40</height>
 		<image>Menu/Esc</image>
 	</button>
+	<button>
+		<name>CloseWaitingForClient</name>
+		<xPos>280</xPos>
+		<yPos>260</yPos>
+		<width>40</width>
+		<height>40</height>
+		<image>Menu/Esc</image>
+	</button>
 
 </menu>
