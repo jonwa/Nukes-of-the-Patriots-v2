@@ -32,7 +32,10 @@ SuperPower::SuperPower() :
 	mTaxesPreviousRound(mTaxes),
 	mSpyNetworkPreviousRound(mSpyNetwork),
 	mNuclearWeaponPreviousRound(mNuclearWeapon),
-	mSpaceProgramPreviousRound(mSpaceProgram)
+	mSpaceProgramPreviousRound(mSpaceProgram),
+	mExportedFoodSold(0), 
+	mExportedGoodsSold(0), 
+	mExportedTechSold(0)
 {
 }
 
@@ -40,7 +43,7 @@ void SuperPower::reset()
 {
 	mPopulation								= 50;			//Befolkning i miljoner
 	mPatriotism								= 20;
-	mCurrency								= 500;
+	mCurrency								= 0;
 	mTaxes									= 30;
 	mFood									= 0;
 	mExportedFood							= 0;
@@ -68,6 +71,9 @@ void SuperPower::reset()
 	mSpyNetworkPreviousRound				= mSpyNetwork;
 	mNuclearWeaponPreviousRound				= mNuclearWeapon;
 	mSpaceProgramPreviousRound				= mSpaceProgram;
+	mExportedFoodSold						= 0;
+	mExportedGoodsSold						= 0;
+	mExportedTechSold						= 0;
 }
 
 SuperPower::~SuperPower()
@@ -194,7 +200,6 @@ void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 		}
 		else
 			text->setText("There is plenty of food for the whole population.\n\nThey now grow to " + intToString(mPopulation) +" million.");
-		
 	}
 	/*	Om mängden mat är mindre än häflten av befolkningen tilldelas mFood noll
 		mPatriotism subtraheras även med två*/

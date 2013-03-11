@@ -28,7 +28,6 @@ class Communist;
 #include <SFML\Window\Event.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <SFML/System.hpp>
-
 #include "Sound.h"
 
 class Capitalist : public SuperPower 
@@ -70,7 +69,7 @@ private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
 
-
+	sf::Clock KLOCKA;
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -120,6 +119,8 @@ private:
 	std::shared_ptr<GUIText> mPatriotismText;
 
 	std::shared_ptr<GUIText> mStatsText[2][9];
+
+	std::shared_ptr<GUIText> mWindowHeadlines[6];
 	
 	std::shared_ptr<GUIText> mNuclearText;
 	std::shared_ptr<GUIText> mSpaceText;
@@ -148,7 +149,6 @@ private:
 	std::shared_ptr<GUIImage>  mPresidentFrame;
 	std::shared_ptr<GUIButton> mCapitalistPresident;
 	std::shared_ptr<GUIButton> mCapitalistTaxesButton;
-	//std::shared_ptr<GUIButton> mCapitalistTaxesIsPresssedButton;
 	std::shared_ptr<GUIButton> mCapitalistResourceButton;	
 	std::shared_ptr<GUIButton> mCapitalistUpgradeButton;		
 	std::shared_ptr<GUIButton> mCapitalistTradeButton;	

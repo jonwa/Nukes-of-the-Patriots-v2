@@ -14,7 +14,18 @@ class Communist;
 class Capitalist;
 class President;
 class GUIText;
+class Event;
+class Timer;
 
+namespace sf
+{
+class TcpServer;
+class TcpClient;
+class UdpServer;
+class UdpClient;
+}
+
+enum ServerState {WAITING, CLOSED, FULL};
 
 class GameManager
 {
@@ -37,12 +48,15 @@ public:
 	void										addSuperPower(std::shared_ptr<SuperPower> power);
 	//void										setVector(std::vector<std::shared_ptr<SuperPower> > SuperPowerVec);
 	
+	void										searchForServers();
+	void										createServer();
+	void										connectToServer();
+
 	std::shared_ptr<President>					getRandomPresident();
 	std::shared_ptr<President>					getGeneral(int number);
 
 	sf::Texture&								getPresidentPlaque(std::shared_ptr<President> president);
 	sf::Texture&								getGeneralPlaque(std::shared_ptr<President> general);
-
 
 	std::shared_ptr<SuperPower>					getCapitalist();
 	std::shared_ptr<SuperPower>					getCommunist();
@@ -54,6 +68,8 @@ public:
 
 	void										init(int year);
 private:
+
+
 	static GameManager* mInstance;
 	GameManager();
 	GameManager(const GameManager&){}
@@ -108,6 +124,18 @@ private:
 
 	std::shared_ptr<GUIText>   mCommunistHeadline[2];
 	std::shared_ptr<GUIText>   mCapitalistHeadline[2];
+
+	sf::TcpServer* mTcpServer;
+	sf::TcpClient* mTcpClient;
+
+	sf::UdpServer* mUdpServer;
+	sf::UdpClient* mUdpClient;
+
+	Event *mCreateServerEvent;
+	Event *mConnectToServerEvent;
+	Timer *mCreateServerTimer;
+
+	ServerState mServerState;
 
 };
 

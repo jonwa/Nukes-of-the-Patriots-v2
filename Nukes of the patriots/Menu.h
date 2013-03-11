@@ -6,6 +6,7 @@
 #include "GUIButton.h"
 #include "GUIEditField.h"
 #include "GUIImage.h"
+#include "GUIScrollBar.h"
 #include "GUIText.h"
 #include "GUIImage.h"
 #include <memory>
@@ -15,37 +16,41 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-#include <SFML/Network.hpp>
 
 class Capitalist;
 class Communist;
 
-namespace sf
-{
-class TcpServer;
-class TcpClient;
-class UdpServer;
-class UdpClient;
-}
-
 class Menu
 {
 public:
-	Menu();
-	Menu(sf::RenderWindow &window);
-	~Menu();
+	static Menu* getInstance();
+	
+	void saveConfig();
+	void loadConfig();
+
+	void setWindow(sf::RenderWindow& window);
+	sf::RenderWindow& getWindow();
+
 	void clear();
 	void setInGameMenuVisible();
-	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
 	void loadTeamAnimation();
 	void tick();
-
+	int mMasterVolume;
 	void update(sf::Event &event);
 
 	void setMainMenuVisible();
 	void resetChooseTeamValues();
 
 private:
+	static Menu* mInstance;
+
+	bool fullscreen;
+
+	Menu();
+	//Menu(const Menu&){}
+	//Menu operator=(const Menu&){}
+	~Menu();
+
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > WindowPos;
@@ -63,6 +68,7 @@ private:
 
 	void resetPickTeamValues();
 
+
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
 	std::shared_ptr<GUIWindow> mSettingsMenuWindow;
@@ -74,14 +80,17 @@ private:
 	std::shared_ptr<GUIButton> mStartNewGameButton;
 	std::shared_ptr<GUIButton> mMultiPlayerButton;
 	std::shared_ptr<GUIButton> mLoadGameButton;
-	std::shared_ptr<GUIButton> mSettingsButton;
+	std::shared_ptr<GUIButton> mSettingsButton[2];
 	std::shared_ptr<GUIButton> mCreditsButton;
-	std::shared_ptr<GUIButton> mExitButton;
+	std::shared_ptr<GUIButton> mExitButton[2];
 
 	std::shared_ptr<GUIText>   mVolumeText;
-	std::shared_ptr<GUIButton> mLowerVolume;
-	std::shared_ptr<GUIButton> mRaiseVolume;
+	std::shared_ptr<GUIScrollBar> mVolumeScrollBar;
+	std::shared_ptr<GUIImage>  mFullscreenImage;
+	//std::shared_ptr<GUIButton> mMuteSound;
 	std::shared_ptr<GUIText>   mWindowSizeText;
+	std::shared_ptr<GUIText>   mFullscreenModeText;
+	std::shared_ptr<GUIButton> mFullscreenModeButton;
 	std::shared_ptr<GUIButton> mCloseSettingsWindow;
 
 	std::shared_ptr<GUIWindow> mInGameMenuWindow;
@@ -102,13 +111,11 @@ private:
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
 
-	sf::TcpServer* mTcpServer;
-	sf::TcpClient* mTcpClient;
+	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
+	std::shared_ptr<GUIText>   mWaitingForClientText;
+	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
-	sf::UdpServer* mUdpServer;
-	sf::UdpClient* mUdpClient;
-
-	sf::RenderWindow &mWindow;
+	sf::RenderWindow* mWindow;
 };
 
 #endif

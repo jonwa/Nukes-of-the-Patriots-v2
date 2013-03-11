@@ -27,10 +27,10 @@
 	<window>
 		<name>CapitalistResourceWindow</name>
 		<xPos>227</xPos>
-		<yPos>264</yPos>
+		<yPos>279</yPos>
 		<width>570</width>
-		<height>168</height>
-		<image>Capitalist/Capitalist_Window_Small</image>
+		<height>334</height>
+		<image>Capitalist/Capitalist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>CapitalistUpgradeWindow</name>

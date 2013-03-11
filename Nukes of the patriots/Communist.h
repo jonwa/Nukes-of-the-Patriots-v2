@@ -122,6 +122,8 @@ private:
 	std::shared_ptr<President> mFirstGeneral;
 	std::shared_ptr<GUIText>   mGeneralBiography;
 
+	std::shared_ptr<GUIText>   mWindowHeadlines[6];
+
  	std::shared_ptr<GUIText> mPopulationText;
 	std::shared_ptr<GUIText> mCurrencyText;
 	std::shared_ptr<GUIText> mPatriotismText;
@@ -304,10 +306,10 @@ private:
 	std::shared_ptr<GUIButton> mCloseGeneralWindow;
 	std::shared_ptr<GUIButton> mClosePickedGeneralWindow;
 
-	std::shared_ptr<GUIImage> mLeftPanel;
-	std::shared_ptr<GUIImage> mRightPanel;
+	std::shared_ptr<GUIImage>  mLeftPanel;
+	std::shared_ptr<GUIImage>  mRightPanel;
 
-	std::shared_ptr<GUIText>    mCommunistHeadLine;
+	std::shared_ptr<GUIText>   mCommunistHeadLine;
 
 	std::shared_ptr<GUIText>   mPatriotismChange;
 	std::shared_ptr<GUIText>   mNewPatriotism;

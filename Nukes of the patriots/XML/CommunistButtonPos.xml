@@ -35,7 +35,7 @@
 	<button>
 		<name>YearOneLowerTaxes</name>
 		<xPos>465</xPos>
-		<yPos>64</yPos>
+		<yPos>104</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_minus5</image>
@@ -43,7 +43,7 @@
 	<button>
 		<name>YearOneRaiseTaxes</name>
 		<xPos>528</xPos>
-		<yPos>64</yPos>
+		<yPos>104</yPos>
 		<width>20</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_plus5</image>
@@ -115,7 +115,7 @@
 	<button>
 		<name>YearOneFoodEditField</name>
 		<xPos>35</xPos>
-		<yPos>66</yPos>
+		<yPos>106</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min10</image>	
@@ -123,7 +123,7 @@
 	<button>
 		<name>YearTwoFoodEditField</name>
 		<xPos>35</xPos>
-		<yPos>144</yPos>
+		<yPos>184</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min5</image>	
@@ -131,7 +131,7 @@
 	<button>
 		<name>YearThreeFoodEditField</name>
 		<xPos>35</xPos>
-		<yPos>222</yPos>
+		<yPos>262</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/kom_texture_button_minus</image>	
@@ -139,7 +139,7 @@
 	<button>
 		<name>YearFourFoodEditField</name>
 		<xPos>35</xPos>
-		<yPos>300</yPos>
+		<yPos>340</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/kom_texture_button_plus</image>	
@@ -147,7 +147,7 @@
 	<button>
 		<name>YearFiveFoodEditField</name>
 		<xPos>35</xPos>
-		<yPos>378</yPos>
+		<yPos>418</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_plu5</image>	
@@ -155,7 +155,7 @@
 	<button>
 		<name>YearOneGoodsEditField</name>
 		<xPos>136</xPos>
-		<yPos>66</yPos>
+		<yPos>106</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_plu10</image>	
@@ -163,7 +163,7 @@
 	<button>
 		<name>YearTwoGoodsEditField</name>
 		<xPos>136</xPos>
-		<yPos>144</yPos>
+		<yPos>184</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min10</image>	
@@ -171,7 +171,7 @@
 	<button>
 		<name>YearThreeGoodsEditField</name>
 		<xPos>136</xPos>
-		<yPos>222</yPos>
+		<yPos>262</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min5</image>	
@@ -179,7 +179,7 @@
 	<button>
 		<name>YearFourGoodsEditField</name>
 		<xPos>136</xPos>
-		<yPos>300</yPos>
+		<yPos>340</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/kom_texture_button_minus</image>	
@@ -187,7 +187,7 @@
 	<button>
 		<name>YearFiveGoodsEditField</name>
 		<xPos>136</xPos>
-		<yPos>378</yPos>
+		<yPos>418</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/kom_texture_button_plus</image>	
@@ -195,7 +195,7 @@
 	<button>
 		<name>YearOneTechEditField</name>
 		<xPos>237</xPos>
-		<yPos>66</yPos>
+		<yPos>106</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_plu5</image>	
@@ -203,7 +203,7 @@
 	<button>
 		<name>YearTwoTechEditField</name>
 		<xPos>237</xPos>
-		<yPos>144</yPos>
+		<yPos>184</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_plu10</image>	
@@ -211,7 +211,7 @@
 	<button>
 		<name>YearThreeTechEditField</name>
 		<xPos>237</xPos>
-		<yPos>222</yPos>
+		<yPos>262</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min10</image>	
@@ -219,7 +219,7 @@
 	<button>
 		<name>YearFourTechEditField</name>
 		<xPos>237</xPos>
-		<yPos>300</yPos>
+		<yPos>340</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/button_min5</image>	
@@ -227,7 +227,7 @@
 	<button>
 		<name>YearFiveTechEditField</name>
 		<xPos>237</xPos>
-		<yPos>378</yPos>
+		<yPos>418</yPos>
 		<width>51</width>
 		<height>37</height>
 		<image>Communist/kom_texture_button_minus</image>	
@@ -499,14 +499,14 @@
 	<button>
 		<name>FirstGeneral</name>
 		<xPos>195</xPos>
-		<yPos>22</yPos>
+		<yPos>60</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image>Generals/president-Alva</image>
 	</button>
 	<button>
 		<name>GoToNextPortrait</name>
-		<xPos>524</xPos>
+		<xPos>453</xPos>
 		<yPos>223</yPos>
 		<width>20</width>
 		<height>40</height>
@@ -514,7 +514,7 @@
 	</button>
 	<button>
 		<name>GoToPreviousPortrait</name>
-		<xPos>20</xPos>
+		<xPos>97</xPos>
 		<yPos>223</yPos>
 		<width>20</width>
 		<height>40</height>
@@ -555,7 +555,7 @@
 	<button>
 		<name>PickedGeneral</name>
 		<xPos>195</xPos>
-		<yPos>22</yPos>
+		<yPos>60</yPos>
 		<width>180</width>
 		<height>194</height>
 		<image>Generals/president-Alva</image>

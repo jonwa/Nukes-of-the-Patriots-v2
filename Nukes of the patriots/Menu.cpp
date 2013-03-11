@@ -11,38 +11,20 @@
 #include "GameManager.h"
 #include "TimerHandler.h"
 #include "Timer.h"
-#include "TcpServer.h"
-#include "TcpClient.h"
-#include "UdpServer.h"
-#include "UdpClient.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
 #include <SFML\Audio\Listener.hpp>
 
 
- /*Konstruktorn kör initialize-funktionen*/
-Menu::Menu(sf::RenderWindow &window) : 
-	mWindow(window),
+Menu::Menu() : 
+	mWindow(nullptr),
 	mCapitalistTeamChosen(false),
 	mCommunistTeamChosen(false),
-	mTcpServer(nullptr),
-	mTcpClient(nullptr),
-	mUdpServer(nullptr),
-	mUdpClient(nullptr),
-	mShowTeamChooseAnimation(false)
+	mShowTeamChooseAnimation(false),
+	fullscreen(false)
 { 
-	//mUdpClient = new sf::UdpClient(55001, 55002, sf::IpAddress::Broadcast);
-	Event::addEventHandler("serverAwaitingConnection", [=](sf::Packet packet)
-	{
-		char serverAddress[1024];
-		unsigned short serverPort;
-		packet>>serverAddress>>serverPort;
-		std::cout<<"Server open: "<<serverAddress<<" port: "<<serverPort<<std::endl;
-		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
-	});
-	sf::Packet packet;
-	packet<<sf::IpAddress::getLocalAddress().toString();
-	//mUdpClient->triggerServerEvent("onPlayerConnect", packet);
+	
+
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
@@ -50,7 +32,82 @@ Menu::Menu(sf::RenderWindow &window) :
 	MenuMusic["MainMenuTrack"]->play();
 	MenuMusic["MainMenuTrack"]->setLoop(true);
 }
+
+Menu* Menu::mInstance = NULL;
+Menu* Menu::getInstance()
+{
+	if(mInstance == NULL)
+		mInstance = new Menu();
+	return mInstance;
+}
 Menu::~Menu(){ }
+
+void Menu::setWindow(sf::RenderWindow& window)
+{
+	mWindow = &window;
+}
+
+sf::RenderWindow &Menu::getWindow()
+{
+	return *mWindow;
+}
+
+void Menu::saveConfig()
+{
+	tinyxml2::XMLDocument doc;
+	
+	//tinyxml2::XMLElement *config = doc.NewElement("Config");
+	//tinyxml2::XMLElement *window = doc.NewElement("Window");
+	//window->SetAttribute("mode", mWindowMode);
+	//config->InsertEndChild(window);
+
+	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
+	master->SetAttribute("value", mVolumeScrollBar->getValue());
+	tinyxml2::XMLElement *position = doc.NewElement("VolumePos");
+	position->SetAttribute("value", mVolumeScrollBar->getSprite()->getPosition().x);
+	tinyxml2::XMLElement *windowMode = doc.NewElement("windowMode");
+	windowMode->SetAttribute("value", fullscreen);
+	
+	doc.InsertEndChild(master);
+	doc.InsertEndChild(windowMode);
+	doc.InsertEndChild(position);
+	doc.SaveFile("XML/Config.xml");
+}
+
+void Menu::loadConfig()
+{
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/Config.xml");
+
+	if(doc.Error())
+		std::cout << "error! unable to load configs";
+	
+	//tinyxml2::XMLElement *config = doc.FirstChildElement("Config");
+	//tinyxml2::XMLElement *window = config->FirstChildElement("Window");
+	//mWindowMode = atoi(window->Attribute("mode"));
+	tinyxml2::XMLElement *master = doc.FirstChildElement("MasterVolume");
+	sf::Listener::setGlobalVolume(atof(master->Attribute("value")));
+	tinyxml2::XMLElement *position = doc.FirstChildElement("VolumePos");
+	mVolumeScrollBar->getSprite()->setPosition((float)atof(position->Attribute("value")), mVolumeScrollBar->getY());
+	tinyxml2::XMLElement *windowMode = doc.FirstChildElement("windowMode");
+	fullscreen = atoi(windowMode->Attribute("value"));
+}
+
+//void Menu::setWindowMode()
+//{
+//	int mCount = 0;
+//	if(mCount %2 == 0)
+//		mWindowMode = sf::Style::Fullscreen;
+//	else
+//		mWindowMode = sf::Style::None;
+//
+//	mCount++;
+//}
+
+//int Menu::getWindowMode()
+//{
+//	return mWindowMode;
+//}
 
 void Menu::loadTeamAnimation()
 {
@@ -64,12 +121,6 @@ void Menu::loadTeamAnimation()
 	std::cout<<"done loading animation!"<<std::endl;
 }
 
-void Menu::connectToServer(unsigned short port, sf::IpAddress ipAddress)
-{
-	if(mTcpClient == nullptr)
-		mTcpClient = new sf::TcpClient(port, ipAddress);
-}
-
 void Menu::clear()
 {
 	MenuMusic.clear();
@@ -78,7 +129,7 @@ void Menu::clear()
 }
 
 
-void Menu:: update(sf::Event &event)
+void Menu::update(sf::Event &event)
 {
 	if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
 	{
@@ -89,8 +140,6 @@ void Menu:: update(sf::Event &event)
 
 		mInGameMenuWindow->setVisible(true);
 	}
-
-
 }
 
 void Menu::resetChooseTeamValues()
@@ -282,25 +331,32 @@ void Menu::initialize()
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
 	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
 	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
-	mSettingsButton			= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
+	mSettingsButton[0]		= GUIButton::create(ButtonPos["Settings"], mMainMenuWindow);
 	mCreditsButton			= GUIButton::create(ButtonPos["Credits"], mMainMenuWindow);
-	mExitButton				= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
+	mExitButton[0]			= GUIButton::create(ButtonPos["Exit"], mMainMenuWindow);
 	mMainMenuWindow->setVisible(false);
 
 	mInGameMenuWindow		= GUIWindow::create(WindowPos["InGameMenu"]);
 	mResumeGameButton		= GUIButton::create(ButtonPos["Resume"], mInGameMenuWindow);
 	mRestartGameButton		= GUIButton::create(ButtonPos["Restart"], mInGameMenuWindow);
 	mSaveGameButton			= GUIButton::create(ButtonPos["SaveGame"], mInGameMenuWindow);
+	mSettingsButton[1]		= GUIButton::create(ButtonPos["Settings"], mInGameMenuWindow);
+	mExitButton[1]			= GUIButton::create(ButtonPos["Exit"], mInGameMenuWindow);
 	mInGameMenuWindow->setVisible(false);
 
-	mSettingsMenuWindow		= GUIWindow::create(WindowPos["SettingsMenu"], mParentWindow);
-	mVolumeText				= GUIText::create(sf::FloatRect(300, 40, 40, 40), "Volume", mSettingsMenuWindow);
+	mSettingsMenuWindow		= GUIWindow::create(WindowPos["SettingsMenu"]);
+	mVolumeText				= GUIText::create(sf::FloatRect(90, 120, 40, 40), "Volume: ", mSettingsMenuWindow);
 	mVolumeText->setColor(sf::Color::White);
-	mLowerVolume			= GUIButton::create(ButtonPos["LowerVolume"], mSettingsMenuWindow);
-	mRaiseVolume			= GUIButton::create(ButtonPos["RaiseVolume"], mSettingsMenuWindow);
-	mWindowSizeText			= GUIText::create(sf::FloatRect(300, 200, 40, 40), "Window size", mSettingsMenuWindow);
+	mVolumeText->setAlignment("left");
+	mVolumeScrollBar		= GUIScrollBar::create(sf::FloatRect(250, 120, 400, 40), mSettingsMenuWindow);
+	//mMuteSound				= GUIButton::create(ButtonPos["Mute"], mSettingsMenuWindow);
+	mWindowSizeText			= GUIText::create(sf::FloatRect(90, 260, 40, 40), "Fullscreen: ", mSettingsMenuWindow);
 	mWindowSizeText->setColor(sf::Color::White);
-	mCloseSettingsWindow	= GUIButton::create(ButtonPos["Esc"], mSettingsMenuWindow);
+	mWindowSizeText->setAlignment("left");
+
+	mFullscreenModeButton			= GUIButton::create(ButtonPos["Fullscreen"], mSettingsMenuWindow);
+	mFullscreenImage				= GUIImage::create(ButtonPos["Esc"], mSettingsMenuWindow);
+	mCloseSettingsWindow			= GUIButton::create(ButtonPos["CloseSettings"], mSettingsMenuWindow);
 	mSettingsMenuWindow->setVisible(false);
 
 	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"]);
@@ -325,13 +381,16 @@ void Menu::initialize()
 	mChooseTeamWindow->setVisible(false);
 	
 	// Lan play ("Multi-player")
-	mLanPlayWindow			= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
-	mLanPlayQuickConnect	= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
+	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mWaitingForClientWindow			= GUIWindow::create(WindowPos[""], mLanPlayWindow);
+	mWaitingForClientText			= GUIText::create(sf::FloatRect(0, 0, 0, 0), "WAITING FOR PLAYER...", mWaitingForClientWindow);
+	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos[""], mWaitingForClientWindow);
 	mLanPlayWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
-	
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
+	GUIManager::getInstance()->addGUIElement(mSettingsMenuWindow);
 }
 
 
@@ -351,8 +410,8 @@ void Menu::tick()
 
 		int frame = progress * 149; //149 = number of frames in the animation
 		sf::Sprite sprite(mTeamAnimationFrames[frame]);
-		sprite.setPosition(mWindow.getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow.getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
-		mWindow.draw(sprite);
+		sprite.setPosition(mWindow->getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow->getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
+		mWindow->draw(sprite);
 	}
 }
 
@@ -386,24 +445,51 @@ void Menu::initializeGuiFuctions()
 	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
 	mLoadGameButton->setOnClickFunction([=]()			{ });
 	
-	mSettingsButton->setMouseEnterFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["SettingsHover"]); });
-	mSettingsButton->setMouseLeaveFunction([=]()		{ mSettingsButton->setTexture(ButtonPos["Settings"]); });
-	mSettingsButton->setOnClickFunction([=]()			
+	mSettingsButton[0]->setMouseEnterFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["SettingsHover"]); });
+	mSettingsButton[0]->setMouseLeaveFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["Settings"]); });
+	mSettingsButton[0]->setOnClickFunction([=]()			
 	{ 
-		//mMainMenuWindow->setVisible(false);
 		mMainMenuWindow->setEnabled(false, true);
 		mSettingsMenuWindow->setVisible(true);
 		mSettingsMenuWindow->setEnabled(true, true);
 	});
 
-	mLowerVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() - 10); });
-	mRaiseVolume->setOnClickFunction([=]()		{ sf::Listener::setGlobalVolume(sf::Listener::getGlobalVolume() + 10); });	
+	mSettingsButton[1]->setMouseEnterFunction([=]()		{ mSettingsButton[1]->setTexture(ButtonPos["SettingsHover"]); });
+	mSettingsButton[1]->setMouseLeaveFunction([=]()		{ mSettingsButton[1]->setTexture(ButtonPos["Settings"]); });
+	mSettingsButton[1]->setOnClickFunction([=]()			
+	{ 
+		mInGameMenuWindow->setEnabled(false, true);
+		mSettingsMenuWindow->setVisible(true);
+		mSettingsMenuWindow->setEnabled(true, true);
+		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
+	});
+	
+	mVolumeScrollBar->setOnGuiChangeFunction([=]()
+	{
+		sf::Listener::setGlobalVolume(mVolumeScrollBar->getValue());
+	});
+	//mMuteSound->setOnClickFunction([=]()	{ sf::Listener::setGlobalVolume(0.f); mVolumeScrollBar->setValue(0); });
+
+	mFullscreenModeButton->setOnClickFunction([=]()
+	{
+		fullscreen = !fullscreen;
+		if(fullscreen)
+			mFullscreenImage->setVisible(true);
+		else
+			mFullscreenImage->setVisible(false);
+		mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
+		mWindow->setMouseCursorVisible(false);
+	});
+
 	mCloseSettingsWindow->setOnClickFunction([=]()		
 	{ 
 		mSettingsMenuWindow->setVisible(false);
 		mSettingsMenuWindow->setEnabled(false, true);
 		//mMainMenuWindow->setVisible(true); 
-		mMainMenuWindow->setEnabled(true, true);
+		if(mMainMenuWindow->getVisible() == true)
+			mMainMenuWindow->setEnabled(true, true);
+		if(mInGameMenuWindow->getVisible() == true)
+			mInGameMenuWindow->setEnabled(true, true);
 	});	
 
 	mCreditsButton->setMouseEnterFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
@@ -411,10 +497,14 @@ void Menu::initializeGuiFuctions()
 	
 	mCreditsButton->setOnClickFunction([=]()	{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
 	
-	mExitButton->setMouseEnterFunction([=]()	{ mExitButton->setTexture(ButtonPos["ExitHover"]); });
-	mExitButton->setMouseLeaveFunction([=]()	{ mExitButton->setTexture(ButtonPos["Exit"]); });
-	mExitButton->setOnClickFunction([=]()		{ mWindow.close(); });
+	mExitButton[0]->setMouseEnterFunction([=]()	{ mExitButton[0]->setTexture(ButtonPos["ExitHover"]); });
+	mExitButton[0]->setMouseLeaveFunction([=]()	{ mExitButton[0]->setTexture(ButtonPos["Exit"]); });
+	mExitButton[0]->setOnClickFunction([=]()	{ mWindow->close(); });
 
+
+	mExitButton[1]->setMouseEnterFunction([=]()	{ mExitButton[1]->setTexture(ButtonPos["ExitHover"]); });
+	mExitButton[1]->setMouseLeaveFunction([=]()	{ mExitButton[1]->setTexture(ButtonPos["Exit"]); });
+	mExitButton[1]->setOnClickFunction([=]()	{ mWindow->close(); });
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
 	{
@@ -503,7 +593,7 @@ void Menu::initializeGuiFuctions()
 	{
 		mInGameMenuWindow->setVisible(false);
 		mResumeGameButton->setTexture(ButtonPos["Resume"]); 
-		//GameManager::getInstance()->getCurrentPlayer()->showGUI();
+		GameManager::getInstance()->getCurrentPlayer()->showGUI();
 	});
 	
 	   //Restart game
@@ -521,24 +611,50 @@ void Menu::initializeGuiFuctions()
 		mParentWindow->setVisible(true);
 		mInGameMenuWindow->setVisible(false); 
 		mChooseTeamWindow->setVisible(true);
+		GUIManager::getInstance()->setOnTop(mChooseTeamWindow);
 	
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
+			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mCapitalistNameField->setText("");
+		mCapitalistNameField->setPlaceHolderText("Enter name here");
 		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalist"].second));
+		mCapitalistOkayButton->setEnabled(false);
 		
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-aktiv"))));
+			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 			(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mCommunistNameField->setText("");	
+		mCommunistNameField->setPlaceHolderText("Enter name here");
 		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunist"].second));
+		mCommunistOkayButton->setEnabled(false);
 		resetChooseTeamValues();
 		mChooseTeamWindow->setEnabled(true, true);
+
 	});
 
 	mSaveGameButton->setOnClickFunction([=]()
 	{
 		
+	});
+
+	mLanPlayQuickConnect->setOnClickFunction([=]()
+	{
+		mLanPlayWindow->setEnabled(false, true);
+		mWaitingForClientWindow->setVisible(true);
+		mWaitingForClientWindow->setEnabled(true, true);
+
+		GameManager::getInstance()->searchForServers();
+		
+
+	});
+
+	mCloseWaitingForClientWindow->setOnClickFunction([=]()
+	{
+		mWaitingForClientWindow->setVisible(false);
+		mWaitingForClientWindow->setEnabled(false, true);
+		mLanPlayWindow->setEnabled(true, true);
 	});
 }	

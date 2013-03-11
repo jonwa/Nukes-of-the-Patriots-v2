@@ -20,6 +20,9 @@ static int foodCost			= 10;
 static int goodsCost		= 20;
 static int techCost			= 30;
 static int propagandaCost	= 100;
+static int propagandaBoughtFood = 0;
+static int propagandaBoughtGoods = 0;
+static int propagandaBoughtTech = 0;
 static int taxChange		= 5;
 static int currentGoods		= 0;
 static int currentTech		= 0;
@@ -85,13 +88,13 @@ void Communist::updateGUI()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
-			mPopulationText->setText(intToString(mPopulation) + " million");
+			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
-			mCurrencyText->setText(intToString(mCurrency));
+			mCurrencyText->setText(intToString(mCurrency) + " §");
 		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
-			mPatriotismText->setText(intToString(mPatriotism));
+			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
 
 		/*GUI text för utskrift av värden på komunisternas interface*/
 		int oldNuclear = stringToInt(mNuclearText->getText());
@@ -147,25 +150,26 @@ void Communist::fiveYearInitialize()
 		tempMap.insert(std::pair<std::string, int> ("food", 0));
 		tempMap.insert(std::pair<std::string, int> ("goods", 0));
 		tempMap.insert(std::pair<std::string, int> ("tech", 0));
-		tempMap.insert(std::pair<std::string, int> ("taxes", 0));
+		tempMap.insert(std::pair<std::string, int> ("taxes", 30));
 		mYearVector.push_back(tempMap);
 	}
 }
 
 void Communist::openFiveYearPlan()
 {
-	if((mRound-1) % 5 == 0 && mRound != 1)
-	{
+	//if((mRound-1) % 5 == 0 && mRound != 1)
+	//{
 		mCommunistMainWindow->setEnabled(false, true);
 		mFiveYearPlanWindow->setEnabled(true, true);
-		//mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
+		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
 		mFiveYearPlanWindow->setVisible(true);
-	}
-	else
-	{
-		if(mRound != 1)
-			resourceIncome();
-	}
+		mTaxesIncomeWindow->setVisible(false);
+		mTaxesIncomeWindow->setEnabled(false, true);
+	//}
+	//else
+	//{
+		
+	//}
 }
 
 void Communist::changeCityImage()
@@ -375,16 +379,16 @@ void Communist::newYearStart()
 	}
 	
 	// My exported resources
-	int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
-	int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
-	int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
-	int exportedTotal = exportedFoodChange + exportedGoodsChange + exportedTechChange;
+	//int exportedFoodChange = mExportedFoodPreviousRound - mExportedFood;
+	//int exportedGoodsChange = mExportedGoodsPreviousRound - mExportedGoods;
+	//int exportedTechChange = mExportedTechPreviousRound - mExportedTech;
+	int exportedTotal = getExportedFoodSold() + getExportedGoodsSold() + getExportedTechSold();
 
 	// Enemy exported resources
-	int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
-	int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoods();
-	int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
-	int enemyExportedTotal = enemyFoodExported + enemyGoodsExported + enemyTechExported;
+	//int enemyFoodExported = enemy->getExportedFoodPreviousRound() - enemy->getExportedFood();
+	//int enemyGoodsExported = enemy->getExportedGoodsPreviousRound() - enemy->getExportedGoods();
+	//int enemyTechExported = enemy->getExportedTechPreviousRound() - enemy->getExportedTech();
+	int enemyExportedTotal = enemy->getExportedFoodSold() + enemy->getExportedGoodsSold() + enemy->getExportedTechSold();
 
 	if(exportedTotal > enemyExportedTotal)
 	{
@@ -409,6 +413,7 @@ void Communist::newYearStart()
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + spaceProgramAmount + exportedChange;
 	mPatriotism += totalPatriotismChange;
+
 	if(totalPatriotismChange <= 0)
 		mPatriotismChange->setText("Total patriotism change: " + intToString(totalPatriotismChange));
 	else
@@ -475,17 +480,30 @@ void Communist::update()
 	mFoodPreviousRound = mFood;
 	mGoodsPreviousRound = mGoods;
 	mTechPreviousRound = mTech;
-	mExportedFoodPreviousRound = mExportedFood;
-	mExportedGoodsPreviousRound = mExportedGoods;
-	mExportedTechPreviousRound = mExportedTech;
 	mTaxesPreviousRound = mTaxes;
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
 
-	openFiveYearPlan();
+
+	if((mRound-1) % 5 == 0 && mRound != 1)	
+		openFiveYearPlan();
+	else
+		if(mRound != 1)
+			resourceIncome();
+
+	mTaxesPatriotismChange->setText("Patriotism: 0");
+
+	//setExportedFoodSold(0);
+	//setExportedGoodsSold(0);
+	//setExportedTechSold(0);
+
+
 
 	changeCityImage();
+	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
+	
+	
 }
 
 //-----------------------------------------------------------
@@ -614,6 +632,12 @@ void Communist::buyPropagandaFood(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtFood += food;
+	if(propagandaBoughtFood > getYearlyFood(round))
+	{
+		food -= propagandaBoughtFood - getYearlyFood(round);
+	}
+
 	mFood += food;
 	mBoughtPropagandaText->setText("Your People got " + intToString(food) + " food");
 }
@@ -638,6 +662,11 @@ void Communist::buyPropagandaGoods(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtGoods += goods;
+	if(propagandaBoughtGoods > getYearlyGoods(round))
+	{
+		goods -= propagandaBoughtGoods - getYearlyGoods(round);
+	}
 	mGoods += goods;
 	mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
 }
@@ -662,6 +691,12 @@ void Communist::buyPropagandaTech(int round)
 		}
 	}
 	mCurrency -= propagandaCost;
+	propagandaBoughtTech += tech;
+	if(propagandaBoughtTech > getYearlyTech(round))
+	{
+		tech -= propagandaBoughtTech - getYearlyTech(round);
+	}
+
 	mTech += tech;
 	mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
 }
@@ -903,49 +938,49 @@ void Communist::initializeCommunistWindow()
 	mYearOneLowerTaxesButton		= GUIButton::create(CommunistButtons["YearOneLowerTaxes"], mFiveYearPlanWindow);	
 	mYearOneRaiseTaxesButton		= GUIButton::create(CommunistButtons["YearOneRaiseTaxes"], mFiveYearPlanWindow);	
 
-	mFiveYearTotalCostText			= GUIText::create(sf::FloatRect(305, 17, 0, 0), "Cost", mFiveYearPlanWindow);
+	mFiveYearTotalCostText			= GUIText::create(sf::FloatRect(305, 57, 0, 0), "Cost", mFiveYearPlanWindow);
 	mFiveYearTotalCostText->setScale(0.8, 0.8);
 	//mFiveYearTotalCostText->setAlignment("middle");
 
-	mFiveYearIncomeText				= GUIText::create(sf::FloatRect(427, 17, 0, 0), "Income", mFiveYearPlanWindow);
+	mFiveYearIncomeText				= GUIText::create(sf::FloatRect(427, 57, 0, 0), "Income", mFiveYearPlanWindow);
 	mFiveYearIncomeText->setScale(0.8, 0.8);
 	mFiveYearIncomeText->setAlignment("middle");
 
-	mFiveYearTaxText				= GUIText::create(sf::FloatRect(506, 17, 0, 0), "Taxes", mFiveYearPlanWindow);
+	mFiveYearTaxText				= GUIText::create(sf::FloatRect(506, 57, 0, 0), "Taxes", mFiveYearPlanWindow);
 	mFiveYearTaxText->setScale(0.8, 0.8);
 	mFiveYearTaxText->setAlignment("middle");
 	
-	mTaxesPatriotismChange			= GUIText::create(sf::FloatRect(390, 440, 0, 0), "Patriotism: 0", mFiveYearPlanWindow);
+	mTaxesPatriotismChange			= GUIText::create(sf::FloatRect(380, 470, 0, 0), "Patriotism: 0", mFiveYearPlanWindow);
 	mTaxesPatriotismChange->setScale(0.8, 0.8);
 
-	mYearOneTaxesText				= GUIText::create(sf::FloatRect(506, 66, 20, 20), "30", mFiveYearPlanWindow);
+	mYearOneTaxesText				= GUIText::create(sf::FloatRect(506, 106, 20, 20), "30", mFiveYearPlanWindow);
 	mYearOneTaxesText->setAlignment("middle");
-	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(506, 144, 20, 20), "30", mFiveYearPlanWindow);
+	mYearTwoTaxesText				= GUIText::create(sf::FloatRect(506, 184, 20, 20), "30", mFiveYearPlanWindow);
 	mYearTwoTaxesText->setAlignment("middle");
-	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(506, 222, 20, 20), "30", mFiveYearPlanWindow);
+	mYearThreeTaxesText				= GUIText::create(sf::FloatRect(506, 262, 20, 20), "30", mFiveYearPlanWindow);
 	mYearThreeTaxesText->setAlignment("middle");
-	mYearFourTaxesText				= GUIText::create(sf::FloatRect(506, 300, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFourTaxesText				= GUIText::create(sf::FloatRect(506, 340, 20, 20), "30", mFiveYearPlanWindow);
 	mYearFourTaxesText->setAlignment("middle");
-	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(506, 378, 20, 20), "30", mFiveYearPlanWindow);
+	mYearFiveTaxesText				= GUIText::create(sf::FloatRect(506, 418, 20, 20), "30", mFiveYearPlanWindow);
 	mYearFiveTaxesText->setAlignment("middle");
 
-	mIncomeYearOne					= GUIText::create(sf::FloatRect(427, 66, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearOne					= GUIText::create(sf::FloatRect(427, 106, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearOne->setScale(0.8, 0.8);
 	mIncomeYearOne->setAlignment("middle");
 
-	mIncomeYearTwo					= GUIText::create(sf::FloatRect(427, 144, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearTwo					= GUIText::create(sf::FloatRect(427, 184, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearTwo->setScale(0.8, 0.8);
 	mIncomeYearTwo->setAlignment("middle");
 
-	mIncomeYearThree				= GUIText::create(sf::FloatRect(427, 222, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearThree				= GUIText::create(sf::FloatRect(427, 262, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearThree->setScale(0.8, 0.8);
 	mIncomeYearThree->setAlignment("middle");
 
-	mIncomeYearFour					= GUIText::create(sf::FloatRect(427, 300, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFour					= GUIText::create(sf::FloatRect(427, 340, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearFour->setScale(0.8, 0.8);
 	mIncomeYearFour->setAlignment("middle");
 
-	mIncomeYearFive					= GUIText::create(sf::FloatRect(427, 378, 20, 20), "0", mFiveYearPlanWindow);
+	mIncomeYearFive					= GUIText::create(sf::FloatRect(427, 418, 20, 20), "0", mFiveYearPlanWindow);
 	mIncomeYearFive->setScale(0.8, 0.8);
 	mIncomeYearFive->setAlignment("middle");
 
@@ -973,19 +1008,19 @@ void Communist::initializeCommunistWindow()
 	mYearFourTech					= GUIEditField::create(CommunistButtons["YearFourTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 	mYearFiveTech					= GUIEditField::create(CommunistButtons["YearFiveTechEditField"].first, GUIEditField::COM, "0", true, mFiveYearPlanWindow);
 
-	mTotalCostYearOne				= GUIText::create(sf::FloatRect(305, 66, 20, 20), "0 §", mFiveYearPlanWindow);
+	mTotalCostYearOne				= GUIText::create(sf::FloatRect(305, 106, 20, 20), "0 §", mFiveYearPlanWindow);
 	mTotalCostYearOne->setScale(0.8, 0.8);
 
-	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(305, 144, 20, 20), "0 §", mFiveYearPlanWindow);
+	mTotalCostYearTwo				= GUIText::create(sf::FloatRect(305, 184, 20, 20), "0 §", mFiveYearPlanWindow);
 	mTotalCostYearTwo->setScale(0.8, 0.8);
 
-	mTotalCostYearThree				= GUIText::create(sf::FloatRect(305, 222, 20, 20), "0 §", mFiveYearPlanWindow);
+	mTotalCostYearThree				= GUIText::create(sf::FloatRect(305, 262, 20, 20), "0 §", mFiveYearPlanWindow);
 	mTotalCostYearThree->setScale(0.8, 0.8);
 
-	mTotalCostYearFour				= GUIText::create(sf::FloatRect(305, 300, 20, 20), "0 §", mFiveYearPlanWindow);
+	mTotalCostYearFour				= GUIText::create(sf::FloatRect(305, 340, 20, 20), "0 §", mFiveYearPlanWindow);
 	mTotalCostYearFour->setScale(0.8, 0.8);
 
-	mTotalCostYearFive				= GUIText::create(sf::FloatRect(305, 378, 20, 20), "0 §", mFiveYearPlanWindow);
+	mTotalCostYearFive				= GUIText::create(sf::FloatRect(305, 418, 20, 20), "0 §", mFiveYearPlanWindow);
 	mTotalCostYearFive->setScale(0.8, 0.8);
 
 	mFiveYearPlanCloseButton		= GUIButton::create(CommunistButtons["CloseFiveYearPlanWindow"], mFiveYearPlanWindow);	
@@ -1016,9 +1051,9 @@ void Communist::initializeCommunistWindow()
 	mCancelUpgradeSpaceProgramButton	= GUIButton::create(CommunistButtons["CancelUpgradeSpaceProgram"], mUpgradeWindow);
 	mCancelUpgradeSpyNetworkButton		= GUIButton::create(CommunistButtons["CancelUpgradeSpyNetwork"], mUpgradeWindow);
 	
-	mSpyPanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(359, 60, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/spy_panel"))), mUpgradeWindow);
-	mSpacePanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/space_panel"))), mUpgradeWindow);
-	mNuclearPanel						= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/nuclear_panel"))), mUpgradeWindow);
+	mSpyPanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(359, 60, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_spy_upgrade"))), mUpgradeWindow);
+	mSpacePanel							= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(184, 97, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_space_upgrade"))), mUpgradeWindow);
+	mNuclearPanel						= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(9, 135, 200, 200), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_nuke_upgrade"))), mUpgradeWindow);
 
 	mBuyNuclearText						= GUIText::create(sf::FloatRect(39, 138, 22, 22), "0", mUpgradeWindow);
 	mBuyNuclearText->setAlignment("middle");
@@ -1042,13 +1077,13 @@ void Communist::initializeCommunistWindow()
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
 
-	mExportQuantityLabel				= GUIText::create(sf::FloatRect(164, 12, 200, 100), "Quantity", mExportWindow);
+	mExportQuantityLabel				= GUIText::create(sf::FloatRect(164, 45, 200, 100), "Quantity", mExportWindow);
 	mExportQuantityLabel->setScale(0.7, 0.7);
 	mExportQuantityLabel->setAlignment("middle");
-	mExportCostLabel					= GUIText::create(sf::FloatRect(348, 12, 200, 100), "Cost", mExportWindow);
+	mExportCostLabel					= GUIText::create(sf::FloatRect(348, 45, 200, 100), "Cost", mExportWindow);
 	mExportCostLabel->setScale(0.7, 0.7);
 	mExportCostLabel->setAlignment("middle");
-	mExportPriceLabel					= GUIText::create(sf::FloatRect(502, 12, 200, 100), "Price", mExportWindow);
+	mExportPriceLabel					= GUIText::create(sf::FloatRect(502, 45, 200, 100), "Price", mExportWindow);
 	mExportPriceLabel->setScale(0.7, 0.7);
 	mExportPriceLabel->setAlignment("middle");
 	mExportTotalPriceLabel				= GUIText::create(sf::FloatRect(362, 231, 200, 100), "Total price:", mExportWindow);
@@ -1078,9 +1113,9 @@ void Communist::initializeCommunistWindow()
 		mExportQuantityText[i]->setAlignment("middle");
 	}
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 67, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
-	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::CAP, "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 54, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
+	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
+	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
 
 	mExportFoodCost->setMaxCharacters(4);
 	mExportGoodsCost->setMaxCharacters(4);
@@ -1214,8 +1249,10 @@ void Communist::initializeCommunistWindow()
 	mResourcesExportedText[2]			= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mExportedResourcesWindow);
 	mResourcesExportedText[2]->setScale(0.8, 0.8);
 	y += mResourcesExportedText[2]->getHeight() + 5;
+
 	mExportedIncomeText					= GUIText::create(sf::FloatRect(mResourcesExportedText[2]->getWidth() + 5, y, 0, 0), "0", mExportedResourcesWindow);
 	mExportedIncomeText->setScale(0.5, 0.5);
+
 	mExportedResourcesWindow->setVisible(false);
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
@@ -1308,6 +1345,7 @@ void Communist::initializeCommunistWindow()
 
 	mResourceIncomeWindow				= GUIWindow::create(CommunistWindows["ResourceIncome"], mCommunistMainWindow);
 	mCloseResourceIncomeWindow			= GUIButton::create(CommunistButtons["CloseResourceIncome"], mResourceIncomeWindow);
+
 	y = 20;
 	mFoodIncome							= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mResourceIncomeWindow);
 	mFoodIncome->setScale(0.8, 0.8);
@@ -1353,20 +1391,27 @@ void Communist::initializeCommunistWindow()
 	mDoNotIncreasePopulation			= GUIButton::create(CommunistButtons["DoNotIncreasePopulation"], mPopulationEatsFoodWindow);
 	mPopulationEatsFoodWindow->setVisible(false);
 
-	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(39, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mFiveYearPlanWindow);
+	mFoodImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(39, 57, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mFiveYearPlanWindow);
 	mFoodImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 53, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mImportWindow);
 	mFoodImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 53, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/food_image"))), mExportWindow);
 
-	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(140, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mFiveYearPlanWindow);
+	mGoodsImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(140, 57, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mFiveYearPlanWindow);
 	mGoodsImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 111, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mImportWindow);
 	mGoodsImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 111, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/goods_image"))), mExportWindow);
 
-	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 17, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
+	mTechImage[0]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(241, 57, 38, 38), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mFiveYearPlanWindow);
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tech_image"))), mExportWindow);
 
-	mGeneralBiography = GUIText::create(sf::FloatRect(40, 290, 0, 0), "", mPickedGeneralWindow);
+	mGeneralBiography = GUIText::create(sf::FloatRect(40, 330, 0, 0), "", mPickedGeneralWindow);
 	mGeneralBiography->setScale(0.6, 0.6);
+
+	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Choose your leader!", mChooseGeneralWindow);
+	mWindowHeadlines[0]->setAlignment("middle");
+	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Your leader is...", mPickedGeneralWindow);
+	mWindowHeadlines[1]->setAlignment("middle");
+	mWindowHeadlines[2] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Five year plan", mFiveYearPlanWindow);
+	mWindowHeadlines[2]->setAlignment("middle");
 
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
@@ -1453,7 +1498,7 @@ void Communist::fiveYearGuiFunctions()
 	{
 		for(int j = 0; j < resources; ++j)
 		{
-			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 98 + 78 * j, 20, 20), "0 §", mFiveYearPlanWindow);
+			resourcesTotalCost[j + i*resources] = GUIText::create(sf::FloatRect(35 + 101 * i, 138 + 78 * j, 20, 20), "0 §", mFiveYearPlanWindow);
 			resourcesTotalCost[j + i*resources]->setScale(0.7, 0.7);
 		}
 	}
@@ -1649,6 +1694,7 @@ void Communist::initializeGuiFunctions()
 			mTaxesIncomeText[1]->setText(mTaxes*mPopulation);
 		}
 		mCommunistMainWindow->setEnabled(true, true);
+
 	});
 	/*Stänger propagandafönster nummer ett*/
 	mPropagandaWindowFirstCloseButton->setOnClickFunction([=]()	
@@ -1670,7 +1716,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyFoodButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyFood(mRound) != 0 && propagandaBoughtFood < getYearlyFood(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaFood(getRound());
@@ -1685,7 +1731,7 @@ void Communist::initializeGuiFunctions()
 			{
 				GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
 			}
-			
+
 			mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 				(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyFoodButton->getTexture()));
 			//mShowBoughtPropaganda->setScale(0.8, 0.8);
@@ -1694,7 +1740,7 @@ void Communist::initializeGuiFunctions()
 
 	mPropagandaBuyGoodsButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyGoods(mRound) != 0 && propagandaBoughtGoods < getYearlyGoods(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaGoods(getRound());
@@ -1709,7 +1755,6 @@ void Communist::initializeGuiFunctions()
 			{
 				GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
 			}
-			
 			mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 				(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyGoodsButton->getTexture()));
 			//mShowBoughtPropaganda->setScale(0.8, 0.8);
@@ -1717,7 +1762,7 @@ void Communist::initializeGuiFunctions()
 	});
 	mPropagandaBuyTechButton->setOnClickFunction([=]()
 	{
-		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0)
+		if(mCurrency >= propagandaCost && getYearlyTech(mRound) != 0 && propagandaBoughtTech < getYearlyTech(mRound))
 		{
 			mPropagandaWindowSecond->setEnabled(true, true);
 			buyPropagandaTech(getRound());
@@ -1732,7 +1777,6 @@ void Communist::initializeGuiFunctions()
 			{
 				GUIAnimation::move(mPropagandaWindowSecond->getChildVector()[i], 200, sf::FloatRect(x, y, 0, 0), mPropagandaWindowSecond->getChildVector()[i]->getRectangle());
 			}
-			
 			mShowBoughtPropaganda->setTexture(std::pair<sf::FloatRect, sf::Texture*>
 				(mShowBoughtPropaganda->getRectangle(), mPropagandaBuyTechButton->getTexture()));
 			//mShowBoughtPropaganda->setScale(0.8, 0.8);
@@ -1890,6 +1934,9 @@ void Communist::initializeGuiFunctions()
 		sf::Color color = mGeneralBiography->getColor();
 		color.a = 255;
 		GUIAnimation::fadeToColor(mGeneralBiography, 1000, sf::Color(color.r, color.g, color.b, 0), color);
+		color = mWindowHeadlines[1]->getColor();
+		color.a = 255;
+		GUIAnimation::fadeToColor(mWindowHeadlines[1], 1000, sf::Color(color.r, color.g, color.b, 0), color);
 		_chooseWindow->setEnabled(false, true);
 		_pickedWindow->setEnabled(false, true);
 		mPickedGeneralWindow->setVisible(true);
@@ -1910,7 +1957,7 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		mGeneral->playSlogan();
+		//mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
@@ -2056,6 +2103,13 @@ void Communist::initializeGuiFunctions()
 		enemy->setExportedFood(enemy->getExportedFood() - _importedFoodQuantity);
 		enemy->setExportedGoods(enemy->getExportedGoods() - _importedGoodsQuantity);
 		enemy->setExportedTech(enemy->getExportedTech() - _importedTechQuantity);
+
+		enemy->setExportedFoodSold(enemy->getExportedFoodSold() + _importedFoodQuantity);
+		enemy->setExportedGoodsSold(enemy->getExportedGoodsSold() + _importedGoodsQuantity);
+		enemy->setExportedTechSold(enemy->getExportedTechSold() + _importedTechQuantity);
+
+		enemy->setCurrency(enemy->getCurrency() + _importedFoodQuantity*enemy->getExportedFoodPrice() + _importedGoodsQuantity*enemy->getExportedGoodsPrice() + _importedTechQuantity*enemy->getExportedTechPrice());
+
 		mCurrency -= stringToInt(mImportTotalPriceText[0]->getText());
 		mCurrency -= stringToInt(mImportTotalPriceText[1]->getText());
 		mCurrency -= stringToInt(mImportTotalPriceText[2]->getText());
@@ -2183,8 +2237,8 @@ void Communist::initializeGuiFunctions()
 			int techBought = 0;
 			int exports = 0;
 			// if nobody bought my exports - then it will be sold internationally
-			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? 0 : moneyIntFood / getExportedFoodPrice();
-			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? 0 : moneyIntGoods / getExportedGoodsPrice();
+			foodBought = (getExportedFood() == 0 || getExportedFoodPrice() == 0) ? getExportedFood() : moneyIntFood / getExportedFoodPrice();
+			goodsBought = (getExportedGoods() == 0 || getExportedGoodsPrice() == 0) ? getExportedTech() : moneyIntGoods / getExportedGoodsPrice();
 			techBought =(getExportedTech() == 0 || getExportedTechPrice() == 0) ? 0 :  moneyIntTech / getExportedTechPrice();
 			//// if international market tries to buy more resources than you have
 			if(foodBought > getExportedFood()) foodBought = getExportedFood();
@@ -2198,13 +2252,60 @@ void Communist::initializeGuiFunctions()
 			int _exportedFood = mExportedFoodPreviousRound-mExportedFood;
 			int _exportedGoods = mExportedGoodsPreviousRound-mExportedGoods;
 			int _exportedTech = mExportedTechPreviousRound-mExportedTech;
-			mResourcesExportedText[0]->setText("You exported "+intToString(_exportedFood)+" food.");
-			mResourcesExportedText[1]->setText("You exported "+intToString(_exportedGoods)+" goods.");
-			mResourcesExportedText[2]->setText("You exported "+intToString(_exportedTech)+" tech.");
-			int exportedTotal = _exportedFood*mExportedFoodPrice + _exportedGoods*mExportedGoodsPrice + _exportedTech*mExportedTechPrice;
+			mResourcesExportedText[0]->setText("You exported "+intToString(foodBought)+" food.");
+			mResourcesExportedText[1]->setText("You exported "+intToString(goodsBought)+" goods.");
+			mResourcesExportedText[2]->setText("You exported "+intToString(techBought)+" tech.");
+			setExportedFoodSold(getExportedFoodSold() + foodBought);
+			setExportedGoodsSold(getExportedGoodsSold() + goodsBought);
+			setExportedTechSold(getExportedTechSold() + techBought);
+			int exportedTotal = foodBought*mExportedFoodPrice + goodsBought*mExportedGoodsPrice + techBought*mExportedTechPrice;
 			mExportedIncomeText->setText("You got " + intToString(exportedTotal) + " § from exports.");
 			mExportedResourcesWindow->setVisible(true);
 			mExportedResourcesWindow->setEnabled(true, true);
+
+			mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+			mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+			mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+
+			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+			mImportBuyQuantityText[0]->setText("0");
+			mImportBuyQuantityText[1]->setText("0");
+			mImportBuyQuantityText[2]->setText("0");
+
+			mImportTotalPriceText[0]->setText("0");
+			mImportTotalPriceText[1]->setText("0");
+			mImportTotalPriceText[2]->setText("0");
+
+			if(enemy->getExportedFood() == 0)
+				mImportPriceText[0]->setText("N/A");
+			else
+				mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+			if(enemy->getExportedGoods() == 0)
+				mImportPriceText[1]->setText("N/A");
+			else
+				mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+			if(enemy->getExportedTech() == 0)
+				mImportPriceText[2]->setText("N/A");
+			else
+				mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+			mExportQuantityText[0]->setText(mExportedFood);
+			mExportQuantityText[1]->setText(mExportedGoods);
+			mExportQuantityText[2]->setText(mExportedTech);
+
+			mExportFoodCost->setText(intToString(mExportedFoodPrice));
+			mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
+			mExportTechCost->setText(intToString(mExportedTechPrice));
+
+			mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
+			mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
+			mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
+			mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
 		}
 		else
 		{
@@ -2235,6 +2336,7 @@ void Communist::initializeGuiFunctions()
 
 		mPopulationEatsFoodWindow->setVisible(true);
 		mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
+
 		mClosePopulationEatsFoodWindow->setVisible(true);
 		mDoIncreasePopulation->setVisible(true);
 		mDoNotIncreasePopulation->setVisible(true);
@@ -2249,7 +2351,7 @@ void Communist::initializeGuiFunctions()
 			mDoNotIncreasePopulation->setVisible(false);
 		}
 	});
-	
+
 	mDoIncreasePopulation->setOnClickFunction([=]()
 	{
 		mCurrency -= mPopulation;

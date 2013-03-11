@@ -13,6 +13,15 @@
 #include "GUIAnimation.h"
 #include "AnimationHandler.h"
 #include "Menu.h"
+#include "Event.h"
+#include "TcpClient.h"
+#include "TcpServer.h"
+#include "UdpClient.h"
+#include "UdpServer.h"
+#include "SFML\Network.hpp"
+
+static int width = 1024;
+static int height = 768;
 
 GameManager* GameManager::mInstance = NULL;
 
@@ -25,11 +34,38 @@ GameManager* GameManager::getInstance()
 	return mInstance;
 }
 
-GameManager::GameManager() : 		
+GameManager::GameManager() : 
+	mTcpServer(nullptr),
+	mTcpClient(nullptr),
+	mUdpServer(nullptr),
+	mUdpClient(nullptr),
+	mCreateServerEvent(nullptr),
+	mConnectToServerEvent(nullptr),
+	mCreateServerTimer(nullptr),
 	mVecPlayersLeft(),		
 	mRound(0),
-	mLoaded(false)
-{	
+	mLoaded(false),
+	mServerState(CLOSED)
+{
+	Event::addEventHandler("heartBeat", [=](sf::Packet packet)
+	{
+		char msg[1024];
+		packet>>msg;
+		std::cout<<"client: "<<msg<<std::endl;
+		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
+	});
+	mUdpServer = new sf::UdpServer(55005);
+	//mTcpServer = new sf::TcpServer(55006);
+	//mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.11.161.227"));
+
+	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
+	Timer::setTimer([=]()
+	{
+		sf::Packet packet;
+		packet<<"arvid";
+		mUdpClient->triggerServerEvent("heartBeat", packet);
+	}, 1000, 0);
+
 	initializeGuiElement();
 	initializeGuiFunctions();
 }
@@ -38,7 +74,6 @@ GameManager::~GameManager()
 {
 	
 }
-
 
 void GameManager::reset()
 {
@@ -50,6 +85,9 @@ void GameManager::reset()
 		(*it)->reset();
 	}
 	AnimationHandler::getInstance()->reset();
+	getCap()->hideGUI();
+	getCom()->hideGUI();
+	mYearText->setVisible(false);
 }
 
 void GameManager::init(int year)
@@ -69,7 +107,6 @@ void GameManager::init(int year)
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);
 		GUIManager::getInstance()->addGUIElement(mYearText);
-	
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		getInstance()->setYear(year);
@@ -91,8 +128,6 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 		//startRound();
 		mLoaded = true;
 	}
@@ -108,8 +143,6 @@ void GameManager::init(int year)
 				break;
 			}
 		}
-		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 	}
 
 	mCurrentPlayer->setRound(1);
@@ -330,6 +363,12 @@ void GameManager::nextRound()
 		{
 			(*it)->newYearStart();
 		}
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+		{
+			(*it)->setExportedFoodSold(0);
+			(*it)->setExportedGoodsSold(0);
+			(*it)->setExportedTechSold(0);
+		}
 		updateStatsWindow();
 
 		mStatsWindow[0]->setVisible(true);
@@ -513,7 +552,6 @@ void GameManager::initializeGuiElement()
 {
 	loadButtonPosition();
 	loadWindowPosition();
-
 	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
 	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
 	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
@@ -582,3 +620,49 @@ void GameManager::initializeGuiFunctions()
 	});
 }
 
+void GameManager::searchForServers()
+{
+	sf::Packet packet;
+	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
+	mUdpClient->triggerServerEvent("clientSearchingForServers", packet);
+	
+	if(mCreateServerTimer == nullptr)
+	{
+		mCreateServerTimer = Timer::setTimer([=]()
+			{
+				createServer();
+			}, 5000, 1);
+	}
+
+	if(mConnectToServerEvent == nullptr)
+	{
+		mConnectToServerEvent = Event::addEventHandler("hereIam", 
+				[=](sf::Packet packet)
+			{
+				connectToServer();
+			});
+	}
+}
+
+void GameManager::createServer()
+{
+	if(mCreateServerEvent == nullptr)
+	{
+		mCreateServerEvent = Event::addEventHandler("clientSearchingForServers", 
+			[=](sf::Packet packet)
+		{
+			char ipAddress[1024];
+			unsigned short port;
+			packet<<ipAddress<<port;
+			std::cout<<"client searching for server: "<<ipAddress<<":"<<port<<std::endl;
+			sf::Packet _packet;
+			_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
+			mUdpServer->triggerClientEvent("hereIam", packet, sf::IpAddress(ipAddress), port);
+		});
+	}
+}
+
+void GameManager::connectToServer()
+{
+	mCreateServerTimer->killTimer();
+}
