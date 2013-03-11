@@ -5,7 +5,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
-enum	GUIType{WINDOW, BUTTON, TEXT, IMAGE, EDIT_FIELD};
+enum	GUIType{WINDOW, BUTTON, TEXT, IMAGE, EDIT_FIELD, SCROLL_BAR};
 
 class GUIElement : public std::enable_shared_from_this<GUIElement>
 {

@@ -91,8 +91,8 @@ void Communist::updateGUI()
 			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency)
-			mCurrencyText->setText(intToString(mCurrency));
-		int oldPatriotism = stringToInt(mPatriotismText->getText() + " §");
+			mCurrencyText->setText(intToString(mCurrency) + " §");
+		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
 			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
 
@@ -168,8 +168,7 @@ void Communist::openFiveYearPlan()
 	//}
 	//else
 	//{
-		if(mRound != 1)
-			resourceIncome();
+		
 	//}
 }
 
@@ -489,6 +488,9 @@ void Communist::update()
 
 	if((mRound-1) % 5 == 0 && mRound != 1)	
 		openFiveYearPlan();
+	else
+		if(mRound != 1)
+			resourceIncome();
 
 	mTaxesPatriotismChange->setText("Patriotism: 0");
 
@@ -1075,13 +1077,13 @@ void Communist::initializeCommunistWindow()
 	/*Export GUI Window med knappar*/
 	mExportWindow						= GUIWindow::create(CommunistWindows["CommunistExportWindow"], mCommunistMainWindow);
 
-	mExportQuantityLabel				= GUIText::create(sf::FloatRect(164, 12, 200, 100), "Quantity", mExportWindow);
+	mExportQuantityLabel				= GUIText::create(sf::FloatRect(164, 45, 200, 100), "Quantity", mExportWindow);
 	mExportQuantityLabel->setScale(0.7, 0.7);
 	mExportQuantityLabel->setAlignment("middle");
-	mExportCostLabel					= GUIText::create(sf::FloatRect(348, 12, 200, 100), "Cost", mExportWindow);
+	mExportCostLabel					= GUIText::create(sf::FloatRect(348, 45, 200, 100), "Cost", mExportWindow);
 	mExportCostLabel->setScale(0.7, 0.7);
 	mExportCostLabel->setAlignment("middle");
-	mExportPriceLabel					= GUIText::create(sf::FloatRect(502, 12, 200, 100), "Price", mExportWindow);
+	mExportPriceLabel					= GUIText::create(sf::FloatRect(502, 45, 200, 100), "Price", mExportWindow);
 	mExportPriceLabel->setScale(0.7, 0.7);
 	mExportPriceLabel->setAlignment("middle");
 	mExportTotalPriceLabel				= GUIText::create(sf::FloatRect(362, 231, 200, 100), "Total price:", mExportWindow);
@@ -1111,7 +1113,7 @@ void Communist::initializeCommunistWindow()
 		mExportQuantityText[i]->setAlignment("middle");
 	}
 
-	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 67, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
+	mExportFoodCost						= GUIEditField::create(sf::FloatRect(280, 54, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
 	mExportGoodsCost					= GUIEditField::create(sf::FloatRect(280, 112, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
 	mExportTechCost						= GUIEditField::create(sf::FloatRect(280, 171, 139, 35), GUIEditField::COM, "0", true, mExportWindow);
 

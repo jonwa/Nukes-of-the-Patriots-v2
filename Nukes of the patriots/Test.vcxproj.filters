@@ -143,6 +143,9 @@
     <ClCompile Include="UdpServer.cpp">
       <Filter>Source Files\network</Filter>
     </ClCompile>
+    <ClCompile Include="GUIScrollBar.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUIButton.h">

@@ -43,7 +43,7 @@ void SuperPower::reset()
 {
 	mPopulation								= 50;			//Befolkning i miljoner
 	mPatriotism								= 20;
-	mCurrency								= 500;
+	mCurrency								= 0;
 	mTaxes									= 30;
 	mFood									= 0;
 	mExportedFood							= 0;

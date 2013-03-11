@@ -6,6 +6,7 @@
 #include "GUIButton.h"
 #include "GUIEditField.h"
 #include "GUIImage.h"
+#include "GUIScrollBar.h"
 #include "GUIText.h"
 #include "GUIImage.h"
 #include <memory>
@@ -15,24 +16,15 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-#include <SFML/Network.hpp>
 
 class Capitalist;
 class Communist;
-
-namespace sf
-{
-class TcpServer;
-class TcpClient;
-class UdpServer;
-class UdpClient;
-}
 
 class Menu
 {
 public:
 	static Menu* getInstance();
-
+	
 	void saveConfig();
 	void loadConfig();
 
@@ -41,14 +33,18 @@ public:
 
 	void clear();
 	void setInGameMenuVisible();
-	void connectToServer(unsigned short port, sf::IpAddress ipAddress);
 	void loadTeamAnimation();
 	void tick();
-
+	int mMasterVolume;
 	void update(sf::Event &event);
+	void startGame();
 
 	void setMainMenuVisible();
 	void resetChooseTeamValues();
+public:
+	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
+	std::shared_ptr<GUIText>   mWaitingForClientText;
+	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
 private:
 	static Menu* mInstance;
@@ -77,7 +73,6 @@ private:
 
 	void resetPickTeamValues();
 
-	std::shared_ptr<GUIButton> mWindowModeButton;
 
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
@@ -95,10 +90,12 @@ private:
 	std::shared_ptr<GUIButton> mExitButton[2];
 
 	std::shared_ptr<GUIText>   mVolumeText;
-	std::shared_ptr<GUIButton> mLowerVolume;
-	std::shared_ptr<GUIButton> mRaiseVolume;
-	std::shared_ptr<GUIButton> mMuteSound;
+	std::shared_ptr<GUIScrollBar> mVolumeScrollBar;
+	std::shared_ptr<GUIImage>  mFullscreenImage;
+	//std::shared_ptr<GUIButton> mMuteSound;
 	std::shared_ptr<GUIText>   mWindowSizeText;
+	std::shared_ptr<GUIText>   mFullscreenModeText;
+	std::shared_ptr<GUIButton> mFullscreenModeButton;
 	std::shared_ptr<GUIButton> mCloseSettingsWindow;
 
 	std::shared_ptr<GUIWindow> mInGameMenuWindow;
@@ -118,12 +115,6 @@ private:
 
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
-
-	sf::TcpServer* mTcpServer;
-	sf::TcpClient* mTcpClient;
-
-	sf::UdpServer* mUdpServer;
-	sf::UdpClient* mUdpClient;
 
 	sf::RenderWindow* mWindow;
 };
