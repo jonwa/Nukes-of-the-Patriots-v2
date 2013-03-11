@@ -31,21 +31,14 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	Event::addEventHandler("onPlayerConnect", [=](sf::Packet packet)
-	{
-		char serverAddress[1024];
-		packet>>serverAddress;
-		std::cout<<"Server open: "<<serverAddress<<std::endl;
-		//connectToServer(serverPort, sf::IpAddress::IpAddress(serverAddress));
-	});
 	//mUdpServer = new sf::UdpServer(55005);
 	//mTcpServer = new sf::TcpServer(55006);
 	//mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.11.161.227"));
 
-	//mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
-	//sf::Packet packet;
-	//packet<<sf::IpAddress::getLocalAddress().toString();
-	//mUdpClient->triggerServerEvent("onPlayerConnect", packet);
+	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
+	sf::Packet packet;
+	packet<<"aleksi";
+	mUdpClient->triggerServerEvent("heartBeat", packet);
 
 	initialize(); 
 	initializeGuiFuctions();
