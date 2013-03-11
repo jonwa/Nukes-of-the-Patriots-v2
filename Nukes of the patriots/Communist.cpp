@@ -1214,8 +1214,8 @@ void Communist::initializeCommunistWindow()
 	mResourcesExportedText[2]			= GUIText::create(sf::FloatRect(50, y, 0, 0), "0", mExportedResourcesWindow);
 	mResourcesExportedText[2]->setScale(0.8, 0.8);
 	y += mResourcesExportedText[2]->getHeight() + 5;
-	mExportedIncomeText					= GUIText::create(sf::FloatRect(0, 0, 0, 0), "0", mExportedResourcesWindow);
-	mExportedIncomeText->setScale(0.8, 0.8);
+	mExportedIncomeText					= GUIText::create(sf::FloatRect(mResourcesExportedText[2]->getWidth() + 5, y, 0, 0), "0", mExportedResourcesWindow);
+	mExportedIncomeText->setScale(0.5, 0.5);
 	mExportedResourcesWindow->setVisible(false);
 
 	mChooseGeneralWindow				= GUIWindow::create(CommunistWindows["ChooseGeneral"], mCommunistMainWindow);
@@ -2235,10 +2235,13 @@ void Communist::initializeGuiFunctions()
 
 		mPopulationEatsFoodWindow->setVisible(true);
 		mCommunistEndTurnButton->setTexture(CommunistButtons["EndTurnIsPressed"]);
-		
+		mClosePopulationEatsFoodWindow->setVisible(true);
+		mDoIncreasePopulation->setVisible(true);
+		mDoNotIncreasePopulation->setVisible(true);
 		if(mIncreasePopulation)
 		{
 			mClosePopulationEatsFoodWindow->setVisible(false);
+			mIncreasePopulation = false;
 		}
 		else
 		{

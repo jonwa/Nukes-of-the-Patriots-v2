@@ -201,19 +201,21 @@ void SuperPower::updateFood(std::shared_ptr<GUIText> text)
 	else if(mFood == 0)
 	{
 		text->setText("There is no food at all for the population.\n\nThis is upsetting.");
-		
+		mIncreasePopulation = false;
 	}
 	/*	Om det inte finns tillräckligt med mat och mFood inte är lika med noll
 		ökar inte patriotismen men mFood tilldelas noll*/
 	else if(mFood > mPopulation / 2)
 	{
 		text->setText("There is not quite enough food for \nthe population.");
+		mIncreasePopulation = false;
 	}
 	/*	Om inga av det överstående stämmer, innebär det att maten är lika med noll och befolkningen inte fått någon mat
 		Detta ger minus fyra i patriotism*/
 	else
 	{
 		text->setText("There is very little food for the population.\n\nThey starve and grumble.");
+		mIncreasePopulation = false;
 	}
 }
 /*Kontrollerar ifall det är möjligt att öka sin population*/
