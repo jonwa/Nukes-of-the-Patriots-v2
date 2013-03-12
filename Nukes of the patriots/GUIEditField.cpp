@@ -1,6 +1,7 @@
 #include "GUIEditField.h"
 #include <SFML\System\String.hpp>
 #include "ResourceHandler.h"
+#include "GameManager.h"
 #include <iostream>
 #include <sstream>
 
@@ -235,8 +236,19 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				}
 				mText.setString(str);
 				if(mOnGuiChange != NULL)
+				{
 					mOnGuiChange();
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIChange(shared_from_this());
+					}
 
+					
+				}
+				if(GameManager::getInstance()->getGameType() == LAN)
+				{
+					GameManager::getInstance()->syncGUIEditField(shared_from_this());
+				}
 				mSelectedCaret = -1;
 				if(mCaretIndex < 0)
 					mCaretIndex = 0;
@@ -262,7 +274,17 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				mText.setString(str);
 
 				if(mOnGuiChange != NULL)
+				{
 					mOnGuiChange();
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIChange(shared_from_this());
+					}
+				}
+				if(GameManager::getInstance()->getGameType() == LAN)
+				{
+					GameManager::getInstance()->syncGUIEditField(shared_from_this());
+				}
 
 				mSelectedCaret = -1;
 			}
@@ -296,7 +318,17 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 
 					mSelectedCaret = -1;
 					if(mOnGuiChange != NULL)
+					{
 						mOnGuiChange();
+						if(GameManager::getInstance()->getGameType() == LAN)
+						{
+							GameManager::getInstance()->syncGUIChange(shared_from_this());
+						}
+					}
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIEditField(shared_from_this());
+					}
 
 					mSelectedCaret = -1;
 				}
@@ -334,12 +366,6 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 	}
 	GUIElement::update(window, event);
 	return true;
-}
-
-
-void GUIEditField::setOnGuiChangeFunction(std::function<void()> function)
-{
-	mOnGuiChange = function;
 }
 
 void GUIEditField::onGUIClick(int mouseX, int mouseY)

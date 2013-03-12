@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GUIManager.h"
 #include "GUIElement.h"
+#include "GUIEditField.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
@@ -92,12 +93,12 @@ GameManager::GameManager() :
 		mRemoteClient->setMousePosition(sf::Vector2i(mouseX, mouseY));
 	});
 
-	Event::addEventHandler("syncGUIClick",
+	/*Event::addEventHandler("syncGUIClick",
 		[=](sf::Packet packet)
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui click - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 	});
 
 	Event::addEventHandler("syncGUIMouseEnter",
@@ -105,7 +106,7 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse enter - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 	});
 
 	Event::addEventHandler("syncGUIMouseLeave",
@@ -113,8 +114,33 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse leave - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 	});
+*/
+	Event::addEventHandler("syncGUIChange",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		//std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		//if(guiElement != nullptr)
+			//guiElement->getOnGuiChangeFunction()();
+	});
+
+	Event::addEventHandler("syncGUIEditField",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		char str[1024];
+		packet>>id>>str;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != nullptr)
+		{
+			guiElement->setText(str);
+		}
+	});
+
+	
 
 	initializeGuiElement();
 	initializeGuiFunctions();
@@ -944,7 +970,7 @@ void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIClick", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIClick", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -954,7 +980,7 @@ void GameManager::syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIMouseEnter", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIMouseEnter", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -964,6 +990,27 @@ void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIChange(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIChange", packet);
+	else if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIEditField(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID()<<guiElement->getText();
+	std::cout << "sending id: " << guiElement->getElementID() << std::endl;
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIEditField", packet);
+	else if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIEditField", packet, mRemoteIpAddress, mRemotePort);
 }

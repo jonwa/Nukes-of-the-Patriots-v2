@@ -25,7 +25,6 @@ public:
 	void			setPlaceHolderText(std::string string);
 	bool			render(sf::RenderWindow *window, sf::RenderStates &states);
 
-	void			setOnGuiChangeFunction(std::function<void()>);
 	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	virtual void	onGUIClick(int mouseX, int mouseY);
 
@@ -41,7 +40,6 @@ private:
 	sf::RectangleShape mCaretShape, mSelectedShape;
 	sf::Sprite mSprite;
 
-	std::function<void()> mOnGuiChange;
 };
 
 #endif

@@ -88,6 +88,7 @@
 		<height>456</height>
 		<image>Menu/choose_team</image>
 	</window>
+	<window>
 		<name>WaitingForClient</name>
 		<xPos>162</xPos>
 		<yPos>0</yPos>

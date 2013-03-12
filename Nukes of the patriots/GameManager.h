@@ -18,6 +18,7 @@ class Event;
 class Timer;
 class RemoteClient;
 class GUIElement;
+class GUIEditField;
 
 namespace sf
 {
@@ -83,15 +84,17 @@ public:
 
 	void										init(int year);
 
-private:
-	std::string mFileName;
-	SaveFilesVec mSaveFiles;
-
-
 	GameType									getGameType();
 	void										syncGUIClick(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIChange(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIEditField(std::shared_ptr<GUIElement> guiEditField);
+
+private:
+	std::string mFileName;
+	SaveFilesVec mSaveFiles;
+
 private:
 
 
