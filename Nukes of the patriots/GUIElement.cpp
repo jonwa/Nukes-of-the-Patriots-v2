@@ -320,10 +320,10 @@ void GUIElement::tick()
 		if(mOnClickFunction != nullptr)
 		{
 			mOnClickFunction();
-			if(GameManager::getInstance()->getGameType() == LAN)
-			{
-				GameManager::getInstance()->syncGUIClick(shared_from_this());
-			}
+			//if(GameManager::getInstance()->getGameType() == LAN)
+			//{
+			//	GameManager::getInstance()->syncGUIClick(shared_from_this());
+			//}
 		}
 	}
 	if(mCallMouseEnterFunc)
@@ -332,10 +332,10 @@ void GUIElement::tick()
 		if(mMouseEnterFunction != nullptr)
 		{
 			mMouseEnterFunction();
-			if(GameManager::getInstance()->getGameType() == LAN)
-			{
-				GameManager::getInstance()->syncGUIMouseEnter(shared_from_this());
-			}
+			//if(GameManager::getInstance()->getGameType() == LAN)
+			//{
+			//	GameManager::getInstance()->syncGUIMouseEnter(shared_from_this());
+			//}
 		}
 	}
 	if(mCallMouseLeaveFunc)
@@ -344,10 +344,10 @@ void GUIElement::tick()
 		if(mMouseLeaveFunction != nullptr)
 		{
 			mMouseLeaveFunction();
-			if(GameManager::getInstance()->getGameType() == LAN)
-			{
-				GameManager::getInstance()->syncGUIMouseLeave(shared_from_this());
-			}
+			//if(GameManager::getInstance()->getGameType() == LAN)
+			//{
+			//	GameManager::getInstance()->syncGUIMouseLeave(shared_from_this());
+			//}
 		}
 	}
 	if(!mChilds.empty())

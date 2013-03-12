@@ -15,7 +15,6 @@
 #include <SFML/Network.hpp>
 #include <SFML\Audio\Listener.hpp>
 
-
 Menu::Menu() : 
 	mWindow(nullptr),
 	mCapitalistTeamChosen(false),
@@ -23,12 +22,12 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
+	//initializeIntroVideo();
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
-	MenuMusic["MainMenuTrack"]->play();
-	MenuMusic["MainMenuTrack"]->setLoop(true);
+	//playVideo();
 }
 
 Menu* Menu::mInstance = NULL;
@@ -39,6 +38,21 @@ Menu* Menu::getInstance()
 	return mInstance;
 }
 Menu::~Menu(){ }
+
+void Menu::playMusic()
+{
+	mMenuMusic->playSound(); 
+	mMenuMusic->setVolume(60);
+}
+void Menu::stopMusic()
+{
+	mMenuMusic->stopSound();
+}
+void Menu::pauseMusic()
+{
+	mMenuMusic->pauseSound();
+}
+
 
 void Menu::setWindow(sf::RenderWindow& window)
 {
@@ -54,11 +68,6 @@ void Menu::saveConfig()
 {
 	tinyxml2::XMLDocument doc;
 	
-	//tinyxml2::XMLElement *config = doc.NewElement("Config");
-	//tinyxml2::XMLElement *window = doc.NewElement("Window");
-	//window->SetAttribute("mode", mWindowMode);
-	//config->InsertEndChild(window);
-
 	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
 	master->SetAttribute("value", sf::Listener::getGlobalVolume()/*mVolumeScrollBar->getValue()*/);
 	tinyxml2::XMLElement *position = doc.NewElement("VolumePos");
@@ -80,9 +89,6 @@ void Menu::loadConfig()
 	if(doc.Error())
 		std::cout << "error! unable to load configs";
 	
-	//tinyxml2::XMLElement *config = doc.FirstChildElement("Config");
-	//tinyxml2::XMLElement *window = config->FirstChildElement("Window");
-	//mWindowMode = atoi(window->Attribute("mode"));
 	tinyxml2::XMLElement *master = doc.FirstChildElement("MasterVolume");
 	sf::Listener::setGlobalVolume((float)atof(master->Attribute("value")));
 	tinyxml2::XMLElement *position = doc.FirstChildElement("VolumePos");
@@ -135,8 +141,13 @@ void Menu::update(sf::Event &event)
 		std::cout<<"in game menu is visible"<<std::endl;
 
 		GUIManager::getInstance()->setOnTop(mInGameMenuWindow);
+		GameManager::getInstance()->getCurrentPlayer()->pauseMusic();
 
 		mInGameMenuWindow->setVisible(true);
+		Timer::setTimer([=]()
+		{
+			playMusic();
+		}, 100, 1);
 	}
 }
 
@@ -339,6 +350,30 @@ void Menu::loadMenuMusic()
 	}
 }
 
+void Menu::initializeIntroVideo()
+{
+	if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
+		std::cout << "unable to load video" << std::endl;
+
+	mIntroMovie.useDebugMessages(false);
+}
+
+void Menu::playVideo()
+{
+	mIntroMovie.play();
+	Timer::setTimer([=]()
+	{
+		stopVideo();
+		playMusic();
+		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+		mMainMenuWindow->setVisible(true);
+	}, 5000, 1);
+}
+
+void Menu::stopVideo()
+{
+	mIntroMovie.stop();
+}
 
  /*
 	Initierar menyernas fönster, bilder samt knappar som skall finnas med.
@@ -353,11 +388,9 @@ void Menu::initialize()
 	loadButtonPosition();
 	loadWindowPosition();
 	loadMenuMusic();
-
+	mMenuMusic				= Sound::create(MenuMusic["MainMenuTrack"]);
 	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
 
-	/*Fönstret och dess barn för LOGOMENU*/
-	//mLogoMenuWindow		= GUIWindow::create(WindowPos["LogoScreen"], mParentWindow);
 
 	/*Fönstret och dess barn för SPLASHSCREEN*/
 	//mSplashScreenWindow = GUIWindow::create(WindowPos["SplashScreen"], mParentWindow);
@@ -426,6 +459,8 @@ void Menu::initialize()
 	mSettingsMenuWindow->setVisible(false);
 
 	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"]);
+	mCreditsPlaceholder		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(350, 50, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Menu/CredtisPlaceHolder"))), mCreditsMenuWindow);
+	mCloseCreditsButton		= GUIButton::create(ButtonPos["CloseCredits"], mCreditsMenuWindow);
 	mCreditsMenuWindow->setVisible(false);
 
 	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
@@ -457,6 +492,7 @@ void Menu::initialize()
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
+	GUIManager::getInstance()->addGUIElement(mCreditsMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSettingsMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[0]);
 	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[1]);
@@ -483,6 +519,8 @@ void Menu::tick()
 		sprite.setPosition(mWindow->getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow->getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
 		mWindow->draw(sprite);
 	}
+	if(mIntroMovie.getStatus() == sfe::Movie::Playing)
+		mWindow->draw(mIntroMovie);
 }
 
 void Menu::startGame()
@@ -572,7 +610,13 @@ void Menu::initializeGuiFuctions()
 	mCreditsButton->setMouseEnterFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
 	mCreditsButton->setMouseLeaveFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["Credits"]); });
 	
-	mCreditsButton->setOnClickFunction([=]()	{ mMainMenuWindow->setVisible(false); mCreditsMenuWindow->setVisible(true); });
+	mCreditsButton->setOnClickFunction([=]()	
+	{  
+		mMainMenuWindow->setEnabled(false, true);
+		GUIManager::getInstance()->setOnTop(mCreditsMenuWindow);
+		mCreditsMenuWindow->setVisible(true);
+		mCreditsMenuWindow->setEnabled(true, true); 
+	});
 	
 	mExitButton[0]->setMouseEnterFunction([=]()	{ mExitButton[0]->setTexture(ButtonPos["ExitHover"]); });
 	mExitButton[0]->setMouseLeaveFunction([=]()	{ mExitButton[0]->setTexture(ButtonPos["Exit"]); });
@@ -671,6 +715,7 @@ void Menu::initializeGuiFuctions()
 		mInGameMenuWindow->setVisible(false);
 		mResumeGameButton->setTexture(ButtonPos["Resume"]); 
 		GameManager::getInstance()->getCurrentPlayer()->showGUI();
+		stopMusic();
 	});
 	
 	   //Restart game
@@ -791,5 +836,12 @@ void Menu::initializeGuiFuctions()
 	mSavedGameSlots[2]->setOnClickFunction([=]()
 	{
 		std::cout << mSavedGameText[2]->getText() << std::endl;
+	});
+
+	mCloseCreditsButton->setOnClickFunction([=]()
+	{ 
+		mCreditsMenuWindow->setVisible(false);
+		mCreditsMenuWindow->setEnabled(false, true);
+		mMainMenuWindow->setEnabled(true, true);
 	});
 }	

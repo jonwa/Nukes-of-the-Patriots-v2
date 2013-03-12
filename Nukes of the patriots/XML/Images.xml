@@ -158,6 +158,9 @@
 </images>
 
 <images directory ="Menu">
+	<image filename="CredtisPlaceHolder.png"/>
+
+
 	<image filename="scrollbar_slider.png"/>
 	<image filename="Scrollbar.png"/>
 	
@@ -167,13 +170,6 @@
 	<image filename="save-poster-red.png"/>
 	
     <image filename="Background.png"/>
-    <image filename="5_bg.png"/>
-    <image filename="6_bg.png"/>
-	<image filename="3_1start.png"/>
-	<image filename="3_2load.png"/>
-	<image filename="3_3settings.png"/>
-	<image filename="3_4credits.png"/>
-	<image filename="3_5exit.png"/>
 	<image filename="kom_teamsign1.png"/>
 	<image filename="kap_teamsign1.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>
@@ -191,10 +187,10 @@
 	<image filename="credits-poster.png"/>
 	<image filename="exit-poster.png"/>
 	
-	<image filename="Resume.png"/>
-	<image filename="ResumeHover.png"/>
-	<image filename="Restart.png"/>
-	<image filename="RestartHover.png"/>
+	<image filename="resume-poster.png"/>
+	<image filename="resume-poster-red.png"/>
+	<image filename="restart-poster-red.png"/>
+	<image filename="restart-poster.png"/>
 	
 	<image filename="play-poster-red.png"/>
 	<image filename="multiplayer-poster-red.png"/>

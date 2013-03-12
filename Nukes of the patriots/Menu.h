@@ -12,11 +12,12 @@
 #include <memory>
 #include <map>
 #include "Timer.h"
-
+#include "Sound.h"
+#include "SoundHandler.h"
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-
+#include <sfeMovie\Movie.hpp>
 class Capitalist;
 class Communist;
 
@@ -45,6 +46,14 @@ public:
 
 	void setLoadGameButtonText();
 
+	void playMusic();
+	void stopMusic();
+	void pauseMusic();
+
+	void playVideo();
+	void stopVideo();
+	sfe::Movie &getVideo();
+
 public:
 	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
 	std::shared_ptr<GUIText>   mWaitingForClientText;
@@ -52,14 +61,14 @@ public:
 
 private:
 	static Menu* mInstance;
-
+	sfe::Movie mIntroMovie;
 	bool fullscreen;
-
+	std::shared_ptr<Sound> mMenuMusic;
 	Menu();
 	//Menu(const Menu&){}
 	//Menu operator=(const Menu&){}
 	~Menu();
-
+	
 	bool mCapitalistTeamChosen, mCommunistTeamChosen;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > ButtonPos;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > WindowPos;
@@ -72,7 +81,7 @@ private:
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void loadMenuMusic();
-
+	void initializeIntroVideo();
 	sf::Texture mTeamAnimationFrames[150];
 	Timer *mTeamAnimationTimer;
 	bool mShowTeamChooseAnimation;
@@ -80,11 +89,13 @@ private:
 	void resetPickTeamValues();
 
 
+	//THIS IS A PLACEHOLDER, REMOVE IT WHEN GRAPHIC IS UPDATED
+	std::shared_ptr<GUIImage> mCreditsPlaceholder;
+
 	std::shared_ptr<GUIWindow> mParentWindow;
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
 	std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
-	//std::shared_ptr<GUIWindow> mLogoMenuWindow;
 	//std::shared_ptr<GUIWindow> mSplashScreenWindow;
 	std::shared_ptr<GUIWindow> mChooseTeamWindow;
 
@@ -98,6 +109,7 @@ private:
 	std::shared_ptr<GUIText>   mLoadGameText;
 	std::shared_ptr<GUIButton> mSettingsButton[2];
 	std::shared_ptr<GUIButton> mCreditsButton;
+	std::shared_ptr<GUIButton> mCloseCreditsButton;
 	std::shared_ptr<GUIButton> mExitButton[2];
 
 	std::shared_ptr<GUIText>   mVolumeText;

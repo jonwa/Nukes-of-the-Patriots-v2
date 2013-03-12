@@ -56,6 +56,14 @@
 		<height>155</height>
 		<image>Menu/credits-poster</image>
 	</button>
+	<button>
+		<name>CloseCredits</name>
+		<xPos>20</xPos>
+		<yPos>680</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
 	<button>		
 		<name>Exit</name>
 		<xPos>578</xPos>
@@ -70,7 +78,7 @@
 		<yPos>49</yPos>
 		<width>54</width>
 		<height>144</height>
-		<image>Menu/Resume</image>
+		<image>Menu/resume-poster</image>
 	</button>
 	<button>
 		<name>Restart</name>
@@ -78,7 +86,7 @@
 		<yPos>131</yPos>
 		<width>64</width>
 		<height>137</height>
-		<image>Menu/Restart</image>
+		<image>Menu/restart-poster</image>
 	</button>
 	<button>
 		<name>SaveGame</name>
@@ -278,7 +286,7 @@
 		<yPos>49</yPos>
 		<width>54</width>
 		<height>144</height>
-		<image>Menu/ResumeHover</image>
+		<image>Menu/resume-poster-red</image>
 	</button>
 	<button>
 		<name>RestartHover</name>
@@ -286,7 +294,7 @@
 		<yPos>131</yPos>
 		<width>64</width>
 		<height>137</height>
-		<image>Menu/RestartHover</image>
+		<image>Menu/restart-poster-red</image>
 	</button>	
 	<button>
 		<name>Mute</name>

@@ -291,7 +291,7 @@
 	<button>
 		<name>PropagandaBuyFood</name>
 		<xPos>20</xPos>
-		<yPos>21</yPos>
+		<yPos>61</yPos>
 		<width>170</width>
 		<height>270</height>
 		<image>Communist/button_okay</image>
@@ -299,7 +299,7 @@
 	<button>
 		<name>PropagandaBuyGoods</name>
 		<xPos>200</xPos>
-		<yPos>21</yPos>
+		<yPos>61</yPos>
 		<width>170</width>
 		<height>270</height>
 		<image>Communist/button_okay</image>
@@ -307,7 +307,7 @@
 	<button>
 		<name>PropagandaBuyTech</name>
 		<xPos>380</xPos>
-		<yPos>21</yPos>
+		<yPos>61</yPos>
 		<width>170</width>
 		<height>270</height>
 		<image>Communist/button_okay</image>
@@ -331,7 +331,7 @@
 	<button>
 		<name>UpgradeNuclearWeapon</name>
 		<xPos>58</xPos>
-		<yPos>352</yPos>
+		<yPos>382</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_smallupgrade</image>		
@@ -339,7 +339,7 @@
 	<button>
 		<name>CancelUpgradeNuclearWeapon</name>
 		<xPos>58</xPos>
-		<yPos>392</yPos>
+		<yPos>422</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_cancel</image>		
@@ -347,7 +347,7 @@
 	<button>
 		<name>UpgradeSpaceProgram</name>
 		<xPos>237</xPos>
-		<yPos>314</yPos>
+		<yPos>344</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_smallupgrade</image>		
@@ -355,7 +355,7 @@
 	<button>
 		<name>CancelUpgradeSpaceProgram</name>
 		<xPos>237</xPos>
-		<yPos>354</yPos>
+		<yPos>384</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_cancel</image>		
@@ -363,7 +363,7 @@
 	<button>
 		<name>UpgradeSpyNetwork</name>
 		<xPos>416</xPos>
-		<yPos>285</yPos>
+		<yPos>315</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_smallupgrade</image>	
@@ -371,7 +371,7 @@
 	<button>
 		<name>CancelUpgradeSpyNetwork</name>
 		<xPos>416</xPos>
-		<yPos>325</yPos>
+		<yPos>355</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_cancel</image>	
@@ -579,7 +579,7 @@
 	<button>
 		<name>CloseExportedResourcesButton</name>
 		<xPos>235</xPos>
-		<yPos>110</yPos>
+		<yPos>272</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Communist/kom_texture_button_ok</image>
