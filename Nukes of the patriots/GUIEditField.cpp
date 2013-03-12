@@ -115,7 +115,7 @@ bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 	mRenderTexture.draw(mText, states);
 	if(mPlaceHolderText.getString().getSize() > 0 && mText.getString().getSize() == 0 && !mSelected)
 	{
-		//mRenderTexture.draw(mPlaceHolderText, states);
+		mRenderTexture.draw(mPlaceHolderText, states);
 	}
 	if(isSelected())
 	{
