@@ -24,6 +24,7 @@ public:
 	sf::Texture* getTexture();
 	sf::Texture* getClickedTexture();
 
+	std::string getName()const;
 	float getFoodPriceModifier();
 	float getGoodsPriceModifier();
 	float getTechPriceModifier();
@@ -33,9 +34,22 @@ public:
 	float getPatriotismTaxModifier();
 	float getPopEatsMore();
 
+	void setFoodPriceModifier(float value);
+	void setGoodsPriceModifier(float value);
+	void setTechPriceModifier(float value);
+	void setNuclearPriceModifier(float value);
+	void setSpacePriceModifier(float value);
+	void setSpyPriceModifier(float value);
+	void setPatriotismTaxModifier(float value);
+	void setPopEatsMore(float value);
+
 	int getYearsElected() { return mYearsElected; }
 	void setYearsElected(int years) { mYearsElected = years; }
 	void playSlogan();
+
+	void setFirstPositiveStat(std::string stat);
+	void setSecondPositiveStat(std::string stat);
+	void setNegativeStat(std::string stat);
 
 	std::string& getFirstPositiveStat();
 	std::string& getSecondPositiveStat();

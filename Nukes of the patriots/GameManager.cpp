@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GUIManager.h"
 #include "GUIElement.h"
+#include "GUIEditField.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
@@ -21,7 +22,6 @@
 #include "UdpServer.h"
 #include "RemoteClient.h"
 #include <SFML\Network.hpp>
-#include "RemoteClient.h"
 
 static int width = 1024;
 static int height = 768;
@@ -97,7 +97,15 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui click - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getOnClickFunction();
+			if(func != NULL)
+			{
+				func();
+			}
+		}
 	});
 
 	Event::addEventHandler("syncGUIMouseEnter",
@@ -105,7 +113,15 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse enter - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getMouseEnterFunction();
+			if(func != NULL)
+			{
+				func();
+			}
+		}
 	});
 
 	Event::addEventHandler("syncGUIMouseLeave",
@@ -113,7 +129,156 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse leave - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getMouseLeaveFunction();
+			if(func != NULL)
+			{
+				func();
+			}
+		}
+	});
+
+	Event::addEventHandler("syncGUIChange",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getOnGuiChangeFunction();
+			if(func != NULL)
+			{
+				func();
+			}
+		}
+	});
+
+	Event::addEventHandler("syncGUIEditField",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		char str[1024];
+		packet>>id>>str;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != nullptr)
+		{
+			guiElement->setText(str);
+		}
+	});
+
+	Event::addEventHandler("syncRandomFirstPlayerToPlay",
+		[=](sf::Packet packet)
+	{
+		int random = 0;
+		packet>>random;
+		mCurrentPlayer = mVecSuperPowers[random];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
+		}
+		mLoaded = true;
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+		if(mRemoteClient->getSuperPower() == random)
+			setEnemyTurn();
+		else
+			setMyTurn();
+	});
+
+	Event::addEventHandler("syncRandomPresident",
+		[=](sf::Packet packet)
+	{
+		char name[1024];
+		char firstPositiveStat[1024];
+		char secondPositiveStat[1024];
+		char negativeStat[1024];
+		float foodPriceModifier = 0, goodsPriceModifier = 0, techPriceModifier = 0;
+		float nuclearPriceModifier = 0, spacePriceModifier = 0, spyPriceModifier = 0;
+		float patriotismTaxModifier = 0, popEatsMore = 0;
+
+		char name2[1024];
+		char firstPositiveStat2[1024];
+		char secondPositiveStat2[1024];
+		char negativeStat2[1024];
+		float foodPriceModifier2 = 0, goodsPriceModifier2 = 0, techPriceModifier2 = 0;
+		float nuclearPriceModifier2 = 0, spacePriceModifier2 = 0, spyPriceModifier2 = 0;
+		float patriotismTaxModifier2 = 0, popEatsMore2 = 0;
+
+		packet>>name>>firstPositiveStat>>secondPositiveStat>>negativeStat
+			>>foodPriceModifier>>goodsPriceModifier>>techPriceModifier
+			>>nuclearPriceModifier>>spacePriceModifier>>spyPriceModifier
+			>>patriotismTaxModifier>>popEatsMore;
+
+		packet>>name2>>firstPositiveStat2>>secondPositiveStat2>>negativeStat2
+			>>foodPriceModifier2>>goodsPriceModifier2>>techPriceModifier2
+			>>nuclearPriceModifier2>>spacePriceModifier2>>spyPriceModifier2
+			>>patriotismTaxModifier2>>popEatsMore2;
+
+		std::shared_ptr<President> firstPresident = getPresidentByName(name);
+		firstPresident->setFirstPositiveStat(firstPositiveStat);
+		firstPresident->setSecondPositiveStat(secondPositiveStat);
+		firstPresident->setNegativeStat(negativeStat);
+		firstPresident->setFoodPriceModifier(foodPriceModifier);
+		firstPresident->setGoodsPriceModifier(goodsPriceModifier);
+		firstPresident->setTechPriceModifier(techPriceModifier);
+		firstPresident->setNuclearPriceModifier(nuclearPriceModifier);
+		firstPresident->setSpacePriceModifier(spacePriceModifier);
+		firstPresident->setSpyPriceModifier(spyPriceModifier);
+		firstPresident->setPatriotismTaxModifier(patriotismTaxModifier);
+		firstPresident->setPopEatsMore(popEatsMore);
+
+		std::shared_ptr<President> secondPresident = getPresidentByName(name2);
+		secondPresident->setFirstPositiveStat(firstPositiveStat2);
+		secondPresident->setSecondPositiveStat(secondPositiveStat2);
+		secondPresident->setNegativeStat(negativeStat2);
+		secondPresident->setFoodPriceModifier(foodPriceModifier2);
+		secondPresident->setGoodsPriceModifier(goodsPriceModifier2);
+		secondPresident->setTechPriceModifier(techPriceModifier2);
+		secondPresident->setNuclearPriceModifier(nuclearPriceModifier2);
+		secondPresident->setSpacePriceModifier(spacePriceModifier2);
+		secondPresident->setSpyPriceModifier(spyPriceModifier2);
+		secondPresident->setPatriotismTaxModifier(patriotismTaxModifier2);
+		secondPresident->setPopEatsMore(popEatsMore2);
+
+		getCap()->LANChooseLeader(firstPresident, secondPresident);
+	});
+
+	Event::addEventHandler("nextPlayerToChooseTeam",
+		[=](sf::Packet packet)
+	{
+		int type = 0;
+		packet>>type;
+		mRemoteClient->setSuperPower(type);
+	});
+
+	Event::addEventHandler("syncPlayersTurn",
+		[=](sf::Packet packet)
+	{
+<<<<<<< HEAD
+		std::cout<<"sync players turn"<<std::endl;
+		//int playersTurn = 1;
+		//packet>>playersTurn;
+		//mPlayersTurn = playersTurn;
+=======
+		int playersTurn = 0;
+		packet>>playersTurn;
+		mPlayersTurn = playersTurn;
+>>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
+	});
+
+	Event::addEventHandler("loadingCompleted",
+		[=](sf::Packet packet)
+	{
+		mRemoteClient->setReady(true);
+		if(mLoaded && mRemoteClient->getSuperPower() == COMMUNIST)
+			getCap()->sendPresidentDataToOtherPlayer();
 	});
 
 	initializeGuiElement();
@@ -276,6 +441,15 @@ void GameManager::init(int year)
 		mYearText->setAlignment("middle");
 		mYearText->setColor(sf::Color::White);
 		GUIManager::getInstance()->addGUIElement(mYearText);
+		sf::Packet packet;
+		packet<<1;
+		triggerOtherPlayersEvent("loadingCompleted", packet);
+		if(mRemoteClient->isReady() && mRemoteClient->getSuperPower() == COMMUNIST)
+			getCap()->sendPresidentDataToOtherPlayer();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		getInstance()->setYear(year);
@@ -288,17 +462,46 @@ void GameManager::init(int year)
 		{
 			(*it)->chooseLeader();
 		}*/
-		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
-		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		if(getGameType() == LAN && isMyTurnToPlay())
 		{
-			if((*it) == mCurrentPlayer)
+			int random = Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0);
+			mCurrentPlayer = mVecSuperPowers[random];
+			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 			{
-				mVecPlayersLeft.erase(it);
-				break;
+				if((*it) == mCurrentPlayer)
+				{
+					mVecPlayersLeft.erase(it);
+					break;
+				}
 			}
+			//startRound();
+			mLoaded = true;
+			sf::Packet packet;
+			packet<<random;
+			triggerOtherPlayersEvent("syncRandomFirstPlayerToPlay", packet);
+			mCurrentPlayer->setRound(1);
+			mCurrentPlayer->showGUI();
+			if(mRemoteClient->getSuperPower() == random)
+				setEnemyTurn();
+			else
+				setMyTurn();
 		}
-		//startRound();
-		mLoaded = true;
+		else if(getGameType() == VERSUS)
+		{
+			mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+			{
+				if((*it) == mCurrentPlayer)
+				{
+					mVecPlayersLeft.erase(it);
+					break;
+				}
+			}
+			//startRound();
+			mLoaded = true;
+			mCurrentPlayer->setRound(1);
+			mCurrentPlayer->showGUI();
+		}
 	}
 	else
 	{
@@ -312,10 +515,9 @@ void GameManager::init(int year)
 				break;
 			}
 		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
 	}
-
-	mCurrentPlayer->setRound(1);
-	mCurrentPlayer->showGUI();
 	//startRound();
 
 }
@@ -339,6 +541,11 @@ std::shared_ptr<Communist> GameManager::getCom()
 {
 	//std::shared_ptr<Communist> com = std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
 	return std::static_pointer_cast<Communist> (mVecSuperPowers[1]);
+}
+
+std::shared_ptr<RemoteClient> GameManager::getRemoteClient()
+{
+	return mRemoteClient;
 }
 
 void GameManager::loadPresidents()
@@ -393,6 +600,18 @@ std::shared_ptr<President> GameManager::getRandomPresident()
 	std::shared_ptr<President> result = mPresidentVector[random];
 	mPresidentVector.erase(mPresidentVector.begin() + random);
 	return result;
+}
+
+void GameManager::removePresidentFromList(std::shared_ptr<President> president)
+{
+	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
+	{
+		if(*it == president)
+		{
+			mPresidentVector.erase(it);
+			break;
+		}
+	}
 }
 
 std::shared_ptr<President> GameManager::getGeneral(int number)
@@ -503,7 +722,6 @@ void GameManager::updateStatsWindow()
 
 void GameManager::nextRound()
 {
-
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		(*it)->hideGUI();
@@ -907,21 +1125,18 @@ void GameManager::tick(sf::RenderWindow &window)
 	{
 		sf::Packet packet;
 		packet<<mousePos.x<<mousePos.y;
-		if(mRole == CLIENT)
-			mUdpClient->triggerServerEvent("syncMousePosition", packet);
-		else if(mRole == SERVER)
-			mUdpServer->triggerClientEvent("syncMousePosition", packet, mRemoteIpAddress, mRemotePort);
+		triggerOtherPlayersEvent("syncMousePosition", packet);
 
 		sf::Sprite remoteCursor(cursorTexture);
 		sf::Vector2i remoteMousePos = mRemoteClient->getMousePosition();
 		remoteCursor.setPosition(remoteMousePos.x, remoteMousePos.y);
 
-		if(mPlayersTurn == 0 && mRole == CLIENT || mPlayersTurn == 1 && mRole == SERVER)
+		if(!isMyTurnToPlay())
 			window.draw(remoteCursor);
 	}
 	cursor.setPosition(mousePos.x, mousePos.y);
 
-	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
+	if(isMyTurnToPlay())
 		window.draw(cursor);
 }
 
@@ -942,28 +1157,94 @@ void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIClick", packet);
-	if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIClick", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIClick", packet);
 }
 
 void GameManager::syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIMouseEnter", packet);
-	if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIMouseEnter", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIMouseEnter", packet);
 }
 
 void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
-	if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIMouseLeave", packet);
 }
+
+void GameManager::syncGUIChange(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	triggerOtherPlayersEvent("syncGUIChange", packet);
+}
+
+void GameManager::syncGUIEditField(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID()<<guiElement->getText();
+	triggerOtherPlayersEvent("syncGUIEditField", packet);
+}
+
+bool GameManager::isMyTurnToPlay()
+{
+	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
+		return true;
+	return false;
+}
+
+void GameManager::triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet)
+{
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent(eventName, packet);
+	else if(mRole == SERVER)
+		mUdpServer->triggerClientEvent(eventName, packet, sf::IpAddress(mRemoteIpAddress), mRemotePort);
+}
+
+std::shared_ptr<President> GameManager::getPresidentByName(std::string name)
+{
+	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
+	{
+		if(std::strcmp((*it)->getName().c_str(), name.c_str()) == 0)
+			return *it;
+	}
+	return nullptr;
+}
+
+void GameManager::nextPlayersTurn()
+{
+	std::cout<<"setting next players turn..."<<std::endl;
+	setEnemyTurn();
+	sf::Packet packet;
+	packet<<mPlayersTurn;
+	triggerOtherPlayersEvent("syncPlayersTurn", packet);
+}
+
+void GameManager::setEnemyTurn()
+{
+	if(mRole == SERVER)
+		mPlayersTurn = 1;
+<<<<<<< HEAD
+	if(mRole == CLIENT)
+=======
+	else if(mRole == CLIENT)
+>>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
+		mPlayersTurn = 0;
+}
+
+void GameManager::setMyTurn()
+{
+	if(mRole == SERVER)
+		mPlayersTurn = 0;
+	else if(mRole == CLIENT)
+		mPlayersTurn = 1;
+<<<<<<< HEAD
+}
+
+
+// Sync packet sending - wait until packet has been sent to send next packet
+=======
+}
+>>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058

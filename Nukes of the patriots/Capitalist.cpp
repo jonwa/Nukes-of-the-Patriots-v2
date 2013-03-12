@@ -19,6 +19,7 @@
 #include <SFML\Window\Mouse.hpp>
 #include <SFML\Window\Keyboard.hpp>
 #include "Menu.h"
+#include "RemoteClient.h"
 
 static int foodCost		= 10;
 static int goodsCost	= 20;
@@ -1178,6 +1179,11 @@ void Capitalist::initializeCapitalistWindow()
 	mExportConfirmButton				= GUIButton::create(CapitalistButtons["ExportConfirm"], mExportWindow);
 	mExportConfirmButton->setSize(CapitalistButtons["ExportConfirm"].first.width, CapitalistButtons["ExportConfirm"].first.height);
 	mExportWindow->setVisible(false);
+
+	mExportedWithoutPriceWindow			= GUIWindow::create(CapitalistWindows["ExportedWithoutPrice"], mCapitalistMainWindow);
+	mExportedWithoutPriceText			= GUIText::create(sf::FloatRect(285, 60, 0, 0), "You must set a price for your export!", mExportedWithoutPriceWindow);
+	mExportedWithoutPriceText->setAlignment("middle");
+	mExportedWithoutPriceWindow->setVisible(false);
 	
 	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
 	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import From ' " + Menu::getInstance()->getEditField("CommunistNameField")->getText() + " '", mImportWindow);
@@ -1462,21 +1468,108 @@ void Capitalist::initializeCityImages()
 	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
+void Capitalist::sendPresidentDataToOtherPlayer()
+{
+	sf::Packet packet;
+	packet<<mFirstPresident->getName()<<mFirstPresident->getFirstPositiveStat()<<mFirstPresident->getSecondPositiveStat()<<mFirstPresident->getNegativeStat()
+		<<mFirstPresident->getFoodPriceModifier()<<mFirstPresident->getGoodsPriceModifier()<<mFirstPresident->getTechPriceModifier()
+		<<mFirstPresident->getNuclearPriceModifier()<<mFirstPresident->getSpacePriceModifier()<<mFirstPresident->getSpyPriceModifier()
+		<<mFirstPresident->getPatriotismTaxModifier()<<mFirstPresident->getPopEatsMore();
+
+	packet<<mSecondPresident->getName()<<mSecondPresident->getFirstPositiveStat()<<mSecondPresident->getSecondPositiveStat()<<mSecondPresident->getNegativeStat()
+		<<mSecondPresident->getFoodPriceModifier()<<mSecondPresident->getGoodsPriceModifier()<<mSecondPresident->getTechPriceModifier()
+		<<mSecondPresident->getNuclearPriceModifier()<<mSecondPresident->getSpacePriceModifier()<<mSecondPresident->getSpyPriceModifier()
+		<<mSecondPresident->getPatriotismTaxModifier()<<mSecondPresident->getPopEatsMore();
+	GameManager::getInstance()->triggerOtherPlayersEvent("syncRandomPresident", packet);
+}
+
 void Capitalist::chooseLeader()
 {
-	mCapitalistMainWindow->setEnabled(false, true);
-	mChoosePresidentWindow->setEnabled(true, true);
-	mChoosePresidentWindow->setVisible(true);
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->getRemoteClient()->getSuperPower() == COMMUNIST)
+	{
+		mCapitalistMainWindow->setEnabled(false, true);
+		mChoosePresidentWindow->setEnabled(true, true);
+		mChoosePresidentWindow->setVisible(true);
+		if(mPresident == NULL)
+			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		else
+		{
+			if(mPresident->getYearsElected() < 2)
+				mFirstPresident = mPresident;
+			else
+				mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		}
+		mSecondPresident = GameManager::getInstance()->getRandomPresident();
+
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
+
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+		mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+		mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+		mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+		mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+		mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+		mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+		mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+	}
+	else if(GameManager::getInstance()->getGameType() == VERSUS)
+	{
+		mCapitalistMainWindow->setEnabled(false, true);
+		mChoosePresidentWindow->setEnabled(true, true);
+		mChoosePresidentWindow->setVisible(true);
+		if(mPresident == NULL)
+			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		else
+		{
+			if(mPresident->getYearsElected() < 2)
+				mFirstPresident = mPresident;
+			else
+				mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		}
+		mSecondPresident = GameManager::getInstance()->getRandomPresident();
+
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
+
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+		mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+		mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+		mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+		mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+		mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+		mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+		mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+	}
+}
+
+void Capitalist::LANChooseLeader(std::shared_ptr<President> firstPresident, std::shared_ptr<President> secondPresident)
+{
 	if(mPresident == NULL)
-		mFirstPresident = GameManager::getInstance()->getRandomPresident();
+	{
+		mFirstPresident = firstPresident;
+		GameManager::getInstance()->removePresidentFromList(mFirstPresident);
+	}
 	else
 	{
 		if(mPresident->getYearsElected() < 2)
 			mFirstPresident = mPresident;
 		else
-			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		{
+			mFirstPresident = firstPresident;
+			GameManager::getInstance()->removePresidentFromList(mFirstPresident);
+		}
 	}
-	mSecondPresident = GameManager::getInstance()->getRandomPresident();
+	mSecondPresident = secondPresident;
+	GameManager::getInstance()->removePresidentFromList(mSecondPresident);
 
 	mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 	mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
@@ -1493,8 +1586,11 @@ void Capitalist::chooseLeader()
 	mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
 	mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
 	mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
-}
 
+	mCapitalistMainWindow->setEnabled(false, true);
+	mChoosePresidentWindow->setEnabled(true, true);
+	mChoosePresidentWindow->setVisible(true);
+}
 
  /**/
 void Capitalist::initializeGuiFunctions()
@@ -2213,28 +2309,52 @@ void Capitalist::initializeGuiFunctions()
 
 	mExportConfirmButton->setOnClickFunction([=]()
 	{
-		mExportWindow->setVisible(false);
-		mCapitalistMainWindow->setEnabled(true, true);
-		mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
+		if(stringToInt(mExportQuantityText[0]->getText()) > 0 && stringToInt(mExportFoodCost->getText()) == 0 || stringToInt(mExportQuantityText[1]->getText()) > 0 && stringToInt(mExportGoodsCost->getText()) == 0 || stringToInt(mExportQuantityText[2]->getText()) > 0 && stringToInt(mExportTechCost->getText()) == 0)
+		{
+			mExportedWithoutPriceWindow->setColor(sf::Color(255, 255, 255, 255));
+			mExportedWithoutPriceText->setColor(sf::Color(0, 0, 0, 255));
+			mExportedWithoutPriceWindow->setVisible(true);
+			mExportWindow->setEnabled(false, true);
+			std::shared_ptr<GUIWindow> _window = mExportedWithoutPriceWindow;
+			std::shared_ptr<GUIText> _text = mExportedWithoutPriceText;
+			std::shared_ptr<GUIWindow> _exportWindow = mExportWindow;
+			Timer::setTimer([=]()
+			{
+				std::shared_ptr<GUIWindow> _window2 = _window;
+				std::shared_ptr<GUIWindow> _exportWindow2 = _exportWindow;
+				GUIAnimation::fadeToColor(_window, 500, sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 0));
+				GUIAnimation::fadeToColor(_text, 500, sf::Color(0, 0, 0, 255), sf::Color(0, 0, 0, 0));
+				Timer::setTimer([=]()
+				{
+					_window2->setVisible(false);
+					_exportWindow2->setEnabled(true, true);
+				}, 500, 1);
+			}, 750, 1);
+		}
+		else
+		{
+			mExportWindow->setVisible(false);
+			mCapitalistMainWindow->setEnabled(true, true);
+			mCapitalistTradeButton->setTexture(CapitalistButtons["Export"]);
+			int _exportedFoodPreviousValue = mExportedFood;
+			int _exportedGoodsPreviousValue = mExportedGoods;
+			int _exportedTechPreviousValue = mExportedTech;
+			mExportedFood = stringToInt(mExportQuantityText[0]->getText());
+			mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
+			mExportedTech = stringToInt(mExportQuantityText[2]->getText());
 
-		int _exportedFoodPreviousValue = mExportedFood;
-		int _exportedGoodsPreviousValue = mExportedGoods;
-		int _exportedTechPreviousValue = mExportedTech;
-		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
-		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
-		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+			int _exportedFoodDiff = mExportedFood - _exportedFoodPreviousValue;
+			int _exportedGoodsDiff = mExportedGoods - _exportedGoodsPreviousValue;
+			int _exportedTechDiff = mExportedTech - _exportedTechPreviousValue;
 
-		int _exportedFoodDiff = mExportedFood - _exportedFoodPreviousValue;
-		int _exportedGoodsDiff = mExportedGoods - _exportedGoodsPreviousValue;
-		int _exportedTechDiff = mExportedTech - _exportedTechPreviousValue;
+			mFood -= _exportedFoodDiff;
+			mGoods -= _exportedGoodsDiff;
+			mTech -= _exportedTechDiff;
 
-		mFood -= _exportedFoodDiff;
-		mGoods -= _exportedGoodsDiff;
-		mTech -= _exportedTechDiff;
-
-		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
-		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
-		mExportedTechPrice = stringToInt(mExportTechCost->getText());
+			mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+			mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+			mExportedTechPrice = stringToInt(mExportTechCost->getText());
+		}
 	});
 
 	/*Stänger ner Taxes fönstret*/

@@ -1375,6 +1375,11 @@ void Communist::initializeCommunistWindow()
 	mExportConfirmButton				= GUIButton::create(CommunistButtons["ExportConfirm"], mExportWindow);
 	mExportConfirmButton->setSize(CommunistButtons["ExportConfirm"].first.width, CommunistButtons["ExportConfirm"].first.height);
 	mExportWindow->setVisible(false);
+
+	mExportedWithoutPriceWindow			= GUIWindow::create(CommunistWindows["ExportedWithoutPrice"], mCommunistMainWindow);
+	mExportedWithoutPriceText			= GUIText::create(sf::FloatRect(285, 60, 0, 0), "You must set a price for your export!", mExportedWithoutPriceWindow);
+	mExportedWithoutPriceText->setAlignment("middle");
+	mExportedWithoutPriceWindow->setVisible(false);
 	
 	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
 	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import from ' " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " '", mImportWindow);
@@ -2414,28 +2419,52 @@ void Communist::initializeGuiFunctions()
 
 	mExportConfirmButton->setOnClickFunction([=]()
 	{
-		mExportWindow->setVisible(false);
-		mCommunistMainWindow->setEnabled(true, true);
-		mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
+		if(stringToInt(mExportQuantityText[0]->getText()) > 0 && stringToInt(mExportFoodCost->getText()) == 0 || stringToInt(mExportQuantityText[1]->getText()) > 0 && stringToInt(mExportGoodsCost->getText()) == 0 || stringToInt(mExportQuantityText[2]->getText()) > 0 && stringToInt(mExportTechCost->getText()) == 0)
+		{
+			mExportedWithoutPriceWindow->setColor(sf::Color(255, 255, 255, 255));
+			mExportedWithoutPriceText->setColor(sf::Color(0, 0, 0, 255));
+			mExportedWithoutPriceWindow->setVisible(true);
+			mExportWindow->setEnabled(false, true);
+			std::shared_ptr<GUIWindow> _window = mExportedWithoutPriceWindow;
+			std::shared_ptr<GUIText> _text = mExportedWithoutPriceText;
+			std::shared_ptr<GUIWindow> _exportWindow = mExportWindow;
+			Timer::setTimer([=]()
+			{
+				std::shared_ptr<GUIWindow> _window2 = _window;
+				std::shared_ptr<GUIWindow> _exportWindow2 = _exportWindow;
+				GUIAnimation::fadeToColor(_window, 500, sf::Color(255, 255, 255, 255), sf::Color(255, 255, 255, 0));
+				GUIAnimation::fadeToColor(_text, 500, sf::Color(0, 0, 0, 255), sf::Color(0, 0, 0, 0));
+				Timer::setTimer([=]()
+				{
+					_window2->setVisible(false);
+					_exportWindow2->setEnabled(true, true);
+				}, 500, 1);
+			}, 750, 1);
+		}
+		else
+		{
+			mExportWindow->setVisible(false);
+			mCommunistMainWindow->setEnabled(true, true);
+			mCommunistTradeButton->setTexture(CommunistButtons["Export"]);
+			int _exportedFoodPreviousValue = mExportedFood;
+			int _exportedGoodsPreviousValue = mExportedGoods;
+			int _exportedTechPreviousValue = mExportedTech;
+			mExportedFood = stringToInt(mExportQuantityText[0]->getText());
+			mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
+			mExportedTech = stringToInt(mExportQuantityText[2]->getText());
 
-		int _exportedFoodPreviousValue = mExportedFood;
-		int _exportedGoodsPreviousValue = mExportedGoods;
-		int _exportedTechPreviousValue = mExportedTech;
-		mExportedFood = stringToInt(mExportQuantityText[0]->getText());
-		mExportedGoods = stringToInt(mExportQuantityText[1]->getText());
-		mExportedTech = stringToInt(mExportQuantityText[2]->getText());
+			int _exportedFoodDiff = mExportedFood - _exportedFoodPreviousValue;
+			int _exportedGoodsDiff = mExportedGoods - _exportedGoodsPreviousValue;
+			int _exportedTechDiff = mExportedTech - _exportedTechPreviousValue;
 
-		int _exportedFoodDiff = mExportedFood - _exportedFoodPreviousValue;
-		int _exportedGoodsDiff = mExportedGoods - _exportedGoodsPreviousValue;
-		int _exportedTechDiff = mExportedTech - _exportedTechPreviousValue;
+			mFood -= _exportedFoodDiff;
+			mGoods -= _exportedGoodsDiff;
+			mTech -= _exportedTechDiff;
 
-		mFood -= _exportedFoodDiff;
-		mGoods -= _exportedGoodsDiff;
-		mTech -= _exportedTechDiff;
-
-		mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
-		mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
-		mExportedTechPrice = stringToInt(mExportTechCost->getText());
+			mExportedFoodPrice = stringToInt(mExportFoodCost->getText());
+			mExportedGoodsPrice = stringToInt(mExportGoodsCost->getText());
+			mExportedTechPrice = stringToInt(mExportTechCost->getText());
+		}
 	});
 
 	mCloseTaxesIncomeWindow->setOnClickFunction([=]()

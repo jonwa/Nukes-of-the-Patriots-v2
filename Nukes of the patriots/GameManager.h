@@ -8,6 +8,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Network.hpp>
 
 class SuperPower;
 class Communist;
@@ -18,6 +19,7 @@ class Event;
 class Timer;
 class RemoteClient;
 class GUIElement;
+class GUIEditField;
 
 namespace sf
 {
@@ -77,21 +79,31 @@ public:
 	std::shared_ptr<SuperPower>					getCommunist();
 	std::shared_ptr<Capitalist>					getCap();
 	std::shared_ptr<Communist>					getCom();
+	std::shared_ptr<RemoteClient>				getRemoteClient();
 	void										reset();
 	
 	std::shared_ptr<GUIWindow>					getStatsWindow();
 
 	void										init(int year);
 
-private:
-	std::string mFileName;
-	SaveFilesVec mSaveFiles;
-
-
 	GameType									getGameType();
 	void										syncGUIClick(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIChange(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
+
+	bool										isMyTurnToPlay();
+	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
+
+	std::shared_ptr<President>					getPresidentByName(std::string name);
+	void										removePresidentFromList(std::shared_ptr<President> president);
+	void										nextPlayersTurn();
+	void										setEnemyTurn();
+	void										setMyTurn();
+private:
+	std::string mFileName;
+	SaveFilesVec mSaveFiles;
 private:
 
 
@@ -145,6 +157,7 @@ private:
 	std::shared_ptr<GUIText>   mFirstCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 
 	std::shared_ptr<GUIText>   mCommunistHeadline[2];

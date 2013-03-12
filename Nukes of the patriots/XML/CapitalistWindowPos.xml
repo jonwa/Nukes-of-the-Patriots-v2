@@ -128,4 +128,12 @@
 		<height>534</height>
 		<image>Capitalist/Capitalist_Window_Big</image>
 	</window>
+	<window>
+		<name>ExportedWithoutPrice</name>
+		<xPos>227</xPos>
+		<yPos>264</yPos>
+		<width>570</width>
+		<height>168</height>
+		<image>Capitalist/Capitalist_Window_Small</image>
+	</window>
 </windows>
