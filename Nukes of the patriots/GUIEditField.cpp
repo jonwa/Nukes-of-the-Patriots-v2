@@ -3,6 +3,7 @@
 #include "ResourceHandler.h"
 #include <iostream>
 #include <sstream>
+#include "GameManager.h"
 
 std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, Type type, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent)
 {
@@ -74,7 +75,9 @@ void GUIEditField::setCaretVisible(bool visible)
 
 void GUIEditField::setText(std::string text)
 {
+	std::cout<<"text before: "<<text<<std::endl;
 	mText.setString(sf::String(text.c_str()));
+	std::cout<<"text after: "<<getText()<<std::endl;
 	//sf::FloatRect boundBox = mText.getGlobalBounds();
 	//setWidth(static_cast<int>(boundBox.width));
 	//setHeight(static_cast<int>(boundBox.height));
@@ -111,7 +114,7 @@ bool GUIEditField::render(sf::RenderWindow *window, sf::RenderStates &states)
 	mRenderTexture.draw(mText, states);
 	if(mPlaceHolderText.getString().getSize() > 0 && mText.getString().getSize() == 0 && !mSelected)
 	{
-		mRenderTexture.draw(mPlaceHolderText, states);
+		//mRenderTexture.draw(mPlaceHolderText, states);
 	}
 	if(isSelected())
 	{
@@ -235,7 +238,17 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				}
 				mText.setString(str);
 				if(mOnGuiChange != NULL)
+				{
 					mOnGuiChange();
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIChange(shared_from_this());
+					}
+				}
+				if(GameManager::getInstance()->getGameType() == LAN)
+				{
+					GameManager::getInstance()->syncGUIEditField(shared_from_this());
+				}
 
 				mSelectedCaret = -1;
 				if(mCaretIndex < 0)
@@ -262,7 +275,17 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				mText.setString(str);
 
 				if(mOnGuiChange != NULL)
+				{
 					mOnGuiChange();
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIChange(shared_from_this());
+					}
+				}
+				if(GameManager::getInstance()->getGameType() == LAN)
+				{
+					GameManager::getInstance()->syncGUIEditField(shared_from_this());
+				}
 
 				mSelectedCaret = -1;
 			}
@@ -296,7 +319,17 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 
 					mSelectedCaret = -1;
 					if(mOnGuiChange != NULL)
+					{
 						mOnGuiChange();
+						if(GameManager::getInstance()->getGameType() == LAN)
+						{
+							GameManager::getInstance()->syncGUIChange(shared_from_this());
+						}
+					}
+					if(GameManager::getInstance()->getGameType() == LAN)
+					{
+						GameManager::getInstance()->syncGUIEditField(shared_from_this());
+					}
 
 					mSelectedCaret = -1;
 				}
@@ -334,12 +367,6 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 	}
 	GUIElement::update(window, event);
 	return true;
-}
-
-
-void GUIEditField::setOnGuiChangeFunction(std::function<void()> function)
-{
-	mOnGuiChange = function;
 }
 
 void GUIEditField::onGUIClick(int mouseX, int mouseY)

@@ -133,6 +133,26 @@ int GUIElement::getElementID()
 	return mElementID;
 }
 
+std::function<void()> GUIElement::getOnClickFunction()
+{
+	return mOnClickFunction;
+}
+
+std::function<void()> GUIElement::getMouseEnterFunction()
+{
+	return mMouseEnterFunction;
+}
+
+std::function<void()> GUIElement::getMouseLeaveFunction()
+{
+	return mMouseLeaveFunction;
+}
+
+std::function<void()> GUIElement::getOnGuiChangeFunction()
+{
+	return mOnGuiChange;
+}
+
 void GUIElement::setX(float x)
 {
 	mRectangle.left = x;
@@ -219,8 +239,7 @@ bool GUIElement::onClick(sf::RenderWindow *window)
 	{
 		mSelected = true;
 		onGUIClick(mousePos.x, mousePos.y);
-		if(mOnClickFunction != nullptr)
-			mCallClickFunc = true;
+		mCallClickFunc = true;
 	}
 	else
 		mSelected = false;
@@ -258,10 +277,7 @@ bool GUIElement::onMove(sf::RenderWindow *window)
 			if(!isMouseInside)
 			{
 				setMouseIsInside(true);
-				if(mMouseEnterFunction != nullptr)
-				{
-					mCallMouseEnterFunc = true;
-				}
+				mCallMouseEnterFunc = true;
 			}
 		}
 		else
@@ -269,8 +285,7 @@ bool GUIElement::onMove(sf::RenderWindow *window)
 			if(isMouseInside)
 			{
 				setMouseIsInside(false);
-				if(mMouseLeaveFunction != nullptr)
-					mCallMouseLeaveFunc = true;
+				mCallMouseLeaveFunc = true;
 			}
 		}
 	}
@@ -310,6 +325,11 @@ void GUIElement::setMouseEnterFunction(std::function <void()> func)
 void GUIElement::setMouseLeaveFunction(std::function <void()> func)
 {
 	mMouseLeaveFunction = func;
+}
+
+void GUIElement::setOnGuiChangeFunction(std::function <void()> func)
+{
+	mOnGuiChange = func;
 }
 
 void GUIElement::tick()

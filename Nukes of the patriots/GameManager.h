@@ -79,6 +79,8 @@ public:
 	void										syncGUIClick(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIChange(std::shared_ptr<GUIElement> guiElement);
+	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
 private:
 
 	static GameManager* mInstance;

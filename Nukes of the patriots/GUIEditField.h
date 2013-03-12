@@ -14,18 +14,17 @@ public:
 	enum Type { CAP, COM, MENU };
 	static std::shared_ptr<GUIEditField> create(sf::FloatRect rect, Type type, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
 				GUIEditField(sf::FloatRect rect, Type type, std::string text = "", bool onlyNumbers = false, std::shared_ptr<GUIElement> parent = 0);
-				~GUIEditField(){}
-	std::string		getText()const{ return mText.getString(); }
-	bool			getCaretVisible();
-	int				getMaxCharacters(){ return mMaxCharacters; }
-	void			setCaretVisible(bool visible);
-	void			setText(std::string text);
-	void			setScale(float width, float height);
-	void			setMaxCharacters(int maxCharacters){ mMaxCharacters = maxCharacters; }
-	void			setPlaceHolderText(std::string string);
-	bool			render(sf::RenderWindow *window, sf::RenderStates &states);
+							~GUIEditField(){}
+	std::string				getText()const{ return mText.getString(); }
+	bool					getCaretVisible();
+	int						getMaxCharacters(){ return mMaxCharacters; }
+	void					setCaretVisible(bool visible);
+	void					setText(std::string text);
+	void					setScale(float width, float height);
+	void					setMaxCharacters(int maxCharacters){ mMaxCharacters = maxCharacters; }
+	void					setPlaceHolderText(std::string string);
+	bool					render(sf::RenderWindow *window, sf::RenderStates &states);
 
-	void			setOnGuiChangeFunction(std::function<void()>);
 	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	virtual void	onGUIClick(int mouseX, int mouseY);
 
@@ -40,8 +39,6 @@ private:
 	float mOffsetX, mOffsetY;
 	sf::RectangleShape mCaretShape, mSelectedShape;
 	sf::Sprite mSprite;
-
-	std::function<void()> mOnGuiChange;
 };
 
 #endif

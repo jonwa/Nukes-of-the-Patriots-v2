@@ -96,7 +96,17 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui click - GUIID: "<<id<<std::endl;
+		std::cout<<"Received id: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getOnClickFunction();
+			if(func != NULL)
+			{
+				std::cout<<"func != NULL"<<std::endl;
+				func();
+			}
+		}
 	});
 
 	Event::addEventHandler("syncGUIMouseEnter",
@@ -104,7 +114,16 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse enter - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getMouseEnterFunction();
+			if(func != NULL)
+			{
+				std::cout<<"func != NULL"<<std::endl;
+				func();
+			}
+		}
 	});
 
 	Event::addEventHandler("syncGUIMouseLeave",
@@ -112,10 +131,51 @@ GameManager::GameManager() :
 	{
 		int id = 0;
 		packet>>id;
-		std::cout<<"gui mouse leave - GUIID: "<<id<<std::endl;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getMouseLeaveFunction();
+			if(func != NULL)
+			{
+				std::cout<<"func != NULL"<<std::endl;
+				func();
+			}
+		}
 	});
 
+	Event::addEventHandler("syncGUIChange",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != NULL)
+		{
+			std::function<void()> func = guiElement->getOnGuiChangeFunction();
+			if(func != NULL)
+			{
+				std::cout<<"func != NULL"<<std::endl;
+				func();
+			}
+		}
+	});
 
+	Event::addEventHandler("syncGUIEditField",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		char str[1024];
+		packet>>id>>str;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		std::cout<<"received id: "<<guiElement->getElementID()<<std::endl;
+		if(guiElement != NULL)
+		{
+			//std::cout<<"gui element != NULL"<<std::endl;
+			//std::cout<<"str: "<<str<<std::endl;
+			guiElement->setText(str);
+			//std::cout<<"new text: "<<guiElement->getText()<<std::endl;
+		}
+	});
 
 	initializeGuiElement();
 	initializeGuiFunctions();
@@ -816,4 +876,25 @@ void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
 		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
 	if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIChange(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID();
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIChange", packet);
+	if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
+}
+
+void GameManager::syncGUIEditField(std::shared_ptr<GUIElement> guiElement)
+{
+	sf::Packet packet;
+	packet<<guiElement->getElementID()<<guiElement->getText();
+	std::cout<<"id: "<<guiElement->getElementID()<<std::endl;
+	if(mRole == CLIENT)
+		mUdpClient->triggerServerEvent("syncGUIChange", packet);
+	if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
 }

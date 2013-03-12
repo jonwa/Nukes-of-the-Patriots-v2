@@ -39,15 +39,23 @@ public:
 	void			setSelected(bool selected);
 	sf::FloatRect	getRectangle();
 	int				getElementID();
+	virtual std::string		getText()const{ return ""; }
+
+	std::function<void()>	getOnClickFunction();
+	std::function<void()>	getMouseEnterFunction();
+	std::function<void()>	getMouseLeaveFunction();
+	std::function<void()>	getOnGuiChangeFunction();
 
 	void			addChild(std::shared_ptr<GUIElement> guiElement);
 	std::shared_ptr<GUIElement> getPtr();
 	std::vector<std::shared_ptr<GUIElement>>& getChildVector();
 
+	virtual void	setText(std::string text){};
 	virtual void	setScale(float width, float height) {}
 	void			setOnClickFunction(std::function<void()>);
 	void			setMouseEnterFunction(std::function<void ()>);
 	void			setMouseLeaveFunction(std::function<void ()>);
+	void			setOnGuiChangeFunction(std::function <void()> func);
 	virtual bool	update(sf::RenderWindow *window, sf::Event event);
 	bool			onClick(sf::RenderWindow *window);
 	bool			onMove(sf::RenderWindow *window);
@@ -67,6 +75,7 @@ protected:
 	std::function<void ()> mOnClickFunction;
 	std::function<void ()> mMouseEnterFunction;
 	std::function<void ()> mMouseLeaveFunction;
+	std::function<void()> mOnGuiChange;
 	bool mCallClickFunc, mCallMouseEnterFunc, mCallMouseLeaveFunc;
 	
 	std::vector<std::shared_ptr<GUIElement>> mChilds;
