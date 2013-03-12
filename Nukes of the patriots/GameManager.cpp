@@ -170,6 +170,25 @@ GameManager::GameManager() :
 		}
 	});
 
+	Event::addEventHandler("syncRandomFirstPlayerToPlay",
+		[=](sf::Packet packet)
+	{
+		int random = 0;
+		packet>>random;
+		mCurrentPlayer = mVecSuperPowers[random];
+		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		{
+			if((*it) == mCurrentPlayer)
+			{
+				mVecPlayersLeft.erase(it);
+				break;
+			}
+		}
+		mLoaded = true;
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
+	});
+
 	initializeGuiElement();
 	initializeGuiFunctions();
 }
@@ -342,17 +361,40 @@ void GameManager::init(int year)
 		{
 			(*it)->chooseLeader();
 		}*/
-		mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
-		for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+		if(getGameType() == LAN && isMyTurnToPlay())
 		{
-			if((*it) == mCurrentPlayer)
+			int random = Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0);
+			mCurrentPlayer = mVecSuperPowers[random];
+			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 			{
-				mVecPlayersLeft.erase(it);
-				break;
+				if((*it) == mCurrentPlayer)
+				{
+					mVecPlayersLeft.erase(it);
+					break;
+				}
 			}
+			//startRound();
+			mLoaded = true;
+			sf::Packet packet;
+			packet<<random;
+			triggerOtherPlayersEvent("syncRandomFirstPlayerToPlay", packet);
 		}
-		//startRound();
-		mLoaded = true;
+		else if(getGameType() == VERSUS)
+		{
+			mCurrentPlayer = mVecSuperPowers[Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0)];
+			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
+			{
+				if((*it) == mCurrentPlayer)
+				{
+					mVecPlayersLeft.erase(it);
+					break;
+				}
+			}
+			//startRound();
+			mLoaded = true;
+		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
 	}
 	else
 	{
@@ -366,10 +408,9 @@ void GameManager::init(int year)
 				break;
 			}
 		}
+		mCurrentPlayer->setRound(1);
+		mCurrentPlayer->showGUI();
 	}
-
-	mCurrentPlayer->setRound(1);
-	mCurrentPlayer->showGUI();
 	//startRound();
 
 }
@@ -557,7 +598,6 @@ void GameManager::updateStatsWindow()
 
 void GameManager::nextRound()
 {
-
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		(*it)->hideGUI();
@@ -961,21 +1001,18 @@ void GameManager::tick(sf::RenderWindow &window)
 	{
 		sf::Packet packet;
 		packet<<mousePos.x<<mousePos.y;
-		if(mRole == CLIENT)
-			mUdpClient->triggerServerEvent("syncMousePosition", packet);
-		else if(mRole == SERVER)
-			mUdpServer->triggerClientEvent("syncMousePosition", packet, mRemoteIpAddress, mRemotePort);
+		triggerOtherPlayersEvent("syncMousePosition", packet);
 
 		sf::Sprite remoteCursor(cursorTexture);
 		sf::Vector2i remoteMousePos = mRemoteClient->getMousePosition();
 		remoteCursor.setPosition(remoteMousePos.x, remoteMousePos.y);
 
-		if(mPlayersTurn == 0 && mRole == CLIENT || mPlayersTurn == 1 && mRole == SERVER)
+		if(!isMyTurnToPlay())
 			window.draw(remoteCursor);
 	}
 	cursor.setPosition(mousePos.x, mousePos.y);
 
-	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
+	if(isMyTurnToPlay())
 		window.draw(cursor);
 }
 
@@ -996,48 +1033,48 @@ void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIClick", packet);
-	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIClick", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIClick", packet);
 }
 
 void GameManager::syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIMouseEnter", packet);
-	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIMouseEnter", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIMouseEnter", packet);
 }
 
 void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
-	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIMouseLeave", packet);
 }
 
 void GameManager::syncGUIChange(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID();
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIChange", packet);
-	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
+	triggerOtherPlayersEvent("syncGUIChange", packet);
 }
 
 void GameManager::syncGUIEditField(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID()<<guiElement->getText();
+	triggerOtherPlayersEvent("syncGUIEditField", packet);
+}
+
+bool GameManager::isMyTurnToPlay()
+{
+	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
+		return true;
+	return false;
+}
+
+void GameManager::triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet)
+{
 	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIEditField", packet);
+		mUdpClient->triggerServerEvent(eventName, packet);
 	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIEditField", packet, mRemoteIpAddress, mRemotePort);
+		mUdpServer->triggerClientEvent(eventName, packet, mRemoteIpAddress, mRemotePort);
 }

@@ -91,6 +91,9 @@ public:
 	void										syncGUIChange(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
 
+	bool										isMyTurnToPlay();
+	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
+
 private:
 	std::string mFileName;
 	SaveFilesVec mSaveFiles;
