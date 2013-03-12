@@ -19,6 +19,7 @@
 #include <SFML\Window\Mouse.hpp>
 #include <SFML\Window\Keyboard.hpp>
 #include "Menu.h"
+#include "RemoteClient.h"
 
 static int foodCost		= 10;
 static int goodsCost	= 20;

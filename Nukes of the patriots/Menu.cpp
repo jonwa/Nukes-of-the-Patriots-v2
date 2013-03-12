@@ -583,7 +583,7 @@ void Menu::initializeGuiFuctions()
 	mExitButton[1]->setMouseLeaveFunction([=]()	{ mExitButton[1]->setTexture(ButtonPos["Exit"]); });
 	mExitButton[1]->setOnClickFunction([=]()	{ mWindow->close(); });
 
-	mCapitalistOkayButton->setOnClickFunction([=]()		
+	mCapitalistOkayButton->setOnClickFunction([=]()
 	{
 		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 		{

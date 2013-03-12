@@ -96,7 +96,7 @@ public:
 	bool										isMyTurnToPlay();
 	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
 
-	std::shared_ptr<President>					GameManager::getPresidentByName(std::string name);
+	std::shared_ptr<President>					getPresidentByName(std::string name);
 	void										removePresidentFromList(std::shared_ptr<President> president);
 	void										nextPlayersTurn();
 	void										setEnemyTurn();
@@ -157,6 +157,7 @@ private:
 	std::shared_ptr<GUIText>   mFirstCapitalistSpyNetworkText;
 	std::shared_ptr<GUIText>   mFirstCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCapitalistSpyNetworkText;
+	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 	std::shared_ptr<GUIText>   mSecondCommunistSpyNetworkText;
 
 	std::shared_ptr<GUIText>   mCommunistHeadline[2];
