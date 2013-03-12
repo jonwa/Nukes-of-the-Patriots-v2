@@ -135,6 +135,26 @@ void President::randomStatFunc()
 	randomStats.clear();
 }
 
+std::string President::getName()const
+{
+	return mName;
+}
+
+void President::setFirstPositiveStat(std::string stat)
+{
+	mPositiveStats[0] = stat;
+}
+
+void President::setSecondPositiveStat(std::string stat)
+{
+	mPositiveStats[1] = stat;
+}
+
+void President::setNegativeStat(std::string stat)
+{
+	mNegativeStats[0] = stat;
+}
+
 std::string& President::getFirstPositiveStat()
 {
 	return mPositiveStats[0];
@@ -187,6 +207,47 @@ float President::getPopEatsMore()
 {
 	return mValues["popEatsMore"];
 }
+
+void President::setFoodPriceModifier(float value)
+{
+	mValues["foodPrice"] = value;
+}
+
+void President::setGoodsPriceModifier(float value)
+{
+	mValues["goodsPrice"] = value;
+}
+
+void President::setTechPriceModifier(float value)
+{
+	mValues["techPrice"] = value;
+}
+
+void President::setNuclearPriceModifier(float value)
+{
+	mValues["nuclearPrice"] = value;
+}
+
+void President::setSpacePriceModifier(float value)
+{
+	mValues["spacePrice"] = value;
+}
+
+void President::setSpyPriceModifier(float value)
+{
+	mValues["spyPrice"] = value;
+}
+
+void President::setPatriotismTaxModifier(float value)
+{
+	mValues["patriotismTax"] = value;
+}
+
+void President::setPopEatsMore(float value)
+{
+	mValues["popEatsMore"] = value;
+}
+
 
 void President::initializeImages(std::string &path)
 {

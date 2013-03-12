@@ -51,6 +51,8 @@ public:
 	bool upgradeSpyNetwork(int value);
 	
 	void chooseLeader();
+	void LANChooseLeader(std::shared_ptr<President> firstPresident, std::shared_ptr<President> secondPresident);
+	void sendPresidentDataToOtherPlayer();
 
 	void showGUI();
 	void hideGUI();

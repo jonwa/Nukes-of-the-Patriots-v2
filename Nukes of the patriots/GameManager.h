@@ -8,6 +8,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include <SFML\Graphics\Texture.hpp>
+#include <SFML\Network.hpp>
 
 class SuperPower;
 class Communist;
@@ -78,6 +79,7 @@ public:
 	std::shared_ptr<SuperPower>					getCommunist();
 	std::shared_ptr<Capitalist>					getCap();
 	std::shared_ptr<Communist>					getCom();
+	std::shared_ptr<RemoteClient>				getRemoteClient();
 	void										reset();
 	
 	std::shared_ptr<GUIWindow>					getStatsWindow();
@@ -94,6 +96,11 @@ public:
 	bool										isMyTurnToPlay();
 	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
 
+	std::shared_ptr<President>					getPresidentByName(std::string name);
+	void										removePresidentFromList(std::shared_ptr<President> president);
+	void										nextPlayersTurn();
+	void										setEnemyTurn();
+	void										setMyTurn();
 private:
 	std::string mFileName;
 	SaveFilesVec mSaveFiles;
