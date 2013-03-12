@@ -585,6 +585,13 @@ void Menu::initializeGuiFuctions()
 
 	mCapitalistOkayButton->setOnClickFunction([=]()		
 	{
+		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+		{
+			sf::Packet packet;
+			packet<<PoliticalType::CAPITALIST;
+			GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
+			GameManager::getInstance()->nextPlayersTurn();
+		}
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));
@@ -635,6 +642,13 @@ void Menu::initializeGuiFuctions()
 
 	mCommunistOkayButton->setOnClickFunction([=]()		
 	{
+		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+		{
+			sf::Packet packet;
+			packet<<PoliticalType::COMMUNIST;
+			GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
+			GameManager::getInstance()->nextPlayersTurn();
+		}
 		mCommunistTeamChosen = true;
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
 		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-inaktiv"))));

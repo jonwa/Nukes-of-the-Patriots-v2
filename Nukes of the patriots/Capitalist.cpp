@@ -1441,21 +1441,108 @@ void Capitalist::initializeCityImages()
 	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
+void Capitalist::sendPresidentDataToOtherPlayer()
+{
+	sf::Packet packet;
+	packet<<mFirstPresident->getName()<<mFirstPresident->getFirstPositiveStat()<<mFirstPresident->getSecondPositiveStat()<<mFirstPresident->getNegativeStat()
+		<<mFirstPresident->getFoodPriceModifier()<<mFirstPresident->getGoodsPriceModifier()<<mFirstPresident->getTechPriceModifier()
+		<<mFirstPresident->getNuclearPriceModifier()<<mFirstPresident->getSpacePriceModifier()<<mFirstPresident->getSpyPriceModifier()
+		<<mFirstPresident->getPatriotismTaxModifier()<<mFirstPresident->getPopEatsMore();
+
+	packet<<mSecondPresident->getName()<<mSecondPresident->getFirstPositiveStat()<<mSecondPresident->getSecondPositiveStat()<<mSecondPresident->getNegativeStat()
+		<<mSecondPresident->getFoodPriceModifier()<<mSecondPresident->getGoodsPriceModifier()<<mSecondPresident->getTechPriceModifier()
+		<<mSecondPresident->getNuclearPriceModifier()<<mSecondPresident->getSpacePriceModifier()<<mSecondPresident->getSpyPriceModifier()
+		<<mSecondPresident->getPatriotismTaxModifier()<<mSecondPresident->getPopEatsMore();
+	GameManager::getInstance()->triggerOtherPlayersEvent("syncRandomPresident", packet);
+}
+
 void Capitalist::chooseLeader()
 {
-	mCapitalistMainWindow->setEnabled(false, true);
-	mChoosePresidentWindow->setEnabled(true, true);
-	mChoosePresidentWindow->setVisible(true);
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->getRemoteClient()->getSuperPower() == COMMUNIST)
+	{
+		mCapitalistMainWindow->setEnabled(false, true);
+		mChoosePresidentWindow->setEnabled(true, true);
+		mChoosePresidentWindow->setVisible(true);
+		if(mPresident == NULL)
+			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		else
+		{
+			if(mPresident->getYearsElected() < 2)
+				mFirstPresident = mPresident;
+			else
+				mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		}
+		mSecondPresident = GameManager::getInstance()->getRandomPresident();
+
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
+
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+		mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+		mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+		mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+		mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+		mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+		mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+		mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+	}
+	else if(GameManager::getInstance()->getGameType() == VERSUS)
+	{
+		mCapitalistMainWindow->setEnabled(false, true);
+		mChoosePresidentWindow->setEnabled(true, true);
+		mChoosePresidentWindow->setVisible(true);
+		if(mPresident == NULL)
+			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		else
+		{
+			if(mPresident->getYearsElected() < 2)
+				mFirstPresident = mPresident;
+			else
+				mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		}
+		mSecondPresident = GameManager::getInstance()->getRandomPresident();
+
+		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
+		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mFirstPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mFirstPresident)));
+
+		mSecondPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mSecondPresidentButton->getRectangle(), mSecondPresident->getTexture()));
+		mSecondPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(mSecondPresidentPlaque->getRectangle(), &GameManager::getInstance()->getPresidentPlaque(mSecondPresident)));
+
+		mFirstPositiveStat[0]->setText(mFirstPresident->getFirstPositiveStat());
+		mSecondPositiveStat[0]->setText(mFirstPresident->getSecondPositiveStat());
+		mFirstNegativeStat->setText(mFirstPresident->getNegativeStat());
+	
+		mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
+		mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
+		mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+	}
+}
+
+void Capitalist::LANChooseLeader(std::shared_ptr<President> firstPresident, std::shared_ptr<President> secondPresident)
+{
 	if(mPresident == NULL)
-		mFirstPresident = GameManager::getInstance()->getRandomPresident();
+	{
+		mFirstPresident = firstPresident;
+		GameManager::getInstance()->removePresidentFromList(mFirstPresident);
+	}
 	else
 	{
 		if(mPresident->getYearsElected() < 2)
 			mFirstPresident = mPresident;
 		else
-			mFirstPresident = GameManager::getInstance()->getRandomPresident();
+		{
+			mFirstPresident = firstPresident;
+			GameManager::getInstance()->removePresidentFromList(mFirstPresident);
+		}
 	}
-	mSecondPresident = GameManager::getInstance()->getRandomPresident();
+	mSecondPresident = secondPresident;
+	GameManager::getInstance()->removePresidentFromList(mSecondPresident);
 
 	mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 	mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
@@ -1472,9 +1559,11 @@ void Capitalist::chooseLeader()
 	mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
 	mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
 	mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+
+	mCapitalistMainWindow->setEnabled(false, true);
+	mChoosePresidentWindow->setEnabled(true, true);
+	mChoosePresidentWindow->setVisible(true);
 }
-
-
 
  /**/
 void Capitalist::initializeGuiFunctions()

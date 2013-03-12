@@ -30,6 +30,7 @@ class Communist;
 #include <SFML/System.hpp>
 #include "Sound.h"
 #include "tinyxml2.h"
+#include "RemoteClient.h"
 
 class Capitalist : public SuperPower 
 {
@@ -51,6 +52,8 @@ public:
 	bool upgradeSpyNetwork(int value);
 	
 	void chooseLeader();
+	void LANChooseLeader(std::shared_ptr<President> firstPresident, std::shared_ptr<President> secondPresident);
+	void sendPresidentDataToOtherPlayer();
 
 	void showGUI();
 	void hideGUI();
