@@ -75,7 +75,7 @@ protected:
 	std::function<void ()> mOnClickFunction;
 	std::function<void ()> mMouseEnterFunction;
 	std::function<void ()> mMouseLeaveFunction;
-	std::function<void()> mOnGuiChange;
+	std::function<void ()> mOnGuiChange;
 	bool mCallClickFunc, mCallMouseEnterFunc, mCallMouseLeaveFunc;
 	
 	std::vector<std::shared_ptr<GUIElement>> mChilds;

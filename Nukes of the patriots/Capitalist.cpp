@@ -6,7 +6,6 @@
 #include "GUIText.h"
 #include "GUIEditField.h"
 #include "GUIImage.h"
-#include "tinyxml2.h"
 #include "President.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
@@ -49,6 +48,199 @@ Capitalist::Capitalist() :
 Capitalist::~Capitalist()
 {
 	
+}
+
+//saving capitalist information
+void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
+{
+	tinyxml2::XMLElement *capitalist = doc.NewElement("Capitalist");
+
+	//saving activateWindow
+	tinyxml2::XMLElement *ActivateWindow = doc.NewElement("ActivateWindow");
+	ActivateWindow->SetAttribute("value", activateWindow);
+	capitalist->InsertEndChild(ActivateWindow);
+
+	//saving round
+	tinyxml2::XMLElement *round = doc.NewElement("Round");
+	round->SetAttribute("value", mRound);
+	capitalist->InsertEndChild(round);
+
+	//saving city_image_counter
+	tinyxml2::XMLElement *count = doc.NewElement("Count");
+	count->SetAttribute("value", mCount);
+	capitalist->InsertEndChild(count);
+
+	//saving overall information (population, patriotism, currency, taxes)
+	tinyxml2::XMLElement *overallInformation = doc.NewElement("OverallInformation");
+	overallInformation->SetAttribute("Population", getPopulation());
+	overallInformation->SetAttribute("Patriotism", getPatriotism());
+	overallInformation->SetAttribute("Currency", getCurrency());
+	overallInformation->SetAttribute("Taxes", getTaxes());
+	//overallInformation->SetAttribute("TaxDecreased", mTaxDecreased);
+	capitalist->InsertEndChild(overallInformation);
+
+	//saving overall information from previous round (population, patriotism, currency, taxes)
+	tinyxml2::XMLElement *overallInformationPreviousRound = doc.NewElement("OverallInformationPreviousRound");
+	overallInformationPreviousRound->SetAttribute("Population_previous_round", getPopulationPreviousRound());
+	overallInformationPreviousRound->SetAttribute("Patriotism_previous_round", getPatriotismPreviousRound());
+	overallInformationPreviousRound->SetAttribute("Currency_previous_round", getCurrencyPreviousRound());
+	overallInformationPreviousRound->SetAttribute("Taxes_previous_round", getTaxPreviousRound());
+	capitalist->InsertEndChild(overallInformationPreviousRound);
+
+	//saving President information
+	tinyxml2::XMLElement *president = doc.NewElement("PresidentInformation");
+	president->SetAttribute("President", mPresident);
+	president->SetAttribute("Picked_president", mPickedPresident);
+	capitalist->InsertEndChild(president);
+
+	//saving resources information (amount)
+	tinyxml2::XMLElement *resourcesAmount = doc.NewElement("ResourcesAmount");
+	resourcesAmount->SetAttribute("food_amount", getFood());
+	resourcesAmount->SetAttribute("goods_amount", getGoods());
+	resourcesAmount->SetAttribute("tech_amount", getTech()); 
+	capitalist->InsertEndChild(resourcesAmount);
+
+	//saving resources information (prices)
+	tinyxml2::XMLElement *resourcesPrices = doc.NewElement("ResourcesPrices");
+	resourcesPrices->SetAttribute("food_price", foodCost);
+	resourcesPrices->SetAttribute("goods_price", goodsCost);
+	resourcesPrices->SetAttribute("tech_price", techCost);
+	capitalist->InsertEndChild(resourcesPrices);
+
+	//saving resources information from previous round
+	tinyxml2::XMLElement *previousRoundResources = doc.NewElement("PreviousRoundResources");
+	previousRoundResources->SetAttribute("Food_previous_round", getFoodPreviousRound());
+	previousRoundResources->SetAttribute("Goods_previous_round", getGoodsPreviousRound());
+	previousRoundResources->SetAttribute("Tech_previous_round", getTaxPreviousRound());
+	capitalist->InsertEndChild(previousRoundResources);
+
+	//saving exported resources information (amount)
+	tinyxml2::XMLElement *exportedResources = doc.NewElement("ExportedResourcesAmount");
+	exportedResources->SetAttribute("food_amount", getExportedFood());
+	exportedResources->SetAttribute("goods_amount", getExportedGoods());
+	exportedResources->SetAttribute("tech_amount", getExportedTech());
+	capitalist->InsertEndChild(exportedResources);
+
+	//saving exported resources information (prices)
+	tinyxml2::XMLElement *exportedResourcesPrices = doc.NewElement("ExportedResourcesPrices");
+	exportedResourcesPrices->SetAttribute("food_price", getExportedFoodPrice());
+	exportedResourcesPrices->SetAttribute("goods_price", getExportedGoodsPrice());
+	exportedResourcesPrices->SetAttribute("tech_price", getExportedTechPrice());
+	capitalist->InsertEndChild(exportedResourcesPrices);
+
+	//saving exported resources information (sold)
+	tinyxml2::XMLElement *exportedResourcesSold = doc.NewElement("ExportedResourcesSold");
+	exportedResourcesSold->SetAttribute("food_sold", getExportedFoodSold());
+	exportedResourcesSold->SetAttribute("goods_sold", getExportedGoodsSold());
+	exportedResourcesSold->SetAttribute("tech_sold", getExportedTechSold());
+
+	//saving exported resources information from previous round
+	tinyxml2::XMLElement *previousRoundExportedResources = doc.NewElement("PreviousRoundExportedResources");
+	previousRoundExportedResources->SetAttribute("Exported_food_previous_round", getExportedFoodPreviousRound());
+	previousRoundExportedResources->SetAttribute("Exported_goods_previous_round", getExportedGoodsPreviousRound());
+	previousRoundExportedResources->SetAttribute("Exported_tech_previous_round", getExportedTechPreviousRound());
+	capitalist->InsertEndChild(previousRoundExportedResources);
+
+	//saving upgrades (nuclear, spaceprogram, spynetwork)
+	tinyxml2::XMLElement *upgrades = doc.NewElement("Upgrades");
+	upgrades->SetAttribute("Nuclear_weapon", getNuclearWeapon());
+	upgrades->SetAttribute("Space_program", getSpaceProgram());
+	upgrades->SetAttribute("Spy_network", getSpyNetwork());
+	capitalist->InsertEndChild(upgrades);
+
+	//saving upgrades from previous round
+	tinyxml2::XMLElement *previousRoundUpgrades = doc.NewElement("PreviousRoundUpgrades");
+	previousRoundUpgrades->SetAttribute("Nuclear_weapon_previous_round", getNuclearWeaponPreviousRound());
+	previousRoundUpgrades->SetAttribute("Space_program_previous_round", getSpaceProgramPreviousRound());
+	previousRoundUpgrades->SetAttribute("Spy_network_previous_round", getSpyNetworkPreviousRound());
+	capitalist->InsertEndChild(previousRoundUpgrades);
+
+	doc.InsertEndChild(capitalist);
+}
+
+//loading capitalist information
+void Capitalist::loadGame(tinyxml2::XMLDocument &doc)
+{
+	tinyxml2::XMLElement *capitalist = doc.FirstChildElement("Capitalist");
+	
+	//loading activate window
+	tinyxml2::XMLElement *ActivateWindow = capitalist->FirstChildElement("ActivateWindow");
+	activateWindow = atoi(ActivateWindow->Attribute("value"));
+
+	//loading round
+	tinyxml2::XMLElement *round = capitalist->FirstChildElement("Round");
+	mRound = atoi(round->Attribute("value"));
+
+	//loading city_image_count
+	tinyxml2::XMLElement *count = capitalist->FirstChildElement("Count");
+	mCount = atoi(count->Attribute("value"));
+
+	//loading overall information
+	tinyxml2::XMLElement *overallInformation = capitalist->FirstChildElement("OverallInformation");
+	mPopulation = atoi(overallInformation->Attribute("Population"));
+	mPatriotism = atoi(overallInformation->Attribute("Patriotism"));
+	mCurrency	= atoi(overallInformation->Attribute("Currency"));
+	mTaxes		= atoi(overallInformation->Attribute("Taxes"));
+
+	//loading overall information from previous round
+	tinyxml2::XMLElement *overallInformationPreviousRound = capitalist->FirstChildElement("OverallInformationPreviousRound");
+	mPopulationPreviousRound = atoi(overallInformationPreviousRound->Attribute("Population_previous_round"));
+	mPatriotismPreviousRound = atoi(overallInformationPreviousRound->Attribute("Patriotism_previous_round"));
+	mCurrencyPreviousRound   = atoi(overallInformationPreviousRound->Attribute("Currency_previous_round"));
+	mTaxesPreviousRound		 = atoi(overallInformationPreviousRound->Attribute("Taxes_previous_round"));
+
+	//loading General information
+	tinyxml2::XMLElement *president = capitalist->FirstChildElement("PresidentInformation");
+	//ADD THE INFORMATION ABOUT WHICH PRESIDENT THAT WAS PICKED
+	mPickedPresident = atoi(president->Attribute("Picked_president"));
+
+	//loading resources (amount)
+	tinyxml2::XMLElement *resourcesAmount = capitalist->FirstChildElement("ResouresAmount");
+	mFood	= atoi(resourcesAmount->Attribute("food_amount"));
+	mGoods	= atoi(resourcesAmount->Attribute("goods_amount"));
+	mTech	= atoi(resourcesAmount->Attribute("tech_amount"));
+
+	//loading resources (prices)
+	tinyxml2::XMLElement *resourcesPrices = capitalist->FirstChildElement("ResourcesPrices");
+	foodCost	= atoi(resourcesPrices->Attribute("food_price"));
+	goodsCost	= atoi(resourcesPrices->Attribute("goods_price"));
+	techCost	= atoi(resourcesPrices->Attribute("tech_price"));
+
+	//loading resources information from previous round
+	tinyxml2::XMLElement *previousRoundResources = capitalist->FirstChildElement("PreviousRoundResources");
+	mFoodPreviousRound  = atoi(previousRoundResources->Attribute("Food_previous_round"));
+	mGoodsPreviousRound = atoi(previousRoundResources->Attribute("Goods_previous_round"));
+	mTaxesPreviousRound = atoi(previousRoundResources->Attribute("Tech_previous_round"));
+
+	//loading exported resource information (amount)
+	tinyxml2::XMLElement *exportedResources = capitalist->FirstChildElement("ExportedResourcesAmount");
+	mExportedFood  = atoi(exportedResources->Attribute("food_amount"));
+	mExportedGoods = atoi(exportedResources->Attribute("goods_amount"));
+	mExportedTech  = atoi(exportedResources->Attribute("tech_amount"));
+
+	//loading exported resources information (prices)
+	tinyxml2::XMLElement *exportedResourcesPrices = capitalist->FirstChildElement("ExportedResourcesPrices");
+	mExportedFoodPrice  = atoi(exportedResourcesPrices->Attribute("food_price"));
+	mExportedGoodsPrice = atoi(exportedResourcesPrices->Attribute("goods_price"));
+	mExportedTechPrice  = atoi(exportedResourcesPrices->Attribute("tech_price"));
+
+	//loading exported resources information from previous round
+	tinyxml2::XMLElement *previousRoundExportedResources = capitalist->FirstChildElement("PreviousRoundExportedResources");
+	mExportedFoodPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_food_previous_round"));
+	mExportedGoodsPreviousRound = atoi(previousRoundExportedResources->Attribute("Exported_goods_previous_round"));
+	mExportedTechPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_tech_previous_round"));
+
+	//loading upgrades (nuclear, spaceprogram, spynetwork)
+	tinyxml2::XMLElement *upgrades = capitalist->FirstChildElement("Upgrades");
+	mNuclearWeapon = atoi(upgrades->Attribute("Nuclear_weapon"));
+	mSpaceProgram  = atoi(upgrades->Attribute("Space_program"));
+	mSpyNetwork    = atoi(upgrades->Attribute("Spy_network"));
+
+	//loading upgrades from previoud round
+	tinyxml2::XMLElement *previousRoundUpgrades = capitalist->FirstChildElement("PreviousRoundUpgrades");
+	mNuclearWeaponPreviousRound  = atoi(previousRoundUpgrades->Attribute("Nuclear_weapon_previous_round"));
+	mSpaceProgramPreviousRound	 = atoi(previousRoundUpgrades->Attribute("Space_program_previous_round"));
+	mSpyNetworkPreviousRound	 = atoi(previousRoundUpgrades->Attribute("Spy_network_previous_round"));
 }
 
 void Capitalist::reset()
@@ -344,6 +536,7 @@ void Capitalist::newYearStart()
 
 void Capitalist::update()
 {
+	mWindowHeadlines[0]->setText(intToString(GameManager::getInstance()->getYear()) + " Presidential Elections ");
 	//std::cout<<"capitalist mRound: "<<mRound<<std::endl;
 	if(mRound > 0)
 	{
@@ -750,7 +943,7 @@ void Capitalist::initializeCapitalistWindow()
 	mPopulationText->setScale(0.7, 0.7);
 	mPopulationText->setColor(sf::Color::White);
 	mPopulationText->setAlignment("middle");
-	mCurrencyText						= GUIText::create(sf::FloatRect(362, 4, 0, 0), intToString(mCurrency), mCapitalistMainWindow);
+	mCurrencyText						= GUIText::create(sf::FloatRect(362, 4, 0, 0), intToString(mCurrency) + "§", mCapitalistMainWindow);
 	mCurrencyText->setScale(0.7, 0.7);
 	mCurrencyText->setColor(sf::Color::White);
 	mCurrencyText->setAlignment("middle");
@@ -785,7 +978,7 @@ void Capitalist::initializeCapitalistWindow()
 	mLowerTaxesButton					= GUIButton::create(CapitalistButtons["LowerTaxes"], mTaxesWindow);
 	mTaxValueText						= GUIText::create(sf::FloatRect(105, 58, 0, 0), intToString(mTaxes), mTaxesWindow);
 	mTaxValueText->setAlignment("middle");
-	mTaxText							= GUIText::create(sf::FloatRect(105, 18, 0, 0), "Tax", mTaxesWindow);
+	mTaxText							= GUIText::create(sf::FloatRect(105, 18, 0, 0), "Set Tax Rate", mTaxesWindow);
 	mTaxText->setAlignment("middle");
 	mTaxesPatriotismChange				= GUIText::create(sf::FloatRect(230, 50, 0, 0), "Patriotism: 0", mTaxesWindow);
 	mTaxesPatriotismChange->setScale(0.8, 0.8);
@@ -1086,7 +1279,7 @@ void Capitalist::initializeCapitalistWindow()
 
 	int statsPosY = 177;
 
-	mCapitalistHeadLine					= GUIText::create(sf::FloatRect(253, 130, 0, 0), "CAPITALIST", statsWindow);
+	mCapitalistHeadLine					= GUIText::create(sf::FloatRect(253, 130, 0, 0), Menu::getInstance()->getEditField("CapitalistNameField")->getText()/*"CAPITALIST"*/, statsWindow);
 	mCapitalistHeadLine->setAlignment("middle");
 
 	mNuclearWeaponChange				= GUIText::create(sf::FloatRect(80, statsPosY, 0, 0), "0", statsWindow);
@@ -1164,24 +1357,26 @@ void Capitalist::initializeCapitalistWindow()
 
 
 	mTaxesIncomeWindow					= GUIWindow::create(CapitalistWindows["TaxesIncome"], mCapitalistMainWindow);
-	mCurrentPopulationText[0]			= GUIText::create(sf::FloatRect(50, 26, 0, 0), "Population ", mTaxesIncomeWindow);
+	mTaxesIncomeHeadLiner				= GUIText::create(sf::FloatRect(285, 30, 0, 0), "Tax Income", mTaxesIncomeWindow);
+	mTaxesIncomeHeadLiner->setAlignment("middle");
+	mCurrentPopulationText[0]			= GUIText::create(sf::FloatRect(50, 107, 0, 0), "Population ", mTaxesIncomeWindow);
 	mCurrentPopulationText[0]->setScale(0.8, 0.8);
 	mCurrentPopulationText[0]->setAlignment("left");
-	mCurrentPopulationText[1]			= GUIText::create(sf::FloatRect(331, 26, 0, 0), intToString(getPopulation()) + " million", mTaxesIncomeWindow);
+	mCurrentPopulationText[1]			= GUIText::create(sf::FloatRect(331, 107, 0, 0), intToString(getPopulation()) + " million", mTaxesIncomeWindow);
 	mCurrentPopulationText[1]->setScale(0.8, 0.8);
 	mCurrentPopulationText[1]->setAlignment("left");
 
-    mCurrentTaxesText[0]		        = GUIText::create(sf::FloatRect(50, 50, 0, 0), "Current tax ", mTaxesIncomeWindow);
+    mCurrentTaxesText[0]		        = GUIText::create(sf::FloatRect(50, 137, 0, 0), "Current tax ", mTaxesIncomeWindow);
 	mCurrentTaxesText[0]->setScale(0.8, 0.8);
 	mCurrentTaxesText[0]->setAlignment("left");
-	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 50, 0, 0), intToString(getTaxes()), mTaxesIncomeWindow);
+	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 137, 0, 0), intToString(getTaxes()), mTaxesIncomeWindow);
 	mCurrentTaxesText[1]->setScale(0.8, 0.8);
 	mCurrentTaxesText[1]->setAlignment("left");
 
-    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 74, 0, 0), "Tax income ", mTaxesIncomeWindow);
+    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income ", mTaxesIncomeWindow);
 	mTaxesIncomeText[0]->setScale(0.8, 0.8);
 	mTaxesIncomeText[0]->setAlignment("left");
-	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 74, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
 	mTaxesIncomeText[1]->setScale(0.8, 0.8);
 	mTaxesIncomeText[1]->setAlignment("left");
 
@@ -1216,9 +1411,9 @@ void Capitalist::initializeCapitalistWindow()
 	mTechImage[1]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mImportWindow);
 	mTechImage[2]	= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(31, 170, 35, 35), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tech_image"))), mExportWindow);
 	
-	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Choose your leader!", mChoosePresidentWindow);
+	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), intToString(GameManager::getInstance()->getYear()) + " presidential elections ", mChoosePresidentWindow);
 	mWindowHeadlines[0]->setAlignment("middle");
-	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Your leader is...", mPickedPresidentWindow);
+	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "President of ' " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " '", mPickedPresidentWindow);
 	mWindowHeadlines[1]->setAlignment("middle");
 
 	/*
@@ -2179,7 +2374,8 @@ void Capitalist::initializeGuiFunctions()
 		mCurrentTaxesText[1]->setText(mTaxes);
 		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
-		mCapitalistPresident->setScale(0.63, 0.68);
+		mCapitalistPresident->setX(mPresidentFrame->getX() + 8); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
+		mCapitalistPresident->setScale(0.55, 0.60);
 		mTaxesIncomeWindow->setVisible(true);
 		mTaxesIncomeWindow->setEnabled(true, true);
 

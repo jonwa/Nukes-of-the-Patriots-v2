@@ -1,7 +1,7 @@
 #ifndef _REMOTE_CLIENT_H
 #define _REMOTE_CLIENT_H
 
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
 #include <string>
 
 class RemoteClient

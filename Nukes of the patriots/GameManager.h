@@ -18,6 +18,7 @@ class Event;
 class Timer;
 class RemoteClient;
 class GUIElement;
+class GUIEditField;
 
 namespace sf
 {
@@ -29,7 +30,7 @@ class UdpClient;
 
 enum ServerState {WAITING, CLOSED, FULL};
 enum GameType {VERSUS, LAN};
-enum CommunicationRole {SERVER, CLIENT};
+enum CommunicationRole { SERVER, CLIENT };
 
 class GameManager
 {
@@ -38,7 +39,15 @@ public:
 	
 	~GameManager();
 
-
+	typedef std::vector<std::string> SaveFilesVec;
+	void saveGame();
+	void loadGame();
+	void saveFileName();
+	void loadFileName();
+	void setDocumentName(std::string fileName);
+	void overwriteCurrentDocument(std::string fileName);
+	std::string getDocumentName() const;
+	SaveFilesVec& getSaveFilesVec();
 
 	int											getYear()const;
 	std::shared_ptr<SuperPower> 				getCurrentPlayer()const;
@@ -81,7 +90,12 @@ public:
 	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIChange(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
+
 private:
+	std::string mFileName;
+	SaveFilesVec mSaveFiles;
+private:
+
 
 	static GameManager* mInstance;
 	GameManager();
@@ -137,6 +151,11 @@ private:
 
 	std::shared_ptr<GUIText>   mCommunistHeadline[2];
 	std::shared_ptr<GUIText>   mCapitalistHeadline[2];
+
+	std::shared_ptr<GUIWindow> mUnableToSaveWindow;
+	std::shared_ptr<GUIButton> mCancelSaveButton;
+	std::shared_ptr<GUIButton> mOverWriteButton;
+	std::shared_ptr<GUIText>   mUnableToSaveText;
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;

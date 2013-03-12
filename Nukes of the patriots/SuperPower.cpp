@@ -166,6 +166,11 @@ int SuperPower::getRound()
 	return mRound;
 }
 
+int SuperPower::getPatriotism()
+{
+	return mPatriotism;
+}
+
 void SuperPower::setRound(int round)
 {
 	mRound = round;

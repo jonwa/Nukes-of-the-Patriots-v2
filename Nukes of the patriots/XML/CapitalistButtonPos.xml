@@ -14,7 +14,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Capitalist/kap_president_frame</image>
+		<image>Capitalist/kap_button_frame</image>
 	</button>
 	<button>
 		<name>Taxes</name>
@@ -374,7 +374,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Capitalist/kap_EndTurn_frame</image>
+		<image>Capitalist/kap_button_frame</image>
 	</button>
 	<button>
 		<name>EndTurn</name>
@@ -483,7 +483,7 @@
 	<button>
 		<name>CloseTaxesIncome</name>
 		<xPos>235</xPos>
-		<yPos>110</yPos>
+		<yPos>272</yPos>
 		<width>100</width>
 		<height>40</height>
 		<image>Capitalist/kap_texture_button_ok</image>

@@ -17,7 +17,7 @@ GUIScrollBar::GUIScrollBar(sf::FloatRect rect, std::shared_ptr<GUIElement> paren
 	GUIElement(rect, parent, SCROLL_BAR),mFollowMouse(false)
 {
 	mScrollBarBackground.setTexture(ResourceHandler::getInstance()->getTexture(std::string("Menu/Scrollbar")));
-	mSprite.setTexture(ResourceHandler::getInstance()->getTexture(std::string("Menu/movablePieceOfShit")));
+	mSprite.setTexture(ResourceHandler::getInstance()->getTexture(std::string("Menu/scrollbar_slider")));
 	setSize(rect.width, rect.height);
 }
 void GUIScrollBar::setValue(int value)
@@ -106,7 +106,7 @@ bool GUIScrollBar::update(sf::RenderWindow *window, sf::Event event)
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
 	if(mFollowMouse)
 	{
-		float x = mousePos.x, y = mousePos.y;
+		float x = mousePos.x - mSprite.getTexture()->getSize().x/2, y = mousePos.y;
 		if(x < getX())
 			x = getX();
 		if(x + mSprite.getTexture()->getSize().x > getX() + mScrollBarBackground.getTexture()->getSize().x)

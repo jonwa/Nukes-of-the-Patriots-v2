@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "GUIManager.h"
 #include "GUIElement.h"
+#include "GUIEditField.h"
 #include "ResourceHandler.h"
 #include "Randomizer.h"
 #include "Capitalist.h"
@@ -19,6 +20,7 @@
 #include "TcpServer.h"
 #include "UdpClient.h"
 #include "UdpServer.h"
+#include "RemoteClient.h"
 #include <SFML\Network.hpp>
 #include "RemoteClient.h"
 
@@ -64,6 +66,7 @@ GameManager::GameManager() :
 	cursor.setTexture(cursorTexture);
 
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
+	
 	mConnectToServerEvent = Event::addEventHandler("hereIam", 
 		[=](sf::Packet packet)
 	{
@@ -90,12 +93,12 @@ GameManager::GameManager() :
 		mRemoteClient->setMousePosition(sf::Vector2i(mouseX, mouseY));
 	});
 
-
-	Event::addEventHandler("syncGUIClick",
+	/*Event::addEventHandler("syncGUIClick",
 		[=](sf::Packet packet)
 	{
 		int id = 0;
 		packet>>id;
+<<<<<<< HEAD
 		std::cout<<"Received id: "<<id<<std::endl;
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 		if(guiElement != NULL)
@@ -107,6 +110,9 @@ GameManager::GameManager() :
 				func();
 			}
 		}
+=======
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+>>>>>>> f3bdfa2e5adc30a846f9159cb617dd6a153a6c6d
 	});
 
 	Event::addEventHandler("syncGUIMouseEnter",
@@ -115,6 +121,7 @@ GameManager::GameManager() :
 		int id = 0;
 		packet>>id;
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+<<<<<<< HEAD
 		if(guiElement != NULL)
 		{
 			std::function<void()> func = guiElement->getMouseEnterFunction();
@@ -124,6 +131,8 @@ GameManager::GameManager() :
 				func();
 			}
 		}
+=======
+>>>>>>> f3bdfa2e5adc30a846f9159cb617dd6a153a6c6d
 	});
 
 	Event::addEventHandler("syncGUIMouseLeave",
@@ -132,6 +141,7 @@ GameManager::GameManager() :
 		int id = 0;
 		packet>>id;
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+<<<<<<< HEAD
 		if(guiElement != NULL)
 		{
 			std::function<void()> func = guiElement->getMouseLeaveFunction();
@@ -176,6 +186,31 @@ GameManager::GameManager() :
 			//std::cout<<"new text: "<<guiElement->getText()<<std::endl;
 		}
 	});
+=======
+	});
+*/
+	Event::addEventHandler("syncGUIChange",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		packet>>id;
+		//std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		//if(guiElement != nullptr)
+			//guiElement->getOnGuiChangeFunction()();
+	});
+
+	Event::addEventHandler("syncGUIEditField",
+		[=](sf::Packet packet)
+	{
+		int id = 0;
+		char str[1024];
+		packet>>id>>str;
+		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
+		if(guiElement != nullptr)
+		{
+			guiElement->setText(str);
+		}
+	});
 
 	initializeGuiElement();
 	initializeGuiFunctions();
@@ -184,6 +219,125 @@ GameManager::GameManager() :
 GameManager::~GameManager()
 {
 	
+}
+
+void GameManager::setDocumentName(std::string fileName)
+{
+	//if filename does not already exist, save game in the given filename
+	if(std::find(mSaveFiles.begin(), mSaveFiles.end(), fileName) == mSaveFiles.end())
+	{
+		std::string temp = ("savedFiles/" + fileName + ".xml");
+		mFileName = temp;
+		saveGame(); //saving the game
+		mSaveFiles.push_back(fileName);
+	}
+	// else choose if you want to overwrite the existing file or if you want to rename the file
+	else 
+	{
+		Menu::getInstance()->getWindows("SaveSuccessful")->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mUnableToSaveWindow);
+		mUnableToSaveWindow->setVisible(true);
+	}
+}
+
+void GameManager::overwriteCurrentDocument(std::string fileName)
+{
+		std::string temp = ("savedFiles/" + fileName + ".xml");
+		mFileName = temp;
+		saveGame(); //saving the game
+}
+
+GameManager::SaveFilesVec& GameManager::getSaveFilesVec()
+{
+	return mSaveFiles;
+}
+
+std::string GameManager::getDocumentName() const
+{
+	return mFileName;
+}
+
+void GameManager::saveGame()
+{
+	tinyxml2::XMLDocument doc;
+	tinyxml2::XMLElement *gameManager = doc.NewElement("GameManager");
+	
+	//saving year
+	tinyxml2::XMLElement *year = doc.NewElement("Year");
+	year->SetAttribute("value", mYear);
+	gameManager->InsertEndChild(year);
+
+	//saving round
+	tinyxml2::XMLElement *round = doc.NewElement("Round");
+	round->SetAttribute("value", mRound);
+	gameManager->InsertEndChild(round);
+
+	//saving loaded
+	tinyxml2::XMLElement *loaded = doc.NewElement("Loaded");
+	loaded->SetAttribute("value", mLoaded);
+	gameManager->InsertEndChild(loaded);
+
+	//saving Communist and Capitalist information 
+	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	{
+		(*it)->saveGame(doc);
+	}
+
+	doc.InsertEndChild(gameManager);
+	doc.SaveFile(mFileName.c_str());
+}
+
+void GameManager::saveFileName()
+{
+	tinyxml2::XMLDocument fileNamesDoc;
+	tinyxml2::XMLElement *saves = fileNamesDoc.NewElement("Saves");
+	for(SaveFilesVec::iterator it = mSaveFiles.begin(); it != mSaveFiles.end(); it++)
+	{
+		tinyxml2::XMLElement *save = fileNamesDoc.NewElement("Save");
+		save->SetAttribute("name", (*it).c_str());
+		saves->InsertEndChild(save);
+	}
+	fileNamesDoc.InsertEndChild(saves);
+	fileNamesDoc.SaveFile("savedFiles/savedFileNames.xml");
+}
+
+void GameManager::loadGame()
+{
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile(mFileName.c_str());
+	tinyxml2::XMLElement *gameManager = doc.NewElement("GameManager");
+	
+	//loading year
+	tinyxml2::XMLElement *year = gameManager->FirstChildElement("Year");
+	mYear = atoi(year->Attribute("value"));
+
+	//loading round
+	tinyxml2::XMLElement *round = gameManager->FirstChildElement("Round");
+	mRound = atoi(round->Attribute("value"));
+
+	//loading loaded
+	tinyxml2::XMLElement *loaded = gameManager->FirstChildElement("Loaded");
+	mLoaded = atoi(loaded->Attribute("value"));
+
+	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
+	{
+		(*it)->loadGame(doc);
+	}
+}
+
+void GameManager::loadFileName()
+{
+	tinyxml2::XMLDocument fileNamesDoc;
+	fileNamesDoc.LoadFile("savedFiles/savedFileNames.xml");
+	
+	if(fileNamesDoc.Error())
+		std::cout << "Fel loadFileName()!";
+
+	tinyxml2::XMLElement *saves = fileNamesDoc.FirstChildElement("Saves");
+	for(tinyxml2::XMLElement *save = saves->FirstChildElement("Save"); save; save = save->NextSiblingElement())
+	{
+		mSaveFiles.push_back(save->Attribute("name"));
+	}
 }
 
 void GameManager::reset()
@@ -669,9 +823,9 @@ void GameManager::initializeGuiElement()
 	mFirstCapitalistSpyNetworkText->setScale(0.4, 0.4);
 	mFirstCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
 	mFirstCommunistSpyNetworkText->setScale(0.4, 0.4);
-	mCapitalistHeadline[0]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mFirstDecideWhoStartWindow);
+	mCapitalistHeadline[0]				= GUIText::create(sf::FloatRect(430, 360, 40, 40),/* Menu::getInstance()->getEditField("CapitalistNameField")->getText()*/"Capitalist", mFirstDecideWhoStartWindow);
 	mCapitalistHeadline[0]->setScale(0.5, 0.5);
-	mCommunistHeadline[0]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mFirstDecideWhoStartWindow);
+	mCommunistHeadline[0]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), /*Menu::getInstance()->getEditField("CommunistNameField")->getText()*/"Communist", mFirstDecideWhoStartWindow);
 	mCommunistHeadline[0]->setScale(0.5, 0.5);
 	mFirstDecideWhoStartWindow->setVisible(false);
 
@@ -682,9 +836,9 @@ void GameManager::initializeGuiElement()
 	mSecondCapitalistSpyNetworkText->setScale(0.4, 0.4);
     mSecondCommunistSpyNetworkText		= GUIText::create(sf::FloatRect(540, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
 	mSecondCommunistSpyNetworkText->setScale(0.4, 0.4);
-	mCapitalistHeadline[1]				= GUIText::create(sf::FloatRect(430, 360, 40, 40), "Capitalist", mSecondDecideWhoStartWindow);
+	mCapitalistHeadline[1]				= GUIText::create(sf::FloatRect(430, 360, 40, 40),"Capitalist", mSecondDecideWhoStartWindow);
 	mCapitalistHeadline[1]->setScale(0.5, 0.5);
-	mCommunistHeadline[1]				= GUIText::create(sf::FloatRect(540, 360, 40, 40), "Communist", mSecondDecideWhoStartWindow);
+	mCommunistHeadline[1]				= GUIText::create(sf::FloatRect(540, 360, 40, 40),"Communist", mSecondDecideWhoStartWindow);
 	mCommunistHeadline[1]->setScale(0.5, 0.5);
 	mSecondDecideWhoStartWindow->setVisible(false);
 
@@ -695,10 +849,20 @@ void GameManager::initializeGuiElement()
 	mStatsWindow[0]->setVisible(false);
 	mStatsWindow[1]->setVisible(false);
 
+	mUnableToSaveWindow					 = GUIWindow::create(BetweenTurnsWindow["UnableToSave"]);
+	mCancelSaveButton					 = GUIButton::create(BetweenTurnsButton["CancelSave"], mUnableToSaveWindow);
+	mOverWriteButton					 = GUIButton::create(BetweenTurnsButton["Overwrite"], mUnableToSaveWindow);
+	mUnableToSaveText					 = GUIText::create(sf::FloatRect(130, 100, 100, 40), "< A saved file with this name already exists >\n< Overwrite? >", mUnableToSaveWindow);
+	mUnableToSaveText->setColor(sf::Color::White);
+	mUnableToSaveText->setScale(0.7, 0.7);
+	mUnableToSaveWindow->setVisible(false);
+
 	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
 	GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
 	GUIManager::getInstance()->addGUIElement(mStatsWindow[0]);
 	GUIManager::getInstance()->addGUIElement(mStatsWindow[1]);
+	GUIManager::getInstance()->addGUIElement(mUnableToSaveWindow);
+
 }
 
 std::shared_ptr<GUIWindow> GameManager::getStatsWindow()
@@ -728,6 +892,27 @@ void GameManager::initializeGuiFunctions()
 		setCurrentPlayer(getCommunist());
 		mSecondDecideWhoStartWindow->setVisible(false);
 		startRound();
+	});
+	mCancelSaveButton->setOnClickFunction([=]()
+	{
+		mUnableToSaveWindow->setVisible(false);
+		Menu::getInstance()->getWindows("SaveCanceled")->setVisible(true);
+	});
+
+	mOverWriteButton->setOnClickFunction([=]()
+	{
+		overwriteCurrentDocument(Menu::getInstance()->getEditField("SaveFileField")->getText());
+		mUnableToSaveWindow->setVisible(false);
+		GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("SaveSuccessful"));
+		Menu::getInstance()->getWindows("SaveSuccessful")->setVisible(true);
+		std::shared_ptr<GUIWindow> _saveWindow = Menu::getInstance()->getWindows("SaveSuccessful");
+		std::shared_ptr<GUIWindow> _inGameWindow = Menu::getInstance()->getWindows("InGameMenu");
+		Timer::setTimer([=]()
+		{
+			_saveWindow->setVisible(false);
+			_inGameWindow->setEnabled(true, true);
+
+		}, 2000, 1);
 	});
 }
 
@@ -831,6 +1016,7 @@ void GameManager::tick(sf::RenderWindow &window)
 			window.draw(remoteCursor);
 	}
 	cursor.setPosition(mousePos.x, mousePos.y);
+
 	if(mPlayersTurn == 0 && mRole == SERVER || mPlayersTurn == 1 && mRole == CLIENT || mGameType == VERSUS)
 		window.draw(cursor);
 }
@@ -854,7 +1040,7 @@ void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIClick", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIClick", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -864,7 +1050,7 @@ void GameManager::syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIMouseEnter", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIMouseEnter", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -874,7 +1060,7 @@ void GameManager::syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIMouseLeave", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIMouseLeave", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -884,7 +1070,7 @@ void GameManager::syncGUIChange(std::shared_ptr<GUIElement> guiElement)
 	packet<<guiElement->getElementID();
 	if(mRole == CLIENT)
 		mUdpClient->triggerServerEvent("syncGUIChange", packet);
-	if(mRole == SERVER)
+	else if(mRole == SERVER)
 		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
 }
 
@@ -892,9 +1078,9 @@ void GameManager::syncGUIEditField(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
 	packet<<guiElement->getElementID()<<guiElement->getText();
-	std::cout<<"id: "<<guiElement->getElementID()<<std::endl;
+	std::cout << "sending id: " << guiElement->getElementID() << std::endl;
 	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent("syncGUIChange", packet);
-	if(mRole == SERVER)
-		mUdpServer->triggerClientEvent("syncGUIChange", packet, mRemoteIpAddress, mRemotePort);
+		mUdpClient->triggerServerEvent("syncGUIEditField", packet);
+	else if(mRole == SERVER)
+		mUdpServer->triggerClientEvent("syncGUIEditField", packet, mRemoteIpAddress, mRemotePort);
 }

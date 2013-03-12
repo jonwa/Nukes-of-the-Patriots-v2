@@ -1,6 +1,7 @@
 #include "GUIEditField.h"
 #include <SFML\System\String.hpp>
 #include "ResourceHandler.h"
+#include "GameManager.h"
 #include <iostream>
 #include <sstream>
 #include "GameManager.h"
@@ -249,7 +250,6 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 				{
 					GameManager::getInstance()->syncGUIEditField(shared_from_this());
 				}
-
 				mSelectedCaret = -1;
 				if(mCaretIndex < 0)
 					mCaretIndex = 0;

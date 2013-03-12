@@ -12,7 +12,7 @@
 	<image filename="kap_texture_button_cancel.png"/>
 	<image filename="kap_texture_button_yes.png"/>
 	<image filename="kap_texture_button_no.png"/>
-
+	<image filename="kap_button_panel.png"/>
 	<image filename="kap_texture_button_plus.png"/>
 	<image filename="kap_texture_button_minus.png"/>
 	<image filename="kap_texture_button_smallupgrade.png"/>
@@ -66,6 +66,8 @@
 	
 	<image filename="taxes_normal.png"/>
 	<image filename="taxes_pressed.png"/>
+	
+	<image filename="kap_button_frame.png"/>
 	
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
@@ -137,7 +139,7 @@
 	<image filename="kom_spy_upgrade.png"/>
 	<image filename="kom_texture_button_trade.png"/>
 	<image filename="kom_texture_button_invert_trade.png"/>
-	<image filename="kommunist_btns_placeholder.png"/>
+	<image filename="kom_button_panel.png"/>
 	<image filename="plan_normal.png"/>
 	<image filename="plan_pressed.png"/>
 	<image filename="propaganda_normal.png"/>
@@ -147,6 +149,8 @@
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
 	
+	<image filename="kom_button_frame.png"/>
+	
 	<image filename="kom_end_turn_frame.png"/>
 	<image filename="kom_president_frame.png"/>
 	<image filename="kom_endturn_normal.png"/>
@@ -154,9 +158,14 @@
 </images>
 
 <images directory ="Menu">
-	<image filename="movablePieceOfShit.png"/>
+	<image filename="scrollbar_slider.png"/>
 	<image filename="Scrollbar.png"/>
-
+	
+	<image filename="fullscreenbutton.png"/>
+	<image filename="fullscreenbutton_clicked.png"/>
+	<image filename="save-poster.png"/>
+	<image filename="save-poster-red.png"/>
+	
     <image filename="Background.png"/>
     <image filename="5_bg.png"/>
     <image filename="6_bg.png"/>
