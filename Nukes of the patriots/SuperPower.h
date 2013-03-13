@@ -72,6 +72,10 @@ public:
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
 	
+	virtual void		stopMusic(){};
+	virtual void		playMusic(){};
+	virtual void		pauseMusic(){};
+
 	virtual bool		upgradeNuclearWeapon(int value) = 0;
 	virtual bool		upgradeSpaceProgram(int value) = 0;
 	virtual bool		upgradeSpyNetwork(int value) = 0;
@@ -83,7 +87,6 @@ public:
 	virtual void		showGUI() = 0;
 	virtual void		hideGUI() = 0;
 	virtual void		update() = 0;
-	virtual void		playMusic() {};
 	virtual void		newYearStart() = 0;
 	virtual void		reset();
 

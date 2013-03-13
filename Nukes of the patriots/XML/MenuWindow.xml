@@ -38,7 +38,7 @@
 		<yPos>0</yPos>
 		<width>0</width>
 		<height>0</height>
-		<image>Menu/5_bg</image>
+		<image>Menu/Background</image>
 	</window>
 	<window>
 		<name>ChooseTeam</name>
@@ -65,7 +65,7 @@
 		<image>Menu/lan_window_background</image>
 	</window>
 	<window>
-	<name>FirstSaveGameWindow</name>
+		<name>FirstSaveGameWindow</name>
 		<xPos>162</xPos>
 		<yPos>50</yPos>
 		<width>700</width>

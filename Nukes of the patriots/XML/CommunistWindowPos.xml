@@ -59,7 +59,7 @@
 	<window>
 		<name>CommunistPropagandaWindowSecond</name>
 		<xPos>236</xPos>
-		<yPos>100</yPos>
+		<yPos>134</yPos>
 		<width>552</width>
 		<height>270</height>
 		<image>Communist/Communist_Window_Medium</image>
@@ -75,7 +75,7 @@
 	<window>
 		<name>CommunistImportWindow</name>
 		<xPos>227</xPos>
-		<yPos>279</yPos>
+		<yPos>171</yPos>
 		<width>570</width>
 		<height>334</height>
 		<image>Communist/Communist_Window_Import_Export</image>
@@ -83,7 +83,7 @@
 	<window>
 		<name>CommunistExportWindow</name>
 		<xPos>227</xPos>
-		<yPos>279</yPos>
+		<yPos>171</yPos>
 		<width>570</width>
 		<height>334</height>
 		<image>Communist/Communist_Window_Import_Export</image>
@@ -109,23 +109,23 @@
 		<xPos>227</xPos>
 		<yPos>171</yPos>
 		<width>570</width>
-		<height>168</height>
+		<height>334</height>
 		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>ExportedResourcesWindow</name>
 		<xPos>227</xPos>
-		<yPos>264</yPos>
+		<yPos>171</yPos>
 		<width>570</width>
-		<height>168</height>
-		<image>Communist/Communist_Window_Small</image>
+		<height>334</height>
+		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
 	<window>
 		<name>ResourceIncome</name>
 		<xPos>227</xPos>
 		<yPos>171</yPos>
 		<width>570</width>
-		<height>168</height>
+		<height>334</height>
 		<image>Communist/Communist_Window_Import_Export</image>
 	</window>
 	<window>

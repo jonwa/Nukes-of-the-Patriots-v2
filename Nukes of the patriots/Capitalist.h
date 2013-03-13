@@ -68,6 +68,7 @@ public:
 
 	void playMusic();
 	void stopMusic();
+	void pauseMusic();
 	void updateGUI();
 
 	void resetResourcesValues();
@@ -179,7 +180,7 @@ private:
 	std::shared_ptr<GUIButton> mRaiseFoodByOneButton;
 	std::shared_ptr<GUIButton> mRaiseFoodByFiveButton;
 	std::shared_ptr<GUIButton> mRaiseFoodByTenButton;
-	std::shared_ptr<GUIText> mResourceFoodPriceText;
+	std::shared_ptr<GUIText>   mResourceFoodPriceText;
 
 	std::shared_ptr<GUIButton> mLowerGoodsByTenButton;
 	std::shared_ptr<GUIButton> mLowerGoodsByFiveButton;
@@ -200,6 +201,7 @@ private:
 	std::shared_ptr<GUIButton> mResourceCloseButton;
 	/*GIU-pekare för upgrade*/
 	std::shared_ptr<GUIWindow> mUpgradeWindow;
+	std::shared_ptr<GUIText>   mUpgradeHeadliner;
 	std::shared_ptr<GUIButton> mUpgradeNuclearWeaponButton;
 	std::shared_ptr<GUIText>   mNuclearGoodsCost;
 	std::shared_ptr<GUIText>   mNuclearTechCost;
@@ -228,6 +230,7 @@ private:
 	std::shared_ptr<GUIButton> mExportConfirmButton;
 
 	std::shared_ptr<GUIWindow> mImportWindow;
+	std::shared_ptr<GUIText>   mImportHeadliner;
 	std::shared_ptr<GUIText> mImportResourceLabel, mImportPriceLabel, mImportQuantityLabel, mImportCostLabel, mImportTotalCostLabel;
 	std::shared_ptr<GUIText> mImportTotalCostText;
 	std::shared_ptr<GUIText> mImportResourcesAvailableText[3];
@@ -243,6 +246,8 @@ private:
 	std::shared_ptr<GUIText>   mExportedWithoutPriceText;
 
 	std::shared_ptr<GUIWindow> mExportedResourcesWindow;
+	std::shared_ptr<GUIText>   mExportIncomeHeadliner;
+	std::shared_ptr<GUIText>   mExportHeadliner;
 	std::shared_ptr<GUIButton> mCloseExportedResourceWindow;
 	std::shared_ptr<GUIText>   mResourcesExportedText[3];
 	std::shared_ptr<GUIText>   mExportedIncomeText;
@@ -301,10 +306,12 @@ private:
 	std::shared_ptr<GUIButton> mCloseTaxesIncomeWindow;
 
 	std::shared_ptr<GUIWindow> mIncreasedResourcesPriceWindow;
+	std::shared_ptr<GUIText>   mIncreasedResourcesPriceHeadliner;
 	std::shared_ptr<GUIText>   mIncreasedResourcesText;
 	std::shared_ptr<GUIButton> mCloseIncreasedResourcesPriceWindow;
 
 	std::shared_ptr<GUIWindow> mPopulationEatsFoodWindow;
+	std::shared_ptr<GUIText>   mPopulationEatsFoodHeadliner;
 	std::shared_ptr<GUIText>   mPopulationEatsFoodText;
 	std::shared_ptr<GUIButton> mClosePopulationEatsFoodWindow;
 	std::shared_ptr<GUIButton> mDoIncreasePopulation;

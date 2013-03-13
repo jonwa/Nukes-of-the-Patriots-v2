@@ -22,12 +22,11 @@
 #include "tinyxml2.h"
 #include "Randomizer.h"
 
-
 using namespace std;
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");//, sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	Randomizer::getInstance(); //Init randomizer singleton to start timer
@@ -38,7 +37,6 @@ int main()
 	Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
 	Menu::getInstance()->loadConfig();
 	GameManager::getInstance()->loadFileName();
-	//GameManager::getInstance();
 
 	bool sleeping = false;
 
@@ -67,7 +65,7 @@ int main()
 			sf::sleep(sf::seconds(0.5f));
 			continue;
 		}
-		//std::cout << "Master volume " << sf::Listener::getGlobalVolume() << std::endl;
+	
 
 		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
