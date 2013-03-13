@@ -54,6 +54,7 @@ public:
 	void playVideo();
 	void stopVideo();
 
+
 public:
 	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
 	std::shared_ptr<GUIText>   mWaitingForClientText;

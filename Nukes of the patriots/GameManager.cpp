@@ -100,9 +100,11 @@ GameManager::GameManager() :
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 		if(guiElement != NULL)
 		{
+			std::cout<<"gui element != null"<<std::endl;
 			std::function<void()> func = guiElement->getOnClickFunction();
 			if(func != NULL)
 			{
+				std::cout<<"calling gui click func"<<std::endl;
 				func();
 			}
 		}
@@ -262,6 +264,7 @@ GameManager::GameManager() :
 		[=](sf::Packet packet)
 	{
 		std::cout<<"sync players turn"<<std::endl;
+
 		//int playersTurn = 1;
 		//packet>>playersTurn;
 		//mPlayersTurn = playersTurn;
@@ -1237,5 +1240,4 @@ void GameManager::setMyTurn()
 
 
 // Sync packet sending - wait until packet has been sent to send next packet
-
 

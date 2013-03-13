@@ -1,6 +1,7 @@
 #include "GUIButton.h"
 #include "ResourceHandler.h"
 #include <iostream>
+#include "Menu.h"
 
 sf::Shader* GUIButton::mGlowEffect = nullptr;
 
@@ -17,7 +18,8 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 	if(mGlowEffect == nullptr)
 	{
 		mGlowEffect = new sf::Shader();
-		mGlowEffect->loadFromFile("effects/glow.frag", sf::Shader::Fragment);
+		if(!mGlowEffect->loadFromFile("effects/glow.frag", sf::Shader::Fragment))
+			Menu::getInstance()->getWindow().close();
 		mGlowEffect->setParameter("texture", sf::Shader::CurrentTexture);
 	}
 	if (pair.second)
