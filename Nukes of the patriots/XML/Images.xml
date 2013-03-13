@@ -264,8 +264,8 @@
 <images directory="BetweenTurns">
 	<image filename="stats_menu.png"/>
 	<image filename="spynetwork_menu.png"/>
-	<image filename="yes.png"/>
-	<image filename="no.png"/>
+	<image filename="texture_button_kapitalist.png"/>
+	<image filename="texture_button_kommunist.png"/>
 	<image filename="Ok-knapp-aktiv.png"/>
 	<image filename="inzoomat.png"/>
 </images>

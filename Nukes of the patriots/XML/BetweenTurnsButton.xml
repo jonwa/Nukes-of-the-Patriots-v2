@@ -14,7 +14,7 @@
 		<yPos>610</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>BetweenTurns/no</image>
+		<image>BetweenTurns/texture_button_kapitalist</image>
 	</button>
 	<button>
 		<name>Communist</name>
@@ -22,7 +22,7 @@
 		<yPos>670</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>BetweenTurns/yes</image>
+		<image>BetweenTurns/texture_button_kommunist</image>
 	</button>
 	<button>
 		<name>FirstWindowOkay</name>
