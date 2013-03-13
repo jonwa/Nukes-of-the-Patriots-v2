@@ -379,12 +379,6 @@ void Menu::loadMenuMusic()
 //	mIntroMovie.stop();
 //}
 
-{
-	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-		std::cout << "unable to load video" << std::endl;
-
-	//mIntroMovie.useDebugMessages(false);
-}
 
 void Menu::playVideo()
 {

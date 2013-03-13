@@ -11,33 +11,25 @@
 	<button>
 		<name>Capitalist</name>
 		<xPos>444</xPos>
-		<yPos>610</yPos>
-		<width>100</width>
-		<height>40</height>
-		<image>BetweenTurns/no</image>
+		<yPos>630</yPos>
+		<width>132</width>
+		<height>64</height>
+		<image>BetweenTurns/neutral_texture_button_kapitalist</image>
 	</button>
 	<button>
 		<name>Communist</name>
 		<xPos>444</xPos>
-		<yPos>670</yPos>
+		<yPos>700</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>BetweenTurns/yes</image>
+		<image>BetweenTurns/neutral_texture_button_kommunist</image>
 	</button>
 	<button>
 		<name>FirstWindowOkay</name>
-		<xPos>444</xPos>
-		<yPos>630</yPos>
-		<width>132</width>
-		<height>64</height>
-		<image>BetweenTurns/Ok-knapp-aktiv</image>
-	</button>
-	<button>
-		<name>SecondWindowOkay</name>
-		<xPos>444</xPos>
-		<yPos>630</yPos>
-		<width>132</width>
-		<height>64</height>
+		<xPos>435</xPos>
+		<yPos>687</yPos>
+		<width>100</width>
+		<height>40</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>
 	</button>
 </buttons>

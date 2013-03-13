@@ -516,7 +516,7 @@ void Communist::newYearStart()
 		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText(spaceProgramAmount);
+		mSpaceProgramIncreasedTextValue->setText("+" + intToString(spaceProgramAmount));
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -653,6 +653,7 @@ void Communist::update()
 		else
 			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
 
+
 		mExportQuantityText[0]->setText(mExportedFood);
 		mExportQuantityText[1]->setText(mExportedGoods);
 		mExportQuantityText[2]->setText(mExportedTech);
@@ -693,12 +694,10 @@ void Communist::update()
 	//setExportedTechSold(0);
 
 
-
+	mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
+	mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound) + "§");
 	changeCityImage();
 	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
-	
-
-	
 }
 
 //-----------------------------------------------------------
@@ -1310,8 +1309,11 @@ void Communist::initializeCommunistWindow()
 	}
 
 	mExportQuantityText[0] = GUIText::create(sf::FloatRect(mExportQuantityBackground[0]->getLocalX() + mExportQuantityBackground[0]->getWidth()/2, 102, 57, 40), "0", mExportWindow);
+	mExportQuantityText[0]->setColor(sf::Color::White);
 	mExportQuantityText[1] = GUIText::create(sf::FloatRect(mExportQuantityBackground[1]->getLocalX() + mExportQuantityBackground[1]->getWidth()/2, 157, 57, 40), "0", mExportWindow);
+	mExportQuantityText[1]->setColor(sf::Color::White);
 	mExportQuantityText[2] = GUIText::create(sf::FloatRect(mExportQuantityBackground[2]->getLocalX() + mExportQuantityBackground[2]->getWidth()/2, 216, 57, 40), "0", mExportWindow);
+	mExportQuantityText[2]->setColor(sf::Color::White);
 	for(int i = 0; i < 3; i++)
 	{
 		mExportQuantityText[i]->setScale(0.7, 0.7);
@@ -1405,6 +1407,7 @@ void Communist::initializeCommunistWindow()
 	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(80, 98, 56, 31), "0", mImportWindow);
 	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(80, 157, 56, 31), "0", mImportWindow);
 	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(80, 217, 56, 31), "0", mImportWindow);
+
 	for(int i = 0; i < 3; i++)
 	{
 		mImportResourcesAvailableText[i]->setScale(0.7, 0.7);
@@ -1427,8 +1430,11 @@ void Communist::initializeCommunistWindow()
 		mImportBuyQuantityBackground[i]->setSize(57, 40);
 	}
 	mImportBuyQuantityText[0] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[0]->getLocalX() + mImportBuyQuantityBackground[0]->getWidth()/2, 98, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[0]->setColor(sf::Color::White);
 	mImportBuyQuantityText[1] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[1]->getLocalX() + mImportBuyQuantityBackground[1]->getWidth()/2, 157, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[1]->setColor(sf::Color::White);	
 	mImportBuyQuantityText[2] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[2]->getLocalX() + mImportBuyQuantityBackground[2]->getWidth()/2, 217, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[2]->setColor(sf::Color::White);	
 	for(int i = 0; i < 3; i++)
 	{
 		mImportBuyQuantityText[i]->setScale(0.7, 0.7);
@@ -1587,14 +1593,14 @@ void Communist::initializeCommunistWindow()
     mCurrentTaxesText[0]		        = GUIText::create(sf::FloatRect(50, 137, 0, 0), "Current tax ", mTaxesIncomeWindow);
 	mCurrentTaxesText[0]->setScale(0.8, 0.8);
 	mCurrentTaxesText[0]->setAlignment("left");
-	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 137, 0, 0), intToString(getTaxes()), mTaxesIncomeWindow);
+	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 137, 0, 0), intToString(getTaxes()) , mTaxesIncomeWindow);
 	mCurrentTaxesText[1]->setScale(0.8, 0.8);
 	mCurrentTaxesText[1]->setAlignment("left");
 
-    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income ", mTaxesIncomeWindow);
+    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income", mTaxesIncomeWindow);
 	mTaxesIncomeText[0]->setScale(0.8, 0.8);
 	mTaxesIncomeText[0]->setAlignment("left");
-	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound) +"§", mTaxesIncomeWindow);
 	mTaxesIncomeText[1]->setScale(0.8, 0.8);
 	mTaxesIncomeText[1]->setAlignment("left");
 
