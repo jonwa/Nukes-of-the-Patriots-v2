@@ -22,12 +22,12 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	initializeIntroVideo();
+	//initializeIntroVideo();
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
-	playVideo();
+	//playVideo();
 }
 
 Menu* Menu::mInstance = NULL;
@@ -141,6 +141,9 @@ void Menu::update(sf::Event &event)
 		std::cout<<"in game menu is visible"<<std::endl;
 
 		GUIManager::getInstance()->setOnTop(mInGameMenuWindow);
+
+
+
 		GameManager::getInstance()->getCurrentPlayer()->pauseMusic();
 
 		mInGameMenuWindow->setVisible(true);
@@ -350,30 +353,30 @@ void Menu::loadMenuMusic()
 	}
 }
 
-void Menu::initializeIntroVideo()
-{
-	if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-		std::cout << "unable to load video" << std::endl;
+//void Menu::initializeIntroVideo()
+//{
+//	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
+//		//std::cout << "unable to load video" << std::endl;
+//
+//	//mIntroMovie.useDebugMessages(false);
+//}
 
-	mIntroMovie.useDebugMessages(false);
-}
+//void Menu::playVideo()
+//{
+//	//mIntroMovie.play();
+//	Timer::setTimer([=]()
+//	{
+//		stopVideo();
+//		playMusic();
+//		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+//		mMainMenuWindow->setVisible(true);
+//	}, 5000, 1);
+//}
 
-void Menu::playVideo()
-{
-	mIntroMovie.play();
-	Timer::setTimer([=]()
-	{
-		stopVideo();
-		playMusic();
-		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-		mMainMenuWindow->setVisible(true);
-	}, 5000, 1);
-}
-
-void Menu::stopVideo()
-{
-	mIntroMovie.stop();
-}
+//void Menu::stopVideo()
+//{
+//	mIntroMovie.stop();
+//}
 
  /*
 	Initierar menyernas fönster, bilder samt knappar som skall finnas med.
@@ -514,8 +517,8 @@ void Menu::tick()
 		sprite.setPosition(mWindow->getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow->getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
 		mWindow->draw(sprite);
 	}
-	if(mIntroMovie.getStatus() == sfe::Movie::Playing)
-		mWindow->draw(mIntroMovie);
+	/*if(mIntroMovie.getStatus() == sfe::Movie::Playing)
+		mWindow->draw(mIntroMovie);*/
 }
 
 void Menu::startGame()

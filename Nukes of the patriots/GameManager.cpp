@@ -261,16 +261,15 @@ GameManager::GameManager() :
 	Event::addEventHandler("syncPlayersTurn",
 		[=](sf::Packet packet)
 	{
-<<<<<<< HEAD
 		std::cout<<"sync players turn"<<std::endl;
 		//int playersTurn = 1;
 		//packet>>playersTurn;
 		//mPlayersTurn = playersTurn;
-=======
+
 		int playersTurn = 0;
 		packet>>playersTurn;
 		mPlayersTurn = playersTurn;
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
+
 	});
 
 	Event::addEventHandler("loadingCompleted",
@@ -446,10 +445,7 @@ void GameManager::init(int year)
 		triggerOtherPlayersEvent("loadingCompleted", packet);
 		if(mRemoteClient->isReady() && mRemoteClient->getSuperPower() == COMMUNIST)
 			getCap()->sendPresidentDataToOtherPlayer();
-<<<<<<< HEAD
-=======
 
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		getInstance()->setYear(year);
@@ -1226,11 +1222,7 @@ void GameManager::setEnemyTurn()
 {
 	if(mRole == SERVER)
 		mPlayersTurn = 1;
-<<<<<<< HEAD
-	if(mRole == CLIENT)
-=======
 	else if(mRole == CLIENT)
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
 		mPlayersTurn = 0;
 }
 
@@ -1240,11 +1232,10 @@ void GameManager::setMyTurn()
 		mPlayersTurn = 0;
 	else if(mRole == CLIENT)
 		mPlayersTurn = 1;
-<<<<<<< HEAD
+
 }
 
 
 // Sync packet sending - wait until packet has been sent to send next packet
-=======
-}
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
+
+

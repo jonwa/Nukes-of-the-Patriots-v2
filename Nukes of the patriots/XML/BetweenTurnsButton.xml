@@ -34,8 +34,8 @@
 	</button>
 	<button>
 		<name>SecondWindowOkay</name>
-		<xPos>450</xPos>
-		<yPos>500</yPos>
+		<xPos>444</xPos>
+		<yPos>630</yPos>
 		<width>132</width>
 		<height>64</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>

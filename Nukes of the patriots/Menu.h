@@ -17,7 +17,7 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-#include <sfeMovie\Movie.hpp>
+//#include <sfeMovie\Movie.hpp>
 
 class Capitalist;
 class Communist;
@@ -53,7 +53,6 @@ public:
 
 	void playVideo();
 	void stopVideo();
-	sfe::Movie &getVideo();
 
 public:
 	std::shared_ptr<GUIWindow> mWaitingForClientWindow;
@@ -62,7 +61,7 @@ public:
 
 private:
 	static Menu* mInstance;
-	sfe::Movie mIntroMovie;
+	//sfe::Movie mIntroMovie;
 	bool fullscreen;
 	std::shared_ptr<Sound> mMenuMusic;
 	Menu();
@@ -97,7 +96,6 @@ private:
 	std::shared_ptr<GUIWindow> mMainMenuWindow;
 	std::shared_ptr<GUIWindow> mSettingsMenuWindow;
 	std::shared_ptr<GUIWindow> mCreditsMenuWindow;
-	//std::shared_ptr<GUIWindow> mSplashScreenWindow;
 	std::shared_ptr<GUIWindow> mChooseTeamWindow;
 
 	std::shared_ptr<GUIButton> mStartNewGameButton;
