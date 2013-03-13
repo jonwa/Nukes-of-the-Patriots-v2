@@ -263,12 +263,6 @@ GameManager::GameManager() :
 	Event::addEventHandler("syncPlayersTurn",
 		[=](sf::Packet packet)
 	{
-		std::cout<<"sync players turn"<<std::endl;
-
-		//int playersTurn = 1;
-		//packet>>playersTurn;
-		//mPlayersTurn = playersTurn;
-
 		int playersTurn = 0;
 		packet>>playersTurn;
 		mPlayersTurn = playersTurn;

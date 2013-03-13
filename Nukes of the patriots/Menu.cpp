@@ -380,17 +380,19 @@ void Menu::loadMenuMusic()
 //}
 
 
-void Menu::playVideo()
-{
-	//mIntroMovie.play();
-	Timer::setTimer([=]()
-	{
-		stopVideo();
-		playMusic();
-		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-		mMainMenuWindow->setVisible(true);
-	}, 5000, 1);
-}
+
+
+//void Menu::playVideo()
+//{
+//	//mIntroMovie.play();
+//	Timer::setTimer([=]()
+//	{
+//		stopVideo();
+//		playMusic();
+//		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+//		mMainMenuWindow->setVisible(true);
+//	}, 5000, 1);
+//}
 
 void Menu::stopVideo()
 {
