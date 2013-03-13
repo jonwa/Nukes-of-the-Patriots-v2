@@ -100,9 +100,11 @@ GameManager::GameManager() :
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 		if(guiElement != NULL)
 		{
+			std::cout<<"gui element != null"<<std::endl;
 			std::function<void()> func = guiElement->getOnClickFunction();
 			if(func != NULL)
 			{
+				std::cout<<"calling gui click func"<<std::endl;
 				func();
 			}
 		}
