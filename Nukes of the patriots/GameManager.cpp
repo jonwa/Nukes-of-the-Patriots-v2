@@ -370,7 +370,7 @@ void GameManager::loadGame()
 {
 	tinyxml2::XMLDocument doc;
 	doc.LoadFile(mFileName.c_str());
-	tinyxml2::XMLElement *gameManager = doc.NewElement("GameManager");
+	tinyxml2::XMLElement *gameManager = doc.FirstChildElement("GameManager");
 	
 	//loading year
 	tinyxml2::XMLElement *year = gameManager->FirstChildElement("Year");
@@ -971,6 +971,10 @@ void GameManager::initializeGuiElement()
 	mUnableToSaveText->setColor(sf::Color::White);
 	mUnableToSaveText->setScale(0.7, 0.7);
 	mUnableToSaveWindow->setVisible(false);
+
+
+	mWinningScreen						= GUIWindow::create(BetweenTurnsWindow["WinningScreen"]);
+
 
 	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
 	GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
