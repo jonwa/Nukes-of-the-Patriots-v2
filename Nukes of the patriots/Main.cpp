@@ -26,7 +26,9 @@ using namespace std;
 
 int main()
 {
+
 	sf::RenderWindow window(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots");
+
 	window.setFramerateLimit(60);
 	window.setMouseCursorVisible(false);
 	Randomizer::getInstance(); //Init randomizer singleton to start timer

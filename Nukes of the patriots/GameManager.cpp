@@ -266,6 +266,7 @@ GameManager::GameManager() :
 		int playersTurn = 0;
 		packet>>playersTurn;
 		mPlayersTurn = playersTurn;
+
 	});
 
 	Event::addEventHandler("loadingCompleted",
@@ -1228,6 +1229,7 @@ void GameManager::setMyTurn()
 		mPlayersTurn = 0;
 	else if(mRole == CLIENT)
 		mPlayersTurn = 1;
+
 }
 
 
