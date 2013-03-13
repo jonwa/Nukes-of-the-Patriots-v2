@@ -1226,11 +1226,7 @@ void GameManager::setEnemyTurn()
 {
 	if(mRole == SERVER)
 		mPlayersTurn = 1;
-<<<<<<< HEAD
-	if(mRole == CLIENT)
-=======
 	else if(mRole == CLIENT)
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
 		mPlayersTurn = 0;
 }
 
@@ -1240,11 +1236,8 @@ void GameManager::setMyTurn()
 		mPlayersTurn = 0;
 	else if(mRole == CLIENT)
 		mPlayersTurn = 1;
-<<<<<<< HEAD
 }
 
 
 // Sync packet sending - wait until packet has been sent to send next packet
-=======
-}
->>>>>>> 8258f5b4cb7110b7db833bf7a6c80b73a0274058
+
