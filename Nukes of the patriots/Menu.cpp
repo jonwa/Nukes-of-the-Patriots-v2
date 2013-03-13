@@ -352,15 +352,15 @@ void Menu::loadMenuMusic()
 
 void Menu::initializeIntroVideo()
 {
-	if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
+	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
 		std::cout << "unable to load video" << std::endl;
 
-	mIntroMovie.useDebugMessages(false);
+	//mIntroMovie.useDebugMessages(false);
 }
 
 void Menu::playVideo()
 {
-	mIntroMovie.play();
+	//mIntroMovie.play();
 	Timer::setTimer([=]()
 	{
 		stopVideo();
@@ -372,7 +372,7 @@ void Menu::playVideo()
 
 void Menu::stopVideo()
 {
-	mIntroMovie.stop();
+	//mIntroMovie.stop();
 }
 
  /*
@@ -519,8 +519,8 @@ void Menu::tick()
 		sprite.setPosition(mWindow->getSize().x/2 - mTeamAnimationFrames[frame].getSize().x/2, mWindow->getSize().y/2 - mTeamAnimationFrames[frame].getSize().y/2);
 		mWindow->draw(sprite);
 	}
-	if(mIntroMovie.getStatus() == sfe::Movie::Playing)
-		mWindow->draw(mIntroMovie);
+	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
+		//mWindow->draw(mIntroMovie);
 }
 
 void Menu::startGame()
