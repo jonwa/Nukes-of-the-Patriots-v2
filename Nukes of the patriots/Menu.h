@@ -18,6 +18,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
 #include <sfeMovie\Movie.hpp>
+
 class Capitalist;
 class Communist;
 

@@ -22,12 +22,12 @@ Menu::Menu() :
 	mShowTeamChooseAnimation(false),
 	fullscreen(false)
 { 
-	//initializeIntroVideo();
+	initializeIntroVideo();
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
-	//playVideo();
+	playVideo();
 }
 
 Menu* Menu::mInstance = NULL;
@@ -390,11 +390,6 @@ void Menu::initialize()
 	loadMenuMusic();
 	mMenuMusic				= Sound::create(MenuMusic["MainMenuTrack"]);
 	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
-
-
-	/*Fönstret och dess barn för SPLASHSCREEN*/
-	//mSplashScreenWindow = GUIWindow::create(WindowPos["SplashScreen"], mParentWindow);
-	//mSplashScreenWindow->setVisible(false);
 
 	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
