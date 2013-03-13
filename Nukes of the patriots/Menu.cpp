@@ -378,26 +378,21 @@ void Menu::loadMenuMusic()
 //{
 //	mIntroMovie.stop();
 //}
-/*
-{
-	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-		std::cout << "unable to load video" << std::endl;
 
-	//mIntroMovie.useDebugMessages(false);
-}
-*/
 
-void Menu::playVideo()
-{
-	//mIntroMovie.play();
-	Timer::setTimer([=]()
-	{
-		stopVideo();
-		playMusic();
-		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-		mMainMenuWindow->setVisible(true);
-	}, 5000, 1);
-}
+
+
+//void Menu::playVideo()
+//{
+//	//mIntroMovie.play();
+//	Timer::setTimer([=]()
+//	{
+//		stopVideo();
+//		playMusic();
+//		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+//		mMainMenuWindow->setVisible(true);
+//	}, 5000, 1);
+//}
 
 void Menu::stopVideo()
 {
