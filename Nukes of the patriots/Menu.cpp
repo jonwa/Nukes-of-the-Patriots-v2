@@ -354,55 +354,32 @@ void Menu::loadMenuMusic()
 }
 
 
-//void Menu::initializeIntroVideo()
-//{
-//	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-//		//std::cout << "unable to load video" << std::endl;
-//
-//	//mIntroMovie.useDebugMessages(false);
-//}
-
-//void Menu::playVideo()
-//{
-//	//mIntroMovie.play();
-//	Timer::setTimer([=]()
-//	{
-//		stopVideo();
-//		playMusic();
-//		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-//		mMainMenuWindow->setVisible(true);
-//	}, 5000, 1);
-//}
-
-//void Menu::stopVideo()
-//{
-//	mIntroMovie.stop();
-//}
-/*
+void Menu::initializeIntroVideo()
 {
 	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-		std::cout << "unable to load video" << std::endl;
+	//	std::cout << "unable to load video" << std::endl;
 
-	//mIntroMovie.useDebugMessages(false);
-}
-*/
-
-void Menu::playVideo()
-{
-	//mIntroMovie.play();
-	Timer::setTimer([=]()
-	{
-		stopVideo();
-		playMusic();
-		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-		mMainMenuWindow->setVisible(true);
-	}, 5000, 1);
+//	mIntroMovie.useDebugMessages(false);
 }
 
 void Menu::stopVideo()
 {
 	//mIntroMovie.stop();
 }
+
+
+//void Menu::playVideo()
+//{
+//	mIntroMovie.play();
+//	Timer::setTimer([=]()
+//	{
+//		stopVideo();
+	//	playMusic();
+		//GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+//		mMainMenuWindow->setVisible(true);
+//	}, 5000, 1);
+//}
+
 
 
  /*
@@ -546,7 +523,7 @@ void Menu::tick()
 	}
 
 	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
-		//mWindow->draw(mIntroMovie);
+	//	mWindow->draw(mIntroMovie);
 
 }
 
@@ -866,6 +843,7 @@ void Menu::initializeGuiFuctions()
 
 	mSavedGameSlots[0]->setOnClickFunction([=]()
 	{
+		
 		std::cout << mSavedGameText[0]->getText() << std::endl;
 	});
 	

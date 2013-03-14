@@ -167,6 +167,8 @@ private:
 	std::shared_ptr<GUIButton> mOverWriteButton;
 	std::shared_ptr<GUIText>   mUnableToSaveText;
 
+	std::shared_ptr<GUIWindow>    mWinningScreen;
+
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;
 

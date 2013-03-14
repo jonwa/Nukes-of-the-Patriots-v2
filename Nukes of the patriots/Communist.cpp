@@ -516,7 +516,7 @@ void Communist::newYearStart()
 		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText(spaceProgramAmount);
+		mSpaceProgramIncreasedTextValue->setText("+" + intToString(spaceProgramAmount));
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -616,10 +616,16 @@ void Communist::update()
 {
 	mResourcesIncomeHeadLiner->setText(intToString(GameManager::getInstance()->getYear()) + " Plan Results");
 	mWindowHeadlines[2]->setText("Five year plan " + intToString(GameManager::getInstance()->getYear()) + " - " + intToString(GameManager::getInstance()->getYear() + 4));
-	mImportHeadliner->setText("Import From ' " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " '");
+	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CapitalistNameField")->getText());
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
+
+	
 	if(mRound > 0)
 	{
+		mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
+		mCurrentTaxesText[1]->setText(intToString(getTaxes()));
+		mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + "§");
+
 		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCapitalist();
 
 		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
@@ -652,6 +658,7 @@ void Communist::update()
 			mImportPriceText[2]->setText("N/A");
 		else
 			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
 
 		mExportQuantityText[0]->setText(mExportedFood);
 		mExportQuantityText[1]->setText(mExportedGoods);
@@ -696,9 +703,6 @@ void Communist::update()
 
 	changeCityImage();
 	propagandaBoughtFood = propagandaBoughtGoods = propagandaBoughtTech = 0;
-	
-
-	
 }
 
 //-----------------------------------------------------------
@@ -1310,8 +1314,11 @@ void Communist::initializeCommunistWindow()
 	}
 
 	mExportQuantityText[0] = GUIText::create(sf::FloatRect(mExportQuantityBackground[0]->getLocalX() + mExportQuantityBackground[0]->getWidth()/2, 102, 57, 40), "0", mExportWindow);
+	mExportQuantityText[0]->setColor(sf::Color::White);
 	mExportQuantityText[1] = GUIText::create(sf::FloatRect(mExportQuantityBackground[1]->getLocalX() + mExportQuantityBackground[1]->getWidth()/2, 157, 57, 40), "0", mExportWindow);
+	mExportQuantityText[1]->setColor(sf::Color::White);
 	mExportQuantityText[2] = GUIText::create(sf::FloatRect(mExportQuantityBackground[2]->getLocalX() + mExportQuantityBackground[2]->getWidth()/2, 216, 57, 40), "0", mExportWindow);
+	mExportQuantityText[2]->setColor(sf::Color::White);
 	for(int i = 0; i < 3; i++)
 	{
 		mExportQuantityText[i]->setScale(0.7, 0.7);
@@ -1382,7 +1389,7 @@ void Communist::initializeCommunistWindow()
 	mExportedWithoutPriceWindow->setVisible(false);
 	
 	mImportWindow						= GUIWindow::create(CommunistWindows["CommunistImportWindow"], mCommunistMainWindow);
-	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import from ' " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " '", mImportWindow);
+	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import from " + Menu::getInstance()->getEditField("CapitalistNameField")->getText(), mImportWindow);
 	mImportHeadliner->setAlignment("middle");
 	mImportResourceLabel				= GUIText::create(sf::FloatRect(32, 52, 200, 100), "Res.", mImportWindow);
 	mImportResourceLabel->setScale(0.7, 0.7);
@@ -1405,6 +1412,7 @@ void Communist::initializeCommunistWindow()
 	mImportResourcesAvailableText[0]	= GUIText::create(sf::FloatRect(80, 98, 56, 31), "0", mImportWindow);
 	mImportResourcesAvailableText[1]	= GUIText::create(sf::FloatRect(80, 157, 56, 31), "0", mImportWindow);
 	mImportResourcesAvailableText[2]	= GUIText::create(sf::FloatRect(80, 217, 56, 31), "0", mImportWindow);
+
 	for(int i = 0; i < 3; i++)
 	{
 		mImportResourcesAvailableText[i]->setScale(0.7, 0.7);
@@ -1427,8 +1435,11 @@ void Communist::initializeCommunistWindow()
 		mImportBuyQuantityBackground[i]->setSize(57, 40);
 	}
 	mImportBuyQuantityText[0] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[0]->getLocalX() + mImportBuyQuantityBackground[0]->getWidth()/2, 98, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[0]->setColor(sf::Color::White);
 	mImportBuyQuantityText[1] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[1]->getLocalX() + mImportBuyQuantityBackground[1]->getWidth()/2, 157, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[1]->setColor(sf::Color::White);	
 	mImportBuyQuantityText[2] = GUIText::create(sf::FloatRect(mImportBuyQuantityBackground[2]->getLocalX() + mImportBuyQuantityBackground[2]->getWidth()/2, 217, 57, 40), "0", mImportWindow);
+	mImportBuyQuantityText[2]->setColor(sf::Color::White);	
 	for(int i = 0; i < 3; i++)
 	{
 		mImportBuyQuantityText[i]->setScale(0.7, 0.7);
@@ -1587,14 +1598,14 @@ void Communist::initializeCommunistWindow()
     mCurrentTaxesText[0]		        = GUIText::create(sf::FloatRect(50, 137, 0, 0), "Current tax ", mTaxesIncomeWindow);
 	mCurrentTaxesText[0]->setScale(0.8, 0.8);
 	mCurrentTaxesText[0]->setAlignment("left");
-	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 137, 0, 0), intToString(getTaxes()), mTaxesIncomeWindow);
+	mCurrentTaxesText[1]		        = GUIText::create(sf::FloatRect(331, 137, 0, 0), intToString(getTaxes()) , mTaxesIncomeWindow);
 	mCurrentTaxesText[1]->setScale(0.8, 0.8);
 	mCurrentTaxesText[1]->setAlignment("left");
 
-    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income ", mTaxesIncomeWindow);
+    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income", mTaxesIncomeWindow);
 	mTaxesIncomeText[0]->setScale(0.8, 0.8);
 	mTaxesIncomeText[0]->setAlignment("left");
-	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound) +"§", mTaxesIncomeWindow);
 	mTaxesIncomeText[1]->setScale(0.8, 0.8);
 	mTaxesIncomeText[1]->setAlignment("left");
 
@@ -1629,7 +1640,7 @@ void Communist::initializeCommunistWindow()
 
 	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "General Secretary Appointment", mChooseGeneralWindow);
 	mWindowHeadlines[0]->setAlignment("middle");
-	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "The Great Leader of ' " + Menu::getInstance()->getEditField("CommunistNameField")->getText() + " '", mPickedGeneralWindow);
+	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "The Great Leader of " + Menu::getInstance()->getEditField("CommunistNameField")->getText(), mPickedGeneralWindow);
 	mWindowHeadlines[1]->setAlignment("middle");
 	mWindowHeadlines[2] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Five year plan " + intToString(GameManager::getInstance()->getYear()) + " - " + intToString(GameManager::getInstance()->getYear() + 4), mFiveYearPlanWindow);
 	mWindowHeadlines[2]->setAlignment("middle");
@@ -1882,7 +1893,8 @@ void Communist::initializeGuiFunctions()
 	});
 	
 	mFiveYearPlanCloseButton->setOnClickFunction([=]()					
-	{		
+	{	
+
 		mFiveYearPlanWindow->setVisible(false);
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlan"]);
 		
@@ -1904,9 +1916,9 @@ void Communist::initializeGuiFunctions()
 
 			updateAllResources();
 			resourceIncome();
-			mCurrentPopulationText[1]->setText(mPopulation);
-			mCurrentTaxesText[1]->setText(mTaxes);
-			mTaxesIncomeText[1]->setText(intToString(mTaxes*mPopulation));
+			mCurrentPopulationText[1]->setText(intToString(mPopulation) + " million");
+			mCurrentTaxesText[1]->setText(intToString(mTaxes) );
+			mTaxesIncomeText[1]->setText(intToString(mTaxes*mPopulation) + " §");
 			mTaxesIncomeWindow->setVisible(true);
 			mTaxesIncomeWindow->setEnabled(true, true);
 			mFiveYearPlanWindow->setEnabled(false, true);
@@ -2184,17 +2196,19 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
+	
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
 		mCommunistGeneralButton->setX(mGeneralFrame->getX() + 8); mCommunistGeneralButton->setY(mGeneralFrame->getY() + 9);
 		mCommunistGeneralButton->setScale(0.55, 0.60);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
+		
 	});
 
 	/*Export knappen på interface*/
 	mCommunistTradeButton->setOnClickFunction([=]()
-	{ 
+	{
 		mCommunistMainWindow->setEnabled(false, true);
 		mImportWindow->setEnabled(true, true);
 
@@ -2641,6 +2655,18 @@ void Communist::initializeGuiFunctions()
 
 		}, 2000, 1);
 	});
+	
+	mCommunistGeneralButton->setMouseEnterFunction([=]()
+	{
+		std::cout << "BAJSNYLLE DET FUNKAR FAKTISKT" << std::endl;
+		mPickedGeneralWindow->setVisible(true);
+		mClosePickedGeneralWindow->setVisible(false);
+	});
+	mCommunistGeneralButton->setMouseLeaveFunction([=]()
+	{
+		mPickedGeneralWindow->setVisible(false);
+		mClosePickedGeneralWindow->setVisible(true);
+	});
 }
 
 void Communist::upgradeWindowText()
@@ -2764,6 +2790,8 @@ void Communist::resourceIncome()
 		mGoodsIncome->setText("You get " + intToString(goods) + " goods");
 		mTechIncome->setText("You get " + intToString(tech) + " tech");
 	}
+
+
 }
 
 void Communist::showGUI()

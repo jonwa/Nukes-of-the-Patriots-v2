@@ -421,7 +421,7 @@ void Capitalist::newYearStart()
 	int taxChange = mTaxes - mTaxesPreviousRound;
 	if(taxChange > 0)
 	{
-		taxPatriotismChange = -2;
+		taxPatriotismChange = -3;
 		mTaxChange->setText("Tax increased");
 		mTaxChange->setY(statsPosY);
 		mTaxChangeValue->setText(taxPatriotismChange);
@@ -430,7 +430,7 @@ void Capitalist::newYearStart()
 	}
 	else if(taxChange < 0)
 	{
-		taxPatriotismChange = 1;
+		taxPatriotismChange = 2 + mPresident->getPatriotismTaxModifier();
 		mTaxChange->setText("Tax decreased");
 		mTaxChange->setY(statsPosY);
 		mTaxChangeValue->setText("+"+intToString(taxPatriotismChange));
@@ -457,7 +457,7 @@ void Capitalist::newYearStart()
 		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
 		mSpaceProgramIncreasedText->setText("Space program increased");
 		mSpaceProgramIncreasedText->setY(statsPosY);
-		mSpaceProgramIncreasedTextValue->setText(spaceProgramAmount);
+		mSpaceProgramIncreasedTextValue->setText("+" + intToString(spaceProgramAmount));
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
 		statsPosY += mSpaceProgramIncreasedText->getHeight();
 	}
@@ -485,7 +485,7 @@ void Capitalist::newYearStart()
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
-		mNuclearWeaponChangeValue->setY(nuclearWeaponChange);
+		mNuclearWeaponChangeValue->setY(statsPosY);
 		statsPosY += mNuclearWeaponChange->getHeight();
 	}
 	else
@@ -552,11 +552,18 @@ void Capitalist::newYearStart()
 void Capitalist::update()
 {
 	mWindowHeadlines[0]->setText(intToString(GameManager::getInstance()->getYear()) + " Presidential Elections ");
-	mImportHeadliner->setText("Import From ' " + Menu::getInstance()->getEditField("CommunistNameField")->getText() + " '");
-	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
+	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText());
+	
 	//std::cout<<"capitalist mRound: "<<mRound<<std::endl;
 	if(mRound > 0)
 	{
+
+		mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
+		
+		mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
+		mCurrentTaxesText[1]->setText(intToString(mTaxes));
+		mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + " §");
+
 		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
 
 		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
@@ -629,9 +636,7 @@ void Capitalist::update()
 	else
 	{
 		getTaxIncome();
-		mCurrentPopulationText[1]->setText(mPopulation);
-		mCurrentTaxesText[1]->setText(mTaxes);
-		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
+
 		mTaxesIncomeWindow->setVisible(true);
 		mCapitalistMainWindow->setEnabled(false, true);
 		mTaxesIncomeWindow->setEnabled(true, true);
@@ -1195,7 +1200,7 @@ void Capitalist::initializeCapitalistWindow()
 	mExportedWithoutPriceWindow->setVisible(false);
 	
 	mImportWindow						= GUIWindow::create(CapitalistWindows["CapitalistImportWindow"], mCapitalistMainWindow);
-	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import From ' " + Menu::getInstance()->getEditField("CommunistNameField")->getText() + " '", mImportWindow);
+	mImportHeadliner					= GUIText::create(sf::FloatRect(285, 9, 0, 0), "Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText(), mImportWindow);
 	mImportHeadliner->setAlignment("middle");
 	mImportResourceLabel				= GUIText::create(sf::FloatRect(32, 52, 200, 100), "Res.", mImportWindow);
 	mImportResourceLabel->setScale(0.7, 0.7);
@@ -1410,10 +1415,10 @@ void Capitalist::initializeCapitalistWindow()
 	mCurrentTaxesText[1]->setScale(0.8, 0.8);
 	mCurrentTaxesText[1]->setAlignment("left");
 
-    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income ", mTaxesIncomeWindow);
+    mTaxesIncomeText[0]					= GUIText::create(sf::FloatRect(50, 167, 0, 0), "Tax income " , mTaxesIncomeWindow);
 	mTaxesIncomeText[0]->setScale(0.8, 0.8);
 	mTaxesIncomeText[0]->setAlignment("left");
-	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound), mTaxesIncomeWindow);
+	mTaxesIncomeText[1]					= GUIText::create(sf::FloatRect(331, 167, 0, 0), intToString(mTaxesPreviousRound*mPopulationPreviousRound) + "§", mTaxesIncomeWindow);
 	mTaxesIncomeText[1]->setScale(0.8, 0.8);
 	mTaxesIncomeText[1]->setAlignment("left");
 
@@ -1454,7 +1459,7 @@ void Capitalist::initializeCapitalistWindow()
 	
 	mWindowHeadlines[0] = GUIText::create(sf::FloatRect(285, 9, 0, 0), intToString(GameManager::getInstance()->getYear()) + " Presidential Elections ", mChoosePresidentWindow);
 	mWindowHeadlines[0]->setAlignment("middle");
-	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "President of ' " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " '", mPickedPresidentWindow);
+	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "President of " + Menu::getInstance()->getEditField("CapitalistNameField")->getText(), mPickedPresidentWindow);
 	mWindowHeadlines[1]->setAlignment("middle");
 
 	/*
@@ -2523,9 +2528,9 @@ void Capitalist::initializeGuiFunctions()
 	{ 
 		mPickedPresidentWindow->setVisible(false);
 		getTaxIncome();
-		mCurrentPopulationText[1]->setText(mPopulation);
-		mCurrentTaxesText[1]->setText(mTaxes);
-		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
+		mCurrentPopulationText[1]->setText(intToString(mPopulation) + " million");
+		mCurrentTaxesText[1]->setText(intToString(mTaxes));
+		mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound) + " §");
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
 		mCapitalistPresident->setX(mPresidentFrame->getX() + 8); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
 		mCapitalistPresident->setScale(0.55, 0.60);
@@ -2772,6 +2777,18 @@ void Capitalist::initializeGuiFunctions()
 	mCloseIncreasedResourcesWindow->setOnClickFunction([=]()
 	{
 		mIncreasedResourcesWindow->setVisible(false);
+	});
+
+	mCapitalistPresident->setMouseEnterFunction([=]()
+	{
+		std::cout << "BAJSNYLLE DET FUNKAR FAKTISKT" << std::endl;
+		mPickedPresidentWindow->setVisible(true);
+		mClosePickedPresidentWindow->setVisible(false);
+	});
+	mCapitalistPresident->setMouseLeaveFunction([=]()
+	{
+		mPickedPresidentWindow->setVisible(false);
+		mClosePickedPresidentWindow->setVisible(true);
 	});
 }
 
