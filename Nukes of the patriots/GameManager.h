@@ -7,6 +7,7 @@
 #include <sstream>
 #include "GUIWindow.h"
 #include "GUIButton.h"
+#include "GUIImage.h"
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Network.hpp>
 
@@ -144,6 +145,8 @@ private:
 
 	std::shared_ptr<SuperPower> mCurrentPlayer;
 
+	std::shared_ptr<GUIWindow> mParentWindow;
+
 	std::shared_ptr<GUIWindow> mStatsWindow[2];
 	std::shared_ptr<GUIButton> mCloseStatsWindow;
 
@@ -167,7 +170,10 @@ private:
 	std::shared_ptr<GUIButton> mOverWriteButton;
 	std::shared_ptr<GUIText>   mUnableToSaveText;
 
-	std::shared_ptr<GUIWindow>    mWinningScreen;
+	std::shared_ptr<GUIWindow>    mWinScreenWindow[2];
+	std::shared_ptr<GUIText>	  mWinningTeamName[2];
+	std::shared_ptr<GUIButton>    mWinScreenOkayButton[2];
+	std::shared_ptr<GUIImage>     mWinningTeamBanners[2];
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;

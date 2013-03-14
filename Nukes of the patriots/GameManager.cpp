@@ -420,12 +420,10 @@ void GameManager::reset()
 	AnimationHandler::getInstance()->reset();
 	getCap()->hideGUI();
 	getCom()->hideGUI();
-	mYearText->setVisible(false);
 }
 
 void GameManager::init(int year)
 {
-
 	if(!mLoaded)
 	{
 		getInstance()->setYear(year);
@@ -435,10 +433,8 @@ void GameManager::init(int year)
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
-		mYearText = GUIText::create(sf::FloatRect(512, 4, 0, 0), intToString(mYear));
-		mYearText->setScale(0.6, 0.6);
-		mYearText->setAlignment("middle");
-		mYearText->setColor(sf::Color::White);
+		mYearText->setText(intToString(mYear));
+		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
 		sf::Packet packet;
 		packet<<1;
@@ -511,6 +507,7 @@ void GameManager::init(int year)
 				break;
 			}
 		}
+		mYearText->setVisible(true);
 		mCurrentPlayer->setRound(1);
 		mCurrentPlayer->showGUI();
 	}
@@ -818,6 +815,44 @@ void GameManager::nextRound()
 	}
 	/*Ökar år med ett när rundan är slut*/
 	mYearText->setText(mYear);
+
+	if(getCapitalist()->getPatriotism() <= 0)
+	{
+		mYearText->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
+		mWinScreenWindow[1]->setVisible(true);
+		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorius!");
+	}
+	else if(getCommunist()->getPatriotism() <= 0)
+	{
+		mYearText->setVisible(false);
+		mStatsWindow[0]->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
+		mWinScreenWindow[0]->setVisible(true);
+		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorius!");
+		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
+	}
+	else if(mYear == 40 && getCommunist()->getPatriotism() < getCapitalist()->getPatriotism())
+	{
+		mYearText->setVisible(false);
+		mStatsWindow[0]->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
+		mWinScreenWindow[0]->setVisible(true);
+		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorius!");
+		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
+	}
+	else if(mYear == 40 && getCapitalist()->getPatriotism() < getCommunist()->getPatriotism())
+	{
+		mYearText->setVisible(false);
+		mStatsWindow[0]->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
+		mWinScreenWindow[1]->setVisible(true);
+		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorius!");
+		mWinningTeamBanners[1]->setTexture(BetweenTurnsButton["CommunistBanner"]);		
+	}
 }
 
  //laddar in fönster
@@ -935,7 +970,15 @@ void GameManager::initializeGuiElement()
 {
 	loadButtonPosition();
 	loadWindowPosition();
-	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"]);
+
+	mYearText = GUIText::create(sf::FloatRect(512, 4, 0, 0), intToString(mYear));
+	mYearText->setScale(0.6, 0.6);
+	mYearText->setAlignment("middle");
+	mYearText->setColor(sf::Color::White);
+	mYearText->setVisible(false);
+
+	mParentWindow						= GUIWindow::create(BetweenTurnsWindow["ParentWindow"]);
+	mFirstDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsSameSpy"], mParentWindow);
 	mCloseFirstWindow					= GUIButton::create(BetweenTurnsButton["FirstWindowOkay"], mFirstDecideWhoStartWindow);
 	mFirstCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mFirstDecideWhoStartWindow);
 	mFirstCapitalistSpyNetworkText->setScale(0.4, 0.4);
@@ -947,7 +990,7 @@ void GameManager::initializeGuiElement()
 	mCommunistHeadline[0]->setScale(0.5, 0.5);
 	mFirstDecideWhoStartWindow->setVisible(false);
 
-	mSecondDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsDiffSpy"]);
+	mSecondDecideWhoStartWindow			= GUIWindow::create(BetweenTurnsWindow["BetweenTurnsDiffSpy"], mParentWindow);
 	mCapitalistButton					= GUIButton::create(BetweenTurnsButton["Capitalist"], mSecondDecideWhoStartWindow);
 	mCommunistButton					= GUIButton::create(BetweenTurnsButton["Communist"], mSecondDecideWhoStartWindow);
 	mSecondCapitalistSpyNetworkText		= GUIText::create(sf::FloatRect(430, 390, 40, 40), "0", mSecondDecideWhoStartWindow);
@@ -960,14 +1003,14 @@ void GameManager::initializeGuiElement()
 	mCommunistHeadline[1]->setScale(0.5, 0.5);
 	mSecondDecideWhoStartWindow->setVisible(false);
 
-	mStatsWindow[0]						= GUIWindow::create(BetweenTurnsWindow["Stats"]);     //icke inzoomat, tidsbaserad inzoomning på detta sm leder till "mStatsWindow[1]"
-	mStatsWindow[1]						= GUIWindow::create(BetweenTurnsWindow["ShowStats"]); //inzoomat, visar stats
+	mStatsWindow[0]						= GUIWindow::create(BetweenTurnsWindow["Stats"], mParentWindow);     //icke inzoomat, tidsbaserad inzoomning på detta sm leder till "mStatsWindow[1]"
+	mStatsWindow[1]						= GUIWindow::create(BetweenTurnsWindow["ShowStats"], mParentWindow); //inzoomat, visar stats
 	mCloseStatsWindow					= GUIButton::create(BetweenTurnsButton["CloseStats"], mStatsWindow[1]);
 
 	mStatsWindow[0]->setVisible(false);
 	mStatsWindow[1]->setVisible(false);
 
-	mUnableToSaveWindow					 = GUIWindow::create(BetweenTurnsWindow["UnableToSave"]);
+	mUnableToSaveWindow					 = GUIWindow::create(BetweenTurnsWindow["UnableToSave"], mParentWindow);
 	mCancelSaveButton					 = GUIButton::create(BetweenTurnsButton["CancelSave"], mUnableToSaveWindow);
 	mOverWriteButton					 = GUIButton::create(BetweenTurnsButton["Overwrite"], mUnableToSaveWindow);
 	mUnableToSaveText					 = GUIText::create(sf::FloatRect(130, 100, 100, 40), "< A saved file with this name already exists >\n< Overwrite? >", mUnableToSaveWindow);
@@ -976,14 +1019,34 @@ void GameManager::initializeGuiElement()
 	mUnableToSaveWindow->setVisible(false);
 
 
-	mWinningScreen						= GUIWindow::create(BetweenTurnsWindow["WinningScreen"]);
+	mWinScreenWindow[0]						= GUIWindow::create(BetweenTurnsWindow["CapitalistWinScreen"], mParentWindow);
+	mWinScreenWindow[1]						= GUIWindow::create(BetweenTurnsWindow["CommunistWinScreen"], mParentWindow);
+	mWinningTeamName[0]						= GUIText::create(sf::FloatRect(512, 8, 0, 0), "", mWinScreenWindow[0]);
+	mWinningTeamName[1]						= GUIText::create(sf::FloatRect(512, 8, 0, 0), "", mWinScreenWindow[0]);
+	mWinningTeamName[0]	->setAlignment("middle");
+	mWinningTeamName[0]	->setColor(sf::Color::Black);
+	mWinningTeamName[0]	->setScale(2.5, 3);
+	mWinningTeamName[0]	->setWidth(700);
+	mWinningTeamName[1]	->setAlignment("middle");
+	mWinningTeamName[1]	->setColor(sf::Color::White);
+	mWinningTeamName[1]	->setScale(2.5, 3);
+	mWinningTeamName[1]	->setWidth(700);
+	mWinScreenOkayButton[0]					= GUIButton::create(BetweenTurnsButton["WinScreenOkayButton"], mWinScreenWindow[0]);
+	mWinScreenOkayButton[1]					= GUIButton::create(BetweenTurnsButton["WinScreenOkayButton"], mWinScreenWindow[1]);
+	mWinningTeamBanners[0]					= GUIImage::create(BetweenTurnsButton["CapitalistBanner"], mWinScreenWindow[0]);
+	mWinningTeamBanners[1]					= GUIImage::create(BetweenTurnsButton["CommunistBanner"], mWinScreenWindow[1]);
 
+	mWinScreenWindow[0]	->setVisible(false);
+	mWinScreenWindow[1]	->setVisible(false);
 
-	GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
-	GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
-	GUIManager::getInstance()->addGUIElement(mStatsWindow[0]);
-	GUIManager::getInstance()->addGUIElement(mStatsWindow[1]);
-	GUIManager::getInstance()->addGUIElement(mUnableToSaveWindow);
+	GUIManager::getInstance()->addGUIElement(mParentWindow);
+
+	//GUIManager::getInstance()->addGUIElement(mFirstDecideWhoStartWindow);
+	//GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
+	//GUIManager::getInstance()->addGUIElement(mStatsWindow[0]);
+	//GUIManager::getInstance()->addGUIElement(mStatsWindow[1]);
+	//GUIManager::getInstance()->addGUIElement(mUnableToSaveWindow);
+	//GUIManager::getInstance()->addGUIElement(mWinScreenWindow);
 
 }
 
@@ -1035,6 +1098,28 @@ void GameManager::initializeGuiFunctions()
 			_inGameWindow->setEnabled(true, true);
 
 		}, 2000, 1);
+	});
+
+	mWinScreenOkayButton[0]->setOnClickFunction([=]()
+	{
+		reset();
+		Menu::getInstance()->reset();
+		mWinScreenWindow[0]->setVisible(false);
+		mParentWindow->setVisible(false);
+		Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
+		GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
+		Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
+	});
+
+	mWinScreenOkayButton[1]->setOnClickFunction([=]()
+	{
+		reset();
+		Menu::getInstance()->reset();
+		mWinScreenWindow[1]->setVisible(false);
+		mParentWindow->setVisible(false);
+		Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
+		GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
+		Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
 	});
 }
 

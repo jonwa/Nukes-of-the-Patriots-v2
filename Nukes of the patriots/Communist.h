@@ -92,7 +92,7 @@ private:
 	std::vector<std::shared_ptr<GUIButton> > mResourcesFoodButtons;
 	std::vector<std::shared_ptr<GUIButton> > mResourcesGoodsButtons;
 	std::vector<std::shared_ptr<GUIButton> > mResourcesTechButtons;
-
+	
 	std::shared_ptr<Sound> mCommunistMainTheme;
 
 	void fiveYearInitialize();

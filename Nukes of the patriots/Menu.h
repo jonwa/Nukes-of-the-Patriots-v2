@@ -30,6 +30,8 @@ public:
 	void saveConfig();
 	void loadConfig();
 
+	void reset();
+
 	std::shared_ptr<GUIWindow> getWindows(std::string string);
 	std::shared_ptr<GUIEditField> getEditField(std::string string);
 

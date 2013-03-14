@@ -48,10 +48,10 @@ void SuperPower::reset()
 	mFood									= 0;
 	mExportedFood							= 0;
 	mExportedFoodPrice						= 0;
-	mTech									= 100;
+	mTech									= 0;
 	mExportedTech							= 0;
 	mExportedTechPrice						= 0;
-	mGoods									= 100;
+	mGoods									= 0;
 	mExportedGoods							= 0;
 	mExportedGoodsPrice						= 0;
 	mSpyNetwork								= 0;

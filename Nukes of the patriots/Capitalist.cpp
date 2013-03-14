@@ -257,12 +257,8 @@ void Capitalist::reset()
 	mCount = 0;
 	mIncreasePopulation = false;
 	mRound = 0;
-	
-	mTaxesWindow->setVisible(false);
-	mResourceWindow->setVisible(false);
-	mUpgradeWindow->setVisible(false);
-	mImportWindow->setVisible(false);
-	mExportWindow->setVisible(false);
+	hideGUI();
+	mTaxesIncomeWindow->setVisible(false);
 
 	mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
 	mCapitalistTaxesButton->setSize(CapitalistButtons["Taxes"].first.width, CapitalistButtons["Taxes"].first.height);
@@ -943,6 +939,8 @@ void Capitalist::initializeCapitalistWindow()
 										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mPresidentFrame						= GUIImage::create(CapitalistButtons["PresidentFrame"], mCapitalistMainWindow);
+	mCapitalistPresident->setX(mPresidentFrame->getX() + 7); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
+	mCapitalistPresident->setScale(0.90, 0.80);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
@@ -1466,10 +1464,11 @@ void Capitalist::initializeCapitalistWindow()
 
 void Capitalist::initializeCityImages()
 {
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city2")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city3")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city4")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city5")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap1")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap2")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap3")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap4")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap5")));
 	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
@@ -2038,7 +2037,11 @@ void Capitalist::initializeGuiFunctions()
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
 	{
 		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5 * mPresident->getSpacePriceModifier();
-		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier() - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
 		int amount = stringToInt(mBuySpaceProgramText->getText());
 		if(mGoods >= spaceProgramGoodsPrice && mTech >= spaceProgramTechPrice)
 		{
@@ -2052,7 +2055,11 @@ void Capitalist::initializeGuiFunctions()
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
 		int spaceProgramGoodsPrice  = 5 * mPresident->getSpacePriceModifier();
-		int spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier() - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier();
 		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
 		for(int i = 0; i < difference; ++i)
 		{
@@ -2539,23 +2546,27 @@ void Capitalist::initializeGuiFunctions()
 		int foodBought = mFood - mFoodPreviousRound;
 		int goodsBought = mGoods - mGoodsPreviousRound;
 		int techBought = mTech - mTechPreviousRound;
-		int totalBought = foodBought + goodsBought + techBought;
-		if(foodBought > goodsBought && foodBought > techBought)
+		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
+
+		int foodTotalCost = foodBought * foodCost;
+		int goodsTotalCost = goodsBought * goodsCost;
+		int techTotalCost = techBought * techCost;
+		if(foodTotalCost > goodsTotalCost && foodTotalCost > techTotalCost)
 		{
 			foodCost += 1;
-			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost) + " §");
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		else if(goodsBought > foodBought && goodsBought > techBought)
+		else if(goodsTotalCost > foodTotalCost && goodsTotalCost > techTotalCost)
 		{
 			goodsCost += 1;
-			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		else if(techBought > foodBought && techBought > goodsBought)
+		else if(techTotalCost > foodTotalCost && techTotalCost > goodsTotalCost)
 		{
 			techCost += 1;
-			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(totalBought != 0)
@@ -2564,17 +2575,17 @@ void Capitalist::initializeGuiFunctions()
 			if(rand == 0)
 			{
 				foodCost += 1;
-				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
 			}
 			else if(rand == 1)
 			{
 			goodsCost += 1;
-			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 			}
 			else
 			{
 			techCost += 1;
-			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 			}
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
@@ -2769,7 +2780,6 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistPresident->setMouseEnterFunction([=]()
 	{
-		std::cout << "BAJSNYLLE DET FUNKAR FAKTISKT" << std::endl;
 		mPickedPresidentWindow->setVisible(true);
 		mClosePickedPresidentWindow->setVisible(false);
 	});
