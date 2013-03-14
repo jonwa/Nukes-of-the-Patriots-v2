@@ -60,9 +60,6 @@ GameManager::GameManager() :
 	mRemotePort(0),
 	mPlayersTurn(0)
 {
-	mTcpServer = new sf::TcpServer(55006);
-	mTcpClient = new sf::TcpClient(55006, sf::IpAddress::getLocalAddress());
-	std::cout << sf::IpAddress::getLocalAddress().toString() << std::endl;
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	cursor.setTexture(cursorTexture);
@@ -227,32 +224,41 @@ GameManager::GameManager() :
 			>>patriotismTaxModifier2>>popEatsMore2;
 
 		std::shared_ptr<President> firstPresident = getPresidentByName(name);
-		firstPresident->setFirstPositiveStat(firstPositiveStat);
-		firstPresident->setSecondPositiveStat(secondPositiveStat);
-		firstPresident->setNegativeStat(negativeStat);
-		firstPresident->setFoodPriceModifier(foodPriceModifier);
-		firstPresident->setGoodsPriceModifier(goodsPriceModifier);
-		firstPresident->setTechPriceModifier(techPriceModifier);
-		firstPresident->setNuclearPriceModifier(nuclearPriceModifier);
-		firstPresident->setSpacePriceModifier(spacePriceModifier);
-		firstPresident->setSpyPriceModifier(spyPriceModifier);
-		firstPresident->setPatriotismTaxModifier(patriotismTaxModifier);
-		firstPresident->setPopEatsMore(popEatsMore);
+		if(firstPresident != nullptr)
+		{
+			std::cout<<"First president found!"<<std::endl;
+			firstPresident->setFirstPositiveStat(firstPositiveStat);
+			firstPresident->setSecondPositiveStat(secondPositiveStat);
+			firstPresident->setNegativeStat(negativeStat);
+			firstPresident->setFoodPriceModifier(foodPriceModifier);
+			firstPresident->setGoodsPriceModifier(goodsPriceModifier);
+			firstPresident->setTechPriceModifier(techPriceModifier);
+			firstPresident->setNuclearPriceModifier(nuclearPriceModifier);
+			firstPresident->setSpacePriceModifier(spacePriceModifier);
+			firstPresident->setSpyPriceModifier(spyPriceModifier);
+			firstPresident->setPatriotismTaxModifier(patriotismTaxModifier);
+			firstPresident->setPopEatsMore(popEatsMore);
+		}
 
 		std::shared_ptr<President> secondPresident = getPresidentByName(name2);
-		secondPresident->setFirstPositiveStat(firstPositiveStat2);
-		secondPresident->setSecondPositiveStat(secondPositiveStat2);
-		secondPresident->setNegativeStat(negativeStat2);
-		secondPresident->setFoodPriceModifier(foodPriceModifier2);
-		secondPresident->setGoodsPriceModifier(goodsPriceModifier2);
-		secondPresident->setTechPriceModifier(techPriceModifier2);
-		secondPresident->setNuclearPriceModifier(nuclearPriceModifier2);
-		secondPresident->setSpacePriceModifier(spacePriceModifier2);
-		secondPresident->setSpyPriceModifier(spyPriceModifier2);
-		secondPresident->setPatriotismTaxModifier(patriotismTaxModifier2);
-		secondPresident->setPopEatsMore(popEatsMore2);
+		if(secondPresident != nullptr)
+		{
+			std::cout<<"Second president found!"<<std::endl;
+			secondPresident->setFirstPositiveStat(firstPositiveStat2);
+			secondPresident->setSecondPositiveStat(secondPositiveStat2);
+			secondPresident->setNegativeStat(negativeStat2);
+			secondPresident->setFoodPriceModifier(foodPriceModifier2);
+			secondPresident->setGoodsPriceModifier(goodsPriceModifier2);
+			secondPresident->setTechPriceModifier(techPriceModifier2);
+			secondPresident->setNuclearPriceModifier(nuclearPriceModifier2);
+			secondPresident->setSpacePriceModifier(spacePriceModifier2);
+			secondPresident->setSpyPriceModifier(spyPriceModifier2);
+			secondPresident->setPatriotismTaxModifier(patriotismTaxModifier2);
+			secondPresident->setPopEatsMore(popEatsMore2);
+		}
 
-		getCap()->LANChooseLeader(firstPresident, secondPresident);
+		if(firstPresident != nullptr && secondPresident != nullptr)
+			getCap()->LANChooseLeader(firstPresident, secondPresident);
 	});
 
 	Event::addEventHandler("nextPlayerToChooseTeam",
@@ -278,6 +284,46 @@ GameManager::GameManager() :
 		mRemoteClient->setReady(true);
 		if(mLoaded && mRemoteClient->getSuperPower() == COMMUNIST)
 			getCap()->sendPresidentDataToOtherPlayer();
+		mRemoteClient->setReady(false);
+	});
+
+	Event::addEventHandler("syncReadyState",
+		[=](sf::Packet packet)
+	{
+		int ready = 0;
+		packet>>ready;
+		mRemoteClient->setReady(ready == 1 ? true : false);
+	});
+
+	Event::addEventHandler("syncRandomPlayerNextRound",
+		[=](sf::Packet packet)
+	{
+		int randomPlayer = 0;
+		packet>>randomPlayer;
+		if(randomPlayer == 0 && mRemoteClient->getSuperPower() == CAPITALIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == COMMUNIST)
+			setEnemyTurn();
+		else if(randomPlayer == 0 && mRemoteClient->getSuperPower() == COMMUNIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == CAPITALIST)
+			setMyTurn();
+		//If both player has same spy network, then select random as next player directly
+		std::vector<std::shared_ptr<SuperPower>> _nextPlayers = mVecPlayersLeft;
+		std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
+		mCloseStatsWindow->setOnClickFunction([=]()
+		{
+			if(_nextPlayers.size() == 1)
+			{
+				_selectStartingPlayer(_nextPlayers[randomPlayer]);
+			}
+			else
+			{
+				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+				mFirstDecideWhoStartWindow->setVisible(true);
+				mStatsWindow[1]->setVisible(false);
+				//mNextWindowToShow = mFirstDecideWhoStartWindow;
+				mFirstDecideWhoStartWindow->setEnabled(true, true);
+				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+			} 
+		});
 	});
 
 	initializeGuiElement();
@@ -457,6 +503,7 @@ void GameManager::init(int year)
 		if(getGameType() == LAN && isMyTurnToPlay())
 		{
 			int random = Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0);
+			random = 0;
 			mCurrentPlayer = mVecSuperPowers[random];
 			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 			{
@@ -775,25 +822,70 @@ void GameManager::nextRound()
 			mStatsWindow[1]->setVisible(true);
 			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
 		}, 3000, 1);
-		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-		//If both player has same spy network, then select random as next player directly
-		mCloseStatsWindow->setOnClickFunction([=]()
+		if(getGameType() == LAN && isMyTurnToPlay())
 		{
+			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
 			if(nextPlayers.size() == 1)
 			{
-				selectStartingPlayer(nextPlayers[randomPlayer]);
+				if(mRemoteClient->getSuperPower() == randomPlayer)
+					setEnemyTurn();
+				else
+					setMyTurn();
 			}
 			else
 			{
-				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-				mFirstDecideWhoStartWindow->setVisible(true);
-				mStatsWindow[1]->setVisible(false);
-				//mNextWindowToShow = mFirstDecideWhoStartWindow;
-				mFirstDecideWhoStartWindow->setEnabled(true, true);
-				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
-			} 
-		});
+				sf::Packet packet;
+				packet<<randomPlayer;
+				triggerOtherPlayersEvent("syncRandomPlayerNextRound", packet);
+				setMyTurn();
+			}
+			//If both player has same spy network, then select random as next player directly
+			mCloseStatsWindow->setOnClickFunction([=]()
+			{
+				if(nextPlayers.size() == 1)
+				{
+					selectStartingPlayer(nextPlayers[randomPlayer]);
+				}
+				else
+				{
+					sf::Packet packet;
+					packet<<1;
+					triggerOtherPlayersEvent("statsWindowReady", packet);
+					if(mRemoteClient->isReady())
+					{
+						setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+						mFirstDecideWhoStartWindow->setVisible(true);
+						mStatsWindow[1]->setVisible(false);
+						//mNextWindowToShow = mFirstDecideWhoStartWindow;
+						mFirstDecideWhoStartWindow->setEnabled(true, true);
+						mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+						mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+					}
+				} 
+			});
+		}
+		else if(getGameType() == VERSUS)
+		{
+			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
+			//If both player has same spy network, then select random as next player directly
+			mCloseStatsWindow->setOnClickFunction([=]()
+			{
+				if(nextPlayers.size() == 1)
+				{
+					selectStartingPlayer(nextPlayers[randomPlayer]);
+				}
+				else
+				{
+					setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+					mFirstDecideWhoStartWindow->setVisible(true);
+					mStatsWindow[1]->setVisible(false);
+					//mNextWindowToShow = mFirstDecideWhoStartWindow;
+					mFirstDecideWhoStartWindow->setEnabled(true, true);
+					mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+					mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+				} 
+			});
+		}
 	}
 	else
 	{
@@ -1223,6 +1315,11 @@ void GameManager::tick(sf::RenderWindow &window)
 
 	if(isMyTurnToPlay())
 		window.draw(cursor);
+
+	if(mUdpClient != nullptr)
+		mUdpClient->tick();
+	if(mUdpServer != nullptr)
+		mUdpServer->tick();
 }
 
 void GameManager::update(sf::Event &event)
@@ -1323,6 +1420,7 @@ void GameManager::setMyTurn()
 		mPlayersTurn = 1;
 
 }
+
 
 
 // Sync packet sending - wait until packet has been sent to send next packet

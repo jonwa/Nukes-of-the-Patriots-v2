@@ -31,8 +31,8 @@ GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_p
 		mSprite.setPosition(getX(), getY());
 	//setSize((pair.first.width == 0) ? pair.second->getSize().x : pair.first.width, (pair.first.height == 0) ? pair.second->getSize().y : pair.first.height);
 
-	mSuccessSound = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_normal_buttons"));
-	mFailedSound  = ResourceHandler::getInstance()->getMusic(std::string("Other/click_sound_failed"));
+	mSuccessSound = ResourceHandler::getInstance()->getMusic(std::string("Buttons/click_sound_normal_buttons"));
+	mFailedSound  = ResourceHandler::getInstance()->getMusic(std::string("Buttons/click_sound_failed"));
 	mOnClickSound = mSuccessSound;
 }
 

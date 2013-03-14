@@ -14,6 +14,7 @@ public:
 	std::string getText()const{ return mText.getString(); }
 	void		setText(std::string text);
 	void		setText(int value);
+	void		setText(wchar_t* text);
 	void		setScale(float width, float height);
 	void		setAlignment(std::string alignment);
 	bool		render(sf::RenderWindow *window, sf::RenderStates &states);

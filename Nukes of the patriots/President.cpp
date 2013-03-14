@@ -2,12 +2,17 @@
 #include "ResourceHandler.h"
 #include <iostream>
 #include "tinyxml2.h"
+#include <sstream>
+#include "Timer.h"
 
 static std::string histories[] = {
 	""
 };
 
 static std::map<std::string, std::string> biographyMap;
+static std::map<std::string, std::pair<int, int>> animationMap;
+static std::map<std::string, std::vector<sf::Texture*>> textures;
+static Timer* resetTimer;
 
 void initBiographyMap()
 {
@@ -22,20 +27,47 @@ void initBiographyMap()
 	while(president != NULL)
 	{
 		std::string name = president->Attribute("name");
+		const char* _frames = president->Attribute("frames");
+		const char* _timeout = president->Attribute("timeout");
+		const char* _directory = president->Attribute("directory");
+		int frames = 0;
+		int timeout = 0;
+		if(_frames != NULL)
+			frames = std::atoi(_frames);
+		if(_timeout != NULL)
+			timeout = std::atoi(_timeout);
 		std::string text = president->GetText();
+		animationMap.insert(std::pair<std::string, std::pair<int, int>>(name, std::pair<int, int>(frames, timeout)));
 		biographyMap.insert(std::pair<std::string, std::string>(name, text));
+		if(_frames != NULL && _timeout != NULL && _directory != NULL)
+		{
+			textures[name] = std::vector<sf::Texture*>();
+			for(int i = 0; i < frames; i++)
+			{
+				std::stringstream str;
+				str<<_directory<<name<<"-animation"<<1+i;
+				textures[name].push_back(&ResourceHandler::getInstance()->getTexture(str.str()));
+			}
+		}
 		president = president->NextSiblingElement("President");
 	}
+
 }
 
 President::President(std::string &filename, std::string &name):
 	mName(name),
-	mYearsElected(0)
+	mYearsElected(0),
+	mCurrentFrame(0),
+	mFrames(0),
+	mTimeOut(0)
 {
 	if(biographyMap.empty())
 		initBiographyMap();
-
+	
+	mFrames		= animationMap[name].first;
+	mTimeOut	= animationMap[name].second;
 	initializeImages(filename);
+
 	randomStatFunc();
 }
 
@@ -260,6 +292,31 @@ void President::playSlogan()
 {
 	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
 	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(20);
+}
+
+void President::presidentAnimation()
+{
+	float progress = mAnimationClock.getElapsedTime().asMilliseconds()/mTimeOut;
+	progress = std::min<float>(progress, 1.0f);
+	int frame = progress * (mFrames-1);
+	mCurrentFrame = frame;
+	std::cout <<"current frame: " << mCurrentFrame << std::endl;
+}
+
+void President::resetAnimation()
+{
+	/*if(resetTimer != nullptr)
+		resetTimer->killTimer();
+	resetTimer = Timer::setTimer([=]()
+	{
+		mCurrentFrame = 0;
+	}, mTimeOut, 1);
+	mAnimationClock.restart();*/
+}
+
+sf::Texture* President::getCurrentAnimationFrame()const
+{
+	return textures[mName][mCurrentFrame];
 }
 
 sf::Texture* President::getTexture()

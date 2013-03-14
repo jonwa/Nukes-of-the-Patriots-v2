@@ -667,10 +667,16 @@ void Menu::initializeGuiFuctions()
 	{
 		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 		{
-			sf::Packet packet;
-			packet<<PoliticalType::CAPITALIST;
-			GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
-			GameManager::getInstance()->nextPlayersTurn();
+			//sf::Packet packet;
+			//packet<<PoliticalType::CAPITALIST;
+			//GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
+			//GameManager::getInstance()->nextPlayersTurn();
+			GameManager::getInstance()->setEnemyTurn();
+		}
+		else
+		{
+			GameManager::getInstance()->getRemoteClient()->setSuperPower(PoliticalType::CAPITALIST);
+			GameManager::getInstance()->setMyTurn();
 		}
 		mCapitalistTeamChosen = true;
 		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
@@ -724,10 +730,16 @@ void Menu::initializeGuiFuctions()
 	{
 		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 		{
-			sf::Packet packet;
-			packet<<PoliticalType::COMMUNIST;
-			GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
-			GameManager::getInstance()->nextPlayersTurn();
+			//sf::Packet packet;
+			//packet<<PoliticalType::COMMUNIST;
+			//GameManager::getInstance()->triggerOtherPlayersEvent("nextPlayerToChooseTeam", packet);
+			//GameManager::getInstance()->nextPlayersTurn();
+			GameManager::getInstance()->setEnemyTurn();
+		}
+		else
+		{
+			GameManager::getInstance()->getRemoteClient()->setSuperPower(PoliticalType::COMMUNIST);
+			GameManager::getInstance()->setMyTurn();
 		}
 		mCommunistTeamChosen = true;
 		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
