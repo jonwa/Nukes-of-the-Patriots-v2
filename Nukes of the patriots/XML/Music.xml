@@ -8,21 +8,35 @@
 <tracks directory ="Communist">
 	<music filename="Kommunist.ogg"/>
 </tracks>
-<tracks directory ="Other">
+<tracks directory ="Buttons">
 	<music filename="click_sound_normal_buttons.wav"/>
 	<music filename="click_sound_failed.wav"/>
+	<music filename="Factory.wav"/>
+	<music filename="Goods.wav"/>
+	<music filename="Nuke.wav"/>
+	<music filename="Space.wav"/>
+	<music filename="Tech.wav"/>
+</tracks>
+<tracks directory ="Other">
+	<music filename="Eating level 3.wav"/>
 </tracks>
 <tracks directory="Slogans">
 	<music filename="Alva.wav"/>
 	<music filename="Blingfaster.wav"/>
 	<music filename="Bob.wav"/>
 	<music filename="Boris.wav"/>
+	<music filename="Dhelma.wav"/>
+	<music filename="Flaire.wav"/>
 	<music filename="Frank.wav"/>
+	<music filename="Frankie.wav"/>
+	<music filename="Gramma.wav"/>
 	<music filename="Gustav.wav"/>
+	<music filename="Hans.wav"/>
 	<music filename="Henrich.wav"/>
 	<music filename="Hugo.wav"/>
 	<music filename="Nojiko.wav"/>
 	<music filename="no-nose.wav"/>
+	<music filename="Olga.wav"/>
 	<music filename="Sam.wav"/>
 	<music filename="SiB.wav"/>
 	<music filename="Stieg.wav"/>

@@ -82,7 +82,7 @@
 		can't remove his mask. Don't worry though; we have a team of 
 		interpreters working around the	clock with him.
 	</President>
-	<President name="Sture">
+	<President name="Sture" frames="4" timeout="10000" directory="Sture/">
 		When Mr. Mash says jump, you don't ask why. You ask how high.
 	</President>
 	<President name="Will">

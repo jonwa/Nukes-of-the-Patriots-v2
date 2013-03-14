@@ -299,3 +299,9 @@
 	<image filename="president-Olga-plaque.png"/>
 	<image filename="president-SiB-plaque.png"/>
 </images>
+<images directory="Sture">
+	<image filename="Sture-animation1.png"/>
+	<image filename="Sture-animation2.png"/>
+	<image filename="Sture-animation3.png"/>
+	<image filename="Sture-animation4.png"/>
+</images>

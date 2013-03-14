@@ -283,6 +283,14 @@ void Capitalist::reset()
 
 void Capitalist::updateGUI()
 {
+	//while(true)
+	//{
+		//if(mCapitalistPresident != nullptr && mPresident != NULL)
+		//{
+			//mPresident->presidentAnimation();
+			//mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getCurrentAnimationFrame()));
+			//mCapitalistPresident->setScale(0.55, 0.60);
+		//}
 	Timer::setTimer([=]()
 	{
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
@@ -339,6 +347,7 @@ void Capitalist::updateGUI()
 		mResourceGoodsPriceText->setText("Price: " + intToString(goodsCost) + " §");
 		mResourceTechPriceText->setText("Price: " + intToString(techCost) + " §");
 	}, 50, 0);
+	//}
 }
 
 
@@ -1531,7 +1540,7 @@ void Capitalist::chooseLeader()
 			else
 				mFirstPresident = GameManager::getInstance()->getRandomPresident();
 		}
-		mSecondPresident = GameManager::getInstance()->getRandomPresident();
+		mSecondPresident = GameManager::getInstance()->getPresidentByName("Sture");
 
 		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>
@@ -2390,7 +2399,10 @@ void Capitalist::initializeGuiFunctions()
 		int food = stringToInt(mFoodCost->getText());
 		int goods = stringToInt(mGoodsCost->getText());
 		int tech = stringToInt(mTechCost->getText());
-		int totalCost = (food + goods + tech);
+		int foodBought = stringToInt(mBuyFoodText->getText()) + mFood;
+		int goodsBought = stringToInt(mBuyGoodsText->getText()) + mGoods;
+		int techBought  = stringToInt(mBuyTechText->getText()) + mTech;
+		int totalCost  = (food + goods + tech);
 		if(mCurrency >= totalCost)
 		{
 			mCapitalistMainWindow->setEnabled(true, true);
@@ -2400,12 +2412,9 @@ void Capitalist::initializeGuiFunctions()
 			setFood(stringToInt(mBuyFoodText->getText()));
 			setGoods(stringToInt(mBuyGoodsText->getText()));
 			setTech(stringToInt(mBuyTechText->getText()));
+			
 			resetResourcesValues();
-		}
-		else
-		{
-			//Spela FAILSOUND!
-		}		
+		}	
 	});
 
 	/*Stänger ner upgrade fönstret "Okay-knappen"*/
@@ -2520,6 +2529,7 @@ void Capitalist::initializeGuiFunctions()
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
 		mCapitalistPresident->setX(mPresidentFrame->getX() + 8); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
 		mCapitalistPresident->setScale(0.55, 0.60);
+		mPresident->resetAnimation();
 		mTaxesIncomeWindow->setVisible(true);
 		mTaxesIncomeWindow->setEnabled(true, true);
 
@@ -2545,12 +2555,14 @@ void Capitalist::initializeGuiFunctions()
 		{
 			goodsCost += 1;
 			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Goods"))->play();
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(techBought > foodBought && techBought > goodsBought)
 		{
 			techCost += 1;
 			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Tech"))->play();
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(totalBought != 0)

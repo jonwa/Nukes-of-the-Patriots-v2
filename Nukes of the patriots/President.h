@@ -5,6 +5,7 @@
 #include <map>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 
 // President-klass av Joakim Stark
 //randomStatFunc har en vektor med random stats, den slumpar fram 3 stats som sedan får värden mappade till sig.
@@ -46,6 +47,9 @@ public:
 	int getYearsElected() { return mYearsElected; }
 	void setYearsElected(int years) { mYearsElected = years; }
 	void playSlogan();
+	void presidentAnimation();
+	void resetAnimation();
+	sf::Texture* getCurrentAnimationFrame()const;
 
 	void setFirstPositiveStat(std::string stat);
 	void setSecondPositiveStat(std::string stat);
@@ -59,12 +63,13 @@ private:
 	std::string mName;
 	void randomStatFunc();
 	int mYearsElected;
+	int mCurrentFrame, mFrames, mTimeOut;
 	sf::Sprite mPortrait;
 	sf::Texture* mClickedPortraitTexture;
 	sf::Texture* mTexture;
+	sf::Clock	 mAnimationClock;
 	std::map <std::string, float> mValues;
 	std::vector<std::string> mPositiveStats;
 	std::vector<std::string> mNegativeStats;
 	std::vector<std::string> randomStats;
-	
 };

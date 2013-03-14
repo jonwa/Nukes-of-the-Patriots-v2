@@ -60,6 +60,7 @@ GameManager::GameManager() :
 	mRemotePort(0),
 	mPlayersTurn(0)
 {
+	//mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.10.178.18"));
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	cursor.setTexture(cursorTexture);
