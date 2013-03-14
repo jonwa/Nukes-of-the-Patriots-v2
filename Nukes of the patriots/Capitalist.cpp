@@ -1545,7 +1545,7 @@ void Capitalist::chooseLeader()
 			else
 				mFirstPresident = GameManager::getInstance()->getRandomPresident();
 		}
-		mSecondPresident = GameManager::getInstance()->getPresidentByName("Sture");
+		mSecondPresident = GameManager::getInstance()->getRandomPresident();
 
 		mFirstPresidentButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mFirstPresidentButton->getRectangle(), mFirstPresident->getTexture()));
 		mFirstPresidentPlaque->setTexture(std::pair<sf::FloatRect, sf::Texture*>

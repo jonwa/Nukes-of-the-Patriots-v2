@@ -35,6 +35,14 @@ void GUIText::setText(std::string text)
 	setHeight(boundBox.height);
 }
 
+void GUIText::setText(wchar_t* text)
+{
+	mText.setString(text);
+	sf::FloatRect boundBox = mText.getLocalBounds();
+	setWidth(boundBox.width);
+	setHeight(boundBox.height);
+}
+
 std::string GUIText::intToString(int i)
 {
 	std::stringstream converter;

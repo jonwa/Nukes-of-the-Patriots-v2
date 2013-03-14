@@ -76,9 +76,7 @@ void GUIEditField::setCaretVisible(bool visible)
 
 void GUIEditField::setText(std::string text)
 {
-	std::cout<<"text before: "<<text<<std::endl;
 	mText.setString(sf::String(text.c_str()));
-	std::cout<<"text after: "<<getText()<<std::endl;
 	//sf::FloatRect boundBox = mText.getGlobalBounds();
 	//setWidth(static_cast<int>(boundBox.width));
 	//setHeight(static_cast<int>(boundBox.height));
