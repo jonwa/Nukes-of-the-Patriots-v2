@@ -2598,6 +2598,7 @@ void Capitalist::initializeGuiFunctions()
 		mExportedGoodsPreviousRound = mExportedGoods;
 		mExportedTechPreviousRound = mExportedTech;
 		int foodBought = mFood - mFoodPreviousRound;
+		
 		int goodsBought = mGoods - mGoodsPreviousRound;
 		int techBought = mTech - mTechPreviousRound;
 		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
@@ -2633,6 +2634,7 @@ void Capitalist::initializeGuiFunctions()
 		}
 		else if(totalBought != 0)
 		{
+			std::vector<int> resources;
 			int rand = Randomizer::getInstance()->randomNr(3, 0);
 			if(rand == 0)
 			{

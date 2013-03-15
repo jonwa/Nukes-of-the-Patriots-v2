@@ -26,7 +26,7 @@ Menu::Menu() :
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
-	mChooseTeamAnimation.openFromFile("mainmenu_sign.wmv");
+	//mChooseTeamAnimation.openFromFile("mainmenu_sign.wmv");
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
 	//playVideo();
 }
@@ -557,8 +557,8 @@ void Menu::tick()
 		mWindow->draw(sprite);
 	}
 
-	if(mChooseTeamAnimation.getStatus() == sfe::Movie::Playing)
-		mWindow->draw(mChooseTeamAnimation);
+	//if(mChooseTeamAnimation.getStatus() == sfe::Movie::Playing)
+		//mWindow->draw(mChooseTeamAnimation);
 	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
 		//mWindow->draw(mIntroMovie);
 
@@ -566,15 +566,15 @@ void Menu::tick()
 
 void Menu::startGame()
 {
-	mChooseTeamAnimation.play();
+	//mChooseTeamAnimation.play();
 	mLanPlayWindow->setVisible(false);
 	mMainMenuWindow->setVisible(false);
 	mChooseTeamWindow->setVisible(true);
-	Timer::setTimer([=]()
+	/*Timer::setTimer([=]()
 	{
 		mChooseTeamAnimation.stop();
 		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
-	}, 4000, 1);
+	}, 4000, 1);*/
 }
 
 void Menu::initializeGuiFuctions()

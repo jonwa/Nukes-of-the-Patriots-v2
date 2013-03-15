@@ -17,7 +17,7 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML\Audio\Music.hpp>
-#include <sfeMovie\Movie.hpp>
+//#include <sfeMovie\Movie.hpp>
 
 class Capitalist;
 class Communist;
@@ -65,7 +65,7 @@ public:
 private:
 	static Menu* mInstance;
 	//sfe::Movie mIntroMovie;
-	sfe::Movie mChooseTeamAnimation;
+	//sfe::Movie mChooseTeamAnimation;
 	bool fullscreen;
 	std::shared_ptr<Sound> mMenuMusic;
 	Menu();
