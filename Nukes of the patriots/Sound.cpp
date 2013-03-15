@@ -12,15 +12,20 @@ std::shared_ptr<Sound> Sound::create(std::shared_ptr<sf::Music> music)
 Sound::Sound(std::shared_ptr<sf::Music> music) :
 	mMusic(music),
 	mTimer(nullptr),
-	mTime(0), 
-	mStartVolume(mMusic->getVolume()),
-	mEndVolume(mMusic->getVolume())
-{	
+	mTime(0),
+	mStartVolume(100),
+	mEndVolume(100)
+{
+	if(mMusic != nullptr)
+	{
+		mStartVolume = mMusic->getVolume();
+		mEndVolume = mMusic->getVolume();
+	}
 }
 
 Sound::~Sound(){}
 
-void Sound::fadeToVolume(std::shared_ptr<sf::Music> music, int time, int startVolume, int endVolume)
+void Sound::fadeToVolume(int time, int startVolume, int endVolume)
 {
 	if(mTimer != nullptr)
 		mTimer->killTimer();
@@ -31,17 +36,20 @@ void Sound::fadeToVolume(std::shared_ptr<sf::Music> music, int time, int startVo
 
 void Sound::tick()
 {
-	float timeleft = 0;
-	float duration = 1;
-	if(Timer::isTimer(mTimer))
+	if(mMusic != nullptr)
 	{
-		timeleft = mTimer->getTimeLeft();
-		duration = mTimer->getTimerDuration();
+		float timeleft = 0;
+		float duration = 1;
+		if(Timer::isTimer(mTimer))
+		{
+			timeleft = mTimer->getTimeLeft();
+			duration = mTimer->getTimerDuration();
+		}
+		float progress = 1 - (timeleft/duration);
+		int volumeDiff = mEndVolume - mStartVolume;
+		//std::cout<<"progress: "<<progress<<" volume: "<<volumeDiff*progress<<std::endl;
+		mMusic->setVolume(mStartVolume + volumeDiff*progress);
 	}
-	float progress = 1 - (timeleft/duration);
-	int volumeDiff = mEndVolume - mStartVolume;
-	//std::cout<<"progress: "<<progress<<" volume: "<<volumeDiff*progress<<std::endl;
-	mMusic->setVolume(mStartVolume + volumeDiff*progress);
 }
 
 
@@ -66,6 +74,22 @@ void Sound::setVolume(int volume)
 	mMusic->setVolume(volume);
 	mStartVolume = volume;
 	mEndVolume = volume;
+}
+
+void Sound::setSound(std::shared_ptr<sf::Music> sound)
+{
+	mMusic = sound;
+	mMusic->setVolume(sound->getVolume());
+}
+
+int Sound::getVolume()
+{
+	return mMusic->getVolume();
+}
+
+std::shared_ptr<sf::Music> Sound::getSound()
+{
+	return mMusic;
 }
 
 

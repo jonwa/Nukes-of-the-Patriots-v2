@@ -306,24 +306,24 @@ GameManager::GameManager() :
 			setMyTurn();
 		//If both player has same spy network, then select random as next player directly
 		std::vector<std::shared_ptr<SuperPower>> _nextPlayers = mVecPlayersLeft;
-		std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
-		mCloseStatsWindow->setOnClickFunction([=]()
-		{
-			if(_nextPlayers.size() == 1)
-			{
-				_selectStartingPlayer(_nextPlayers[randomPlayer]);
-			}
-			else
-			{
-				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-				mFirstDecideWhoStartWindow->setVisible(true);
-				mStatsWindow[1]->setVisible(false);
-				//mNextWindowToShow = mFirstDecideWhoStartWindow;
-				mFirstDecideWhoStartWindow->setEnabled(true, true);
-				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
-			} 
-		});
+		//std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
+		//mCloseStatsWindow->setOnClickFunction([=]()
+		//{
+		//	if(_nextPlayers.size() == 1)
+		//	{
+		//		_selectStartingPlayer(_nextPlayers[randomPlayer]);
+		//	}
+		//	else
+		//	{
+		//		setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+		//		mFirstDecideWhoStartWindow->setVisible(true);
+		//		mStatsWindow[1]->setVisible(false);
+		//		//mNextWindowToShow = mFirstDecideWhoStartWindow;
+		//		mFirstDecideWhoStartWindow->setEnabled(true, true);
+		//		mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+		//		mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+		//	} 
+		//});
 	});
 
 	initializeGuiElement();

@@ -4,8 +4,10 @@
 #include <memory>
 #include <sstream>
 #include "tinyxml2.h"
+#include <SFML\Audio\Music.hpp>
 
 class GUIText;
+class Sound;
 
 enum PoliticalType
 {
@@ -71,11 +73,13 @@ public:
 
 	bool		enableToIncreasePopulation();
 	void		increasePopulation();
-	
+
+	std::shared_ptr<sf::Music> getSoundEffect(std::string path);
+	void		playSoundEffect(std::string path);
 	virtual void		stopMusic(){};
 	virtual void		playMusic(){};
 	virtual void		pauseMusic(){};
-
+	
 	virtual bool		upgradeNuclearWeapon(int value) = 0;
 	virtual bool		upgradeSpaceProgram(int value) = 0;
 	virtual bool		upgradeSpyNetwork(int value) = 0;
@@ -106,6 +110,9 @@ protected:
 			return 0;
 		return atoi(str.c_str());
 	}
+
+	std::shared_ptr<Sound> mPopulationEatsSound;
+	std::shared_ptr<Sound> mUpgradeSound;
 
 	PoliticalType mType;
 
