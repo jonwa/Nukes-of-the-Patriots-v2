@@ -745,8 +745,10 @@ void Communist::update()
 	if((mRound-1) % 5 == 0 && mRound != 1)	
 		openFiveYearPlan();
 	else
+	{
 		if(mRound != 1)
 			resourceIncome();
+	}
 
 	mTaxesPatriotismChange->setText("Patriotism: 0");
 

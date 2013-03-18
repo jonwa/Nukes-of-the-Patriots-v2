@@ -5,7 +5,7 @@
 sf::TcpClient::TcpClient(unsigned short serverPort, sf::IpAddress serverAddress):
 	mTcpSocket(),mTcpThread(nullptr),mTcpConnect(nullptr),mServerPort(serverPort),mServerAddress(serverAddress)
 {
-	mTcpSocket.setBlocking(false);
+	mTcpSocket.setBlocking(true);
 	mTcpConnect = new sf::Thread(&TcpClient::connect, this);
 	//mTcpThread = new sf::Thread(&TcpClient::tick, this);
 	mTcpConnect->launch();
@@ -17,11 +17,12 @@ void sf::TcpClient::connect()
 	bool connected = false;
 	while(!connected)
 	{
+		mTcpSocket.setBlocking(true);
 		sf::Socket::Status status = mTcpSocket.connect(mServerAddress, mServerPort);
-		sf::Packet packet;
 		if(status == sf::Socket::Done)
 		{
 			connected = true;
+			sf::Packet packet;
 			packet<<mServerAddress.toString()<<mServerPort;
 			Event::triggerEvent("onClientPlayerConnected", packet);
 			//std::cout<<"You connected to the server!"<<std::endl;
@@ -34,6 +35,7 @@ void sf::TcpClient::tick()
 	//while(true)
 	//{
 		sf::Packet packet;
+		mTcpSocket.setBlocking(false);
 		sf::Socket::Status status = mTcpSocket.receive(packet);
 		if(status == sf::Socket::Done)
 		{
@@ -48,6 +50,10 @@ void sf::TcpClient::tick()
 			std::size_t size = packet.getDataSize() - charlen - sizeof(int);
 			_packet.append(data, size);
 			Event::triggerEvent(eventName, _packet);
+		}
+		else if(status == sf::Socket::Disconnected)
+		{
+			std::cout<<"server died!"<<std::endl;
 		}
 	//}
 }

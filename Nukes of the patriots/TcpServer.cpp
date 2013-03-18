@@ -37,7 +37,7 @@ void sf::TcpServer::tick()
 			else
 			{
 				// listener is not ready, test the other clients
-				for(std::vector<sf::TcpSocket*>::iterator it = mClients.begin(); it != mClients.end(); ++it)
+				for(std::vector<sf::TcpSocket*>::iterator it = mClients.begin(); it != mClients.end();)
 				{
 					sf::TcpSocket& client = **it;
 					if(mSocketSelector.isReady(client))
@@ -58,6 +58,7 @@ void sf::TcpServer::tick()
 							std::size_t size = packet.getDataSize() - charlen - sizeof(int);
 							_packet.append(data, size);
 							Event::triggerEvent(eventName, _packet);
+							it++;
 						}
 						else if(status == sf::Socket::Disconnected)
 						{
@@ -65,7 +66,10 @@ void sf::TcpServer::tick()
 							_packet<<client.getRemoteAddress().toString()<<client.getRemotePort();
 							Event::triggerEvent("onPlayerDisconnected", _packet);
 							std::cout<<" has disconnected!"<<std::endl;
+							it = mClients.erase(it);
 						}
+						else
+							it++;
 					}
 				}
 			}

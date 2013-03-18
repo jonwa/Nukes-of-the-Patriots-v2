@@ -58,32 +58,48 @@ GameManager::GameManager() :
 	mRemoteClient(std::make_shared<RemoteClient>()),
 	mRemoteIpAddress(""),
 	mRemotePort(0),
-	mPlayersTurn(0)
+	mPlayersTurn(0),
+	mReady(false)
 {
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	cursor.setTexture(cursorTexture);
 
-	mTcpServer = new sf::TcpServer(55006);
-	mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.10.177.137"));
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
 
 	Event::addEventHandler("onPlayerConnected",
-		[=](sf::Packet)
+		[=](sf::Packet packet)
 	{
-		std::cout<<"Player connected to my server!"<<std::endl;
+		mServerState = ServerState::FULL;
+		char ipAddress[1024];
+		unsigned short port;
+		packet>>ipAddress>>port;
+		std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
+		mRemoteIpAddress = ipAddress;
+		mRemotePort = 55001;
+		mPlayersTurn = 0;
+		mGameType = GameType::LAN;
+		Menu::getInstance()->startGame();
 	});
 
 	Event::addEventHandler("onPlayerDisconnected",
-		[=](sf::Packet)
+		[=](sf::Packet packet)
 	{
 		std::cout<<"Player disconnected from my server!"<<std::endl;
 	});
 
 	Event::addEventHandler("onClientPlayerConnected",
-		[=](sf::Packet)
+		[=](sf::Packet packet)
 	{
-		std::cout<<"You connected to a server!"<<std::endl;
+		char ipAddress[1024];
+		unsigned short port;
+		packet>>ipAddress>>port;
+		std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
+		mRemoteIpAddress = ipAddress;
+		mRemotePort = 55005;
+		mPlayersTurn = 0;
+		mGameType = GameType::LAN;
+		Menu::getInstance()->startGame();
 	});
 	
 	mConnectToServerEvent = Event::addEventHandler("hereIam", 
@@ -208,7 +224,7 @@ GameManager::GameManager() :
 				break;
 			}
 		}
-		mLoaded = true;
+		mReady = true;
 		mCurrentPlayer->setRound(1);
 		mCurrentPlayer->showGUI();
 		if(mRemoteClient->getSuperPower() == random)
@@ -305,7 +321,7 @@ GameManager::GameManager() :
 		[=](sf::Packet packet)
 	{
 		mRemoteClient->setReady(true);
-		if(mLoaded && mRemoteClient->getSuperPower() == COMMUNIST)
+		if(mReady && mRemoteClient->getSuperPower() == COMMUNIST)
 			getCap()->sendPresidentDataToOtherPlayer();
 		mRemoteClient->setReady(false);
 	});
@@ -347,6 +363,20 @@ GameManager::GameManager() :
 		//		mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
 		//	} 
 		//});
+	});
+
+	Event::addEventHandler("statsWindowReady",
+		[=](sf::Packet packet)
+	{
+		mRemoteClient->setReady(true);
+	});
+
+	Event::addEventHandler("syncRandomStartingPlayer", 
+		[=](sf::Packet packet)
+	{
+		int player = 0;
+		packet>>player;
+		setRandomPlayer(mVecSuperPowers[player]);
 	});
 
 	initializeGuiElement();
@@ -505,13 +535,17 @@ void GameManager::init(int year)
 		mYearText->setText(intToString(mYear));
 		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
-		sf::Packet packet;
-		packet<<1;
-		triggerOtherPlayersEvent("loadingCompleted", packet);
-		if(mRemoteClient->isReady() && mRemoteClient->getSuperPower() == COMMUNIST)
+		mReady = true;
+		if(getGameType() == LAN)
 		{
-			getCap()->sendPresidentDataToOtherPlayer();
-			mRemoteClient->setReady(false);
+			sf::Packet packet;
+			packet<<1;
+			triggerOtherPlayersEvent("loadingCompleted", packet);
+			if(mRemoteClient->isReady() && mRemoteClient->getSuperPower() == COMMUNIST)
+			{
+				getCap()->sendPresidentDataToOtherPlayer();
+				mRemoteClient->setReady(false);
+			}
 		}
 
 
@@ -530,7 +564,6 @@ void GameManager::init(int year)
 		if(getGameType() == LAN && isMyTurnToPlay())
 		{
 			int random = Randomizer::getInstance()->randomNr(mVecSuperPowers.size(), 0);
-			random = 0;
 			mCurrentPlayer = mVecSuperPowers[random];
 			for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecPlayersLeft.begin(); it != mVecPlayersLeft.end(); it++)
 			{
@@ -787,6 +820,17 @@ void GameManager::updateStatsWindow()
 	
 }
 
+void GameManager::setRandomPlayer(std::shared_ptr<SuperPower> player)
+{
+	setCurrentPlayer(player); // Need to set setCurrentPlayer to update player round
+	mFirstDecideWhoStartWindow->setVisible(true);
+	mStatsWindow[1]->setVisible(false);
+	//mNextWindowToShow = mFirstDecideWhoStartWindow;
+	mFirstDecideWhoStartWindow->setEnabled(true, true);
+	mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+	mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+}
+
 void GameManager::nextRound()
 {
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
@@ -849,46 +893,44 @@ void GameManager::nextRound()
 			mStatsWindow[1]->setVisible(true);
 			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
 		}, 3000, 1);
-		if(getGameType() == LAN && isMyTurnToPlay())
+		if(getGameType() == LAN)
 		{
 			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
 			if(nextPlayers.size() == 1)
 			{
-				if(mRemoteClient->getSuperPower() == randomPlayer)
+				if(nextPlayers[randomPlayer]->getType() == mRemoteClient->getSuperPower())
 					setEnemyTurn();
 				else
 					setMyTurn();
-			}
-			else
-			{
-				sf::Packet packet;
-				packet<<randomPlayer;
-				triggerOtherPlayersEvent("syncRandomPlayerNextRound", packet);
-				setMyTurn();
 			}
 			//If both player has same spy network, then select random as next player directly
 			mCloseStatsWindow->setOnClickFunction([=]()
 			{
 				if(nextPlayers.size() == 1)
 				{
-					selectStartingPlayer(nextPlayers[randomPlayer]);
+					selectStartingPlayer();
 				}
 				else
 				{
 					sf::Packet packet;
 					packet<<1;
+					mReady = true;
 					triggerOtherPlayersEvent("statsWindowReady", packet);
 					if(mRemoteClient->isReady())
 					{
-						setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-						mFirstDecideWhoStartWindow->setVisible(true);
-						mStatsWindow[1]->setVisible(false);
-						//mNextWindowToShow = mFirstDecideWhoStartWindow;
-						mFirstDecideWhoStartWindow->setEnabled(true, true);
-						mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-						mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+						if(mRole == SERVER)
+						{
+							setRandomPlayer(nextPlayers[randomPlayer]);
+							sf::Packet _packet;
+							_packet<<(nextPlayers[randomPlayer]->getType() == CAPITALIST ? 0 : 1);
+							triggerOtherPlayersEvent("syncRandomStartingPlayer", _packet);
+						}
 					}
-				} 
+				}
+				if(isMyTurnToPlay())
+					setEnemyTurn();
+				else
+					setMyTurn();
 			});
 		}
 		else if(getGameType() == VERSUS)
@@ -928,9 +970,32 @@ void GameManager::nextRound()
 			if((*it)->getSpyNetwork() == max)
 				nextPlayers.push_back((*it));
 		}
-		int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-		setCurrentPlayer(nextPlayers[randomPlayer]);
-		startRound();
+		if(getGameType() == LAN)
+		{
+			if(mCurrentPlayer == getCapitalist())
+			{
+				if(mRemoteClient->getSuperPower() == CAPITALIST)
+					setMyTurn();
+				else
+					setEnemyTurn();
+				setCurrentPlayer(getCommunist());
+			}
+			else
+			{
+				if(mRemoteClient->getSuperPower() == COMMUNIST)
+					setMyTurn();
+				else
+					setEnemyTurn();
+				setCurrentPlayer(getCapitalist());
+			}
+			startRound();
+		}
+		else if(getGameType() == VERSUS)
+		{
+			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
+			setCurrentPlayer(nextPlayers[randomPlayer]);
+			startRound();
+		}
 	}
 	/*Ökar år med ett när rundan är slut*/
 	mYearText->setText(mYear);
@@ -1303,10 +1368,10 @@ void GameManager::createServer()
 			packet>>ipAddress>>port;
 			std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 			sf::Packet _packet;
-			_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
+			_packet<<sf::IpAddress::getLocalAddress().toString()<<mTcpServer->getPort();
 			mRemoteIpAddress = ipAddress;
 			mRemotePort = port;
-			mUdpServer->triggerClientEvent("onClientConnected", _packet, sf::IpAddress(ipAddress), port);
+			mTcpServer->triggerClientEvent("onClientConnected", _packet, sf::IpAddress(ipAddress), port);
 			mPlayersTurn = 0;
 			mGameType = GameType::LAN;
 			Menu::getInstance()->startGame();
@@ -1316,8 +1381,8 @@ void GameManager::createServer()
 
 void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 {
-	/*
 	mUdpClient->setReceivingAddress(ipAdress);
+	/*
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
 	mUdpClient->triggerServerEvent("connectToServer", packet);
@@ -1329,7 +1394,7 @@ void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 void GameManager::tick(sf::RenderWindow &window)
 {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-	if(mGameType == GameType::LAN)
+	if(mGameType == GameType::LAN && mUdpClient != nullptr)
 	{
 		sf::Packet packet;
 		packet<<mousePos.x<<mousePos.y;

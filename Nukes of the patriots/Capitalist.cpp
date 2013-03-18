@@ -565,61 +565,73 @@ void Capitalist::update()
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText());
 	
 	//std::cout<<"capitalist mRound: "<<mRound<<std::endl;
-	if(mRound > 0)
+	if(mRound > 1)
 	{
+		if((mRound-1) % 4 == 0 ) 
+		{
+			chooseLeader();
+		}
+		else
+		{
+			getTaxIncome();
 
-		mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
+			mTaxesIncomeWindow->setVisible(true);
+			mCapitalistMainWindow->setEnabled(false, true);
+			mTaxesIncomeWindow->setEnabled(true, true);
+		}
+	}
+
+	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
 		
-		mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
-		mCurrentTaxesText[1]->setText(intToString(mTaxes));
-		mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + " §");
+	mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
+	mCurrentTaxesText[1]->setText(intToString(mTaxes));
+	mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + " §");
 
-		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
+	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
 
-		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
-		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
-		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+	mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+	mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+	mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
 
+	mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+	mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+	mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+	mImportBuyQuantityText[0]->setText("0");
+	mImportBuyQuantityText[1]->setText("0");
+	mImportBuyQuantityText[2]->setText("0");
+
+	mImportTotalPriceText[0]->setText("0");
+	mImportTotalPriceText[1]->setText("0");
+	mImportTotalPriceText[2]->setText("0");
+
+	if(enemy->getExportedFood() == 0)
+		mImportPriceText[0]->setText("N/A");
+	else
 		mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+	if(enemy->getExportedGoods() == 0)
+		mImportPriceText[1]->setText("N/A");
+	else
 		mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+	if(enemy->getExportedTech() == 0)
+		mImportPriceText[2]->setText("N/A");
+	else
 		mImportPriceText[2]->setText(enemy->getExportedTechPrice());
 
-		mImportBuyQuantityText[0]->setText("0");
-		mImportBuyQuantityText[1]->setText("0");
-		mImportBuyQuantityText[2]->setText("0");
+	mExportQuantityText[0]->setText(mExportedFood);
+	mExportQuantityText[1]->setText(mExportedGoods);
+	mExportQuantityText[2]->setText(mExportedTech);
 
-		mImportTotalPriceText[0]->setText("0");
-		mImportTotalPriceText[1]->setText("0");
-		mImportTotalPriceText[2]->setText("0");
+	mExportFoodCost->setText(intToString(mExportedFoodPrice));
+	mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
+	mExportTechCost->setText(intToString(mExportedTechPrice));
 
-		if(enemy->getExportedFood() == 0)
-			mImportPriceText[0]->setText("N/A");
-		else
-			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
-
-		if(enemy->getExportedGoods() == 0)
-			mImportPriceText[1]->setText("N/A");
-		else
-			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
-
-		if(enemy->getExportedTech() == 0)
-			mImportPriceText[2]->setText("N/A");
-		else
-			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
-
-		mExportQuantityText[0]->setText(mExportedFood);
-		mExportQuantityText[1]->setText(mExportedGoods);
-		mExportQuantityText[2]->setText(mExportedTech);
-
-		mExportFoodCost->setText(intToString(mExportedFoodPrice));
-		mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
-		mExportTechCost->setText(intToString(mExportedTechPrice));
-
-		mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
-		mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
-		mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
-		mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
-	}
+	mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
+	mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
+	mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
+	mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -638,19 +650,6 @@ void Capitalist::update()
 	//std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
 	//std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 	mTaxesPatriotismChange->setText(0);
-
-	if((mRound-1) % 4 == 0 ) 
-	{
-		chooseLeader();
-	}
-	else
-	{
-		getTaxIncome();
-
-		mTaxesIncomeWindow->setVisible(true);
-		mCapitalistMainWindow->setEnabled(false, true);
-		mTaxesIncomeWindow->setEnabled(true, true);
-	}
 
 	changeCityImage();
 }
