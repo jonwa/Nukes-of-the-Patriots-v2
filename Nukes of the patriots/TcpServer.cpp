@@ -65,7 +65,6 @@ void sf::TcpServer::tick()
 							sf::Packet _packet;
 							_packet<<client.getRemoteAddress().toString()<<client.getRemotePort();
 							Event::triggerEvent("onPlayerDisconnected", _packet);
-							std::cout<<" has disconnected!"<<std::endl;
 							it = mClients.erase(it);
 						}
 						else

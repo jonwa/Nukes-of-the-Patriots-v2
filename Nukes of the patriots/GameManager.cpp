@@ -766,6 +766,7 @@ void GameManager::startRound()
 	mCurrentPlayer->setCurrency(mCurrentPlayer->getCurrency() + exports);
 	*/
 
+
 	mCurrentPlayer->update();
 
 	mCurrentPlayer->showGUI();
@@ -817,7 +818,7 @@ void GameManager::setYear(int year)
 
 void GameManager::updateStatsWindow()
 {
-	
+
 }
 
 void GameManager::setRandomPlayer(std::shared_ptr<SuperPower> player)

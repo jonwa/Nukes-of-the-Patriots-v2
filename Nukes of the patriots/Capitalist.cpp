@@ -580,7 +580,6 @@ void Capitalist::update()
 			mTaxesIncomeWindow->setEnabled(true, true);
 		}
 	}
-
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
 		
 	mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
