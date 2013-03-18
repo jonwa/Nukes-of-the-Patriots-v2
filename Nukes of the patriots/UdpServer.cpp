@@ -5,9 +5,10 @@
 sf::UdpServer::UdpServer(unsigned short port):mUdpSocket(),mUdpThread(nullptr)
 {
 	mUdpSocket.bind(port);
-	mUdpSocket.setBlocking(true);
-	mUdpThread = new sf::Thread(&UdpServer::tick, this);
-	mUdpThread->launch();
+	mUdpSocket.setBlocking(false);
+	//mUdpSocket.setBlocking(true);
+	//mUdpThread = new sf::Thread(&UdpServer::tick, this);
+	//mUdpThread->launch();
 }
 
 void sf::UdpServer::sendData(sf::Packet packet, sf::IpAddress ipAddress, unsigned short port)
@@ -17,8 +18,8 @@ void sf::UdpServer::sendData(sf::Packet packet, sf::IpAddress ipAddress, unsigne
 
 void sf::UdpServer::tick()
 {
-	while(true)
-	{
+	//while(true)
+	//{
 		sf::IpAddress sender;
 		unsigned short port;
 		sf::Packet packet;
@@ -37,7 +38,7 @@ void sf::UdpServer::tick()
 			_packet.append(data, size);
 			Event::triggerEvent(eventName, _packet);
 		}
-	}
+	//}
 }
 
 void sf::UdpServer::triggerClientEvent(std::string eventName, sf::Packet packet, sf::IpAddress receivingAddress, unsigned short receivingPort)
