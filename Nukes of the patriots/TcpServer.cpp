@@ -5,17 +5,17 @@
 sf::TcpServer::TcpServer(unsigned short port):mTcpListener(),mClients(),mTcpThread(nullptr)
 {
 	mTcpListener.listen(port);
-	mTcpListener.setBlocking(true);
+	mTcpListener.setBlocking(false);
 	mSocketSelector.add(mTcpListener);
-	mTcpThread = new sf::Thread(&TcpServer::tick, this);
-	mTcpThread->launch();
+	//mTcpThread = new sf::Thread(&TcpServer::tick, this);
+	//mTcpThread->launch();
 }
 
 void sf::TcpServer::tick()
 {
-	while(true)
-	{
-		if(mSocketSelector.wait())
+	//while(true)
+	//{
+		if(mSocketSelector.wait(sf::seconds(0.001f)))
 		{
 			if(mSocketSelector.isReady(mTcpListener))
 			{
@@ -45,23 +45,32 @@ void sf::TcpServer::tick()
 						// The client has sent some data, time to get it!
 						sf::Packet packet;
 						sf::Socket::Status status = client.receive(packet);
-						switch(status)
+						if(status == sf::Socket::Done)
 						{
-							case(sf::Socket::Done):
-								break;
-							case(sf::Socket::Disconnected):
-								packet<<client.getRemoteAddress().toString()<<client.getRemotePort();
-								Event::triggerEvent("onPlayerDisconnected", packet);
-								std::cout<<" has disconnected!"<<std::endl;
-								break;
-							default:
-								break;
+							char eventName[1024];
+							int charlen = 0;
+							packet>>eventName>>charlen;
+							sf::Packet _packet;
+							void *data = const_cast<void*>(packet.getData());
+							char *startPos = (char*)data;
+							startPos += sizeof(char*) + charlen + sizeof(int);
+							data = startPos;
+							std::size_t size = packet.getDataSize() - charlen - sizeof(int);
+							_packet.append(data, size);
+							Event::triggerEvent(eventName, _packet);
+						}
+						else if(status == sf::Socket::Disconnected)
+						{
+							sf::Packet _packet;
+							_packet<<client.getRemoteAddress().toString()<<client.getRemotePort();
+							Event::triggerEvent("onPlayerDisconnected", _packet);
+							std::cout<<" has disconnected!"<<std::endl;
 						}
 					}
 				}
 			}
 		}
-	}
+//	}
 }
 
 void sf::TcpServer::sendDataToClient(sf::Packet packet, std::vector<sf::TcpSocket*> clients)
@@ -69,5 +78,16 @@ void sf::TcpServer::sendDataToClient(sf::Packet packet, std::vector<sf::TcpSocke
 	for(std::vector<sf::TcpSocket*>::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
 		(*it)->send(packet);
+	}
+}
+
+void sf::TcpServer::triggerClientEvent(std::string eventName, sf::Packet packet, sf::IpAddress receivingAddress, unsigned short receivingPort)
+{
+	sf::Packet _packet;
+	_packet<<eventName.c_str()<<eventName.length();
+	_packet.append(packet.getData(), packet.getDataSize());
+	for(std::vector<sf::TcpSocket*>::iterator it = mClients.begin(); it != mClients.end(); ++it)
+	{
+		(*it)->send(_packet);
 	}
 }

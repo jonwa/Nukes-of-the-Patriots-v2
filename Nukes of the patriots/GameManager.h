@@ -95,7 +95,7 @@ public:
 	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
 
 	bool										isMyTurnToPlay();
-	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
+	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet, std::string type = "TCP");
 
 	std::shared_ptr<President>					getPresidentByName(std::string name);
 	void										removePresidentFromList(std::shared_ptr<President> president);

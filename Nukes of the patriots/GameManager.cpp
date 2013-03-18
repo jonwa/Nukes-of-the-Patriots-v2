@@ -65,6 +65,24 @@ GameManager::GameManager() :
 	cursor.setTexture(cursorTexture);
 
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
+
+	Event::addEventHandler("onPlayerConnected",
+		[=](sf::Packet)
+	{
+		std::cout<<"Player connected to my server!"<<std::endl;
+	});
+
+	Event::addEventHandler("onPlayerDisconnected",
+		[=](sf::Packet)
+	{
+		std::cout<<"Player disconnected from my server!"<<std::endl;
+	});
+
+	Event::addEventHandler("onClientPlayerConnected",
+		[=](sf::Packet)
+	{
+		std::cout<<"You connected to a server!"<<std::endl;
+	});
 	
 	mConnectToServerEvent = Event::addEventHandler("hereIam", 
 		[=](sf::Packet packet)
@@ -1296,10 +1314,12 @@ void GameManager::createServer()
 
 void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 {
-	//mUdpClient->setReceivingAddress(ipAdress);
-	//sf::Packet packet;
-	//packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
-	//mUdpClient->triggerServerEvent("connectToServer", packet);
+	/*
+	mUdpClient->setReceivingAddress(ipAdress);
+	sf::Packet packet;
+	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
+	mUdpClient->triggerServerEvent("connectToServer", packet);
+	*/
 	mCreateServerTimer->killTimer();
 	mTcpClient = new sf::TcpClient(port, sf::IpAddress(ipAdress));
 }
@@ -1311,7 +1331,7 @@ void GameManager::tick(sf::RenderWindow &window)
 	{
 		sf::Packet packet;
 		packet<<mousePos.x<<mousePos.y;
-		triggerOtherPlayersEvent("syncMousePosition", packet);
+		triggerOtherPlayersEvent("syncMousePosition", packet, "UDP");
 
 		sf::Sprite remoteCursor(cursorTexture);
 		sf::Vector2i remoteMousePos = mRemoteClient->getMousePosition();
@@ -1325,10 +1345,10 @@ void GameManager::tick(sf::RenderWindow &window)
 	if(isMyTurnToPlay())
 		window.draw(cursor);
 		
-	if(mUdpClient != nullptr)
-		mUdpClient->tick();
-	if(mUdpServer != nullptr)
-		mUdpServer->tick();
+	if(mTcpClient != nullptr)
+		mTcpClient->tick();
+	if(mTcpServer != nullptr)
+		mTcpServer->tick();
 }
 
 void GameManager::update(sf::Event &event)
@@ -1386,12 +1406,22 @@ bool GameManager::isMyTurnToPlay()
 	return false;
 }
 
-void GameManager::triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet)
+void GameManager::triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet, std::string type)
 {
-	if(mRole == CLIENT)
-		mUdpClient->triggerServerEvent(eventName, packet);
-	else if(mRole == SERVER)
-		mUdpServer->triggerClientEvent(eventName, packet, sf::IpAddress(mRemoteIpAddress), mRemotePort);
+	if(type == "UDP")
+	{
+		if(mRole == CLIENT)
+			mUdpClient->triggerServerEvent(eventName, packet);
+		else if(mRole == SERVER)
+			mUdpServer->triggerClientEvent(eventName, packet, sf::IpAddress(mRemoteIpAddress), mRemotePort);
+	}
+	else
+	{
+		if(mRole == CLIENT)
+			mTcpClient->triggerServerEvent(eventName, packet);
+		else if(mRole == SERVER)
+			mTcpServer->triggerClientEvent(eventName, packet, sf::IpAddress(mRemoteIpAddress), mRemotePort);
+	}
 }
 
 std::shared_ptr<President> GameManager::getPresidentByName(std::string name)
