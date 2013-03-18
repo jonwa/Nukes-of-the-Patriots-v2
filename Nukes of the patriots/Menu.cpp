@@ -519,7 +519,7 @@ void Menu::initialize()
 	// Lan play ("Multi-player")
 	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
 	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
-	mBackToMainMenuButton[1]		= GUIButton::create(ButtonPos["CloseLanWindow"], mChooseTeamWindow);
+	mBackToMainMenuButton[1]		= GUIButton::create(ButtonPos["CloseLanWindow"], mLanPlayWindow);
 	mWaitingForClientWindow			= GUIWindow::create(WindowPos["WaitingForClient"], mLanPlayWindow);
 	mWaitingForClientText			= GUIText::create(sf::FloatRect(100, 100, 0, 0), "Searching for servers...", mWaitingForClientWindow);
 	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos["CloseWaitingForClient"], mWaitingForClientWindow);
@@ -847,18 +847,14 @@ void Menu::initializeGuiFuctions()
 
 	mBackToMainMenuButton[0]->setOnClickFunction([=]()
 	{
-		mChooseTeamWindow->setEnabled(false, true);
 		mChooseTeamWindow->setVisible(false);
 		mMainMenuWindow->setVisible(true);
-		mMainMenuWindow->setEnabled(true, true);
 	});
 
 	mBackToMainMenuButton[1]->setOnClickFunction([=]()
 	{
-		mLanPlayWindow->setEnabled(false, true);
 		mLanPlayWindow->setVisible(false);
 		mMainMenuWindow->setVisible(true);
-		mMainMenuWindow->setEnabled(true, true);
 	});
 
 	mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });

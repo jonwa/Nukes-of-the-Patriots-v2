@@ -64,6 +64,8 @@ GameManager::GameManager() :
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	cursor.setTexture(cursorTexture);
 
+	mTcpServer = new sf::TcpServer(55006);
+	mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.10.177.137"));
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
 
 	Event::addEventHandler("onPlayerConnected",
