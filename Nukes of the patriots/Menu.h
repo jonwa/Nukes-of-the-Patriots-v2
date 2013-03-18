@@ -63,6 +63,7 @@ public:
 	std::shared_ptr<GUIButton> mCloseWaitingForClientWindow;
 
 private:
+	bool mFullscreenCount;
 	static Menu* mInstance;
 	//sfe::Movie mIntroMovie;
 	bool fullscreen;

@@ -47,7 +47,6 @@ int main()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-
 			if(!sleeping)
 			{
 				GUIManager::getInstance()->update(event);
@@ -68,7 +67,6 @@ int main()
 			continue;
 		}
 	
-
 		AnimationHandler::getInstance()->tick();
 		GUIManager::getInstance()->tick();
 		AnimationHandler::getInstance()->tick();

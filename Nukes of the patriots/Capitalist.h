@@ -73,6 +73,7 @@ public:
 
 	void resetResourcesValues();
 
+	bool enoughFood();
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
@@ -104,6 +105,7 @@ private:
 	
 	std::shared_ptr<Sound> mCapitalistMainTheme; // capitalist main theme music
 
+	
 	void loadButtonPosition();
 	void loadWindowPosition();
 	void loadCapitalistMusic();

@@ -22,7 +22,8 @@
 #include "UdpServer.h"
 #include "RemoteClient.h"
 #include <SFML\Network.hpp>
-
+#include "Sound.h"
+#include "SoundHandler.h"
 static int width = 1024;
 static int height = 768;
 
@@ -295,36 +296,36 @@ GameManager::GameManager() :
 		mRemoteClient->setReady(ready == 1 ? true : false);
 	});
 
-	Event::addEventHandler("syncRandomPlayerNextRound",
-		[=](sf::Packet packet)
-	{
-		int randomPlayer = 0;
-		packet>>randomPlayer;
-		if(randomPlayer == 0 && mRemoteClient->getSuperPower() == CAPITALIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == COMMUNIST)
-			setEnemyTurn();
-		else if(randomPlayer == 0 && mRemoteClient->getSuperPower() == COMMUNIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == CAPITALIST)
-			setMyTurn();
-		//If both player has same spy network, then select random as next player directly
-		std::vector<std::shared_ptr<SuperPower>> _nextPlayers = mVecPlayersLeft;
-		std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
-		mCloseStatsWindow->setOnClickFunction([=]()
-		{
-			if(_nextPlayers.size() == 1)
-			{
-				_selectStartingPlayer(_nextPlayers[randomPlayer]);
-			}
-			else
-			{
-				setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-				mFirstDecideWhoStartWindow->setVisible(true);
-				mStatsWindow[1]->setVisible(false);
-				//mNextWindowToShow = mFirstDecideWhoStartWindow;
-				mFirstDecideWhoStartWindow->setEnabled(true, true);
-				mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-				mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
-			} 
-		});
-	});
+	//Event::addEventHandler("syncRandomPlayerNextRound",
+	//	[=](sf::Packet packet)
+	//{
+	//	int randomPlayer = 0;
+	//	packet>>randomPlayer;
+	//	if(randomPlayer == 0 && mRemoteClient->getSuperPower() == CAPITALIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == COMMUNIST)
+	//		setEnemyTurn();
+	//	else if(randomPlayer == 0 && mRemoteClient->getSuperPower() == COMMUNIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == CAPITALIST)
+	//		setMyTurn();
+	//	//If both player has same spy network, then select random as next player directly
+	//	std::vector<std::shared_ptr<SuperPower>> _nextPlayers = mVecPlayersLeft;
+	//	std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
+	//	mCloseStatsWindow->setOnClickFunction([=]()
+	//	{
+	//		if(_nextPlayers.size() == 1)
+	//		{
+	//			_selectStartingPlayer(_nextPlayers[randomPlayer]);
+	//		}
+	//		else
+	//		{
+	//			setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+	//			mFirstDecideWhoStartWindow->setVisible(true);
+	//			mStatsWindow[1]->setVisible(false);
+	//			//mNextWindowToShow = mFirstDecideWhoStartWindow;
+	//			mFirstDecideWhoStartWindow->setEnabled(true, true);
+	//			mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+	//			mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+	//		} 
+	//	}
+	/*});*/
 
 	initializeGuiElement();
 	initializeGuiFunctions();
@@ -334,6 +335,7 @@ GameManager::~GameManager()
 {
 	
 }
+
 
 void GameManager::setDocumentName(std::string fileName)
 {
@@ -634,6 +636,40 @@ void GameManager::loadPresidents()
 	}
 }
 
+void GameManager::loadWinScreenMusic()
+{
+	tinyxml2::XMLDocument doc;
+	doc.LoadFile("XML/WinScreenMusic.xml");
+
+	if(doc.Error())
+		std::cout << "Fel! loadWinScreenMusic";
+	
+	tinyxml2::XMLElement *element = doc.FirstChildElement("tracks");
+	tinyxml2::XMLElement *music = element->FirstChildElement("music");
+	
+	const char* temp;
+	while (music != 0)
+	{
+		std::string tempName;
+		if (temp = music->FirstChildElement("name")->GetText())
+		{
+			tempName = temp;
+		}
+		
+		temp	 = music->FirstChildElement("file")->GetText();
+		std::string name;
+		if (temp)
+			name = temp;
+				
+		mWinScreenMusic[tempName] = ResourceHandler::getInstance()->getMusic(name);
+	
+		music = music->NextSiblingElement();	
+
+	}
+}
+
+
+
 std::shared_ptr<President> GameManager::getRandomPresident()
 {
 	int random = Randomizer::getInstance()->randomNr(mPresidentVector.size(), 0);
@@ -757,7 +793,77 @@ void GameManager::setYear(int year)
 
 void GameManager::updateStatsWindow()
 {
-	
+}
+
+bool GameManager::initWinningScreen()
+{
+	if(getCapitalist()->getPatriotism() <= 0)
+	{
+		mYearText->setVisible(false);
+		mCommunistWins->playSound(); // Play the communist music for winning
+		mCommunistWins->setVolume(60);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
+		mWinScreenWindow[1]->setVisible(true);
+		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorious!");
+		mWinningTeamBanners[1]->setTexture(BetweenTurnsButton["CommunistBanner"]);	
+		mWinScreenText[1]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " collapses under the pressure of \nthe public;"
+																	" calling for a democratic reform.\n\nCommunism will end the evils of the free market\n and create equality among the people of \n" + Menu::getInstance()->getEditField("CapitalistNameField")->getText() +
+																	"! No one is left behind! \n\nPeople have said that capitalism is an ideology\n only good on paper, and you, glorious leader\n of " + Menu::getInstance()->getEditField("CommunistNameField")->getText() +  ", have "
+																	"proven them right!");
+		return true;
+	}
+	else if(getCommunist()->getPatriotism() <= 0)
+	{
+		mYearText->setVisible(false);
+		mCapitalistWins->playSound();
+		mCapitalistWins->setVolume(60);
+		mStatsWindow[0]->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
+		mWinScreenWindow[0]->setVisible(true);
+		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorious!");
+		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
+		mWinScreenText[0]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " collapses under the pressure of the \npublic; "
+																	"calling for a democratic reform.\n\nCapitalism will liberate the people of " + Menu::getInstance()->getEditField("CommunistNameField")->getText() +
+																	"\nbringing fortune and welfare for the ambitious!\n\nPeople have said that communism is an ideology\nonly good on"
+																	" paper, and you, glorious leader of\n " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() +  ", have "
+																	"proven them right!");
+		return true;
+	}
+	else if(mYear == 40 && getCommunist()->getPatriotism() < getCapitalist()->getPatriotism())
+	{
+		mYearText->setVisible(false);
+		mCapitalistWins->playSound();
+		mCapitalistWins->setVolume(60);
+		mStatsWindow[0]->setVisible(false);
+		mStatsWindow[1]->setVisible(false);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
+		mWinScreenWindow[0]->setVisible(true);
+		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorious!");
+		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
+		mWinScreenText[0]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " collapses under the pressure of the \npublic; "
+																	"calling for a democratic reform.\n\nCapitalism will liberate the people of " + Menu::getInstance()->getEditField("CommunistNameField")->getText() +
+																	"\nbringing fortune and welfare for the ambitious!\n\nPeople have said that communism is an ideology\nonly good on"
+																	" paper, and you, glorious leader of\n " + Menu::getInstance()->getEditField("CapitalistNameField")->getText() +  ", have "
+																	"proven them right!");
+		return true;
+	}
+	else if(mYear == 40 && getCapitalist()->getPatriotism() < getCommunist()->getPatriotism())
+	{
+		mYearText->setVisible(false);
+		mCommunistWins->playSound(); 
+		mCommunistWins->setVolume(60);
+		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
+		mWinScreenWindow[1]->setVisible(true);
+		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorious!");
+		mWinningTeamBanners[1]->setTexture(BetweenTurnsButton["CommunistBanner"]);	
+		mWinScreenText[1]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " collapses under the pressure of \nthe public;"
+																	" calling for a democratic reform.\n\nCommunism will end the evils of the free market\n and create equality among the people of \n" + Menu::getInstance()->getEditField("CapitalistNameField")->getText() +
+																	"! No one is left behind! \n\nPeople have said that capitalism is an ideology\n only good on paper, and you, glorious leader\n of " + Menu::getInstance()->getEditField("CommunistNameField")->getText() +  ", have "
+																	"proven them right!");
+		return true;
+	}
+	return false;
 }
 
 void GameManager::nextRound()
@@ -813,14 +919,16 @@ void GameManager::nextRound()
 		{
 			GUIAnimation::fadeToColor(mStatsWindow[0], 1000, mStatsWindow[0]->getColor(), sf::Color(255, 255, 255, 0));
 			std::shared_ptr<GUIWindow> _statsWindow = mStatsWindow[0];
+
+			std::shared_ptr<GUIText> _yearText = mYearText;
 			Timer::setTimer([=]()
 			{
 				_statsWindow->setVisible(false);
 			}, 1000, 1);
 
-			mStatsWindow[1]->setColor(sf::Color(255, 255, 255, 0));
-			mStatsWindow[1]->setVisible(true);
-			GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
+				mStatsWindow[1]->setColor(sf::Color(255, 255, 255, 0));
+				mStatsWindow[1]->setVisible(true);
+				GUIAnimation::fadeToColor(mStatsWindow[1], 1000, mStatsWindow[1]->getColor(), sf::Color(255, 255, 255, 255));
 		}, 3000, 1);
 		if(getGameType() == LAN && isMyTurnToPlay())
 		{
@@ -870,20 +978,23 @@ void GameManager::nextRound()
 			//If both player has same spy network, then select random as next player directly
 			mCloseStatsWindow->setOnClickFunction([=]()
 			{
-				if(nextPlayers.size() == 1)
+				if(!initWinningScreen())
 				{
-					selectStartingPlayer(nextPlayers[randomPlayer]);
+					if(nextPlayers.size() == 1)
+					{
+						selectStartingPlayer(nextPlayers[randomPlayer]);
+					}
+					else
+					{
+						setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
+						mFirstDecideWhoStartWindow->setVisible(true);
+						mStatsWindow[1]->setVisible(false);
+						//mNextWindowToShow = mFirstDecideWhoStartWindow;
+						mFirstDecideWhoStartWindow->setEnabled(true, true);
+						mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
+						mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
+					} 
 				}
-				else
-				{
-					setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-					mFirstDecideWhoStartWindow->setVisible(true);
-					mStatsWindow[1]->setVisible(false);
-					//mNextWindowToShow = mFirstDecideWhoStartWindow;
-					mFirstDecideWhoStartWindow->setEnabled(true, true);
-					mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-					mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
-				} 
 			});
 		}
 	}
@@ -907,44 +1018,6 @@ void GameManager::nextRound()
 	}
 	/*Ökar år med ett när rundan är slut*/
 	mYearText->setText(mYear);
-
-	if(getCapitalist()->getPatriotism() <= 0)
-	{
-		mYearText->setVisible(false);
-		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
-		mWinScreenWindow[1]->setVisible(true);
-		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorius!");
-	}
-	else if(getCommunist()->getPatriotism() <= 0)
-	{
-		mYearText->setVisible(false);
-		mStatsWindow[0]->setVisible(false);
-		mStatsWindow[1]->setVisible(false);
-		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
-		mWinScreenWindow[0]->setVisible(true);
-		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorius!");
-		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
-	}
-	else if(mYear == 40 && getCommunist()->getPatriotism() < getCapitalist()->getPatriotism())
-	{
-		mYearText->setVisible(false);
-		mStatsWindow[0]->setVisible(false);
-		mStatsWindow[1]->setVisible(false);
-		GUIManager::getInstance()->setOnTop(mWinScreenWindow[0]);
-		mWinScreenWindow[0]->setVisible(true);
-		mWinningTeamName[0]->setText(Menu::getInstance()->getEditField("CapitalistNameField")->getText() + " is Victorius!");
-		mWinningTeamBanners[0]->setTexture(BetweenTurnsButton["CapitalistBanner"]);		
-	}
-	else if(mYear == 40 && getCapitalist()->getPatriotism() < getCommunist()->getPatriotism())
-	{
-		mYearText->setVisible(false);
-		mStatsWindow[0]->setVisible(false);
-		mStatsWindow[1]->setVisible(false);
-		GUIManager::getInstance()->setOnTop(mWinScreenWindow[1]);
-		mWinScreenWindow[1]->setVisible(true);
-		mWinningTeamName[1]->setText(Menu::getInstance()->getEditField("CommunistNameField")->getText() + " is Victorius!");
-		mWinningTeamBanners[1]->setTexture(BetweenTurnsButton["CommunistBanner"]);		
-	}
 }
 
  //laddar in fönster
@@ -1062,6 +1135,12 @@ void GameManager::initializeGuiElement()
 {
 	loadButtonPosition();
 	loadWindowPosition();
+	loadWinScreenMusic();
+
+
+	mCapitalistWins = Sound::create(mWinScreenMusic["CapitalistWins"]);
+	mCommunistWins  = Sound::create(mWinScreenMusic["CommunistWins"]);
+
 
 	mYearText = GUIText::create(sf::FloatRect(512, 4, 0, 0), intToString(mYear));
 	mYearText->setScale(0.6, 0.6);
@@ -1114,20 +1193,24 @@ void GameManager::initializeGuiElement()
 	mWinScreenWindow[0]						= GUIWindow::create(BetweenTurnsWindow["CapitalistWinScreen"], mParentWindow);
 	mWinScreenWindow[1]						= GUIWindow::create(BetweenTurnsWindow["CommunistWinScreen"], mParentWindow);
 	mWinningTeamName[0]						= GUIText::create(sf::FloatRect(512, 8, 0, 0), "", mWinScreenWindow[0]);
-	mWinningTeamName[1]						= GUIText::create(sf::FloatRect(512, 8, 0, 0), "", mWinScreenWindow[0]);
+	mWinningTeamName[1]						= GUIText::create(sf::FloatRect(512, 8, 0, 0), "", mWinScreenWindow[1]);
 	mWinningTeamName[0]	->setAlignment("middle");
 	mWinningTeamName[0]	->setColor(sf::Color::Black);
-	mWinningTeamName[0]	->setScale(2.5, 3);
+	mWinningTeamName[0]	->setScale(1.7, 2.5);
 	mWinningTeamName[0]	->setWidth(700);
 	mWinningTeamName[1]	->setAlignment("middle");
-	mWinningTeamName[1]	->setColor(sf::Color::White);
-	mWinningTeamName[1]	->setScale(2.5, 3);
+	mWinningTeamName[1]	->setColor(sf::Color::Black);
+	mWinningTeamName[1]	->setScale(1.7, 2.5);
 	mWinningTeamName[1]	->setWidth(700);
 	mWinScreenOkayButton[0]					= GUIButton::create(BetweenTurnsButton["WinScreenOkayButton"], mWinScreenWindow[0]);
 	mWinScreenOkayButton[1]					= GUIButton::create(BetweenTurnsButton["WinScreenOkayButton"], mWinScreenWindow[1]);
 	mWinningTeamBanners[0]					= GUIImage::create(BetweenTurnsButton["CapitalistBanner"], mWinScreenWindow[0]);
 	mWinningTeamBanners[1]					= GUIImage::create(BetweenTurnsButton["CommunistBanner"], mWinScreenWindow[1]);
 
+	mWinScreenText[0]			= GUIText::create(sf::FloatRect(255, 200, 0, 0), "", mWinScreenWindow[0]);
+	mWinScreenText[0]->setScale(0.8,0.8);
+	mWinScreenText[1]			= GUIText::create(sf::FloatRect(255, 200, 0, 0), "", mWinScreenWindow[1]);
+	mWinScreenText[1]->setScale(0.8,0.8);
 	mWinScreenWindow[0]	->setVisible(false);
 	mWinScreenWindow[1]	->setVisible(false);
 
@@ -1196,22 +1279,36 @@ void GameManager::initializeGuiFunctions()
 	{
 		reset();
 		Menu::getInstance()->reset();
-		mWinScreenWindow[0]->setVisible(false);
-		mParentWindow->setVisible(false);
-		Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
-		GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
-		Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
+		mCapitalistWins->fadeToVolume(mWinScreenMusic["CapitalistWins"], 1000, mWinScreenMusic["CapitalistWins"]->getVolume(), 0);
+		std::shared_ptr<GUIWindow> _capitalistWin = mWinScreenWindow[0];
+		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
+		Timer::setTimer([=]()
+		{
+			_capitalistWin->setVisible(false);
+			_parentWindow->setVisible(false);
+			Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
+			GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
+			Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
+			Menu::getInstance()->playMusic();
+		}, 1000, 1);
 	});
 
 	mWinScreenOkayButton[1]->setOnClickFunction([=]()
 	{
 		reset();
 		Menu::getInstance()->reset();
-		mWinScreenWindow[1]->setVisible(false);
-		mParentWindow->setVisible(false);
-		Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
-		GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
-		Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
+		mCommunistWins->fadeToVolume(mWinScreenMusic["CommunistWins"], 1000, mWinScreenMusic["CommunistWins"]->getVolume(), 0);
+		std::shared_ptr<GUIWindow> _communistWins = mWinScreenWindow[1];
+		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
+		Timer::setTimer([=]()
+		{
+			_communistWins->setVisible(false);
+			_parentWindow->setVisible(false);
+			Menu::getInstance()->getWindows("ParentWindow")->setVisible(true);
+			GUIManager::getInstance()->setOnTop(Menu::getInstance()->getWindows("MainMenu"));
+			Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
+			Menu::getInstance()->playMusic();
+		}, 1000, 1);
 	});
 }
 

@@ -385,10 +385,11 @@ void Capitalist::newYearStart()
 	//capitalist title: 241, 90
 	int statsPosY = 177;   //communist 628, 177
 	int foodPatriotismChange = 0;
+
 	if(mFood == 0)
 	{
-		foodPatriotismChange = -4;
-		mFoodChange->setText("No food for the population");
+		foodPatriotismChange = -4; 
+		mFoodChange->setText("No food for the people");
 		mFoodChange->setY(statsPosY);
 		mFoodChangeValue->setText(foodPatriotismChange);
 		mFoodChangeValue->setY(statsPosY);
@@ -397,7 +398,7 @@ void Capitalist::newYearStart()
 	else if(mFood > 0 && mFood <= mPopulation/2)
 	{
 		foodPatriotismChange = -2;
-		mFoodChange->setText("Not as much food as we expected");
+		mFoodChange->setText("Too little food for the people");
 		mFoodChange->setY(statsPosY);
 		mFoodChangeValue->setText(foodPatriotismChange);
 		mFoodChangeValue->setY(statsPosY);
@@ -410,8 +411,8 @@ void Capitalist::newYearStart()
 		mFoodChange->setText("");
 		mFoodChangeValue->setText("");
 	}
-
-	mFood -= mPopulation;
+	
+	mFood -= (float)mPopulationPreviousRound*mPresident->getPopEatsMore(); ////// FIXA DETTA SÅ ATT DET STÄMMER
 	if(mFood < 0) mFood = 0;
 	int taxPatriotismChange = 0;
 	int taxChange = mTaxes - mTaxesPreviousRound;
@@ -451,7 +452,7 @@ void Capitalist::newYearStart()
 	if(spaceProgramIncreased)
 	{
 		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
-		mSpaceProgramIncreasedText->setText("Space program increased");
+		mSpaceProgramIncreasedText->setText("Space program upgraded");
 		mSpaceProgramIncreasedText->setY(statsPosY);
 		mSpaceProgramIncreasedTextValue->setText("+" + intToString(spaceProgramAmount));
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
@@ -468,7 +469,7 @@ void Capitalist::newYearStart()
 	int exportedChange = 0;
 	if(mNuclearWeapon >= enemyNuclearWeapon*2)
 	{
-		mNuclearWeaponChange->setText("Double enemies nuclear weapon");
+		mNuclearWeaponChange->setText("Twice as many nuclear weapons");
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
@@ -477,7 +478,7 @@ void Capitalist::newYearStart()
 	}
 	else if(mNuclearWeapon > enemyNuclearWeapon)
 	{
-		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
+		mNuclearWeaponChange->setText("More nuclear weapons");
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
@@ -492,7 +493,7 @@ void Capitalist::newYearStart()
 
 	if(mSpaceProgram > enemySpaceProgram)
 	{
-		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
+		mSpaceProgramMoreThanEnemyText->setText("More advanced space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
 		mSpaceProgramMoreThanEnemyTextValue->setText("+"+intToString(spaceProgramChange));
@@ -519,7 +520,7 @@ void Capitalist::newYearStart()
 
 	if(exportedTotal > enemyExportedTotal)
 	{
-		mExportedChange->setText("Exported more resources than enemy");
+		mExportedChange->setText("Exported more resources");
 		exportedChange += 1;
 		mExportedChange->setY(statsPosY);
 		mExportedChangeValue->setText("+"+intToString(exportedChange));
@@ -758,6 +759,11 @@ bool Capitalist::upgradeSpyNetwork(int value)
 	return true;
 }
 
+/*Kontrollerar ifall det finns nog med mat till hela befolkningen*/
+bool Capitalist::enoughFood()
+{
+	return mFood >= mPopulation * mPresident->getPopEatsMore();
+}
 
 void Capitalist::resetResourcesValues()
 {
@@ -939,6 +945,7 @@ void Capitalist::initializeCapitalistWindow()
 	initializeCityImages();
 
 	mCapitalistMainTheme				= Sound::create(CapitalistMusic["CapitalistMainTheme"]);
+
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistButtonFrame				= GUIWindow::create(CapitalistWindows["InterfaceButtonsFrame"], mCapitalistMainWindow);

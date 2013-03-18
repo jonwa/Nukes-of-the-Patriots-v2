@@ -128,7 +128,7 @@ void President::randomStatFunc()
 	negStatMap.insert(std::pair<std::string,float>("nuclearPrice", 1.2f));
 	negStatMap.insert(std::pair<std::string,float>("spacePrice", 1.2f));
 	negStatMap.insert(std::pair<std::string,float>("spyPrice", 1.2f));
-	negStatMap.insert(std::pair<std::string,float>("popEatsMore", 0.1f));
+	negStatMap.insert(std::pair<std::string,float>("popEatsMore", 1.1f));
 
 	int random = ( randomizer->randomNr(randomStats.size(),0) );
 
@@ -328,4 +328,3 @@ sf::Texture* President::getClickedTexture()
 {
 	return mClickedPortraitTexture;
 }
-

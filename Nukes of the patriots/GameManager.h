@@ -21,6 +21,8 @@ class Timer;
 class RemoteClient;
 class GUIElement;
 class GUIEditField;
+class Sound;
+class SoundHandler;
 
 namespace sf
 {
@@ -125,6 +127,8 @@ private:
 	void loadButtonPosition();
 	void initializeGuiElement();
 	void initializeGuiFunctions();
+	void loadWinScreenMusic();
+	bool initWinningScreen();
 
 	int mYear;
 	int mRound;
@@ -140,8 +144,13 @@ private:
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsWindow;
 	std::map<std::string, std::pair<sf::FloatRect, sf::Texture*> > BetweenTurnsButton;
 
+	std::map<std::string, std::shared_ptr<sf::Music> >	mWinScreenMusic;
+
 	std::map<std::shared_ptr<President>, sf::Texture*> mPresidentPlaqueMap;
 	std::map<std::shared_ptr<President>, sf::Texture*> mGeneralPlaqueMap;
+
+	std::shared_ptr<Sound> mCapitalistWins;
+	std::shared_ptr<Sound> mCommunistWins;
 
 	std::shared_ptr<SuperPower> mCurrentPlayer;
 
@@ -174,6 +183,7 @@ private:
 	std::shared_ptr<GUIText>	  mWinningTeamName[2];
 	std::shared_ptr<GUIButton>    mWinScreenOkayButton[2];
 	std::shared_ptr<GUIImage>     mWinningTeamBanners[2];
+	std::shared_ptr<GUIText>      mWinScreenText[2];
 
 	sf::TcpServer* mTcpServer;
 	sf::TcpClient* mTcpClient;

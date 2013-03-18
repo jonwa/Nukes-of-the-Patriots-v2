@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<tracks>
+	<music>
+		<name>CapitalistWins</name>
+		<file>WinScreen/Kap_win</file>
+	</music>
+	<music>
+		<name>CommunistWins</name>
+		<file>WinScreen/Kommunist_win</file>
+	</music>
+</tracks>

@@ -59,7 +59,7 @@ public:
 
 	void		getTaxIncome();
 	void		updateFood(std::shared_ptr<GUIText> text);
-	bool		enoughFood();
+	virtual bool		enoughFood();
 
 	void		setExportedFood(int food)						{ mExportedFood = food; };
 	void		setExportedGoods(int goods)						{ mExportedGoods = goods; };

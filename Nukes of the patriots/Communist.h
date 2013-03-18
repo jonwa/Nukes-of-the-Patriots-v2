@@ -39,8 +39,6 @@ public:
 
 	void		reset();
 
-	bool		enoughFood();
-
 	bool		setFood(int value);
 	bool		setGoods(int value);
 	bool		setTech(int value);

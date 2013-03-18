@@ -42,4 +42,9 @@
 	<music filename="Stieg.wav"/>
 	<music filename="Sture.wav"/>
 </tracks>
+<tracks directory="WinScreen">
+	<music filename="Kap_win.ogg"/>
+	<music filename="Kommunist_win.ogg"/>
+</tracks>
+
 

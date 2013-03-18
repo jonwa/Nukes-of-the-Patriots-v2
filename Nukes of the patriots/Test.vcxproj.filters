@@ -187,9 +187,6 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Source Files\TinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="President.h">
-      <Filter>Header Files\SuperPower</Filter>
-    </ClInclude>
     <ClInclude Include="Randomizer.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
@@ -246,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="RemoteClient.h">
       <Filter>Header Files\network</Filter>
+    </ClInclude>
+    <ClInclude Include="President.h">
+      <Filter>Header Files\SuperPower</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

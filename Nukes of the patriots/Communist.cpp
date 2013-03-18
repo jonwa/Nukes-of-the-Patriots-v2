@@ -360,6 +360,7 @@ void Communist::openFiveYearPlan()
 {
 	//if((mRound-1) % 5 == 0 && mRound != 1)
 	//{
+		mWindowHeadlines[2]->setText("Five year plan " + intToString(GameManager::getInstance()->getYear()) + " - " + intToString(GameManager::getInstance()->getYear() + 4));
 		mCommunistMainWindow->setEnabled(false, true);
 		mFiveYearPlanWindow->setEnabled(true, true);
 		mCommunistFiveYearPlanButton->setTexture(CommunistButtons["FiveYearPlanIsPressed"]);
@@ -461,7 +462,7 @@ void Communist::newYearStart()
 	if(mFood == 0)
 	{
 		foodPatriotismChange = -4;
-		mFoodChange->setText("No food for the population");
+		mFoodChange->setText("No food for the people");
 		mFoodChange->setY(statsPosY);
 		mFoodChangeValue->setText(foodPatriotismChange);
 		mFoodChangeValue->setY(statsPosY);
@@ -470,7 +471,7 @@ void Communist::newYearStart()
 	else if(mFood > 0 && mFood <= mPopulation/2)
 	{
 		foodPatriotismChange = -2;
-		mFoodChange->setText("Not as much food as we expected");
+		mFoodChange->setText("Too little food for the people");
 		mFoodChange->setY(statsPosY);
 		mFoodChangeValue->setText(foodPatriotismChange);
 		mFoodChangeValue->setY(statsPosY);
@@ -526,7 +527,7 @@ void Communist::newYearStart()
 	if(spaceProgramIncreased)
 	{
 		spaceProgramAmount = mSpaceProgram - mSpaceProgramPreviousRound;
-		mSpaceProgramIncreasedText->setText("Space program increased");
+		mSpaceProgramIncreasedText->setText("Space program upgraded");
 		mSpaceProgramIncreasedText->setY(statsPosY);
 		mSpaceProgramIncreasedTextValue->setText("+" + intToString(spaceProgramAmount));
 		mSpaceProgramIncreasedTextValue->setY(statsPosY);
@@ -543,7 +544,7 @@ void Communist::newYearStart()
 	int exportedChange = 0;
 	if(mNuclearWeapon >= enemyNuclearWeapon*2)
 	{
-		mNuclearWeaponChange->setText("Double enemies nuclear weapon");
+		mNuclearWeaponChange->setText("More nuclear weapons");
 		nuclearWeaponChange = 2;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
@@ -552,7 +553,7 @@ void Communist::newYearStart()
 	}
 	else if(mNuclearWeapon > enemyNuclearWeapon)
 	{
-		mNuclearWeaponChange->setText("Nuclear weapon more than enemy");
+		mNuclearWeaponChange->setText("Twice as many nuclear weapons");
 		nuclearWeaponChange = 1;
 		mNuclearWeaponChange->setY(statsPosY);
 		mNuclearWeaponChangeValue->setText("+"+intToString(nuclearWeaponChange));
@@ -567,7 +568,7 @@ void Communist::newYearStart()
 
 	if(mSpaceProgram > enemySpaceProgram)
 	{
-		mSpaceProgramMoreThanEnemyText->setText("Best upgraded Space program");
+		mSpaceProgramMoreThanEnemyText->setText("More advanced space program");
 		spaceProgramChange = 1;
 		mSpaceProgramMoreThanEnemyText->setY(statsPosY);
 		mSpaceProgramMoreThanEnemyTextValue->setText("+"+intToString(spaceProgramChange));
@@ -594,7 +595,7 @@ void Communist::newYearStart()
 
 	if(exportedTotal > enemyExportedTotal)
 	{
-		mExportedChange->setText("Exported more resources than enemy");
+		mExportedChange->setText("Exported more resources");
 		exportedChange += 1;
 		mExportedChange->setY(statsPosY);
 		mExportedChangeValue->setText("+"+intToString(exportedChange));
@@ -644,7 +645,6 @@ void Communist::newYearStart()
 void Communist::update()
 {
 	mResourcesIncomeHeadLiner->setText(intToString(GameManager::getInstance()->getYear()) + " Plan Results");
-	mWindowHeadlines[2]->setText("Five year plan " + intToString(GameManager::getInstance()->getYear()) + " - " + intToString(GameManager::getInstance()->getYear() + 4));
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CapitalistNameField")->getText());
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
 

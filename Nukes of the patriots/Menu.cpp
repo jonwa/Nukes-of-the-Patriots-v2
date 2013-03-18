@@ -20,7 +20,8 @@ Menu::Menu() :
 	mCapitalistTeamChosen(false),
 	mCommunistTeamChosen(false),
 	mShowTeamChooseAnimation(false),
-	fullscreen(false)
+	fullscreen(true),
+	mFullscreenCount(true)
 { 
 	//initializeIntroVideo();
 	initialize(); 
@@ -492,7 +493,7 @@ void Menu::initialize()
 	mSettingsMenuWindow->setVisible(false);
 
 	mCreditsMenuWindow		= GUIWindow::create(WindowPos["CreditsMenu"]);
-	mCreditsPlaceholder		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(350, 50, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Menu/CredtisPlaceHolder"))), mCreditsMenuWindow);
+	mCreditsPlaceholder		= GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 0, 0), &ResourceHandler::getInstance()->getTexture(std::string("Menu/credits_placeholder"))), mCreditsMenuWindow);
 	mCloseCreditsButton		= GUIButton::create(ButtonPos["CloseCredits"], mCreditsMenuWindow);
 	mCreditsMenuWindow->setVisible(false);
 
@@ -526,8 +527,8 @@ void Menu::initialize()
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
 	GUIManager::getInstance()->addGUIElement(mMainMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
-	GUIManager::getInstance()->addGUIElement(mCreditsMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSettingsMenuWindow);
+	GUIManager::getInstance()->addGUIElement(mCreditsMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[0]);
 	GUIManager::getInstance()->addGUIElement(mSaveGameWindow[1]);
 	GUIManager::getInstance()->addGUIElement(mLoadGameWindow);
@@ -555,7 +556,7 @@ void Menu::tick()
 	}
 
 	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
-		//mWindow->draw(mIntroMovie);
+	//	mWindow->draw(mIntroMovie);
 
 }
 
@@ -601,6 +602,7 @@ void Menu::initializeGuiFuctions()
 	mSettingsButton[0]->setOnClickFunction([=]()			
 	{ 
 		mMainMenuWindow->setEnabled(false, true);
+		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
 		mSettingsMenuWindow->setVisible(true);
 		mSettingsMenuWindow->setEnabled(true, true);
 	});
@@ -610,9 +612,9 @@ void Menu::initializeGuiFuctions()
 	mSettingsButton[1]->setOnClickFunction([=]()			
 	{ 
 		mInGameMenuWindow->setEnabled(false, true);
+		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
 		mSettingsMenuWindow->setVisible(true);
 		mSettingsMenuWindow->setEnabled(true, true);
-		GUIManager::getInstance()->setOnTop(mSettingsMenuWindow);
 	});
 	
 	mVolumeScrollBar->setOnGuiChangeFunction([=]()
@@ -628,8 +630,6 @@ void Menu::initializeGuiFuctions()
 			mFullscreenImage->setVisible(true);
 		else
 			mFullscreenImage->setVisible(false);
-		mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
-		mWindow->setMouseCursorVisible(false);
 	});
 
 	mCloseSettingsWindow->setOnClickFunction([=]()		
@@ -638,9 +638,38 @@ void Menu::initializeGuiFuctions()
 		mSettingsMenuWindow->setEnabled(false, true);
 		//mMainMenuWindow->setVisible(true); 
 		if(mMainMenuWindow->getVisible() == true)
+		{
+			mMainMenuWindow->setVisible(true);
 			mMainMenuWindow->setEnabled(true, true);
-		if(mInGameMenuWindow->getVisible() == true)
+		}
+		else if(mInGameMenuWindow->getVisible() == true)
+		{
+			mInGameMenuWindow->setVisible(true);
 			mInGameMenuWindow->setEnabled(true, true);
+		}
+
+		if(fullscreen)
+		{
+			if(!mFullscreenCount)
+			{
+				mFullscreenCount = true;
+				mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
+			}
+			else
+				mFullscreenCount = true;
+		}
+		else if(!fullscreen)
+		{
+			if(mFullscreenCount)
+			{
+				mFullscreenCount = false;
+				mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Titlebar|sf::Style::Close);
+			}
+			else
+				mFullscreenCount = false;
+		}
+
+		mWindow->setMouseCursorVisible(false);
 	});	
 
 	mCreditsButton->setMouseEnterFunction([=]()	{ mCreditsButton->setTexture(ButtonPos["CreditsHover"]); });
@@ -862,7 +891,6 @@ void Menu::initializeGuiFuctions()
 
 	mSavedGameSlots[0]->setOnClickFunction([=]()
 	{
-		
 		std::cout << mSavedGameText[0]->getText() << std::endl;
 	});
 	
