@@ -16,6 +16,7 @@ public:
 	void				tick();
 	void				connect();
 	void				sendDataToServer(sf::Packet packet);
+	void				triggerServerEvent(std::string eventName, sf::Packet packet);
 						~TcpClient(){delete mTcpThread; delete mTcpConnect;};
 private:
 	sf::TcpSocket mTcpSocket;

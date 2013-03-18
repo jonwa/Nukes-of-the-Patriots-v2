@@ -56,7 +56,7 @@ public:
 	int											getYear()const;
 	std::shared_ptr<SuperPower> 				getCurrentPlayer()const;
 	std::vector<std::shared_ptr<SuperPower> >	getPlayers()const;
-	void										selectStartingPlayer(std::shared_ptr<SuperPower> startingPlayer);
+	void										selectStartingPlayer(std::shared_ptr<SuperPower> startingPlayer = nullptr);
 	void										setCurrentPlayer(std::shared_ptr<SuperPower> nextPlayer);
 	void										setYear(int year);
 	void										startRound();
@@ -97,13 +97,14 @@ public:
 	void										syncGUIEditField(std::shared_ptr<GUIElement> guiElement);
 
 	bool										isMyTurnToPlay();
-	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet);
+	void										triggerOtherPlayersEvent(std::string eventName, sf::Packet &packet, std::string type = "TCP");
 
 	std::shared_ptr<President>					getPresidentByName(std::string name);
 	void										removePresidentFromList(std::shared_ptr<President> president);
 	void										nextPlayersTurn();
 	void										setEnemyTurn();
 	void										setMyTurn();
+	void										setRandomPlayer(std::shared_ptr<SuperPower> player);
 private:
 	std::string mFileName;
 	SaveFilesVec mSaveFiles;
@@ -204,6 +205,7 @@ private:
 	unsigned short mRemotePort;
 
 	int mPlayersTurn; // 0 = servers turn
+	bool mReady;
 };
 
 

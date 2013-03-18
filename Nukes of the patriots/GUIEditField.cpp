@@ -295,7 +295,7 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 			char key = static_cast<char>(event.text.unicode);
 			if(!mOnlyNumbers || (mOnlyNumbers && event.text.unicode >= 48 && event.text.unicode <= 57))
 			{
-				if(event.text.unicode < 128 && event.text.unicode != 13 && event.text.unicode != 8)
+				if(/*event.text.unicode < 128 && */event.text.unicode != 13 && event.text.unicode != 8)
 				{
 					sf::String str = mText.getString();
 					if(mCaretIndex > str.getSize())

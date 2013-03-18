@@ -13,12 +13,12 @@
 	<music filename="click_sound_failed.wav"/>
 	<music filename="Factory.wav"/>
 	<music filename="Goods.wav"/>
-	<music filename="Nuke.wav"/>
+	<music filename="Nuclear.wav"/>
 	<music filename="Space.wav"/>
 	<music filename="Tech.wav"/>
 </tracks>
 <tracks directory ="Other">
-	<music filename="Eating level 3.wav"/>
+	<music filename="eating_level_3.wav"/>
 </tracks>
 <tracks directory="Slogans">
 	<music filename="Alva.wav"/>

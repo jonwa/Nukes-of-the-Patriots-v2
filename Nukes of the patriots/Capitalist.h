@@ -78,7 +78,6 @@ private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
 
-	sf::Clock KLOCKA;
 	std::string intToString(int i)
 	{
 		std::stringstream converter;
@@ -104,6 +103,7 @@ private:
 	std::map<std::string, std::shared_ptr<sf::Music> >			   CapitalistMusic;
 	
 	std::shared_ptr<Sound> mCapitalistMainTheme; // capitalist main theme music
+	std::shared_ptr<Sound> mIncreasedResoucesSound;
 
 	
 	void loadButtonPosition();

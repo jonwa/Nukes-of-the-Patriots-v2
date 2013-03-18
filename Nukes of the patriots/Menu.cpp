@@ -27,6 +27,7 @@ Menu::Menu() :
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
+	//mChooseTeamAnimation.openFromFile("mainmenu_sign.wmv");
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
 	//playVideo();
 }
@@ -498,6 +499,7 @@ void Menu::initialize()
 	mCreditsMenuWindow->setVisible(false);
 
 	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
+	mBackToMainMenuButton[0]	= GUIButton::create(ButtonPos["CloseChooseTeamWindow"], mChooseTeamWindow);
 	mTeamCommunist				= GUIImage::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
 	mTeamCapitalist				= GUIImage::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
 
@@ -518,6 +520,7 @@ void Menu::initialize()
 	// Lan play ("Multi-player")
 	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
 	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mBackToMainMenuButton[1]		= GUIButton::create(ButtonPos["CloseLanWindow"], mLanPlayWindow);
 	mWaitingForClientWindow			= GUIWindow::create(WindowPos["WaitingForClient"], mLanPlayWindow);
 	mWaitingForClientText			= GUIText::create(sf::FloatRect(100, 100, 0, 0), "Searching for servers...", mWaitingForClientWindow);
 	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos["CloseWaitingForClient"], mWaitingForClientWindow);
@@ -555,6 +558,8 @@ void Menu::tick()
 		mWindow->draw(sprite);
 	}
 
+	//if(mChooseTeamAnimation.getStatus() == sfe::Movie::Playing)
+		//mWindow->draw(mChooseTeamAnimation);
 	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
 	//	mWindow->draw(mIntroMovie);
 
@@ -562,9 +567,15 @@ void Menu::tick()
 
 void Menu::startGame()
 {
+	//mChooseTeamAnimation.play();
 	mLanPlayWindow->setVisible(false);
 	mMainMenuWindow->setVisible(false);
-	mChooseTeamWindow->setVisible(true); 
+	mChooseTeamWindow->setVisible(true);
+	/*Timer::setTimer([=]()
+	{
+		mChooseTeamAnimation.stop();
+		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+	}, 4000, 1);*/
 }
 
 void Menu::initializeGuiFuctions()
@@ -581,6 +592,7 @@ void Menu::initializeGuiFuctions()
 	mMultiPlayerButton->setOnClickFunction([=]()		
 	{ 
 		//mParentWindow->setEnabled(false, true);
+		mMainMenuWindow->setVisible(false);
 		mLanPlayWindow->setVisible(true);
 		mLanPlayWindow->setEnabled(true, true);
 	});
@@ -860,6 +872,18 @@ void Menu::initializeGuiFuctions()
 		mWaitingForClientWindow->setVisible(false);
 		mWaitingForClientWindow->setEnabled(false, true);
 		mLanPlayWindow->setEnabled(true, true);
+	});
+
+	mBackToMainMenuButton[0]->setOnClickFunction([=]()
+	{
+		mChooseTeamWindow->setVisible(false);
+		mMainMenuWindow->setVisible(true);
+	});
+
+	mBackToMainMenuButton[1]->setOnClickFunction([=]()
+	{
+		mLanPlayWindow->setVisible(false);
+		mMainMenuWindow->setVisible(true);
 	});
 
 	mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });

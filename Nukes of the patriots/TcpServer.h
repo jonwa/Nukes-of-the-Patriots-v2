@@ -17,6 +17,7 @@ public:
 	void				setPort(unsigned short port){ mTcpListener.listen(port); }
 	void				tick();
 	void				sendDataToClient(sf::Packet packet, std::vector<sf::TcpSocket*> clients);
+	void				triggerClientEvent(std::string eventName, sf::Packet packet, sf::IpAddress receivingAddress, unsigned short receivingPort);
 						~TcpServer(){delete mTcpThread;};
 private:
 	sf::TcpListener mTcpListener;

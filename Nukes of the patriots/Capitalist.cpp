@@ -28,6 +28,7 @@ static int taxChange	= 5;
 static int taxPatriotismChange = 0;
 static int currentGoods = 0;
 static int currentTech  = 0;
+static int maxCurrencyChange = 0;
 static bool activateWindow = false;
 
 Capitalist::Capitalist() :
@@ -292,23 +293,37 @@ void Capitalist::updateGUI()
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
 			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
+
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency && stringToInt(mCurrencyText->getText()) != mCurrency)
 		{
-			/*int difference = mCurrency - oldCurrency;
-			int currencyChange = 100;
-			
-			std::cout << KLOCKA.getElapsedTime().asSeconds() << std::endl;
-			if(KLOCKA.getElapsedTime().asMilliseconds() > 0.2)
+			int difference = mCurrency - oldCurrency;
+			int currencyChange = 1;
+			maxCurrencyChange += currencyChange;
+			if(difference < 0)
 			{
-				KLOCKA.restart();
-				if(difference < 0)
-					mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
-				else
-					mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
-			}*/
-			mCurrencyText->setText(intToString(mCurrency) + " §");
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) < mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
+			else
+			{
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) > mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
 		}
+
 		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
 			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
@@ -342,8 +357,7 @@ void Capitalist::updateGUI()
 		mResourceFoodPriceText->setText("Price: " + intToString(foodCost) + " §");
 		mResourceGoodsPriceText->setText("Price: " + intToString(goodsCost) + " §");
 		mResourceTechPriceText->setText("Price: " + intToString(techCost) + " §");
-	}, 50, 0);
-	//}
+	}, 2, 0);
 }
 
 
@@ -552,61 +566,72 @@ void Capitalist::update()
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText());
 	
 	//std::cout<<"capitalist mRound: "<<mRound<<std::endl;
-	if(mRound > 0)
+	if(mRound > 1)
 	{
+		if((mRound-1) % 4 == 0 ) 
+		{
+			chooseLeader();
+		}
+		else
+		{
+			getTaxIncome();
 
-		mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
+			mTaxesIncomeWindow->setVisible(true);
+			mCapitalistMainWindow->setEnabled(false, true);
+			mTaxesIncomeWindow->setEnabled(true, true);
+		}
+	}
+	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
 		
-		mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
-		mCurrentTaxesText[1]->setText(intToString(mTaxes));
-		mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + " §");
+	mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
+	mCurrentTaxesText[1]->setText(intToString(mTaxes));
+	mTaxesIncomeText[1]->setText(intToString(getTaxes()*getPopulation()) + " §");
 
-		std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
+	std::shared_ptr<SuperPower> enemy = GameManager::getInstance()->getCommunist();
 
-		mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
-		mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
-		mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
+	mImportResourcesAvailableText[0]->setText(enemy->getExportedFood());
+	mImportResourcesAvailableText[1]->setText(enemy->getExportedGoods());
+	mImportResourcesAvailableText[2]->setText(enemy->getExportedTech());
 
+	mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+	mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+	mImportPriceText[2]->setText(enemy->getExportedTechPrice());
+
+	mImportBuyQuantityText[0]->setText("0");
+	mImportBuyQuantityText[1]->setText("0");
+	mImportBuyQuantityText[2]->setText("0");
+
+	mImportTotalPriceText[0]->setText("0");
+	mImportTotalPriceText[1]->setText("0");
+	mImportTotalPriceText[2]->setText("0");
+
+	if(enemy->getExportedFood() == 0)
+		mImportPriceText[0]->setText("N/A");
+	else
 		mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
+
+	if(enemy->getExportedGoods() == 0)
+		mImportPriceText[1]->setText("N/A");
+	else
 		mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
+
+	if(enemy->getExportedTech() == 0)
+		mImportPriceText[2]->setText("N/A");
+	else
 		mImportPriceText[2]->setText(enemy->getExportedTechPrice());
 
-		mImportBuyQuantityText[0]->setText("0");
-		mImportBuyQuantityText[1]->setText("0");
-		mImportBuyQuantityText[2]->setText("0");
+	mExportQuantityText[0]->setText(mExportedFood);
+	mExportQuantityText[1]->setText(mExportedGoods);
+	mExportQuantityText[2]->setText(mExportedTech);
 
-		mImportTotalPriceText[0]->setText("0");
-		mImportTotalPriceText[1]->setText("0");
-		mImportTotalPriceText[2]->setText("0");
+	mExportFoodCost->setText(intToString(mExportedFoodPrice));
+	mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
+	mExportTechCost->setText(intToString(mExportedTechPrice));
 
-		if(enemy->getExportedFood() == 0)
-			mImportPriceText[0]->setText("N/A");
-		else
-			mImportPriceText[0]->setText(enemy->getExportedFoodPrice());
-
-		if(enemy->getExportedGoods() == 0)
-			mImportPriceText[1]->setText("N/A");
-		else
-			mImportPriceText[1]->setText(enemy->getExportedGoodsPrice());
-
-		if(enemy->getExportedTech() == 0)
-			mImportPriceText[2]->setText("N/A");
-		else
-			mImportPriceText[2]->setText(enemy->getExportedTechPrice());
-
-		mExportQuantityText[0]->setText(mExportedFood);
-		mExportQuantityText[1]->setText(mExportedGoods);
-		mExportQuantityText[2]->setText(mExportedTech);
-
-		mExportFoodCost->setText(intToString(mExportedFoodPrice));
-		mExportGoodsCost->setText(intToString(mExportedGoodsPrice));
-		mExportTechCost->setText(intToString(mExportedTechPrice));
-
-		mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
-		mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
-		mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
-		mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
-	}
+	mExportPriceText[0]->setText(mExportedFood * mExportedFoodPrice);
+	mExportPriceText[1]->setText(mExportedGoods * mExportedGoodsPrice);
+	mExportPriceText[2]->setText(mExportedTech * mExportedTechPrice);
+	mExportTotalPriceValue->setText(mExportedFood * mExportedFoodPrice + mExportedGoods * mExportedGoodsPrice + mExportedTech * mExportedTechPrice);
 	// Set previous round values as current round values so we can get the difference at the start of the next round
 	// Would've been better to use a vector
 	mPatriotismPreviousRound = mPatriotism;
@@ -625,19 +650,6 @@ void Capitalist::update()
 	//std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
 	//std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 	mTaxesPatriotismChange->setText(0);
-
-	if((mRound-1) % 4 == 0 ) 
-	{
-		chooseLeader();
-	}
-	else
-	{
-		getTaxIncome();
-
-		mTaxesIncomeWindow->setVisible(true);
-		mCapitalistMainWindow->setEnabled(false, true);
-		mTaxesIncomeWindow->setEnabled(true, true);
-	}
 
 	changeCityImage();
 }
@@ -770,6 +782,7 @@ void Capitalist::resetResourcesValues()
 	mFoodCost->setText("Cost: 0 §");
 	mGoodsCost->setText("Cost: 0 §");
 	mTechCost->setText("Cost: 0 §");
+	mTotalResourcesCost->setText("Total cost: 0 §");
 	mBuyFoodText->setText(0);
 	mBuyGoodsText->setText(0);
 	mBuyTechText->setText(0);
@@ -945,6 +958,8 @@ void Capitalist::initializeCapitalistWindow()
 	initializeCityImages();
 
 	mCapitalistMainTheme				= Sound::create(CapitalistMusic["CapitalistMainTheme"]);
+	mIncreasedResoucesSound				= Sound::create();
+	mUpgradeSound						= Sound::create();
 
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
@@ -1639,7 +1654,6 @@ void Capitalist::initializeGuiFunctions()
 		mResourceWindow->setEnabled(true, true);
 		mResourceWindow->setVisible(true); 
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
-
 		float x = mResourceWindow->getX() + mResourceWindow->getRectangle().width/2;
 		float y = mResourceWindow->getY() + mResourceWindow->getRectangle().height/2;
 		GUIAnimation::move(mResourceWindow, 100, sf::FloatRect(x, y, 0, 0), mResourceWindow->getRectangle());
@@ -2029,13 +2043,26 @@ void Capitalist::initializeGuiFunctions()
 		
 		if(mGoods >= nuclearGoodsPrice && mTech >= nuclearTechPrice)
 		{
+			if(mUpgradeSound != nullptr)
+			{
+				if(mUpgradeSound->getSound()->getStatus() == sf::Music::Stopped)
+				{
+					mUpgradeSound->setSound(getSoundEffect("Buttons/Nuclear"));
+					mUpgradeSound->playSound();
+				}
+			}
+			else
+			{
+				mUpgradeSound->setSound(getSoundEffect("Buttons/Nuclear"));
+				mUpgradeSound->playSound();
+			}
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
 			mGoods -= nuclearGoodsPrice;
 			mTech  -= nuclearTechPrice;
 		}
-	});		
+	});
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
 		int nuclearGoodsPrice	= 10 * mPresident->getNuclearPriceModifier();
@@ -2046,7 +2073,6 @@ void Capitalist::initializeGuiFunctions()
 		mBuyNuclearText->setText(mNuclearText->getText());
 
 		upgradeWindowText();
-		
 	});
 			
 
@@ -2061,6 +2087,19 @@ void Capitalist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpaceProgramText->getText());
 		if(mGoods >= spaceProgramGoodsPrice && mTech >= spaceProgramTechPrice)
 		{
+			if(mUpgradeSound->getSound() != nullptr)
+			{
+				if(mUpgradeSound->getSound()->getStatus() == sf::Music::Stopped)
+				{
+					mUpgradeSound->setSound(getSoundEffect("Buttons/Space"));
+					mUpgradeSound->playSound();
+				}
+			}
+			else
+			{
+				mUpgradeSound->setSound(getSoundEffect("Buttons/Space"));
+				mUpgradeSound->playSound();
+			}
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
@@ -2092,6 +2131,8 @@ void Capitalist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpyNetworkText->getText());
 		if(mTech >= spyNetworkTechPrice)
 		{
+			//if(getSoundEffect("Buttons/Spy")->getStatus() == sf::Music::Stopped)
+				//playSoundEffect("Buttons/Spy");
 			++amount;
 			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
@@ -2433,7 +2474,7 @@ void Capitalist::initializeGuiFunctions()
 			setTech(stringToInt(mBuyTechText->getText()));
 			
 			resetResourcesValues();
-		}	
+		}
 	});
 
 	/*Stänger ner upgrade fönstret "Okay-knappen"*/
@@ -2557,10 +2598,12 @@ void Capitalist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{
+		mCapitalistMainTheme->fadeToVolume(1000, mCapitalistMainTheme->getVolume(), 25);
 		mExportedFoodPreviousRound = mExportedFood;
 		mExportedGoodsPreviousRound = mExportedGoods;
 		mExportedTechPreviousRound = mExportedTech;
 		int foodBought = mFood - mFoodPreviousRound;
+		
 		int goodsBought = mGoods - mGoodsPreviousRound;
 		int techBought = mTech - mTechPreviousRound;
 		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
@@ -2578,8 +2621,9 @@ void Capitalist::initializeGuiFunctions()
 		{
 			goodsCost += 1;
 			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
-
-			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Goods"))->play();
+			mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+			
+			mIncreasedResoucesSound->playSound();
 
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
@@ -2588,13 +2632,14 @@ void Capitalist::initializeGuiFunctions()
 			techCost += 1;
 
 			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
-
-			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Tech"))->play();
+			mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+			mIncreasedResoucesSound->playSound();
 
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(totalBought != 0)
 		{
+			std::vector<int> resources;
 			int rand = Randomizer::getInstance()->randomNr(3, 0);
 			if(rand == 0)
 			{
@@ -2633,6 +2678,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
+		mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);
@@ -2673,7 +2719,8 @@ void Capitalist::initializeGuiFunctions()
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
-		mCapitalistMainTheme->fadeToVolume(CapitalistMusic["CapitalistMainTheme"], 2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
+		mCapitalistMainTheme->fadeToVolume(2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<Sound> music = mCapitalistMainTheme;
 		std::shared_ptr<GUIButton> endTurn = mCapitalistEndTurnButton;
