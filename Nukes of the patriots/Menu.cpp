@@ -591,6 +591,7 @@ void Menu::initializeGuiFuctions()
 	mMultiPlayerButton->setOnClickFunction([=]()		
 	{ 
 		//mParentWindow->setEnabled(false, true);
+		mMainMenuWindow->setVisible(false);
 		mLanPlayWindow->setVisible(true);
 		mLanPlayWindow->setEnabled(true, true);
 	});
