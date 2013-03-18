@@ -26,6 +26,7 @@ static int propagandaBoughtTech = 0;
 static int taxChange		= 5;
 static int currentGoods		= 0;
 static int currentTech		= 0;
+static int maxCurrencyChange = 0;
 static bool activateWindow	= false;
 static float volumeChange	= 10.f;
 static int generalCount = 0;
@@ -57,11 +58,13 @@ void Communist::reset()
 	static int currentGoods		= 0;
 	static int currentTech		= 0;
 	static bool activateWindow	= false;
-
 	static int generalCount = 0;
 	mRound = 0;
 	mCount = 0;
 	mIncreasePopulation = false;
+
+	hideGUI();
+	mTaxesIncomeWindow->setVisible(false);
 
 	mGeneral = nullptr;
 	mChooseGeneralWindow->setVisible(true);
@@ -78,7 +81,16 @@ void Communist::reset()
 
 	mCommunistGeneralButton->setTexture(CommunistButtons["General"]);
 	mCommunistGeneralButton->setSize(CommunistButtons["General"].first.width, CommunistButtons["General"].first.height);
+
+
+	mYearOneTaxesText->setText(getTaxes());
+	mYearTwoTaxesText->setText(getTaxes());
+	mYearThreeTaxesText->setText(getTaxes());
+	mYearFourTaxesText->setText(getTaxes());
+	mYearFiveTaxesText->setText(getTaxes());
+
 	SuperPower::reset();
+
 	
 }
 
@@ -90,8 +102,35 @@ void Communist::updateGUI()
 		if(mPopulation != oldPopulation)
 			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
 		int oldCurrency = stringToInt(mCurrencyText->getText());
-		if(mCurrency != oldCurrency)
-			mCurrencyText->setText(intToString(mCurrency) + " §");
+		if(mCurrency != oldCurrency && stringToInt(mCurrencyText->getText()) != mCurrency)
+		{
+			int difference = mCurrency - oldCurrency;
+			int currencyChange = 1;
+			maxCurrencyChange += currencyChange;
+			
+			if(difference < 0)
+			{
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) < mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
+			else
+			{
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) > mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
+		}
 		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
 			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
@@ -120,7 +159,7 @@ void Communist::updateGUI()
 		int oldTech = stringToInt(mTechText->getText());
 		if(getTech() != oldTech)
 			mTechText->setText(intToString(getTech()));
-	}, 50, 0);
+	}, 2, 0);
 }
 
 
@@ -355,6 +394,7 @@ void Communist::openFiveYearPlan()
 		mFiveYearPlanWindow->setVisible(true);
 		mTaxesIncomeWindow->setVisible(false);
 		mTaxesIncomeWindow->setEnabled(false, true);
+
 	//}
 	//else
 	//{
@@ -610,6 +650,23 @@ void Communist::newYearStart()
 		mPatriotismChange->setText("Total patriotism change: +" + intToString(totalPatriotismChange));
 
 	mNewPatriotism->setText("Total patriotism: " + intToString(mPatriotism));
+
+	switch(mRound%5 + 1)
+	{
+		case 2:
+			mIncomeYearTwo->setText(intToString(getPopulation() * getTaxes()) + " §");
+		case 3:
+			mIncomeYearThree->setText(intToString(getPopulation() * getTaxes()) + " §");
+		case 4:
+			mIncomeYearFour->setText(intToString(getPopulation() * getTaxes()) + " §");
+		case 5:
+			mIncomeYearFive->setText(intToString(getPopulation() * getTaxes()) + " §");
+			break;
+		default:
+			break;
+	}
+	std::cout<<"case: "<<(mRound%5 + 1)<<std::endl;
+	
 }
 
 void Communist::update()
@@ -619,7 +676,6 @@ void Communist::update()
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CapitalistNameField")->getText());
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
 
-	
 	if(mRound > 0)
 	{
 		mCurrentPopulationText[1]->setText(intToString(getPopulation()) + " million");
@@ -685,7 +741,6 @@ void Communist::update()
 	mSpyNetworkPreviousRound = mSpyNetwork;
 	mNuclearWeaponPreviousRound = mNuclearWeapon;
 	mSpaceProgramPreviousRound = mSpaceProgram;
-
 
 	if((mRound-1) % 5 == 0 && mRound != 1)	
 		openFiveYearPlan();
@@ -1063,7 +1118,8 @@ void Communist::initializeCommunistWindow()
 	loadCommunistMusic();
 	initializeCityImages();
 
-	mCommunistMainTheme				= Sound::create(CommunistMusic["CommunistMainTheme"]); 
+	mCommunistMainTheme				= Sound::create(CommunistMusic["CommunistMainTheme"]);
+	mUpgradeSound					= Sound::create();
 
 	mCommunistMainWindow			= GUIWindow::create(CommunistWindows["CommunistInterface"]);
 	mCommunistButtonFrame			= GUIWindow::create(CommunistWindows["InterfaceButtonsFrame"], mCommunistMainWindow);
@@ -1073,6 +1129,8 @@ void Communist::initializeCommunistWindow()
 									  (CommunistButtons["CityImages"].first, CityImages[0]), mCommunistMainWindow);
 	mCommunistGeneralButton			= GUIButton::create(CommunistButtons["General"], mCommunistMainWindow);
 	mGeneralFrame					= GUIImage::create(CommunistButtons["GeneralFrame"], mCommunistMainWindow);
+	mCommunistGeneralButton->setX(mGeneralFrame->getX() + 7); mCommunistGeneralButton->setY(mGeneralFrame->getY() + 9);
+	mCommunistGeneralButton->setScale(0.90, 0.80);
 	mCommunistFiveYearPlanButton    = GUIButton::create(CommunistButtons["FiveYearPlan"], mCommunistMainWindow);
 	mCommunistPropagandaButton		= GUIButton::create(CommunistButtons["Propaganda"], mCommunistMainWindow);
 	mCommunistUpgradeButton			= GUIButton::create(CommunistButtons["Upgrade"], mCommunistMainWindow);
@@ -1677,6 +1735,7 @@ void Communist::chooseLeader()
 /*Initierar funktionerna för femårsplansknapparna. Egen funktion för att inte göra allting så grötigt.*/
 void Communist::fiveYearGuiFunctions()
 {
+
 	std::vector<std::shared_ptr<GUIEditField> > foodFields;
 	std::vector<std::shared_ptr<GUIEditField> > goodsFields;
 	std::vector<std::shared_ptr<GUIEditField> > techFields;
@@ -2025,6 +2084,8 @@ void Communist::initializeGuiFunctions()
 		
 		if(mGoods >= nuclearGoodsPrice && mTech >= nuclearTechPrice)
 		{
+			if(getSoundEffect("Buttons/Nuclear")->getStatus() == sf::Music::Stopped)
+				playSoundEffect("Buttons/Nuclear");
 			mUpgradeNuclearWeaponButton->canClick(true);
 			++amount;
 			mBuyNuclearText->setText(amount);
@@ -2051,10 +2112,16 @@ void Communist::initializeGuiFunctions()
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
 	{
 		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5;
-		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10;
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCapitalist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10;
 		int amount = stringToInt(mBuySpaceProgramText->getText());
 		if(mGoods >= spaceProgramGoodsPrice && mTech >= spaceProgramTechPrice)
 		{
+			if(getSoundEffect("Buttons/Space")->getStatus() == sf::Music::Stopped)
+				playSoundEffect("Buttons/Space");
 			mUpgradeSpaceProgramButton->canClick(true);
 			++amount;
 			mBuySpaceProgramText->setText(amount);
@@ -2068,7 +2135,11 @@ void Communist::initializeGuiFunctions()
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
 		int spaceProgramGoodsPrice  = 5;
-		int spaceProgramTechPrice	= 10;
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= 10 - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= 10;
 		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
 		for(int i = 0; i < difference; ++i)
 		{
@@ -2592,6 +2663,7 @@ void Communist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
 	{
+		mCommunistMainTheme->setVolume(25);
 		updateFood(mPopulationEatsFoodText);
 
 		mPopulationEatsFoodWindow->setVisible(true);
@@ -2632,7 +2704,8 @@ void Communist::initializeGuiFunctions()
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
-		mCommunistMainTheme->fadeToVolume(CommunistMusic["CommunistMainTheme"], 2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
+		mCommunistMainTheme->fadeToVolume(2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<GUIButton> endTurn = mCommunistEndTurnButton;
 		sf::FloatRect rect = sf::FloatRect(CommunistButtons["EndTurn"].first);
@@ -2658,7 +2731,6 @@ void Communist::initializeGuiFunctions()
 	
 	mCommunistGeneralButton->setMouseEnterFunction([=]()
 	{
-		std::cout << "BAJSNYLLE DET FUNKAR FAKTISKT" << std::endl;
 		mPickedGeneralWindow->setVisible(true);
 		mClosePickedGeneralWindow->setVisible(false);
 	});

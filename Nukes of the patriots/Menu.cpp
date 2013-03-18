@@ -26,6 +26,7 @@ Menu::Menu() :
 	initialize(); 
 	initializeGuiFuctions();
 	//loadTeamAnimation();
+	//mChooseTeamAnimation.openFromFile("mainmenu_sign.wmv");
 	mTeamAnimationTimer = Timer::setTimer([&](){}, 5000, 1);
 	//playVideo();
 }
@@ -53,6 +54,33 @@ void Menu::pauseMusic()
 	mMenuMusic->pauseSound();
 }
 
+void Menu::reset()
+{
+		mParentWindow->setVisible(true);
+		mInGameMenuWindow->setVisible(false); 
+		mChooseTeamWindow->setVisible(true);
+		GUIManager::getInstance()->setOnTop(mChooseTeamWindow);
+	
+		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
+		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mCapitalistNameField->setText("");
+		mCapitalistNameField->setPlaceHolderText("Enter name here");
+		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalist"].second));
+		mCapitalistOkayButton->setEnabled(false);
+		
+		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
+		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
+			(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
+		mCommunistNameField->setText("");	
+		mCommunistNameField->setPlaceHolderText("Enter name here");
+		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunist"].second));
+		mCommunistOkayButton->setEnabled(false);
+		resetChooseTeamValues();
+		mChooseTeamWindow->setEnabled(true, true);
+}
 
 void Menu::setWindow(sf::RenderWindow& window)
 {
@@ -175,7 +203,9 @@ void Menu::setLoadGameButtonText()
 
 std::shared_ptr<GUIWindow> Menu::getWindows(std::string string)
 {
-	if(string == "MainMenu")
+	if(string == "ParentWindow")
+		return mParentWindow;
+	else if(string == "MainMenu")
 		return mMainMenuWindow;
 	else if(string == "InGameMenu")
 		return mInGameMenuWindow;
@@ -183,6 +213,8 @@ std::shared_ptr<GUIWindow> Menu::getWindows(std::string string)
 		return mSaveGameWindow[0];
 	else if(string == "SaveSuccessful")
 		return mSaveGameWindow[1];
+	else if(string == "ChooseTeam")
+		return mChooseTeamWindow;
 }
 
 std::shared_ptr<GUIEditField> Menu::getEditField(std::string string)
@@ -354,28 +386,28 @@ void Menu::loadMenuMusic()
 }
 
 
-void Menu::initializeIntroVideo()
-{
-	//if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
-	//	std::cout << "unable to load video" << std::endl;
-
+//void Menu::initializeIntroVideo()
+//{
+//	if (!mIntroMovie.openFromFile("FrukostFabriken.wmv"))
+//		std::cout << "unable to load video" << std::endl;
+//
 //	mIntroMovie.useDebugMessages(false);
-}
-
-void Menu::stopVideo()
-{
-	//mIntroMovie.stop();
-}
-
-
+//}
+//
+//void Menu::stopVideo()
+//{
+//	mIntroMovie.stop();
+//}
+//
+//
 //void Menu::playVideo()
 //{
 //	mIntroMovie.play();
 //	Timer::setTimer([=]()
 //	{
 //		stopVideo();
-	//	playMusic();
-		//GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+//		playMusic();
+//		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
 //		mMainMenuWindow->setVisible(true);
 //	}, 5000, 1);
 //}
@@ -398,7 +430,7 @@ void Menu::initialize()
 	mMenuMusic				= Sound::create(MenuMusic["MainMenuTrack"]);
 	mParentWindow			= GUIWindow::create(WindowPos["MenuInterface"]);
 
-	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"], mParentWindow);
+	mMainMenuWindow			= GUIWindow::create(WindowPos["MainMenu"]);
 	mStartNewGameButton		= GUIButton::create(ButtonPos["StartGame"], mMainMenuWindow);
 	mMultiPlayerButton		= GUIButton::create(ButtonPos["MultiPlayer"], mMainMenuWindow);
 	mLoadGameButton			= GUIButton::create(ButtonPos["LoadGame"], mMainMenuWindow);
@@ -466,6 +498,7 @@ void Menu::initialize()
 	mCreditsMenuWindow->setVisible(false);
 
 	mChooseTeamWindow			= GUIWindow::create(WindowPos["ChooseTeam"], mParentWindow);
+	mBackToMainMenuButton[0]	= GUIButton::create(ButtonPos["CloseChooseTeamWindow"], mChooseTeamWindow);
 	mTeamCommunist				= GUIImage::create(ButtonPos["TeamCommunist"], mChooseTeamWindow);
 	mTeamCapitalist				= GUIImage::create(ButtonPos["TeamCapitalist"], mChooseTeamWindow);
 
@@ -486,6 +519,7 @@ void Menu::initialize()
 	// Lan play ("Multi-player")
 	mLanPlayWindow					= GUIWindow::create(WindowPos["LanPlayWindow"], mParentWindow);
 	mLanPlayQuickConnect			= GUIButton::create(ButtonPos["LanPlayQuickConnect"], mLanPlayWindow);
+	mBackToMainMenuButton[1]		= GUIButton::create(ButtonPos["CloseLanWindow"], mChooseTeamWindow);
 	mWaitingForClientWindow			= GUIWindow::create(WindowPos["WaitingForClient"], mLanPlayWindow);
 	mWaitingForClientText			= GUIText::create(sf::FloatRect(100, 100, 0, 0), "Searching for servers...", mWaitingForClientWindow);
 	mCloseWaitingForClientWindow	= GUIButton::create(ButtonPos["CloseWaitingForClient"], mWaitingForClientWindow);
@@ -493,6 +527,7 @@ void Menu::initialize()
 	mLanPlayWindow->setVisible(false);
 
 	GUIManager::getInstance()->addGUIElement(mParentWindow);
+	GUIManager::getInstance()->addGUIElement(mMainMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mInGameMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mCreditsMenuWindow);
 	GUIManager::getInstance()->addGUIElement(mSettingsMenuWindow);
@@ -522,16 +557,24 @@ void Menu::tick()
 		mWindow->draw(sprite);
 	}
 
+	//if(mChooseTeamAnimation.getStatus() == sfe::Movie::Playing)
+		//mWindow->draw(mChooseTeamAnimation);
 	//if(mIntroMovie.getStatus() == sfe::Movie::Playing)
-	//	mWindow->draw(mIntroMovie);
+		//mWindow->draw(mIntroMovie);
 
 }
 
 void Menu::startGame()
 {
+	//mChooseTeamAnimation.play();
 	mLanPlayWindow->setVisible(false);
 	mMainMenuWindow->setVisible(false);
-	mChooseTeamWindow->setVisible(true); 
+	mChooseTeamWindow->setVisible(true);
+	/*Timer::setTimer([=]()
+	{
+		mChooseTeamAnimation.stop();
+		GUIManager::getInstance()->setOnTop(mMainMenuWindow);
+	}, 4000, 1);*/
 }
 
 void Menu::initializeGuiFuctions()
@@ -724,7 +767,6 @@ void Menu::initializeGuiFuctions()
 				_parentWindow->setVisible(false);
 
 				_music.at("MainMenuTrack")->stop(); 
-
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
 		}
@@ -760,31 +802,7 @@ void Menu::initializeGuiFuctions()
 	mRestartGameButton->setOnClickFunction([=]()
 	{
 		GameManager::getInstance()->reset();
-		mParentWindow->setVisible(true);
-		mInGameMenuWindow->setVisible(false); 
-		mChooseTeamWindow->setVisible(true);
-		GUIManager::getInstance()->setOnTop(mChooseTeamWindow);
-	
-		mCapitalistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCapitalistOkayButton->getX(), mCapitalistOkayButton->getY(), mCapitalistOkayButton->getWidth(), mCapitalistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
-		mCapitalistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCapitalistNameField->getX(), mCapitalistNameField->getY(), mCapitalistNameField->getWidth(), mCapitalistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
-		mCapitalistNameField->setText("");
-		mCapitalistNameField->setPlaceHolderText("Enter name here");
-		mTeamCapitalist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCapitalist->getRectangle(), ButtonPos["TeamCapitalist"].second));
-		mCapitalistOkayButton->setEnabled(false);
-		
-		mCommunistOkayButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCommunistOkayButton->getX(), mCommunistOkayButton->getY(), mCommunistOkayButton->getWidth(), mCommunistOkayButton->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Ok-knapp-inaktiv"))));
-		mCommunistNameField->setTexture(std::pair<sf::FloatRect, sf::Texture*>
-			(sf::FloatRect(mCommunistNameField->getX(), mCommunistNameField->getY(), mCommunistNameField->getWidth(), mCommunistNameField->getHeight()), &ResourceHandler::getInstance()->getTexture(std::string("Menu/Namnruta-aktiv"))));
-		mCommunistNameField->setText("");	
-		mCommunistNameField->setPlaceHolderText("Enter name here");
-		mTeamCommunist->setTexture(std::pair<sf::FloatRect, sf::Texture*> (mTeamCommunist->getRectangle(), ButtonPos["TeamCommunist"].second));
-		mCommunistOkayButton->setEnabled(false);
-		resetChooseTeamValues();
-		mChooseTeamWindow->setEnabled(true, true);
-
+		reset();
 	});
 
 	mSaveGameButton->setOnClickFunction([=]()
@@ -824,6 +842,22 @@ void Menu::initializeGuiFuctions()
 		mWaitingForClientWindow->setVisible(false);
 		mWaitingForClientWindow->setEnabled(false, true);
 		mLanPlayWindow->setEnabled(true, true);
+	});
+
+	mBackToMainMenuButton[0]->setOnClickFunction([=]()
+	{
+		mChooseTeamWindow->setEnabled(false, true);
+		mChooseTeamWindow->setVisible(false);
+		mMainMenuWindow->setVisible(true);
+		mMainMenuWindow->setEnabled(true, true);
+	});
+
+	mBackToMainMenuButton[1]->setOnClickFunction([=]()
+	{
+		mLanPlayWindow->setEnabled(false, true);
+		mLanPlayWindow->setVisible(false);
+		mMainMenuWindow->setVisible(true);
+		mMainMenuWindow->setEnabled(true, true);
 	});
 
 	mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });

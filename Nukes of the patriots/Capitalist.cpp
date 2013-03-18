@@ -28,6 +28,7 @@ static int taxChange	= 5;
 static int taxPatriotismChange = 0;
 static int currentGoods = 0;
 static int currentTech  = 0;
+static int maxCurrencyChange = 0;
 static bool activateWindow = false;
 
 Capitalist::Capitalist() :
@@ -257,12 +258,8 @@ void Capitalist::reset()
 	mCount = 0;
 	mIncreasePopulation = false;
 	mRound = 0;
-	
-	mTaxesWindow->setVisible(false);
-	mResourceWindow->setVisible(false);
-	mUpgradeWindow->setVisible(false);
-	mImportWindow->setVisible(false);
-	mExportWindow->setVisible(false);
+	hideGUI();
+	mTaxesIncomeWindow->setVisible(false);
 
 	mCapitalistTaxesButton->setTexture(CapitalistButtons["Taxes"]);
 	mCapitalistTaxesButton->setSize(CapitalistButtons["Taxes"].first.width, CapitalistButtons["Taxes"].first.height);
@@ -296,23 +293,37 @@ void Capitalist::updateGUI()
 		int oldPopulation = stringToInt(mPopulationText->getText().substr(0, mPopulationText->getText().length() - 9));
 		if(mPopulation != oldPopulation)
 			mPopulationText->setText("Population: " + intToString(mPopulation) + " million");
+
 		int oldCurrency = stringToInt(mCurrencyText->getText());
 		if(mCurrency != oldCurrency && stringToInt(mCurrencyText->getText()) != mCurrency)
 		{
-			/*int difference = mCurrency - oldCurrency;
-			int currencyChange = 100;
-			
-			std::cout << KLOCKA.getElapsedTime().asSeconds() << std::endl;
-			if(KLOCKA.getElapsedTime().asMilliseconds() > 0.2)
+			int difference = mCurrency - oldCurrency;
+			int currencyChange = 1;
+			maxCurrencyChange += currencyChange;
+			if(difference < 0)
 			{
-				KLOCKA.restart();
-				if(difference < 0)
-					mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
-				else
-					mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
-			}*/
-			mCurrencyText->setText(intToString(mCurrency) + " §");
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency - currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) < mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
+			else
+			{
+				if(maxCurrencyChange > 10)
+				{
+					maxCurrencyChange = 0;
+					currencyChange = 100;
+				}
+				mCurrencyText->setText(intToString(oldCurrency + currencyChange) + " §");
+				if(stringToInt(mCurrencyText->getText()) > mCurrency)
+					mCurrencyText->setText(intToString(mCurrency) + " §");
+			}
 		}
+
 		int oldPatriotism = stringToInt(mPatriotismText->getText());
 		if(mPatriotism != oldPatriotism)
 			mPatriotismText->setText("Patriotism: " + intToString(mPatriotism));
@@ -346,8 +357,7 @@ void Capitalist::updateGUI()
 		mResourceFoodPriceText->setText("Price: " + intToString(foodCost) + " §");
 		mResourceGoodsPriceText->setText("Price: " + intToString(goodsCost) + " §");
 		mResourceTechPriceText->setText("Price: " + intToString(techCost) + " §");
-	}, 50, 0);
-	//}
+	}, 2, 0);
 }
 
 
@@ -768,6 +778,7 @@ void Capitalist::resetResourcesValues()
 	mFoodCost->setText("Cost: 0 §");
 	mGoodsCost->setText("Cost: 0 §");
 	mTechCost->setText("Cost: 0 §");
+	mTotalResourcesCost->setText("Total cost: 0 §");
 	mBuyFoodText->setText(0);
 	mBuyGoodsText->setText(0);
 	mBuyTechText->setText(0);
@@ -943,6 +954,8 @@ void Capitalist::initializeCapitalistWindow()
 	initializeCityImages();
 
 	mCapitalistMainTheme				= Sound::create(CapitalistMusic["CapitalistMainTheme"]);
+	mIncreasedResoucesSound				= Sound::create();
+	mUpgradeSound						= Sound::create();
 
 	mCapitalistMainWindow				= GUIWindow::create(CapitalistWindows["CapitalistInterface"]);
 	mCapitalistButtonFrame				= GUIWindow::create(CapitalistWindows["InterfaceButtonsFrame"], mCapitalistMainWindow);
@@ -952,6 +965,8 @@ void Capitalist::initializeCapitalistWindow()
 										  (CapitalistButtons["CityImages"].first, CityImages[0]), mCapitalistMainWindow);
 	mCapitalistPresident				= GUIButton::create(CapitalistButtons["President"], mCapitalistMainWindow);
 	mPresidentFrame						= GUIImage::create(CapitalistButtons["PresidentFrame"], mCapitalistMainWindow);
+	mCapitalistPresident->setX(mPresidentFrame->getX() + 7); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
+	mCapitalistPresident->setScale(0.90, 0.80);
 	mCapitalistTaxesButton				= GUIButton::create(CapitalistButtons["Taxes"], mCapitalistMainWindow);
 	mCapitalistResourceButton			= GUIButton::create(CapitalistButtons["Resource"], mCapitalistMainWindow);
 	mCapitalistUpgradeButton			= GUIButton::create(CapitalistButtons["Upgrade"], mCapitalistMainWindow);
@@ -1475,10 +1490,11 @@ void Capitalist::initializeCapitalistWindow()
 
 void Capitalist::initializeCityImages()
 {
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city2")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city3")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city4")));
-	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_city5")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap1")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap2")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap3")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap4")));
+	CityImages.push_back(&ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap5")));
 	//mChangeCityImage->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mChangeCityImage->getRectangle(), CityImages[0])); 
 }
 
@@ -1633,7 +1649,6 @@ void Capitalist::initializeGuiFunctions()
 		mResourceWindow->setEnabled(true, true);
 		mResourceWindow->setVisible(true); 
 		mCapitalistResourceButton->setTexture(CapitalistButtons["ResourceIsPressed"]);
-
 		float x = mResourceWindow->getX() + mResourceWindow->getRectangle().width/2;
 		float y = mResourceWindow->getY() + mResourceWindow->getRectangle().height/2;
 		GUIAnimation::move(mResourceWindow, 100, sf::FloatRect(x, y, 0, 0), mResourceWindow->getRectangle());
@@ -2023,13 +2038,26 @@ void Capitalist::initializeGuiFunctions()
 		
 		if(mGoods >= nuclearGoodsPrice && mTech >= nuclearTechPrice)
 		{
+			if(mUpgradeSound != nullptr)
+			{
+				if(mUpgradeSound->getSound()->getStatus() == sf::Music::Stopped)
+				{
+					mUpgradeSound->setSound(getSoundEffect("Buttons/Nuclear"));
+					mUpgradeSound->playSound();
+				}
+			}
+			else
+			{
+				mUpgradeSound->setSound(getSoundEffect("Buttons/Nuclear"));
+				mUpgradeSound->playSound();
+			}
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
 			mGoods -= nuclearGoodsPrice;
 			mTech  -= nuclearTechPrice;
 		}
-	});		
+	});
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
 		int nuclearGoodsPrice	= 10 * mPresident->getNuclearPriceModifier();
@@ -2040,17 +2068,33 @@ void Capitalist::initializeGuiFunctions()
 		mBuyNuclearText->setText(mNuclearText->getText());
 
 		upgradeWindowText();
-		
 	});
 			
 
 	mUpgradeSpaceProgramButton->setOnClickFunction([=]()  
 	{
 		int spaceProgramGoodsPrice  = (stringToInt(mBuySpaceProgramText->getText()) + 1) * 5 * mPresident->getSpacePriceModifier();
-		int spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier() - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= (stringToInt(mBuySpaceProgramText->getText()) + 1) * 10 * mPresident->getSpacePriceModifier();
 		int amount = stringToInt(mBuySpaceProgramText->getText());
 		if(mGoods >= spaceProgramGoodsPrice && mTech >= spaceProgramTechPrice)
 		{
+			if(mUpgradeSound->getSound() != nullptr)
+			{
+				if(mUpgradeSound->getSound()->getStatus() == sf::Music::Stopped)
+				{
+					mUpgradeSound->setSound(getSoundEffect("Buttons/Space"));
+					mUpgradeSound->playSound();
+				}
+			}
+			else
+			{
+				mUpgradeSound->setSound(getSoundEffect("Buttons/Space"));
+				mUpgradeSound->playSound();
+			}
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
@@ -2061,7 +2105,11 @@ void Capitalist::initializeGuiFunctions()
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
 		int spaceProgramGoodsPrice  = 5 * mPresident->getSpacePriceModifier();
-		int spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier();
+		int spaceProgramTechPrice	= 0;
+		if(GameManager::getInstance()->getCommunist()->getSpaceProgram() > mSpaceProgram)
+			spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier() - (5 * stringToInt(mBuySpyNetworkText->getText()));
+		else
+			spaceProgramTechPrice	= 10 * mPresident->getSpacePriceModifier();
 		int difference = stringToInt(mBuySpaceProgramText->getText()) - stringToInt(mSpaceText->getText());
 		for(int i = 0; i < difference; ++i)
 		{
@@ -2078,6 +2126,8 @@ void Capitalist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpyNetworkText->getText());
 		if(mTech >= spyNetworkTechPrice)
 		{
+			//if(getSoundEffect("Buttons/Spy")->getStatus() == sf::Music::Stopped)
+				//playSoundEffect("Buttons/Spy");
 			++amount;
 			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
@@ -2419,7 +2469,7 @@ void Capitalist::initializeGuiFunctions()
 			setTech(stringToInt(mBuyTechText->getText()));
 			
 			resetResourcesValues();
-		}	
+		}
 	});
 
 	/*Stänger ner upgrade fönstret "Okay-knappen"*/
@@ -2543,50 +2593,63 @@ void Capitalist::initializeGuiFunctions()
 	/*nästa runda*/
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{
+		mCapitalistMainTheme->fadeToVolume(1000, mCapitalistMainTheme->getVolume(), 25);
 		mExportedFoodPreviousRound = mExportedFood;
 		mExportedGoodsPreviousRound = mExportedGoods;
 		mExportedTechPreviousRound = mExportedTech;
 		int foodBought = mFood - mFoodPreviousRound;
+		
 		int goodsBought = mGoods - mGoodsPreviousRound;
 		int techBought = mTech - mTechPreviousRound;
-		int totalBought = foodBought + goodsBought + techBought;
-		if(foodBought > goodsBought && foodBought > techBought)
+		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
+
+		int foodTotalCost = foodBought * foodCost;
+		int goodsTotalCost = goodsBought * goodsCost;
+		int techTotalCost = techBought * techCost;
+		if(foodTotalCost > goodsTotalCost && foodTotalCost > techTotalCost)
 		{
 			foodCost += 1;
-			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+			mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost) + " §");
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		else if(goodsBought > foodBought && goodsBought > techBought)
+		else if(goodsTotalCost > foodTotalCost && goodsTotalCost > techTotalCost)
 		{
 			goodsCost += 1;
-			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
-			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Goods"))->play();
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
+			mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+			
+			mIncreasedResoucesSound->playSound();
+
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
-		else if(techBought > foodBought && techBought > goodsBought)
+		else if(techTotalCost > foodTotalCost && techTotalCost > goodsTotalCost)
 		{
 			techCost += 1;
-			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
-			ResourceHandler::getInstance()->getMusic(std::string("Buttons/Tech"))->play();
+
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
+			mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+			mIncreasedResoucesSound->playSound();
+
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else if(totalBought != 0)
 		{
+			std::vector<int> resources;
 			int rand = Randomizer::getInstance()->randomNr(3, 0);
 			if(rand == 0)
 			{
 				foodCost += 1;
-				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost));
+				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
 			}
 			else if(rand == 1)
 			{
 			goodsCost += 1;
-			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost));
+			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 			}
 			else
 			{
 			techCost += 1;
-			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost));
+			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 			}
 			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
@@ -2610,6 +2673,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
+		mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);
@@ -2650,7 +2714,8 @@ void Capitalist::initializeGuiFunctions()
 	
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
-		mCapitalistMainTheme->fadeToVolume(CapitalistMusic["CapitalistMainTheme"], 2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
+		mCapitalistMainTheme->fadeToVolume(2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<Sound> music = mCapitalistMainTheme;
 		std::shared_ptr<GUIButton> endTurn = mCapitalistEndTurnButton;
@@ -2781,7 +2846,6 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistPresident->setMouseEnterFunction([=]()
 	{
-		std::cout << "BAJSNYLLE DET FUNKAR FAKTISKT" << std::endl;
 		mPickedPresidentWindow->setVisible(true);
 		mClosePickedPresidentWindow->setVisible(false);
 	});

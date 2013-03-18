@@ -32,4 +32,28 @@
 		<height>40</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>
 	</button>
+	<button>
+		<name>CapitalistBanner</name>
+		<xPos>22</xPos>
+		<yPos>16</yPos>
+		<width>983</width>
+		<height>103</height>
+		<image>BetweenTurns/winscreen_teamsign_capitalist</image>
+	</button>
+	<button>
+		<name>CommunistBanner</name>
+		<xPos>22</xPos>
+		<yPos>16</yPos>
+		<width>983</width>
+		<height>103</height>
+		<image>BetweenTurns/winscreen_teamsign_capitalist</image>
+	</button>
+	<button>
+		<name>WinScreenOkayButton</name>
+		<xPos>444</xPos>
+		<yPos>673</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>BetweenTurns/Ok-knapp-aktiv</image>
+	</button>
 </buttons>

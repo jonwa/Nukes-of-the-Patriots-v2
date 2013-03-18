@@ -32,4 +32,28 @@
 		<height>768</height>
 		<image>BetweenTurns/spynetwork_menu</image>
 	</window>
+	<window>
+		<name>CapitalistWinScreen</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image>BetweenTurns/kap_win_screen</image>
+	</window>
+	<window>
+		<name>CommunistWinScreen</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image>BetweenTurns/kom_win_screen</image>
+	</window>
+	<window>
+		<name>ParentWindow</name>
+		<xPos>0</xPos>
+		<yPos>0</yPos>
+		<width>1024</width>
+		<height>768</height>
+		<image></image>
+	</window>
 </windows>

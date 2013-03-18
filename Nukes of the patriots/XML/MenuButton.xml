@@ -64,6 +64,22 @@
 		<height>40</height>
 		<image>Menu/Ok-knapp-aktiv</image>
 	</button>
+	<button>
+		<name>CloseChooseTeamWindow</name>
+		<xPos>20</xPos>
+		<yPos>680</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
+	<button>
+		<name>CloseLanWindow</name>
+		<xPos>20</xPos>
+		<yPos>680</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>Menu/Ok-knapp-aktiv</image>
+	</button>
 	<button>		
 		<name>Exit</name>
 		<xPos>578</xPos>

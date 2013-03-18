@@ -30,6 +30,8 @@ public:
 	void saveConfig();
 	void loadConfig();
 
+	void reset();
+
 	std::shared_ptr<GUIWindow> getWindows(std::string string);
 	std::shared_ptr<GUIEditField> getEditField(std::string string);
 
@@ -63,6 +65,7 @@ public:
 private:
 	static Menu* mInstance;
 	//sfe::Movie mIntroMovie;
+	//sfe::Movie mChooseTeamAnimation;
 	bool fullscreen;
 	std::shared_ptr<Sound> mMenuMusic;
 	Menu();
@@ -142,6 +145,7 @@ private:
 
 	std::shared_ptr<GUIWindow> mLanPlayWindow;
 	std::shared_ptr<GUIButton> mLanPlayQuickConnect;
+	std::shared_ptr<GUIButton> mBackToMainMenuButton[2];
 
 	sf::RenderWindow* mWindow;
 };
