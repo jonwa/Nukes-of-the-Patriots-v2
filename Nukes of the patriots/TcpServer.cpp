@@ -24,7 +24,9 @@ void sf::TcpServer::tick()
 				sf::Socket::Status status = mTcpListener.accept(*client);
 				if(status == sf::Socket::Done)
 				{
-					std::cout<<"New client connected: "<<client->getRemoteAddress()<<std::endl;
+					sf::Packet packet;
+					packet<<client->getRemoteAddress().toString()<<client->getRemotePort();
+					Event::triggerEvent("onPlayerConnected", packet);
 					// add new client to client list
 					mClients.push_back(client);
 					// add the new client to the selector so we
@@ -48,6 +50,8 @@ void sf::TcpServer::tick()
 							case(sf::Socket::Done):
 								break;
 							case(sf::Socket::Disconnected):
+								packet<<client.getRemoteAddress().toString()<<client.getRemotePort();
+								Event::triggerEvent("onPlayerDisconnected", packet);
 								std::cout<<" has disconnected!"<<std::endl;
 								break;
 							default:

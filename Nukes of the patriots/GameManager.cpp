@@ -64,17 +64,18 @@ GameManager::GameManager() :
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
 	cursor.setTexture(cursorTexture);
 
-	mTcpServer = new sf::TcpServer(55006);
-	mTcpClient = new sf::TcpClient(55006, sf::IpAddress("193.10.177.137"));
 	mUdpClient = new sf::UdpClient(55001, 55005, sf::IpAddress::Broadcast);
 	
 	mConnectToServerEvent = Event::addEventHandler("hereIam", 
 		[=](sf::Packet packet)
 	{
-		char ipAddress[1024];
-		unsigned short port;
-		packet>>ipAddress>>port;
-		connectToServer(ipAddress, port);
+		if(mTcpClient == nullptr)
+		{
+			char ipAddress[1024];
+			unsigned short port;
+			packet>>ipAddress>>port;
+			connectToServer(ipAddress, port);
+		}
 	});
 
 	Event::addEventHandler("onClientConnected", 
@@ -1244,6 +1245,7 @@ void GameManager::createServer()
 		std::cout<<"No server found... creating server"<<std::endl;
 		mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
 		mUdpServer = new sf::UdpServer(55005);
+		mTcpServer = new sf::TcpServer(55006);
 		mRole = SERVER;
 		mServerState = WAITING;
 		Event::addEventHandler("heartBeat", [=](sf::Packet packet)
@@ -1268,7 +1270,7 @@ void GameManager::createServer()
 				packet>>ipAddress>>port;
 				std::cout<<"client searching for server: "<<ipAddress<<":"<<port<<std::endl;
 				sf::Packet _packet;
-				_packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpServer->getPort();
+				_packet<<sf::IpAddress::getLocalAddress().toString()<<mTcpServer->getPort();
 				mUdpServer->triggerClientEvent("hereIam", _packet, sf::IpAddress(ipAddress), port);
 			}
 		});
@@ -1294,11 +1296,12 @@ void GameManager::createServer()
 
 void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 {
-	mUdpClient->setReceivingAddress(ipAdress);
-	sf::Packet packet;
-	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
-	mUdpClient->triggerServerEvent("connectToServer", packet);
+	//mUdpClient->setReceivingAddress(ipAdress);
+	//sf::Packet packet;
+	//packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
+	//mUdpClient->triggerServerEvent("connectToServer", packet);
 	mCreateServerTimer->killTimer();
+	mTcpClient = new sf::TcpClient(port, sf::IpAddress(ipAdress));
 }
 
 void GameManager::tick(sf::RenderWindow &window)
