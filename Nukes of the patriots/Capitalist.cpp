@@ -2978,6 +2978,7 @@ void Capitalist::hideGUI()
 
 void Capitalist::LANRandomIncreasedResource(int random)
 {
+	std::cout<<"random resource increase func call"<<std::endl;
 	int foodBought = mFood - mFoodPreviousRound;
 		
 	int goodsBought = mGoods - mGoodsPreviousRound;
