@@ -2874,7 +2874,6 @@ void Communist::resourceIncome()
 	}
 	else
 	{
-		
 		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 		{
 			int food = 0, goods = 0, tech = 0;
@@ -2927,7 +2926,7 @@ void Communist::resourceIncome()
 			mFoodIncome->setText("You get " + intToString(food) + " food");
 			mGoodsIncome->setText("You get " + intToString(goods) + " goods");
 			mTechIncome->setText("You get " + intToString(tech) + " tech");
-			}
+		}
 		else if(GameManager::getInstance()->getGameType() == VERSUS)
 		{
 			int food = 0, goods = 0, tech = 0;
@@ -2974,7 +2973,6 @@ void Communist::resourceIncome()
 					moneyDifference += techCost;
 				}
 			}
-
 			mFoodIncome->setText("You get " + intToString(food) + " food");
 			mGoodsIncome->setText("You get " + intToString(goods) + " goods");
 			mTechIncome->setText("You get " + intToString(tech) + " tech");
