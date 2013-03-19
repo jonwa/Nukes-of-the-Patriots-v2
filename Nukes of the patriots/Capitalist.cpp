@@ -2978,6 +2978,14 @@ void Capitalist::hideGUI()
 
 void Capitalist::LANRandomIncreasedResource(int random)
 {
+	int foodBought = mFood - mFoodPreviousRound;
+	int goodsBought = mGoods - mGoodsPreviousRound;
+	int techBought = mTech - mTechPreviousRound;
+	int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
+
+	int foodTotalCost = foodBought * foodCost;
+	int goodsTotalCost = goodsBought * goodsCost;
+	int techTotalCost = techBought * techCost;
 	std::vector<int> cost;
 	std::vector<int> resourceType;
 	std::vector<std::string> resourceLink;
