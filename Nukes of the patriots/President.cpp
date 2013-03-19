@@ -237,7 +237,7 @@ float President::getPatriotismTaxModifier()
 
 float President::getPopEatsMore()
 {
-	return mValues["popEatsMore"];
+	return mValues["popEatsMore"] == 0 ? 1 : mValues["popEatsMore"];
 }
 
 void President::setFoodPriceModifier(float value)

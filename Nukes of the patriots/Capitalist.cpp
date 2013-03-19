@@ -19,7 +19,6 @@
 #include <SFML\Window\Mouse.hpp>
 #include <SFML\Window\Keyboard.hpp>
 #include "Menu.h"
-#include "RemoteClient.h"
 
 static int foodCost		= 10;
 static int goodsCost	= 20;
@@ -562,6 +561,11 @@ void Capitalist::newYearStart()
 
 void Capitalist::update()
 {
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->getRemoteClient()->getSuperPower() == CAPITALIST)
+		GameManager::getInstance()->setEnemyTurn();
+	else
+		GameManager::getInstance()->setMyTurn();
+
 	mWindowHeadlines[0]->setText(intToString(GameManager::getInstance()->getYear()) + " Presidential Elections ");
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText());
 	
@@ -1551,6 +1555,9 @@ void Capitalist::chooseLeader()
 		mFirstPositiveStat[1]->setText(mSecondPresident->getFirstPositiveStat());
 		mSecondPositiveStat[1]->setText(mSecondPresident->getSecondPositiveStat());
 		mSecondNegativeStat->setText(mSecondPresident->getNegativeStat());
+
+		if(GameManager::getInstance()->getRemoteClient()->isReady())
+			sendPresidentDataToOtherPlayer();
 	}
 	else if(GameManager::getInstance()->getGameType() == VERSUS)
 	{
@@ -2678,7 +2685,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
-		mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
+		//mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);

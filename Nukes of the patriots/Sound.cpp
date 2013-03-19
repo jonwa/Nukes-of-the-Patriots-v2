@@ -40,7 +40,7 @@ void Sound::tick()
 	{
 		float timeleft = 0;
 		float duration = 1;
-		if(Timer::isTimer(mTimer))
+		if(Timer::isTimer(mTimer) && mTimer != NULL)
 		{
 			timeleft = mTimer->getTimeLeft();
 			duration = mTimer->getTimerDuration();

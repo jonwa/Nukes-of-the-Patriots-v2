@@ -672,6 +672,10 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->getRemoteClient()->getSuperPower() == COMMUNIST)
+		GameManager::getInstance()->setEnemyTurn();
+	else
+		GameManager::getInstance()->setMyTurn();
 	mResourcesIncomeHeadLiner->setText(intToString(GameManager::getInstance()->getYear()) + " Plan Results");
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CapitalistNameField")->getText());
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
@@ -893,9 +897,18 @@ void Communist::buyPropagandaFood(int round)
 	{
 		food -= propagandaBoughtFood - getYearlyFood(round);
 	}
-
-	mFood += food;
-	mBoughtPropagandaText->setText("Your People got " + intToString(food) + " food");
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+	{
+		sf::Packet packet;
+		std::string type = "food";
+		packet<<food<<type;
+		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+	}
+	else if(GameManager::getInstance()->getGameType() == VERSUS)
+	{
+		mFood += food;
+		mBoughtPropagandaText->setText("Your people got " + intToString(food) + " food");
+	}
 }
 
 void Communist::buyPropagandaGoods(int round)
@@ -923,8 +936,19 @@ void Communist::buyPropagandaGoods(int round)
 	{
 		goods -= propagandaBoughtGoods - getYearlyGoods(round);
 	}
-	mGoods += goods;
-	mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
+
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+	{
+		sf::Packet packet;
+		std::string type = "goods";
+		packet<<goods<<type;
+		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+	}
+	else if(GameManager::getInstance()->getGameType() == VERSUS)
+	{
+		mGoods += goods;
+		mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
+	}
 }
 
 void Communist::buyPropagandaTech(int round)
@@ -953,10 +977,38 @@ void Communist::buyPropagandaTech(int round)
 		tech -= propagandaBoughtTech - getYearlyTech(round);
 	}
 
-	mTech += tech;
-	mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+	{
+		sf::Packet packet;
+		std::string type = "tech";
+		packet<<tech<<type;
+		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+	}
+	else if(GameManager::getInstance()->getGameType() == VERSUS)
+	{
+		mTech += tech;
+		mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
+	}
 }
 
+void Communist::LANBuyPropaganda(int amount, std::string type)
+{
+	if(type == "food")
+	{
+		mFood += amount;
+		mBoughtPropagandaText->setText("Your people got " + intToString(amount) + " food");
+	}
+	else if(type == "goods")
+	{
+		mGoods += amount;
+		mBoughtPropagandaText->setText("Your people got " + intToString(amount) + " goods");
+	}
+	else
+	{
+		mTech += amount;
+		mBoughtPropagandaText->setText("Your people got " + intToString(amount) + " tech");
+	}
+}
 //------------------------------------------------------------------------------------------------------
 	
 //------------------------------------------------------------------------------------------------------
@@ -2821,17 +2873,17 @@ void Communist::resourceIncome()
 		{
 			std::vector<int> resourceCosts;
 			std::vector<std::string> resourceType;
-			if(mCurrency >= foodCost)
+			if(getYearlyFood(mRound) > food && mCurrency >= foodCost)
 			{
 				resourceCosts.push_back(foodCost);
 				resourceType.push_back("food");
 			}
-			if(mCurrency >= goodsCost)
+			if(getYearlyGoods(mRound) > goods && mCurrency >= goodsCost)
 			{
 				resourceCosts.push_back(goodsCost);
 				resourceType.push_back("goods");
 			}
-			if(mCurrency >= techCost)
+			if(getYearlyTech(mRound) > tech && mCurrency >= techCost)
 			{
 				resourceCosts.push_back(techCost);
 				resourceType.push_back("tech");
@@ -2860,12 +2912,26 @@ void Communist::resourceIncome()
 				moneyDifference += techCost;
 			}
 		}
-		mFoodIncome->setText("You get " + intToString(food) + " food");
-		mGoodsIncome->setText("You get " + intToString(goods) + " goods");
-		mTechIncome->setText("You get " + intToString(tech) + " tech");
+		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
+		{
+			sf::Packet packet;
+			packet<<food<<goods<<tech;
+			GameManager::getInstance()->triggerOtherPlayersEvent("communistRandomResources", packet);
+		}
+		else if(GameManager::getInstance()->getGameType() == VERSUS)
+		{
+			mFoodIncome->setText("You get " + intToString(food) + " food");
+			mGoodsIncome->setText("You get " + intToString(goods) + " goods");
+			mTechIncome->setText("You get " + intToString(tech) + " tech");
+		}
 	}
+}
 
-
+void Communist::LANResourcesIncome(int food, int goods, int tech)
+{
+	mFoodIncome->setText("You get " + intToString(food) + " food");
+	mGoodsIncome->setText("You get " + intToString(goods) + " goods");
+	mTechIncome->setText("You get " + intToString(tech) + " tech");
 }
 
 void Communist::showGUI()
