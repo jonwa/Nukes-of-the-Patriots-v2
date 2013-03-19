@@ -399,6 +399,14 @@ GameManager::GameManager() :
 		getCom()->LANBuyPropaganda(amount, type);
 	});
 
+	Event::addEventHandler("capitalistResourcesRandomIncrease",
+		[=](sf::Packet packet)
+	{
+		int random = 0;
+		packet>>random;
+		getCap()->LANRandomIncreasedResource(random);
+	});
+
 	initializeGuiElement();
 	initializeGuiFunctions();
 }

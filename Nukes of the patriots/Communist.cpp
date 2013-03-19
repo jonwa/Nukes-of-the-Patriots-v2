@@ -903,6 +903,8 @@ void Communist::buyPropagandaFood(int round)
 		std::string type = "food";
 		packet<<food<<type;
 		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+		mFood += food;
+		mBoughtPropagandaText->setText("Your people got " + intToString(food) + " food");
 	}
 	else if(GameManager::getInstance()->getGameType() == VERSUS)
 	{
@@ -943,6 +945,8 @@ void Communist::buyPropagandaGoods(int round)
 		std::string type = "goods";
 		packet<<goods<<type;
 		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+		mGoods += goods;
+		mBoughtPropagandaText->setText("Your people got " + intToString(goods) + " goods");
 	}
 	else if(GameManager::getInstance()->getGameType() == VERSUS)
 	{
@@ -983,6 +987,8 @@ void Communist::buyPropagandaTech(int round)
 		std::string type = "tech";
 		packet<<tech<<type;
 		GameManager::getInstance()->triggerOtherPlayersEvent("buyPropaganda", packet);
+		mTech += tech;
+		mBoughtPropagandaText->setText("Your people got " + intToString(tech) + " tech");
 	}
 	else if(GameManager::getInstance()->getGameType() == VERSUS)
 	{
@@ -2868,58 +2874,107 @@ void Communist::resourceIncome()
 	}
 	else
 	{
-		int food = 0, goods = 0, tech = 0;
-		while(moneyDifference < 0)
-		{
-			std::vector<int> resourceCosts;
-			std::vector<std::string> resourceType;
-			if(getYearlyFood(mRound) > food && mCurrency >= foodCost)
-			{
-				resourceCosts.push_back(foodCost);
-				resourceType.push_back("food");
-			}
-			if(getYearlyGoods(mRound) > goods && mCurrency >= goodsCost)
-			{
-				resourceCosts.push_back(goodsCost);
-				resourceType.push_back("goods");
-			}
-			if(getYearlyTech(mRound) > tech && mCurrency >= techCost)
-			{
-				resourceCosts.push_back(techCost);
-				resourceType.push_back("tech");
-			}
-			if(resourceCosts.empty())
-				break;
-			int rand = Randomizer::getInstance()->randomNr(resourceCosts.size(), 0);
-			mCurrency -= resourceCosts[rand];
-
-			if(resourceType[rand] == "food")
-			{
-				mFood++;
-				food++;
-				moneyDifference += foodCost;
-			}
-			else if(resourceType[rand] == "goods")
-			{
-				mGoods++;
-				goods++;
-				moneyDifference += goodsCost;
-			}
-			else if(resourceType[rand] == "tech")
-			{
-				mTech++;
-				tech++;
-				moneyDifference += techCost;
-			}
-		}
+		
 		if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 		{
+			int food = 0, goods = 0, tech = 0;
+			while(moneyDifference < 0)
+			{
+				std::vector<int> resourceCosts;
+				std::vector<std::string> resourceType;
+				if(getYearlyFood(mRound) > food && mCurrency >= foodCost)
+				{
+					resourceCosts.push_back(foodCost);
+					resourceType.push_back("food");
+				}
+				if(getYearlyGoods(mRound) > goods && mCurrency >= goodsCost)
+				{
+					resourceCosts.push_back(goodsCost);
+					resourceType.push_back("goods");
+				}
+				if(getYearlyTech(mRound) > tech && mCurrency >= techCost)
+				{
+					resourceCosts.push_back(techCost);
+					resourceType.push_back("tech");
+				}
+				if(resourceCosts.empty())
+					break;
+				int rand = Randomizer::getInstance()->randomNr(resourceCosts.size(), 0);
+				mCurrency -= resourceCosts[rand];
+
+				if(resourceType[rand] == "food")
+				{
+					mFood++;
+					food++;
+					moneyDifference += foodCost;
+				}
+				else if(resourceType[rand] == "goods")
+				{
+					mGoods++;
+					goods++;
+					moneyDifference += goodsCost;
+				}
+				else if(resourceType[rand] == "tech")
+				{
+					mTech++;
+					tech++;
+					moneyDifference += techCost;
+				}
+			}
 			sf::Packet packet;
 			packet<<food<<goods<<tech;
 			GameManager::getInstance()->triggerOtherPlayersEvent("communistRandomResources", packet);
-		}
+			mFoodIncome->setText("You get " + intToString(food) + " food");
+			mGoodsIncome->setText("You get " + intToString(goods) + " goods");
+			mTechIncome->setText("You get " + intToString(tech) + " tech");
+			}
 		else if(GameManager::getInstance()->getGameType() == VERSUS)
 		{
+			int food = 0, goods = 0, tech = 0;
+			while(moneyDifference < 0)
+			{
+				std::vector<int> resourceCosts;
+				std::vector<std::string> resourceType;
+				if(getYearlyFood(mRound) > food && mCurrency >= foodCost)
+				{
+					resourceCosts.push_back(foodCost);
+					resourceType.push_back("food");
+				}
+				if(getYearlyGoods(mRound) > goods && mCurrency >= goodsCost)
+				{
+					resourceCosts.push_back(goodsCost);
+					resourceType.push_back("goods");
+				}
+				if(getYearlyTech(mRound) > tech && mCurrency >= techCost)
+				{
+					resourceCosts.push_back(techCost);
+					resourceType.push_back("tech");
+				}
+				if(resourceCosts.empty())
+					break;
+				int rand = Randomizer::getInstance()->randomNr(resourceCosts.size(), 0);
+				mCurrency -= resourceCosts[rand];
+
+				if(resourceType[rand] == "food")
+				{
+					mFood++;
+					food++;
+					moneyDifference += foodCost;
+				}
+				else if(resourceType[rand] == "goods")
+				{
+					mGoods++;
+					goods++;
+					moneyDifference += goodsCost;
+				}
+				else if(resourceType[rand] == "tech")
+				{
+					mTech++;
+					tech++;
+					moneyDifference += techCost;
+				}
+			}
+
 			mFoodIncome->setText("You get " + intToString(food) + " food");
 			mGoodsIncome->setText("You get " + intToString(goods) + " goods");
 			mTechIncome->setText("You get " + intToString(tech) + " tech");
@@ -2929,6 +2984,11 @@ void Communist::resourceIncome()
 
 void Communist::LANResourcesIncome(int food, int goods, int tech)
 {
+	mFood += food;
+	mGoods += goods;
+	mTech += tech;
+	int totalCost = food * foodCost + goods * goodsCost + tech * techCost;
+	mCurrency -= totalCost;
 	mFoodIncome->setText("You get " + intToString(food) + " food");
 	mGoodsIncome->setText("You get " + intToString(goods) + " goods");
 	mTechIncome->setText("You get " + intToString(tech) + " tech");
