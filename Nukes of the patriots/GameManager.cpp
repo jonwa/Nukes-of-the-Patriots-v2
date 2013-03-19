@@ -20,7 +20,6 @@
 #include "TcpServer.h"
 #include "UdpClient.h"
 #include "UdpServer.h"
-#include "RemoteClient.h"
 #include <SFML\Network.hpp>
 #include "Sound.h"
 #include "SoundHandler.h"
@@ -323,7 +322,7 @@ GameManager::GameManager() :
 		mRemoteClient->setReady(true);
 		if(mReady)
 		{
-			if(mReady && mRemoteClient->getSuperPower() == COMMUNIST)
+			if(mRemoteClient->getSuperPower() == COMMUNIST)
 				getCap()->sendPresidentDataToOtherPlayer();
 			mCurrentPlayer->showGUI();
 		}
