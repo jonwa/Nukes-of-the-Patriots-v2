@@ -672,6 +672,10 @@ void Communist::newYearStart()
 
 void Communist::update()
 {
+	if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->getRemoteClient()->getSuperPower() == COMMUNIST)
+		GameManager::getInstance()->setEnemyTurn();
+	else
+		GameManager::getInstance()->setMyTurn();
 	mResourcesIncomeHeadLiner->setText(intToString(GameManager::getInstance()->getYear()) + " Plan Results");
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CapitalistNameField")->getText());
 	mPopulationEatsFoodHeadliner->setText("Population Report " + intToString(GameManager::getInstance()->getYear()));
@@ -2821,17 +2825,17 @@ void Communist::resourceIncome()
 		{
 			std::vector<int> resourceCosts;
 			std::vector<std::string> resourceType;
-			if(mCurrency >= foodCost)
+			if(getYearlyFood(mRound) > food && mCurrency >= foodCost)
 			{
 				resourceCosts.push_back(foodCost);
 				resourceType.push_back("food");
 			}
-			if(mCurrency >= goodsCost)
+			if(getYearlyGoods(mRound) > goods && mCurrency >= goodsCost)
 			{
 				resourceCosts.push_back(goodsCost);
 				resourceType.push_back("goods");
 			}
-			if(mCurrency >= techCost)
+			if(getYearlyTech(mRound) > tech && mCurrency >= techCost)
 			{
 				resourceCosts.push_back(techCost);
 				resourceType.push_back("tech");

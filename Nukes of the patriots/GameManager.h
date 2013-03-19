@@ -8,6 +8,7 @@
 #include "GUIWindow.h"
 #include "GUIButton.h"
 #include "GUIImage.h"
+#include "RemoteClient.h"
 #include <SFML\Graphics\Texture.hpp>
 #include <SFML\Network.hpp>
 
@@ -18,7 +19,6 @@ class President;
 class GUIText;
 class Event;
 class Timer;
-class RemoteClient;
 class GUIElement;
 class GUIEditField;
 class Sound;
