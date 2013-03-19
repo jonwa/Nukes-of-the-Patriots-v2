@@ -74,6 +74,7 @@ public:
 	void resetResourcesValues();
 
 	bool enoughFood();
+	void LANRandomIncreasedResource(int random);
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;

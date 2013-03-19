@@ -20,7 +20,6 @@
 #include "TcpServer.h"
 #include "UdpClient.h"
 #include "UdpServer.h"
-#include "RemoteClient.h"
 #include <SFML\Network.hpp>
 #include "Sound.h"
 #include "SoundHandler.h"
@@ -140,11 +139,9 @@ GameManager::GameManager() :
 		std::shared_ptr<GUIElement> guiElement = GUIManager::getInstance()->getElementByID(id);
 		if(guiElement != NULL)
 		{
-			std::cout<<"gui element != null"<<std::endl;
 			std::function<void()> func = guiElement->getOnClickFunction();
 			if(func != NULL)
 			{
-				std::cout<<"calling gui click func"<<std::endl;
 				func();
 			}
 		}
@@ -227,7 +224,6 @@ GameManager::GameManager() :
 		}
 		mReady = true;
 		mCurrentPlayer->setRound(1);
-		mCurrentPlayer->showGUI();
 		if(mRemoteClient->getSuperPower() == random)
 			setEnemyTurn();
 		else
@@ -263,7 +259,9 @@ GameManager::GameManager() :
 			>>nuclearPriceModifier2>>spacePriceModifier2>>spyPriceModifier2
 			>>patriotismTaxModifier2>>popEatsMore2;
 
-		std::shared_ptr<President> firstPresident = getPresidentByName(name);
+		std::shared_ptr<President> firstPresident = getCap()->getPresident();
+		if(firstPresident == NULL)
+			firstPresident = getPresidentByName(name);
 		if(firstPresident != nullptr)
 		{
 			std::cout<<"First president found!"<<std::endl;
@@ -322,8 +320,12 @@ GameManager::GameManager() :
 		[=](sf::Packet packet)
 	{
 		mRemoteClient->setReady(true);
-		if(mReady && mRemoteClient->getSuperPower() == COMMUNIST)
-			getCap()->sendPresidentDataToOtherPlayer();
+		if(mReady)
+		{
+			if(mRemoteClient->getSuperPower() == COMMUNIST)
+				getCap()->sendPresidentDataToOtherPlayer();
+			mCurrentPlayer->showGUI();
+		}
 		mRemoteClient->setReady(false);
 	});
 
@@ -378,6 +380,31 @@ GameManager::GameManager() :
 		int player = 0;
 		packet>>player;
 		setRandomPlayer(mVecSuperPowers[player]);
+	});
+
+	Event::addEventHandler("communistRandomResources",
+		[=](sf::Packet packet)
+	{
+		int food = 0, goods = 0, tech = 0;
+		packet>>food>>goods>>tech;
+		getCom()->LANResourcesIncome(food, goods, tech);
+	});
+
+	Event::addEventHandler("buyPropaganda",
+		[=](sf::Packet packet)
+	{
+		int amount = 0;
+		char type[1024];
+		packet>>amount>>type;
+		getCom()->LANBuyPropaganda(amount, type);
+	});
+
+	Event::addEventHandler("capitalistResourcesRandomIncrease",
+		[=](sf::Packet packet)
+	{
+		int random = 0;
+		packet>>random;
+		getCap()->LANRandomIncreasedResource(random);
 	});
 
 	initializeGuiElement();
@@ -537,19 +564,6 @@ void GameManager::init(int year)
 		mYearText->setText(intToString(mYear));
 		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
-		mReady = true;
-		if(getGameType() == LAN)
-		{
-			sf::Packet packet;
-			packet<<1;
-			triggerOtherPlayersEvent("loadingCompleted", packet);
-			if(mRemoteClient->isReady() && mRemoteClient->getSuperPower() == COMMUNIST)
-			{
-				getCap()->sendPresidentDataToOtherPlayer();
-				mRemoteClient->setReady(false);
-			}
-		}
-
 
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
@@ -581,7 +595,6 @@ void GameManager::init(int year)
 			packet<<random;
 			triggerOtherPlayersEvent("syncRandomFirstPlayerToPlay", packet);
 			mCurrentPlayer->setRound(1);
-			mCurrentPlayer->showGUI();
 			if(mRemoteClient->getSuperPower() == random)
 				setEnemyTurn();
 			else
@@ -602,6 +615,22 @@ void GameManager::init(int year)
 			mLoaded = true;
 			mCurrentPlayer->setRound(1);
 			mCurrentPlayer->showGUI();
+		}
+		mReady = true;
+		if(getGameType() == LAN)
+		{
+			sf::Packet packet;
+			packet<<1;
+			triggerOtherPlayersEvent("loadingCompleted", packet);
+			if(mRemoteClient->isReady())
+			{
+				if(mRemoteClient->getSuperPower() == COMMUNIST)
+				{
+					getCap()->sendPresidentDataToOtherPlayer();
+					mRemoteClient->setReady(false);
+				}
+				mCurrentPlayer->showGUI();
+			}
 		}
 	}
 	else
@@ -1004,30 +1033,41 @@ void GameManager::nextRound()
 		}, 3000, 1);
 		if(getGameType() == LAN)
 		{
+			mReady = false;
+			mRemoteClient->setReady(false);
 			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
-			if(nextPlayers.size() == 1)
-			{
-				if(nextPlayers[randomPlayer]->getType() == mRemoteClient->getSuperPower())
-					setEnemyTurn();
-				else
-					setMyTurn();
-			}
 			//If both player has same spy network, then select random as next player directly
 			mCloseStatsWindow->setOnClickFunction([=]()
 			{
-				if(nextPlayers.size() == 1)
+				if(isMyTurnToPlay())
 				{
-					selectStartingPlayer();
-				}
-				else
-				{
+					/*
 					sf::Packet packet;
 					packet<<1;
 					mReady = true;
 					triggerOtherPlayersEvent("statsWindowReady", packet);
-					if(mRemoteClient->isReady())
+					*/
+					mReady = true;
+					setEnemyTurn();
+				}
+				else
+				{
+					mRemoteClient->setReady(true);
+					setMyTurn();
+				}
+				if(mReady && mRemoteClient->isReady())
+				{
+					if(nextPlayers.size() == 1)
 					{
-						if(mRole == SERVER)
+						if(nextPlayers[randomPlayer]->getType() == mRemoteClient->getSuperPower())
+							setEnemyTurn();
+						else
+							setMyTurn();
+						selectStartingPlayer();
+					}
+					else
+					{
+						if(isMyTurnToPlay())
 						{
 							setRandomPlayer(nextPlayers[randomPlayer]);
 							sf::Packet _packet;
@@ -1036,10 +1076,6 @@ void GameManager::nextRound()
 						}
 					}
 				}
-				if(isMyTurnToPlay())
-					setEnemyTurn();
-				else
-					setMyTurn();
 			});
 		}
 		else if(getGameType() == VERSUS)

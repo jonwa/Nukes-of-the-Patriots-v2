@@ -69,6 +69,8 @@ public:
 	void newYearStart();
 	void updateGUI();
 
+	void LANResourcesIncome(int food, int goods, int tech);
+	void LANBuyPropaganda(int amount, std::string type);
 private:
 	int mCount;
 	sf::Thread *mUpdateGUIThread;
