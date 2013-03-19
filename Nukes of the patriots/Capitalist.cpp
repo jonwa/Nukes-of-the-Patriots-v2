@@ -2646,24 +2646,97 @@ void Capitalist::initializeGuiFunctions()
 		}
 		else if(totalBought != 0)
 		{
-			std::vector<int> resources;
-			int rand = Randomizer::getInstance()->randomNr(3, 0);
-			if(rand == 0)
+			if(GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay())
 			{
-				foodCost += 1;
-				mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
+				std::vector<int> cost;
+				std::vector<int> resourceType;
+				std::vector<std::string> resourceLink;
+				resourceLink.push_back("food");
+				resourceLink.push_back("goods");
+				resourceLink.push_back("tech");
+				int highestCost = 0;
+				cost.push_back(foodTotalCost);
+				cost.push_back(goodsTotalCost);
+				cost.push_back(techTotalCost);
+				for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+				{
+					if(cost[i] > highestCost)
+					{
+						highestCost = cost[i];
+					}
+				}
+				for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+				{
+					if(cost[i] == highestCost)
+					{
+						resourceType.push_back(i);
+					}
+				}
+				int rand = Randomizer::getInstance()->randomNr(resourceType.size(), 0);
+				sf::Packet packet;
+				packet<<rand;
+				GameManager::getInstance()->triggerOtherPlayersEvent("capitalistResourcesRandomIncrease", packet);
+				if(resourceLink[resourceType[rand]] == "food")
+				{
+					foodCost += 1;
+					mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
+				}
+				else if(resourceLink[resourceType[rand]] == "goods")
+				{
+					goodsCost += 1;
+					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
+				}
+				else
+				{
+					techCost += 1;
+					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
+				}
+				mIncreasedResourcesPriceWindow->setVisible(true);
 			}
-			else if(rand == 1)
+			else if(GameManager::getInstance()->getGameType() == VERSUS)
 			{
-			goodsCost += 1;
-			mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
+				std::vector<int> cost;
+				std::vector<int> resourceType;
+				std::vector<std::string> resourceLink;
+				resourceLink.push_back("food");
+				resourceLink.push_back("goods");
+				resourceLink.push_back("tech");
+				int highestCost = 0;
+				cost.push_back(foodTotalCost);
+				cost.push_back(goodsTotalCost);
+				cost.push_back(techTotalCost);
+				for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+				{
+					if(cost[i] > highestCost)
+					{
+						highestCost = cost[i];
+					}
+				}
+				for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+				{
+					if(cost[i] == highestCost)
+					{
+						resourceType.push_back(i);
+					}
+				}
+				int rand = Randomizer::getInstance()->randomNr(resourceType.size(), 0);
+				if(resourceLink[resourceType[rand]] == "food")
+				{
+					foodCost += 1;
+					mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
+				}
+				else if(resourceLink[resourceType[rand]] == "goods")
+				{
+					goodsCost += 1;
+					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
+				}
+				else
+				{
+					techCost += 1;
+					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
+				}
+				mIncreasedResourcesPriceWindow->setVisible(true);
 			}
-			else
-			{
-			techCost += 1;
-			mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
-			}
-			mIncreasedResourcesPriceWindow->setVisible(true);
 		}
 		else
 		{
@@ -2903,3 +2976,56 @@ void Capitalist::hideGUI()
 	mCapitalistMainWindow->setVisible(false);
 }
 
+void Capitalist::LANRandomIncreasedResource(int random)
+{
+	int foodBought = mFood - mFoodPreviousRound;
+		
+	int goodsBought = mGoods - mGoodsPreviousRound;
+	int techBought = mTech - mTechPreviousRound;
+	int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
+
+	int foodTotalCost = foodBought * foodCost;
+	int goodsTotalCost = goodsBought * goodsCost;
+	int techTotalCost = techBought * techCost;
+	std::vector<int> cost;
+	std::vector<int> resourceType;
+	std::vector<std::string> resourceLink;
+	resourceLink.push_back("food");
+	resourceLink.push_back("goods");
+	resourceLink.push_back("tech");
+	int highestCost = 0;
+	cost.push_back(foodTotalCost);
+	cost.push_back(goodsTotalCost);
+	cost.push_back(techTotalCost);
+	for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+	{
+		if(cost[i] > highestCost)
+		{
+			highestCost = cost[i];
+		}
+	}
+	for(std::vector<int>::size_type i = 0; i < cost.size(); ++i)
+	{
+		if(cost[i] == highestCost)
+		{
+			resourceType.push_back(i);
+		}
+	}
+	int rand = random;
+	if(resourceLink[resourceType[rand]] == "food")
+	{
+		foodCost += 1;
+		mIncreasedResourcesText->setText("The price of food is now " + intToString(foodCost)  + " §");
+	}
+	else if(resourceLink[resourceType[rand]] == "goods")
+	{
+		goodsCost += 1;
+		mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
+	}
+	else
+	{
+		techCost += 1;
+		mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
+	}
+	mIncreasedResourcesPriceWindow->setVisible(true);
+}

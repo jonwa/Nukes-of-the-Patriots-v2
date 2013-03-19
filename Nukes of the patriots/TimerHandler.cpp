@@ -41,23 +41,16 @@ bool TimerHandler::isTimer(Timer* timer)
 
 void TimerHandler::tick()
 {
-	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size(); it++)
+	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size();it++)
 	{
-		if(mVecTimers[it] == NULL)
+		if(!mVecTimers[it]->isAlive())
 		{
 			delete mVecTimers[it];
 			mVecTimers.erase(mVecTimers.begin() + it);
 		}
 		else
 		{
-			if(!mVecTimers[it]->tick())
-			{
-				if(mVecTimers[it] != NULL)
-				{
-					delete mVecTimers[it];
-					mVecTimers.erase(mVecTimers.begin() + it);
-				}
-			}
+			mVecTimers[it]->tick();
 		}
 	}
 }
