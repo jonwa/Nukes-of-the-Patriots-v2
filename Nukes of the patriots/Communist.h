@@ -367,6 +367,15 @@ private:
 	std::shared_ptr<GUIImage>  mNuclearPanel;
 	std::shared_ptr<GUIImage>  mSpacePanel;
 	std::shared_ptr<GUIImage>  mSpyPanel;
+
+
+	std::shared_ptr<GUIImage>  mToolTipInterface[6];
+	Timer *mGeneralToolTipTimer;
+	Timer *mFiveYearPlanToolTipTimer;
+	Timer *mPropagandaToolTipTimer;
+	Timer *mUpgradeToolTipTimer;
+	Timer *mTradeToolTipTimer;
+	Timer *mEndTurnToolTipTimer;
 };
 
 #endif

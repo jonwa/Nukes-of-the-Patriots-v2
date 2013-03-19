@@ -71,7 +71,7 @@ bool Timer::tick()
 
 void Timer::killTimer()
 {
-	TimerHandler::getInstance()->removeTimer(this);
+	//TimerHandler::getInstance()->removeTimer(this);
 	mAlive = false;
 }
 

@@ -76,6 +76,9 @@
 	<image filename="kap_EndTurn_frame.png"/>
 	<image filename="kap_endturn_normal.png"/>
 	<image filename="kap_endturn_pressed.png"/>
+	
+	<image filename="kap_tooltips_plate_up_left.png"/>
+	<image filename="kap_tooltips_plate_up_right.png"/>
 </images>
 
 <images directory ="Communist">
@@ -156,12 +159,16 @@
 	<image filename="kom_president_frame.png"/>
 	<image filename="kom_endturn_normal.png"/>
 	<image filename="kom_endturn_pressed.png"/>
+	
+	
+	<image filename="kom_tooltips_plate_up_left.png"/>
+	<image filename="kom_tooltips_plate_up_right.png"/>
 </images>
 
 <images directory ="Menu">
 	<image filename="credits_placeholder.png"/>
 	<image filename="neutral_texture_button_back.png"/>
-
+	
 
 	<image filename="scrollbar_slider.png"/>
 	<image filename="Scrollbar.png"/>

@@ -1372,7 +1372,7 @@ void GameManager::initializeGuiFunctions()
 	{
 		reset();
 		Menu::getInstance()->reset();
-		mCapitalistWins->fadeToVolume(mWinScreenMusic["CapitalistWins"], 1000, mWinScreenMusic["CapitalistWins"]->getVolume(), 0);
+		mCapitalistWins->fadeToVolume(1000, mWinScreenMusic["CapitalistWins"]->getVolume(), 0);
 		std::shared_ptr<GUIWindow> _capitalistWin = mWinScreenWindow[0];
 		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
 		Timer::setTimer([=]()
@@ -1390,7 +1390,7 @@ void GameManager::initializeGuiFunctions()
 	{
 		reset();
 		Menu::getInstance()->reset();
-		mCommunistWins->fadeToVolume(mWinScreenMusic["CommunistWins"], 1000, mWinScreenMusic["CommunistWins"]->getVolume(), 0);
+		mCommunistWins->fadeToVolume(1000, mWinScreenMusic["CommunistWins"]->getVolume(), 0);
 		std::shared_ptr<GUIWindow> _communistWins = mWinScreenWindow[1];
 		std::shared_ptr<GUIWindow> _parentWindow = mParentWindow;
 		Timer::setTimer([=]()

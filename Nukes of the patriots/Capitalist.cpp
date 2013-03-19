@@ -36,7 +36,6 @@ Capitalist::Capitalist() :
 	mCount(0),
 	mUpdateGUIThread(nullptr),
 	mPickedPresident(0)
-	
 {
 	mRound				= 0;
 	mIncreasePopulation = false;
@@ -1482,6 +1481,26 @@ void Capitalist::initializeCapitalistWindow()
 	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "President of " + Menu::getInstance()->getEditField("CapitalistNameField")->getText(), mPickedPresidentWindow);
 	mWindowHeadlines[1]->setAlignment("middle");
 
+	//president tooltip
+	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
+	mToolTipInterface[0]->setVisible(false);
+	//taxes tooltip
+	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
+	mToolTipInterface[1]->setVisible(false);
+	//resources tooltip
+	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
+	mToolTipInterface[2]->setVisible(false);
+	//upgrade tooltip
+	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
+	mToolTipInterface[3]->setVisible(false);
+	//trade tooltip
+	mToolTipInterface[4] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
+	mToolTipInterface[4]->setVisible(false);													 
+	//end turn tooltip																			 
+	mToolTipInterface[5] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
+	mToolTipInterface[5]->setVisible(false);
+
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -1630,6 +1649,25 @@ void Capitalist::LANChooseLeader(std::shared_ptr<President> firstPresident, std:
  /**/
 void Capitalist::initializeGuiFunctions()
 {
+	mCapitalistTaxesButton->setMouseEnterFunction([=]() 
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
+		std::shared_ptr<GUIButton> _taxesButton = mCapitalistTaxesButton;
+		mTaxesToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_taxesButton->getX() + _taxesButton->getWidth()/2); 
+			_tooltipImage->setY(_taxesButton->getY() - _taxesButton->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCapitalistTaxesButton->setMouseLeaveFunction([=]() 
+	{
+		mToolTipInterface[1]->setVisible(false);
+		if(Timer::isTimer(mTaxesToolTipTimer))
+			mTaxesToolTipTimer->killTimer();
+	});
+
 	/*Taxes GUI-window knapparna*/
 	mCapitalistTaxesButton->setOnClickFunction([=]()			
 	{ 
@@ -1645,6 +1683,25 @@ void Capitalist::initializeGuiFunctions()
 		{
 			GUIAnimation::move(mTaxesWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mTaxesWindow->getChildVector()[i]->getRectangle());
 		}
+	});
+
+	mCapitalistResourceButton->setMouseEnterFunction([=]() 
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
+		std::shared_ptr<GUIButton> _resourceButton = mCapitalistResourceButton;
+		mResourceToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_resourceButton->getX() + _resourceButton->getWidth()/2); 
+			_tooltipImage->setY(_resourceButton->getY() - _resourceButton->getHeight()*1.5);
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCapitalistResourceButton->setMouseLeaveFunction([=]() 
+	{
+		mToolTipInterface[2]->setVisible(false);
+		if(Timer::isTimer(mResourceToolTipTimer))
+			mResourceToolTipTimer->killTimer();
 	});
 
 	/*Resources GUI-Window knappar*/
@@ -2007,6 +2064,25 @@ void Capitalist::initializeGuiFunctions()
 	});
 
 
+	mCapitalistUpgradeButton->setMouseEnterFunction([=]() 
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3];
+		std::shared_ptr<GUIButton> _upgradeButton = mCapitalistUpgradeButton;
+		mUpgradeToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_upgradeButton->getX() - _upgradeButton->getWidth()/4); 
+			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCapitalistUpgradeButton->setMouseLeaveFunction([=]() 
+	{
+		mToolTipInterface[3]->setVisible(false);
+		if(Timer::isTimer(mUpgradeToolTipTimer))
+			mUpgradeToolTipTimer->killTimer();
+	});
+
 	/*Upgrade GUI-Window med knappar*/
 	mCapitalistUpgradeButton->setOnClickFunction([=]()	
 	{
@@ -2150,6 +2226,24 @@ void Capitalist::initializeGuiFunctions()
 		}
 		mBuySpyNetworkText->setText(mSpyText->getText());
 		upgradeWindowText();
+	});
+
+	mCapitalistTradeButton->setMouseEnterFunction([=]() 
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[4]; 
+		std::shared_ptr<GUIButton> _tradeButton = mCapitalistTradeButton;
+		mTradeToolTipTimer = Timer::setTimer([=](){
+			_tooltipImage->setX(_tradeButton->getX() - _tradeButton->getWidth()/4); 
+			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCapitalistTradeButton->setMouseLeaveFunction([=]() 
+	{
+		mToolTipInterface[4]->setVisible(false);
+		if(Timer::isTimer(mTradeToolTipTimer))
+			mTradeToolTipTimer->killTimer();
 	});
 
 	/*Export GUI-Window med knappar*/
@@ -2578,7 +2672,6 @@ void Capitalist::initializeGuiFunctions()
 		}
 	});
 
-	/*Stänger ner fönster som visar vilken president som blivit vald*/
 	mClosePickedPresidentWindow->setOnClickFunction([=]()				
 	{ 
 		mPickedPresidentWindow->setVisible(false);
@@ -2595,7 +2688,25 @@ void Capitalist::initializeGuiFunctions()
 
 	});
 
-	/*nästa runda*/
+	mCapitalistEndTurnButton->setMouseEnterFunction([=]() 
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[5];
+		std::shared_ptr<GUIButton> _endturnButton = mCapitalistEndTurnButton;
+		std::shared_ptr<GUIImage>  _endturnFrame = mEndTurnFrame;
+		mEndTurnToolTipTimer = Timer::setTimer([=](){
+			_tooltipImage->setX(_endturnButton->getX() - _endturnButton->getWidth()/2); 
+			_tooltipImage->setY(_endturnFrame->getY() - _endturnFrame->getHeight()*0.75); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCapitalistEndTurnButton->setMouseLeaveFunction([=]() 
+	{
+		mToolTipInterface[5]->setVisible(false);
+		if(Timer::isTimer(mEndTurnToolTipTimer))
+			mEndTurnToolTipTimer->killTimer();
+	});
+	
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{
 		mCapitalistMainTheme->fadeToVolume(1000, mCapitalistMainTheme->getVolume(), 25);
@@ -2678,7 +2789,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
-		mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
+		//mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);
@@ -2851,11 +2962,21 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistPresident->setMouseEnterFunction([=]()
 	{
+		std::shared_ptr<GUIImage> _tooptipImage = mToolTipInterface[0];
+		std::shared_ptr<GUIButton> _president = mCapitalistPresident;
+		mPresidentToolTipTimer = Timer::setTimer([=](){
+			_tooptipImage->setX(_president->getX());
+			_tooptipImage->setY(_president->getY() - _president->getHeight()*0.75);
+			_tooptipImage->setVisible(true);
+		}, 2000, 1);
 		mPickedPresidentWindow->setVisible(true);
 		mClosePickedPresidentWindow->setVisible(false);
 	});
 	mCapitalistPresident->setMouseLeaveFunction([=]()
 	{
+		mToolTipInterface[0]->setVisible(false);
+		if(Timer::isTimer(mPresidentToolTipTimer))
+			mPresidentToolTipTimer->killTimer();
 		mPickedPresidentWindow->setVisible(false);
 		mClosePickedPresidentWindow->setVisible(true);
 	});

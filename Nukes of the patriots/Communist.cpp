@@ -1705,6 +1705,27 @@ void Communist::initializeCommunistWindow()
 	mWindowHeadlines[2] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "Five year plan " + intToString(GameManager::getInstance()->getYear()) + " - " + intToString(GameManager::getInstance()->getYear() + 4), mFiveYearPlanWindow);
 	mWindowHeadlines[2]->setAlignment("middle");
 
+
+
+	//general tooltip
+	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
+	mToolTipInterface[0]->setVisible(false);
+	//fiveyearplan tooltip
+	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
+	mToolTipInterface[1]->setVisible(false);
+	//propaganda tooltip
+	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
+	mToolTipInterface[2]->setVisible(false);
+	//upgrade tooltip
+	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
+	mToolTipInterface[3]->setVisible(false);
+	//trade tooltip
+	mToolTipInterface[4] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
+	mToolTipInterface[4]->setVisible(false);													 
+	//end turn tooltip																			 
+	mToolTipInterface[5] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
+	mToolTipInterface[5]->setVisible(false);
+
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
 	 	och kommer automatiskt få med sig alla barnnoder till denna
@@ -1887,6 +1908,27 @@ void Communist::fiveYearGuiFunctions()
 void Communist::initializeGuiFunctions()
 {
 	fiveYearGuiFunctions();
+
+	mCommunistFiveYearPlanButton->setMouseEnterFunction([=]()
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
+		std::shared_ptr<GUIButton> _fiveYearPlan = mCommunistFiveYearPlanButton;
+		mFiveYearPlanToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_fiveYearPlan->getX() + _fiveYearPlan->getWidth()/2); 
+			_tooltipImage->setY(_fiveYearPlan->getY() - _fiveYearPlan->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+			
+		}, 2000, 1);
+	});
+
+	mCommunistFiveYearPlanButton->setMouseLeaveFunction([=]()
+	{
+		mToolTipInterface[1]->setVisible(false);
+		if(Timer::isTimer(mFiveYearPlanToolTipTimer))
+			mFiveYearPlanToolTipTimer->killTimer();
+	});
+
 	/*Fem års plan knappen på interface  */
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
 	{
@@ -1905,6 +1947,26 @@ void Communist::initializeGuiFunctions()
 			GUIAnimation::move(mFiveYearPlanWindow->getChildVector()[i], 100, sf::FloatRect(x, y, 0, 0), mFiveYearPlanWindow->getChildVector()[i]->getRectangle());
 		}
 	});
+
+	mCommunistPropagandaButton->setMouseEnterFunction([=]()
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
+		std::shared_ptr<GUIButton> _propagada = mCommunistPropagandaButton;
+		mPropagandaToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_propagada->getX() + _propagada->getWidth()/2); 
+			_tooltipImage->setY(_propagada->getY() - _propagada->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCommunistPropagandaButton->setMouseLeaveFunction([=]()
+	{
+		mToolTipInterface[2]->setVisible(false);
+		if(Timer::isTimer(mPropagandaToolTipTimer))
+			mPropagandaToolTipTimer->killTimer();
+	});
+
 	/*Propaganda knappen på interface*/
 	mCommunistPropagandaButton->setOnClickFunction([=]()		
 	{ 
@@ -1930,6 +1992,26 @@ void Communist::initializeGuiFunctions()
 		}
 
 	});
+
+	mCommunistUpgradeButton->setMouseEnterFunction([=]()
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3];
+		std::shared_ptr<GUIButton> _upgradeButton = mCommunistUpgradeButton;
+		mUpgradeToolTipTimer = Timer::setTimer([=]()
+		{
+			_tooltipImage->setX(_upgradeButton->getX() - _upgradeButton->getWidth()/4); 
+			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCommunistUpgradeButton->setMouseLeaveFunction([=]()
+	{
+		mToolTipInterface[3]->setVisible(false);
+		if(Timer::isTimer(mUpgradeToolTipTimer))
+			mUpgradeToolTipTimer->killTimer();
+	});
+
 	/*Upgrade knappen på interface*/
 	mCommunistUpgradeButton->setOnClickFunction([=]()			
 	{
@@ -2269,14 +2351,30 @@ void Communist::initializeGuiFunctions()
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
 	mClosePickedGeneralWindow->setOnClickFunction([=]()
 	{
-	
 		mPickedGeneralWindow->setVisible(false);
 		mCommunistGeneralButton->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCommunistGeneralButton->getRectangle(), mGeneral->getTexture()));
 		mCommunistGeneralButton->setX(mGeneralFrame->getX() + 8); mCommunistGeneralButton->setY(mGeneralFrame->getY() + 9);
 		mCommunistGeneralButton->setScale(0.55, 0.60);
 		mFiveYearPlanWindow->setVisible(true);
 		mFiveYearPlanWindow->setEnabled(true, true);
-		
+	});
+
+	mCommunistTradeButton->setMouseEnterFunction([=]()
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[4]; 
+		std::shared_ptr<GUIButton> _tradeButton = mCommunistTradeButton;
+		mTradeToolTipTimer = Timer::setTimer([=](){
+			_tooltipImage->setX(_tradeButton->getX() - _tradeButton->getWidth()/4); 
+			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*1.5); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCommunistTradeButton->setMouseLeaveFunction([=]()
+	{
+		mToolTipInterface[4]->setVisible(false);
+		if(Timer::isTimer(mTradeToolTipTimer))
+			mTradeToolTipTimer->killTimer();
 	});
 
 	/*Export knappen på interface*/
@@ -2662,6 +2760,25 @@ void Communist::initializeGuiFunctions()
 		mCommunistMainWindow->setEnabled(true, true);
 	});
 
+	mCommunistEndTurnButton->setMouseEnterFunction([=]()
+	{
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[5];
+		std::shared_ptr<GUIButton> _endturnButton = mCommunistEndTurnButton;
+		std::shared_ptr<GUIImage>  _endturnFrame = mEndTurnFrame;
+		mEndTurnToolTipTimer = Timer::setTimer([=](){
+			_tooltipImage->setX(_endturnButton->getX() - _endturnButton->getWidth()/2); 
+			_tooltipImage->setY(_endturnFrame->getY() - _endturnFrame->getHeight()*0.75); 
+			_tooltipImage->setVisible(true);
+		}, 2000, 1);
+	});
+
+	mCommunistEndTurnButton->setMouseLeaveFunction([=]()
+	{
+		mToolTipInterface[5]->setVisible(false);
+		if(Timer::isTimer(mEndTurnToolTipTimer))
+			mEndTurnToolTipTimer->killTimer();
+	});
+
 	/*nästa runda*/
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
 	{
@@ -2733,6 +2850,14 @@ void Communist::initializeGuiFunctions()
 	
 	mCommunistGeneralButton->setMouseEnterFunction([=]()
 	{
+		std::shared_ptr<GUIImage> _tooptipImage = mToolTipInterface[0];
+		std::shared_ptr<GUIButton> _general = mCommunistGeneralButton;
+		mGeneralToolTipTimer = Timer::setTimer([=](){
+			_tooptipImage->setX(_general->getX());
+			_tooptipImage->setY(_general->getY() - _general->getHeight()*0.75);
+			_tooptipImage->setVisible(true);
+		}, 2000, 1);
+
 		mPickedGeneralWindow->setVisible(true);
 		mClosePickedGeneralWindow->setVisible(false);
 	});
@@ -2740,6 +2865,9 @@ void Communist::initializeGuiFunctions()
 	{
 		mPickedGeneralWindow->setVisible(false);
 		mClosePickedGeneralWindow->setVisible(true);
+		mToolTipInterface[0]->setVisible(false);
+		if(Timer::isTimer(mGeneralToolTipTimer))
+			mGeneralToolTipTimer->killTimer();
 	});
 }
 

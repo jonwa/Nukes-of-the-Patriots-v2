@@ -24,6 +24,7 @@ void TimerHandler::removeTimer(Timer* timer)
 		if(mVecTimers[it] == timer)
 		{
 			mVecTimers[it] = NULL; // Elements are not going to be deleted here
+			std::cout << "remove timer: " << mVecTimers[it]<<std::endl;
 			break;
 		}
 	}
@@ -39,28 +40,45 @@ bool TimerHandler::isTimer(Timer* timer)
 	return false;
 }
 
+//void TimerHandler::tick()
+//{
+//	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size(); it++)
+//	{
+//		if(mVecTimers[it] == NULL)
+//		{
+//			delete mVecTimers[it];
+//			mVecTimers.erase(mVecTimers.begin() + it);
+//		}
+//		else
+//		{
+//			if(!mVecTimers[it]->tick())
+//			{
+//				if(mVecTimers[it] != NULL)
+//				{
+//					delete mVecTimers[it];
+//					mVecTimers.erase(mVecTimers.begin() + it);
+//				}
+//			}
+//		}
+//	}
+//}
+
 void TimerHandler::tick()
 {
-	for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size(); it++)
-	{
-		if(mVecTimers[it] == NULL)
-		{
-			delete mVecTimers[it];
-			mVecTimers.erase(mVecTimers.begin() + it);
-		}
-		else
-		{
-			if(!mVecTimers[it]->tick())
-			{
-				if(mVecTimers[it] != NULL)
-				{
-					delete mVecTimers[it];
-					mVecTimers.erase(mVecTimers.begin() + it);
-				}
-			}
-		}
-	}
+	 for(std::vector<Timer*>::size_type it = 0; it < mVecTimers.size();it++)
+	 {
+		 if(!mVecTimers[it]->isAlive())
+		 {
+			 delete mVecTimers[it];
+			 mVecTimers.erase(mVecTimers.begin() + it);
+		 }
+		 else
+		 {
+			 mVecTimers[it]->tick();
+		 }
+	 }
 }
+
 
 TimerHandler* TimerHandler::mInstance = NULL;
 

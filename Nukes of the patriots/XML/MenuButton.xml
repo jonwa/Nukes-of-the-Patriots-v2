@@ -70,7 +70,7 @@
 		<yPos>680</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Menu/Ok-knapp-aktiv</image>
+		<image>Menu/neutral_texture_button_back</image>
 	</button>
 	<button>
 		<name>CloseLanWindow</name>
@@ -78,7 +78,7 @@
 		<yPos>680</yPos>
 		<width>100</width>
 		<height>40</height>
-		<image>Menu/Ok-knapp-aktiv</image>
+		<image>Menu/neutral_texture_button_back</image>
 	</button>
 	<button>		
 		<name>Exit</name>
