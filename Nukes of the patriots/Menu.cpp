@@ -707,6 +707,7 @@ void Menu::initializeGuiFuctions()
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
+			GameManager::getInstance()->showWaitingScreen(false);
 			Timer::setTimer([=]()
 			{
 				_parentWindow->setVisible(false); 
@@ -770,10 +771,10 @@ void Menu::initializeGuiFuctions()
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
+			GameManager::getInstance()->showWaitingScreen(false);
 			Timer::setTimer([=]()
 			{
 				_parentWindow->setVisible(false);
-
 				_music.at("MainMenuTrack")->stop(); 
 				GameManager::getInstance()->init(1952); // initierar första året
 			}, 100, 1);
@@ -846,6 +847,8 @@ void Menu::initializeGuiFuctions()
 
 	mCloseWaitingForClientWindow->setOnClickFunction([=]()
 	{
+		GameManager::getInstance()->stopSearchingForServer();
+		mWaitingForClientText->setText("Searching for server...");
 		mWaitingForClientWindow->setVisible(false);
 		mWaitingForClientWindow->setEnabled(false, true);
 		mLanPlayWindow->setEnabled(true, true);
