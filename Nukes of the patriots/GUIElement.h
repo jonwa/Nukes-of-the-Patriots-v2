@@ -2,6 +2,7 @@
 #define _GUIElement_H
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Network.hpp>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -71,7 +72,7 @@ protected:
 	bool mVisible, mMouseInside, mEnabled, mSelected;
 	std::shared_ptr<GUIElement> mParent;
 	GUIType mGUIType;
-
+	
 	std::function<void ()> mOnClickFunction;
 	std::function<void ()> mMouseEnterFunction;
 	std::function<void ()> mMouseLeaveFunction;
