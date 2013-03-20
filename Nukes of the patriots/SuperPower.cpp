@@ -6,7 +6,7 @@
 
 SuperPower::SuperPower() : 
 	mPopulation(50),			//Befolkning i miljoner
-	mPatriotism(20),
+	mPatriotism(5),
 	mCurrency(0),
 	mTaxes(30),
 	mFood(0),
@@ -45,7 +45,7 @@ SuperPower::SuperPower() :
 void SuperPower::reset()
 {
 	mPopulation								= 50;			//Befolkning i miljoner
-	mPatriotism								= 20;
+	mPatriotism								= 5;
 	mCurrency								= 0;
 	mTaxes									= 30;
 	mFood									= 0;

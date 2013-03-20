@@ -419,7 +419,7 @@ GameManager::~GameManager()
 
 void GameManager::setDocumentName(std::string fileName)
 {
-	//if filename does not already exist, save game in the given filename
+	// filename does not already exist, save game in the given filename
 	if(std::find(mSaveFiles.begin(), mSaveFiles.end(), fileName) == mSaveFiles.end())
 	{
 		std::string temp = ("savedFiles/" + fileName + ".xml");
@@ -427,7 +427,7 @@ void GameManager::setDocumentName(std::string fileName)
 		saveGame(); //saving the game
 		mSaveFiles.push_back(fileName);
 	}
-	// else choose if you want to overwrite the existing file or if you want to rename the file
+	// choose if you want to overwrite the existing file or if you want to rename the file
 	else 
 	{
 		Menu::getInstance()->getWindows("SaveSuccessful")->setVisible(false);
