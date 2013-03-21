@@ -110,7 +110,6 @@ void GUIButton::setSize(float width, float height)
 
 void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
-	mOnClickSound->setVolume(100);
 	mOnClickSound->play();
 }
 
@@ -130,5 +129,4 @@ void GUIButton::setColor(sf::Color color)
 {
 	mSprite.setColor(color);
 	GUIElement::setColor(color);
-
 }

@@ -290,8 +290,8 @@ void President::initializeImages(std::string &path)
 
 void President::playSlogan()
 {
-	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
-	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(20);
+	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(50);
+	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
 }
 
 void President::presidentAnimation()
@@ -327,4 +327,9 @@ sf::Texture* President::getTexture()
 sf::Texture* President::getClickedTexture()
 {
 	return mClickedPortraitTexture;
+}
+
+std::shared_ptr<sf::Music> President::getSlogan()
+{
+	return ResourceHandler::getInstance()->getMusic("Slogans/" + mName);
 }

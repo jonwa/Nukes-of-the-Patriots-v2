@@ -2384,7 +2384,16 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		//mGeneral->playSlogan();
+
+		int volume = mCommunistMainTheme->getVolume();
+		std::shared_ptr<Sound> _sound = mCommunistMainTheme;
+		std::shared_ptr<President> _general = mGeneral;
+		_sound->fadeToVolume(500, _sound->getVolume(), 25);
+		Timer::setTimer([=]()
+		{
+			_sound->fadeToVolume(1000, _sound->getVolume(), volume);
+		}, _general->getSlogan()->getDuration().asMilliseconds(), 1);
+		mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/

@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Audio/Music.hpp>
 
 // President-klass av Joakim Stark
 //randomStatFunc har en vektor med random stats, den slumpar fram 3 stats som sedan får värden mappade till sig.
@@ -24,6 +25,7 @@ public:
 	void initializeImages(std::string &path);
 	sf::Texture* getTexture();
 	sf::Texture* getClickedTexture();
+	std::shared_ptr<sf::Music> getSlogan();
 
 	std::string getName()const;
 	float getFoodPriceModifier();
