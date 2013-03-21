@@ -68,7 +68,8 @@
 	<image filename="taxes_normal.png"/>
 	<image filename="taxes_pressed.png"/>
 	
-	<image filename="kap_button_frame.png"/>
+	<image filename="kap_button_frame_pres.png"/>
+	<image filename="kap_button_frame_end.png"/>
 	
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
@@ -79,6 +80,11 @@
 	
 	<image filename="kap_tooltips_plate_up_left.png"/>
 	<image filename="kap_tooltips_plate_up_right.png"/>
+	
+	<image filename="taxes.png"/>
+	<image filename="resources.png"/>
+	<image filename="tooltip_upgrades.png"/>
+	<image filename="trade.png"/>
 </images>
 
 <images directory ="Communist">
@@ -153,7 +159,8 @@
 	<image filename="trade_normal.png"/>
 	<image filename="trade_pressed.png"/>
 	
-	<image filename="kom_button_frame.png"/>
+	<image filename="kom_button_frame_pres.png"/>
+	<image filename="kom_button_frame_end.png"/>
 	
 	<image filename="kom_end_turn_frame.png"/>
 	<image filename="kom_president_frame.png"/>
@@ -163,6 +170,11 @@
 	
 	<image filename="kom_tooltips_plate_up_left.png"/>
 	<image filename="kom_tooltips_plate_up_right.png"/>
+	
+	<image filename="plan.png"/>
+	<image filename="propaganda.png"/>
+	<image filename="tooltip_upgrades.png"/>
+	<image filename="trade.png"/>
 </images>
 
 <images directory ="Menu">

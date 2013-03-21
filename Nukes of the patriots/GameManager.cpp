@@ -62,8 +62,7 @@ GameManager::GameManager() :
 	mRemotePort(0),
 	mPlayersTurn(0),
 	mReady(false),
-	mShowWaitingScreen(true),
-	mInitialized(false)
+	mShowWaitingScreen(true)
 {
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
@@ -397,7 +396,7 @@ GameManager::~GameManager()
 
 void GameManager::setDocumentName(std::string fileName)
 {
-	//if filename does not already exist, save game in the given filename
+	// filename does not already exist, save game in the given filename
 	if(std::find(mSaveFiles.begin(), mSaveFiles.end(), fileName) == mSaveFiles.end())
 	{
 		std::string temp = ("savedFiles/" + fileName + ".xml");
@@ -405,7 +404,7 @@ void GameManager::setDocumentName(std::string fileName)
 		saveGame(); //saving the game
 		mSaveFiles.push_back(fileName);
 	}
-	// else choose if you want to overwrite the existing file or if you want to rename the file
+	// choose if you want to overwrite the existing file or if you want to rename the file
 	else 
 	{
 		Menu::getInstance()->getWindows("SaveSuccessful")->setVisible(false);
@@ -524,6 +523,7 @@ void GameManager::reset()
 		(*it)->reset();
 	}
 	AnimationHandler::getInstance()->reset();
+	setGameType(VERSUS);
 	getCap()->hideGUI();
 	getCom()->hideGUI();
 }
@@ -756,6 +756,18 @@ void GameManager::removePresidentFromList(std::shared_ptr<President> president)
 	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
 	{
 		if(*it == president)
+		{
+			mPresidentVector.erase(it);
+			break;
+		}
+	}
+}
+
+void GameManager::removePresidentFromList(std::string name)
+{
+	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
+	{
+		if((*it)->getName() == name)
 		{
 			mPresidentVector.erase(it);
 			break;
@@ -1568,6 +1580,11 @@ GameType GameManager::getGameType()
 	return mGameType;
 }
 
+void GameManager::setGameType(GameType gameType)
+{
+	mGameType = gameType;
+}
+
 void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)
 {
 	sf::Packet packet;
@@ -1675,14 +1692,4 @@ void GameManager::stopSearchingForServer()
 		mSearchForServerTimer->killTimer();
 	if(Timer::isTimer(mCreateServerTimer))
 		mCreateServerTimer->killTimer();
-}
-
-void GameManager::setInitialized(bool initialized)
-{
-	mInitialized = initialized;
-}
-
-bool GameManager::isInitialized()
-{
-	return mInitialized;
 }

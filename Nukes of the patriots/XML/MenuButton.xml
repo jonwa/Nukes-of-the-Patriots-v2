@@ -66,7 +66,7 @@
 	</button>
 	<button>
 		<name>CloseChooseTeamWindow</name>
-		<xPos>20</xPos>
+		<xPos>-150</xPos>
 		<yPos>680</yPos>
 		<width>100</width>
 		<height>40</height>
@@ -290,10 +290,10 @@
 	</button>
 	<button>
 		<name>LanPlayQuickConnect</name>
-		<xPos>365</xPos>
+		<xPos>398</xPos>
 		<yPos>84</yPos>
-		<width>293</width>
-		<height>44</height>	
+		<width>230</width>
+		<height>87</height>	
 		<image>Menu/lan_quick_connect</image>
 	</button>		
 	<button>

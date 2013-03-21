@@ -44,20 +44,6 @@ void GUIManager::init(sf::RenderWindow *window)
 void GUIManager::addGUIElement(std::shared_ptr<GUIElement> guiElement)
 {
 	mGuiElements.push_back(guiElement);
-	/*if(!guiElement->getChildVector().empty())
-	{
-		for(std::vector<std::shared_ptr<GUIElement>>::size_type i = 0; i < guiElement->getChildVector().size(); ++i)
-		{
-			mGuiElements.push_back(guiElement->getChildVector()[i]);
-			if(!guiElement->getChildVector().empty())
-			{
-				for(std::vector<std::shared_ptr<GUIElement> >::size_type j = 0; j < guiElement->getChildVector()[i]->getChildVector().size(); ++j)
-				{
-					mGuiElements.push_back(guiElement->getChildVector()[i]->getChildVector()[j]);
-				}
-			}
-		}
-	}*/
 }
 
 void GUIManager::render(sf::RenderStates states)
@@ -73,7 +59,7 @@ void GUIManager::render(sf::RenderStates states)
 
 void GUIManager::update(sf::Event event)
 {
-	if( (GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay()) || GameManager::getInstance()->getGameType() == VERSUS )
+	if( (GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay()) || GameManager::getInstance()->getGameType() == VERSUS)
 	{
 		bool clicked = false;
 		bool moved = false;

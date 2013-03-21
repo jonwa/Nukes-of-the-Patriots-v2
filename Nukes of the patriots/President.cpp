@@ -95,9 +95,9 @@ void President::randomStatFunc()
 	randomStats.push_back("patriotismTax");
 	
 	std::map<std::string, std::string> posStatsText;
-	posStatsText.insert(std::pair<std::string, std::string>("foodPrice", "Food Price -2"));
-	posStatsText.insert(std::pair<std::string, std::string>("goodsPrice", "Goods Price -2"));
-	posStatsText.insert(std::pair<std::string, std::string>("techPrice", "Tech Price -2"));
+	posStatsText.insert(std::pair<std::string, std::string>("foodPrice", "Food Price -3"));
+	posStatsText.insert(std::pair<std::string, std::string>("goodsPrice", "Goods Price -3"));
+	posStatsText.insert(std::pair<std::string, std::string>("techPrice", "Tech Price -3"));
 	posStatsText.insert(std::pair<std::string, std::string>("nuclearPrice", "Nuclear weapons \n20% cheaper"));
 	posStatsText.insert(std::pair<std::string, std::string>("spacePrice", "Space program \n20% cheaper"));
 	posStatsText.insert(std::pair<std::string, std::string>("spyPrice", "Spy network \n20% cheaper"));
@@ -113,9 +113,9 @@ void President::randomStatFunc()
 	negStatsText.insert(std::pair<std::string, std::string>("popEatsMore", "Population eats \n10% more food"));
 
 	std::map<std::string, float> posStatMap;
-	posStatMap.insert(std::pair<std::string,float>("foodPrice", -2.f));
-	posStatMap.insert(std::pair<std::string,float>("goodsPrice", -2.f));
-	posStatMap.insert(std::pair<std::string,float>("techPrice", -2.f));
+	posStatMap.insert(std::pair<std::string,float>("foodPrice", -3.f));
+	posStatMap.insert(std::pair<std::string,float>("goodsPrice", -3.f));
+	posStatMap.insert(std::pair<std::string,float>("techPrice", -3.f));
 	posStatMap.insert(std::pair<std::string,float>("nuclearPrice", 0.8f));
 	posStatMap.insert(std::pair<std::string,float>("spacePrice",0.8f));
 	posStatMap.insert(std::pair<std::string,float>("spyPrice", 0.8f));
@@ -290,8 +290,8 @@ void President::initializeImages(std::string &path)
 
 void President::playSlogan()
 {
-	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
-	//ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(20);
+	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(50);
+	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
 }
 
 void President::presidentAnimation()
@@ -327,4 +327,9 @@ sf::Texture* President::getTexture()
 sf::Texture* President::getClickedTexture()
 {
 	return mClickedPortraitTexture;
+}
+
+std::shared_ptr<sf::Music> President::getSlogan()
+{
+	return ResourceHandler::getInstance()->getMusic("Slogans/" + mName);
 }

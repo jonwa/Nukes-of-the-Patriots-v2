@@ -46,7 +46,7 @@ Menu::~Menu(){ }
 void Menu::playMusic()
 {
 	mMenuMusic->playSound(); 
-	mMenuMusic->setVolume(60);
+	mMenuMusic->setVolume(100);
 }
 void Menu::stopMusic()
 {
@@ -100,14 +100,11 @@ void Menu::saveConfig()
 	tinyxml2::XMLDocument doc;
 	
 	tinyxml2::XMLElement *master = doc.NewElement("MasterVolume");
-	master->SetAttribute("value", sf::Listener::getGlobalVolume()/*mVolumeScrollBar->getValue()*/);
+	master->SetAttribute("value", sf::Listener::getGlobalVolume());
 	tinyxml2::XMLElement *position = doc.NewElement("VolumePos");
 	position->SetAttribute("value", mVolumeScrollBar->getSprite()->getPosition().x);
-	tinyxml2::XMLElement *windowMode = doc.NewElement("windowMode");
-	windowMode->SetAttribute("value", fullscreen);
 	
 	doc.InsertEndChild(master);
-	doc.InsertEndChild(windowMode);
 	doc.InsertEndChild(position);
 	doc.SaveFile("XML/Config.xml");
 }
@@ -124,25 +121,8 @@ void Menu::loadConfig()
 	sf::Listener::setGlobalVolume((float)atof(master->Attribute("value")));
 	tinyxml2::XMLElement *position = doc.FirstChildElement("VolumePos");
 	mVolumeScrollBar->getSprite()->setPosition((float)atof(position->Attribute("value")), mVolumeScrollBar->getY());
-	tinyxml2::XMLElement *windowMode = doc.FirstChildElement("windowMode");
-	fullscreen = atoi(windowMode->Attribute("value"));
 }
 
-//void Menu::setWindowMode()
-//{
-//	int mCount = 0;
-//	if(mCount %2 == 0)
-//		mWindowMode = sf::Style::Fullscreen;
-//	else
-//		mWindowMode = sf::Style::None;
-//
-//	mCount++;
-//}
-
-//int Menu::getWindowMode()
-//{
-//	return mWindowMode;
-//}
 
 void Menu::loadTeamAnimation()
 {
@@ -485,7 +465,6 @@ void Menu::initialize()
 	mVolumeText->setColor(sf::Color::White);
 	mVolumeText->setAlignment("left");
 	mVolumeScrollBar		= GUIScrollBar::create(sf::FloatRect(260, 130, 400, 20), mSettingsMenuWindow);
-	//mMuteSound				= GUIButton::create(ButtonPos["Mute"], mSettingsMenuWindow);
 	mWindowSizeText			= GUIText::create(sf::FloatRect(90, 260, 40, 40), "Fullscreen: ", mSettingsMenuWindow);
 	mWindowSizeText->setColor(sf::Color::White);
 	mWindowSizeText->setAlignment("left");
@@ -635,7 +614,6 @@ void Menu::initializeGuiFuctions()
 	{
 		sf::Listener::setGlobalVolume(mVolumeScrollBar->getValue());
 	});
-	//mMuteSound->setOnClickFunction([=]()	{ sf::Listener::setGlobalVolume(0.f); mVolumeScrollBar->setValue(0); });
 
 	mFullscreenModeButton->setOnClickFunction([=]()
 	{
@@ -664,7 +642,7 @@ void Menu::initializeGuiFuctions()
 
 		if(fullscreen)
 		{
-			if(!mFullscreenCount)
+			if(mFullscreenCount)
 			{
 				mFullscreenCount = true;
 				mWindow->create(sf::VideoMode(1024, 768, 32), "Nukes of the Patriots", sf::Style::Fullscreen);
@@ -845,6 +823,7 @@ void Menu::initializeGuiFuctions()
 	mRestartGameButton->setOnClickFunction([=]()
 	{
 		GameManager::getInstance()->reset();
+		
 		reset();
 	});
 
@@ -860,8 +839,6 @@ void Menu::initializeGuiFuctions()
 		mWaitingForClientWindow->setEnabled(true, true);
 
 		GameManager::getInstance()->searchForServers();
-		
-
 	});
 
 	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
@@ -891,6 +868,8 @@ void Menu::initializeGuiFuctions()
 
 	mBackToMainMenuButton[0]->setOnClickFunction([=]()
 	{
+		if(GameManager::getInstance()->getGameType() == LAN)
+			GameManager::getInstance()->setGameType(VERSUS);
 		mChooseTeamWindow->setVisible(false);
 		mMainMenuWindow->setVisible(true);
 	});

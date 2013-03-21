@@ -56,11 +56,6 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *capitalist = doc.NewElement("Capitalist");
 
-	//saving activateWindow
-	tinyxml2::XMLElement *ActivateWindow = doc.NewElement("ActivateWindow");
-	ActivateWindow->SetAttribute("value", activateWindow);
-	capitalist->InsertEndChild(ActivateWindow);
-
 	//saving round
 	tinyxml2::XMLElement *round = doc.NewElement("Round");
 	round->SetAttribute("value", mRound);
@@ -134,6 +129,7 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 	exportedResourcesSold->SetAttribute("food_sold", getExportedFoodSold());
 	exportedResourcesSold->SetAttribute("goods_sold", getExportedGoodsSold());
 	exportedResourcesSold->SetAttribute("tech_sold", getExportedTechSold());
+	capitalist->InsertEndChild(exportedResourcesSold);
 
 	//saving exported resources information from previous round
 	tinyxml2::XMLElement *previousRoundExportedResources = doc.NewElement("PreviousRoundExportedResources");
@@ -163,10 +159,6 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 void Capitalist::loadGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *capitalist = doc.FirstChildElement("Capitalist");
-	
-	//loading activate window
-	tinyxml2::XMLElement *ActivateWindow = capitalist->FirstChildElement("ActivateWindow");
-	activateWindow = atoi(ActivateWindow->Attribute("value"));
 
 	//loading round
 	tinyxml2::XMLElement *round = capitalist->FirstChildElement("Round");
@@ -1486,24 +1478,19 @@ void Capitalist::initializeCapitalistWindow()
 	mWindowHeadlines[1] = GUIText::create(sf::FloatRect(285, 9, 0, 0), "President of " + Menu::getInstance()->getEditField("CapitalistNameField")->getText(), mPickedPresidentWindow);
 	mWindowHeadlines[1]->setAlignment("middle");
 
-	//president tooltip
-	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
-	mToolTipInterface[0]->setVisible(false);
+
 	//taxes tooltip
-	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
-	mToolTipInterface[1]->setVisible(false);
+	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/taxes"))), mCapitalistMainWindow);
+	mToolTipInterface[0]->setVisible(false);
 	//resources tooltip
-	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_right"))), mCapitalistMainWindow);
-	mToolTipInterface[2]->setVisible(false);
+	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/resources"))), mCapitalistMainWindow);
+	mToolTipInterface[1]->setVisible(false);
 	//upgrade tooltip
-	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
-	mToolTipInterface[3]->setVisible(false);
+	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/tooltip_upgrades"))), mCapitalistMainWindow);
+	mToolTipInterface[2]->setVisible(false);
 	//trade tooltip
-	mToolTipInterface[4] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
-	mToolTipInterface[4]->setVisible(false);													 
-	//end turn tooltip																			 
-	mToolTipInterface[5] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/kap_tooltips_plate_up_left"))), mCapitalistMainWindow);
-	mToolTipInterface[5]->setVisible(false);
+	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Capitalist/trade"))), mCapitalistMainWindow);
+	mToolTipInterface[3]->setVisible(false);													 
 
 
 	/*
@@ -1659,19 +1646,19 @@ void Capitalist::initializeGuiFunctions()
 {
 	mCapitalistTaxesButton->setMouseEnterFunction([=]() 
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[0];
 		std::shared_ptr<GUIButton> _taxesButton = mCapitalistTaxesButton;
 		mTaxesToolTipTimer = Timer::setTimer([=]()
 		{
-			_tooltipImage->setX(_taxesButton->getX() + _taxesButton->getWidth()/2); 
-			_tooltipImage->setY(_taxesButton->getY() - _taxesButton->getHeight()*1.5); 
+			_tooltipImage->setX(_taxesButton->getX()); 
+			_tooltipImage->setY(_taxesButton->getY() - _taxesButton->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCapitalistTaxesButton->setMouseLeaveFunction([=]() 
 	{
-		mToolTipInterface[1]->setVisible(false);
+		mToolTipInterface[0]->setVisible(false);
 		if(Timer::isTimer(mTaxesToolTipTimer))
 			mTaxesToolTipTimer->killTimer();
 	});
@@ -1679,6 +1666,8 @@ void Capitalist::initializeGuiFunctions()
 	/*Taxes GUI-window knapparna*/
 	mCapitalistTaxesButton->setOnClickFunction([=]()			
 	{ 
+		if(Timer::isTimer(mTaxesToolTipTimer))
+			mTaxesToolTipTimer->killTimer();
 		mCapitalistMainWindow->setEnabled(false, true);
 		mTaxesWindow->setEnabled(true, true);
 		mTaxesWindow->setVisible(true); 
@@ -1695,19 +1684,19 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistResourceButton->setMouseEnterFunction([=]() 
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
 		std::shared_ptr<GUIButton> _resourceButton = mCapitalistResourceButton;
 		mResourceToolTipTimer = Timer::setTimer([=]()
 		{
-			_tooltipImage->setX(_resourceButton->getX() + _resourceButton->getWidth()/2); 
-			_tooltipImage->setY(_resourceButton->getY() - _resourceButton->getHeight()*1.5);
+			_tooltipImage->setX(_resourceButton->getX()); 
+			_tooltipImage->setY(_resourceButton->getY() - _resourceButton->getHeight()*2);
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCapitalistResourceButton->setMouseLeaveFunction([=]() 
 	{
-		mToolTipInterface[2]->setVisible(false);
+		mToolTipInterface[1]->setVisible(false);
 		if(Timer::isTimer(mResourceToolTipTimer))
 			mResourceToolTipTimer->killTimer();
 	});
@@ -1715,6 +1704,8 @@ void Capitalist::initializeGuiFunctions()
 	/*Resources GUI-Window knappar*/
 	mCapitalistResourceButton->setOnClickFunction([=]()			
 	{ 
+		if(Timer::isTimer(mResourceToolTipTimer))
+			mResourceToolTipTimer->killTimer();
 		mCapitalistMainWindow->setEnabled(false, true);
 		mResourceWindow->setEnabled(true, true);
 		mResourceWindow->setVisible(true); 
@@ -1901,6 +1892,7 @@ void Capitalist::initializeGuiFunctions()
 		mGoodsCost->setText("Cost: " + intToString(goodsCost*goodsAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});	
+
 	mLowerGoodsByOneButton->setOnClickFunction([=]()
 	{ 
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -1919,6 +1911,7 @@ void Capitalist::initializeGuiFunctions()
 		mGoodsCost->setText("Cost: " + intToString(goodsCost*goodsAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});	
+
 	mRaiseGoodsByOneButton->setOnClickFunction([=]()
 	{ 
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -1935,6 +1928,7 @@ void Capitalist::initializeGuiFunctions()
 		mGoodsCost->setText("Cost: " + intToString(goodsCost*goodsAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});	
+
 	mRaiseGoodsByFiveButton->setOnClickFunction([=]()
 	{ 
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -1951,6 +1945,7 @@ void Capitalist::initializeGuiFunctions()
 		mGoodsCost->setText("Cost: " + intToString(goodsCost*goodsAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});	
+
 	mRaiseGoodsByTenButton->setOnClickFunction([=]()
 	{ 
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -1986,6 +1981,7 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText("Cost: " + intToString(techCost*techAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});
+
 	mLowerTechByFiveButton->setOnClickFunction([=]()
 	{
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -2004,6 +2000,7 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText("Cost: " + intToString(techCost*techAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});
+
 	mLowerTechByOneButton->setOnClickFunction([=]()
 	{
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -2022,6 +2019,7 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText("Cost: " + intToString(techCost*techAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});
+
 	mRaiseTechByOneButton->setOnClickFunction([=]()
 	{
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -2038,6 +2036,7 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText("Cost: " + intToString(techCost*techAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});
+
 	mRaiseTechByFiveButton->setOnClickFunction([=]()
 	{
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -2054,6 +2053,7 @@ void Capitalist::initializeGuiFunctions()
 		mTechCost->setText("Cost: " + intToString(techCost*techAmount) + " §");
 		mTotalResourcesCost->setText("Total cost: " + intToString(totalCost) + " §");;
 	});
+
 	mRaiseTechByTenButton->setOnClickFunction([=]()
 	{
 		int foodAmount = stringToInt(mBuyFoodText->getText());
@@ -2074,26 +2074,27 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistUpgradeButton->setMouseEnterFunction([=]() 
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
 		std::shared_ptr<GUIButton> _upgradeButton = mCapitalistUpgradeButton;
 		mUpgradeToolTipTimer = Timer::setTimer([=]()
 		{
 			_tooltipImage->setX(_upgradeButton->getX() - _upgradeButton->getWidth()/4); 
-			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*1.5); 
+			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCapitalistUpgradeButton->setMouseLeaveFunction([=]() 
 	{
-		mToolTipInterface[3]->setVisible(false);
+		mToolTipInterface[2]->setVisible(false);
 		if(Timer::isTimer(mUpgradeToolTipTimer))
 			mUpgradeToolTipTimer->killTimer();
 	});
 
-	/*Upgrade GUI-Window med knappar*/
 	mCapitalistUpgradeButton->setOnClickFunction([=]()	
 	{
+		if(Timer::isTimer(mUpgradeToolTipTimer))
+			mUpgradeToolTipTimer->killTimer();
 		currentGoods				= mGoods;
 		currentTech					= mTech;
 
@@ -2127,7 +2128,7 @@ void Capitalist::initializeGuiFunctions()
 		
 		if(mGoods >= nuclearGoodsPrice && mTech >= nuclearTechPrice)
 		{
-			if(mUpgradeSound != nullptr)
+			if(mUpgradeSound->getSound() != nullptr)
 			{
 				if(mUpgradeSound->getSound()->getStatus() == sf::Music::Stopped)
 				{
@@ -2238,18 +2239,18 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistTradeButton->setMouseEnterFunction([=]() 
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[4]; 
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3]; 
 		std::shared_ptr<GUIButton> _tradeButton = mCapitalistTradeButton;
 		mTradeToolTipTimer = Timer::setTimer([=](){
 			_tooltipImage->setX(_tradeButton->getX() - _tradeButton->getWidth()/4); 
-			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*1.5); 
+			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCapitalistTradeButton->setMouseLeaveFunction([=]() 
 	{
-		mToolTipInterface[4]->setVisible(false);
+		mToolTipInterface[3]->setVisible(false);
 		if(Timer::isTimer(mTradeToolTipTimer))
 			mTradeToolTipTimer->killTimer();
 	});
@@ -2257,6 +2258,8 @@ void Capitalist::initializeGuiFunctions()
 	/*Export GUI-Window med knappar*/
 	mCapitalistTradeButton->setOnClickFunction([=]()
 	{ 
+		if(Timer::isTimer(mTradeToolTipTimer))
+			mTradeToolTipTimer->killTimer();
 		mCapitalistMainWindow->setEnabled(false, true);
 		mImportWindow->setEnabled(true, true);
 
@@ -2672,7 +2675,18 @@ void Capitalist::initializeGuiFunctions()
 				_pickedWindow->setEnabled(true, true);
 			}, 1000, 1);
 			
-			//mPresident->playSlogan();
+			if(mPresident->getSlogan() != nullptr)
+			{
+				int volume = mCapitalistMainTheme->getVolume();
+				std::shared_ptr<Sound> _sound = mCapitalistMainTheme;
+				std::shared_ptr<President> _president = mPresident;
+				_sound->fadeToVolume(500, _sound->getVolume(), 25);
+				Timer::setTimer([=]()
+				{
+					_sound->fadeToVolume(1000, _sound->getVolume(), volume);
+				}, _president->getSlogan()->getDuration().asMilliseconds(), 1);
+				mPresident->playSlogan();
+			}
 			int yearsElected = mPresident->getYearsElected();
 
 			mPresident->setYearsElected(yearsElected + 1);
@@ -2696,24 +2710,6 @@ void Capitalist::initializeGuiFunctions()
 
 	});
 
-	mCapitalistEndTurnButton->setMouseEnterFunction([=]() 
-	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[5];
-		std::shared_ptr<GUIButton> _endturnButton = mCapitalistEndTurnButton;
-		std::shared_ptr<GUIImage>  _endturnFrame = mEndTurnFrame;
-		mEndTurnToolTipTimer = Timer::setTimer([=](){
-			_tooltipImage->setX(_endturnButton->getX() - _endturnButton->getWidth()/2); 
-			_tooltipImage->setY(_endturnFrame->getY() - _endturnFrame->getHeight()*0.75); 
-			_tooltipImage->setVisible(true);
-		}, 2000, 1);
-	});
-
-	mCapitalistEndTurnButton->setMouseLeaveFunction([=]() 
-	{
-		mToolTipInterface[5]->setVisible(false);
-		if(Timer::isTimer(mEndTurnToolTipTimer))
-			mEndTurnToolTipTimer->killTimer();
-	});
 	
 	mCapitalistEndTurnButton->setOnClickFunction([=]()	
 	{
@@ -2721,10 +2717,13 @@ void Capitalist::initializeGuiFunctions()
 		mExportedFoodPreviousRound = mExportedFood;
 		mExportedGoodsPreviousRound = mExportedGoods;
 		mExportedTechPreviousRound = mExportedTech;
+
 		int foodBought = mFood - mFoodPreviousRound;
-		
+		std::cout << "Food this round: " << mFood << "| Food previous round: " << mFoodPreviousRound << "| Food bought: " << foodBought << std::endl;
 		int goodsBought = mGoods - mGoodsPreviousRound;
+		std::cout << "Goods this round: " << mGoods << "| Goods previous round: " << mGoodsPreviousRound << "| Goods bought: " << goodsBought << std::endl;
 		int techBought = mTech - mTechPreviousRound;
+		std::cout << "Tech this round: " << mTech << "| Tech previous round: " << mTechPreviousRound << "| Tech bought: " << techBought << std::endl;
 		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
 
 		int foodTotalCost = foodBought * foodCost;
@@ -2795,11 +2794,15 @@ void Capitalist::initializeGuiFunctions()
 				}
 				else if(resourceLink[resourceType[rand]] == "goods")
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+					mIncreasedResoucesSound->playSound();
 					goodsCost += 1;
 					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 				}
 				else
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+					mIncreasedResoucesSound->playSound();
 					techCost += 1;
 					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 				}
@@ -2839,11 +2842,15 @@ void Capitalist::initializeGuiFunctions()
 				}
 				else if(resourceLink[resourceType[rand]] == "goods")
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+					mIncreasedResoucesSound->playSound();
 					goodsCost += 1;
 					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 				}
 				else
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+					mIncreasedResoucesSound->playSound();
 					techCost += 1;
 					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 				}
@@ -2870,7 +2877,8 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
-		//mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
+		if(mIncreasedResoucesSound->getSound() != nullptr)
+			mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);
@@ -2912,7 +2920,7 @@ void Capitalist::initializeGuiFunctions()
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
 		mCapitalistMainTheme->fadeToVolume(2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
-		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(500, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<Sound> music = mCapitalistMainTheme;
 		std::shared_ptr<GUIButton> endTurn = mCapitalistEndTurnButton;
@@ -3043,21 +3051,12 @@ void Capitalist::initializeGuiFunctions()
 
 	mCapitalistPresident->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooptipImage = mToolTipInterface[0];
-		std::shared_ptr<GUIButton> _president = mCapitalistPresident;
-		mPresidentToolTipTimer = Timer::setTimer([=](){
-			_tooptipImage->setX(_president->getX());
-			_tooptipImage->setY(_president->getY() - _president->getHeight()*0.75);
-			_tooptipImage->setVisible(true);
-		}, 2000, 1);
+
 		mPickedPresidentWindow->setVisible(true);
 		mClosePickedPresidentWindow->setVisible(false);
 	});
 	mCapitalistPresident->setMouseLeaveFunction([=]()
 	{
-		mToolTipInterface[0]->setVisible(false);
-		if(Timer::isTimer(mPresidentToolTipTimer))
-			mPresidentToolTipTimer->killTimer();
 		mPickedPresidentWindow->setVisible(false);
 		mClosePickedPresidentWindow->setVisible(true);
 	});

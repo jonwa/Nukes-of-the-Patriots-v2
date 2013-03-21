@@ -14,7 +14,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_button_frame</image>
+		<image>Communist/kom_button_frame_pres</image>
 	</button>
 	<button>
 		<name>FiveYearPlan</name>
@@ -478,7 +478,7 @@
 		<yPos>636</yPos>
 		<width>112</width>
 		<height>132</height>
-		<image>Communist/kom_button_frame</image>
+		<image>Communist/kom_button_frame_end</image>
 	</button>
 	<button>
 		<name>EndTurn</name>

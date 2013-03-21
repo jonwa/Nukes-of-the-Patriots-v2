@@ -328,7 +328,7 @@ private:
 	std::shared_ptr<GUIImage>  mSpacePanel;
 	std::shared_ptr<GUIImage>  mSpyPanel;
 
-	std::shared_ptr<GUIImage>  mToolTipInterface[6];
+	std::shared_ptr<GUIImage>  mToolTipInterface[4];
 	Timer *mPresidentToolTipTimer;
 	Timer *mTaxesToolTipTimer;
 	Timer *mResourceToolTipTimer;

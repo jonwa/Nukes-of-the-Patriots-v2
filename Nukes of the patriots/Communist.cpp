@@ -173,11 +173,6 @@ void Communist::saveGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *communist = doc.NewElement("Communist");
 
-	//saving activateWindow
-	tinyxml2::XMLElement *ActivateWindow = doc.NewElement("ActivateWindow");
-	ActivateWindow->SetAttribute("value", activateWindow);
-	communist->InsertEndChild(ActivateWindow);
-
 	//saving round
 	tinyxml2::XMLElement *round = doc.NewElement("Round");
 	round->SetAttribute("value", mRound);
@@ -273,10 +268,6 @@ void Communist::saveGame(tinyxml2::XMLDocument &doc)
 void Communist::loadGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *communist = doc.FirstChildElement("Communist");
-	
-	//loading activate window
-	tinyxml2::XMLElement *ActivateWindow = communist->FirstChildElement("ActivateWindow");
-	activateWindow = atoi(ActivateWindow->Attribute("value"));
 
 	//loading round
 	tinyxml2::XMLElement *round = communist->FirstChildElement("Round");
@@ -357,8 +348,8 @@ void Communist::loadGame(tinyxml2::XMLDocument &doc)
 //spelar upp musiken samt loopar den
 void Communist::playMusic()
 {
-	mCommunistMainTheme->playSound(true);
-	mCommunistMainTheme->setVolume(130);
+	//mCommunistMainTheme->playSound(true);
+	//mCommunistMainTheme->setVolume(130);
 }
 //Stoppar musiken
 void Communist::stopMusic()
@@ -1765,24 +1756,18 @@ void Communist::initializeCommunistWindow()
 
 
 
-	//general tooltip
-	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
-	mToolTipInterface[0]->setVisible(false);
 	//fiveyearplan tooltip
-	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
-	mToolTipInterface[1]->setVisible(false);
+	mToolTipInterface[0] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Communist/plan"))), mCommunistMainWindow);
+	mToolTipInterface[0]->setVisible(false);
 	//propaganda tooltip
-	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_right"))), mCommunistMainWindow);
-	mToolTipInterface[2]->setVisible(false);
+	mToolTipInterface[1] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Communist/propaganda"))), mCommunistMainWindow);
+	mToolTipInterface[1]->setVisible(false);
 	//upgrade tooltip
-	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
-	mToolTipInterface[3]->setVisible(false);
+	mToolTipInterface[2] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Communist/tooltip_upgrades"))), mCommunistMainWindow);
+	mToolTipInterface[2]->setVisible(false);
 	//trade tooltip
-	mToolTipInterface[4] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
-	mToolTipInterface[4]->setVisible(false);													 
-	//end turn tooltip																			 
-	mToolTipInterface[5] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 136, 112), &ResourceHandler::getInstance()->getTexture(std::string("Communist/kom_tooltips_plate_up_left"))), mCommunistMainWindow);
-	mToolTipInterface[5]->setVisible(false);
+	mToolTipInterface[3] = GUIImage::create(std::pair<sf::FloatRect, sf::Texture*>(sf::FloatRect(0, 0, 200, 156), &ResourceHandler::getInstance()->getTexture(std::string("Communist/trade"))), mCommunistMainWindow);
+	mToolTipInterface[3]->setVisible(false);													 
 
 	/*
 	 	Lägger in föräldernoden i vektorn som finns i GUIManager
@@ -1969,12 +1954,12 @@ void Communist::initializeGuiFunctions()
 
 	mCommunistFiveYearPlanButton->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[0];
 		std::shared_ptr<GUIButton> _fiveYearPlan = mCommunistFiveYearPlanButton;
 		mFiveYearPlanToolTipTimer = Timer::setTimer([=]()
 		{
-			_tooltipImage->setX(_fiveYearPlan->getX() + _fiveYearPlan->getWidth()/2); 
-			_tooltipImage->setY(_fiveYearPlan->getY() - _fiveYearPlan->getHeight()*1.5); 
+			_tooltipImage->setX(_fiveYearPlan->getX()); 
+			_tooltipImage->setY(_fiveYearPlan->getY() - _fiveYearPlan->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 			
 		}, 2000, 1);
@@ -1982,7 +1967,7 @@ void Communist::initializeGuiFunctions()
 
 	mCommunistFiveYearPlanButton->setMouseLeaveFunction([=]()
 	{
-		mToolTipInterface[1]->setVisible(false);
+		mToolTipInterface[0]->setVisible(false);
 		if(Timer::isTimer(mFiveYearPlanToolTipTimer))
 			mFiveYearPlanToolTipTimer->killTimer();
 	});
@@ -1990,6 +1975,8 @@ void Communist::initializeGuiFunctions()
 	/*Fem års plan knappen på interface  */
 	mCommunistFiveYearPlanButton->setOnClickFunction([=]()		
 	{
+		if(Timer::isTimer(mFiveYearPlanToolTipTimer))
+			mFiveYearPlanToolTipTimer->killTimer();
 		mCommunistMainWindow->setEnabled(false, true);
 		mFiveYearPlanCloseButton->setEnabled(true, false);
 
@@ -2008,19 +1995,19 @@ void Communist::initializeGuiFunctions()
 
 	mCommunistPropagandaButton->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[1];
 		std::shared_ptr<GUIButton> _propagada = mCommunistPropagandaButton;
 		mPropagandaToolTipTimer = Timer::setTimer([=]()
 		{
-			_tooltipImage->setX(_propagada->getX() + _propagada->getWidth()/2); 
-			_tooltipImage->setY(_propagada->getY() - _propagada->getHeight()*1.5); 
+			_tooltipImage->setX(_propagada->getX()); 
+			_tooltipImage->setY(_propagada->getY() - _propagada->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCommunistPropagandaButton->setMouseLeaveFunction([=]()
 	{
-		mToolTipInterface[2]->setVisible(false);
+		mToolTipInterface[1]->setVisible(false);
 		if(Timer::isTimer(mPropagandaToolTipTimer))
 			mPropagandaToolTipTimer->killTimer();
 	});
@@ -2028,6 +2015,8 @@ void Communist::initializeGuiFunctions()
 	/*Propaganda knappen på interface*/
 	mCommunistPropagandaButton->setOnClickFunction([=]()		
 	{ 
+		if(Timer::isTimer(mPropagandaToolTipTimer))
+			mPropagandaToolTipTimer->killTimer();
 		mCommunistMainWindow->setEnabled(false, true);
 		mPropagandaWindowFirst->setEnabled(true, true);
 
@@ -2053,19 +2042,19 @@ void Communist::initializeGuiFunctions()
 
 	mCommunistUpgradeButton->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3];
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[2];
 		std::shared_ptr<GUIButton> _upgradeButton = mCommunistUpgradeButton;
 		mUpgradeToolTipTimer = Timer::setTimer([=]()
 		{
 			_tooltipImage->setX(_upgradeButton->getX() - _upgradeButton->getWidth()/4); 
-			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*1.5); 
+			_tooltipImage->setY(_upgradeButton->getY() - _upgradeButton->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCommunistUpgradeButton->setMouseLeaveFunction([=]()
 	{
-		mToolTipInterface[3]->setVisible(false);
+		mToolTipInterface[2]->setVisible(false);
 		if(Timer::isTimer(mUpgradeToolTipTimer))
 			mUpgradeToolTipTimer->killTimer();
 	});
@@ -2073,6 +2062,8 @@ void Communist::initializeGuiFunctions()
 	/*Upgrade knappen på interface*/
 	mCommunistUpgradeButton->setOnClickFunction([=]()			
 	{
+		if(Timer::isTimer(mUpgradeToolTipTimer))
+			mUpgradeToolTipTimer->killTimer();
 		mCommunistMainWindow->setEnabled(false, true);
 		mUpgradeWindow->setEnabled(true, true);
 
@@ -2228,15 +2219,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Nuclear")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Nuclear");
-			mUpgradeNuclearWeaponButton->canClick(true);
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
 			mGoods -= nuclearGoodsPrice;
 			mTech  -= nuclearTechPrice;
 		}
-		else
-			mUpgradeNuclearWeaponButton->canClick(false);
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
@@ -2264,15 +2252,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Space")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Space");
-			mUpgradeSpaceProgramButton->canClick(true);
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
 			mGoods -= spaceProgramGoodsPrice;
 			mTech  -= spaceProgramTechPrice;
 		}
-		else
-			mUpgradeSpaceProgramButton->canClick(false);
 	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
@@ -2299,15 +2284,11 @@ void Communist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpyNetworkText->getText());
 		if(mTech >= spyNetworkTechPrice)
 		{
-			mUpgradeSpyNetworkButton->canClick(true);
 			++amount;
 			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
 			upgradeWindowText();
 		}
-		else
-			mUpgradeSpyNetworkButton->canClick(false);
-		
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
@@ -2403,7 +2384,16 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		//mGeneral->playSlogan();
+
+		int volume = mCommunistMainTheme->getVolume();
+		std::shared_ptr<Sound> _sound = mCommunistMainTheme;
+		std::shared_ptr<President> _general = mGeneral;
+		_sound->fadeToVolume(500, _sound->getVolume(), 25);
+		Timer::setTimer([=]()
+		{
+			_sound->fadeToVolume(1000, _sound->getVolume(), volume);
+		}, _general->getSlogan()->getDuration().asMilliseconds(), 1);
+		mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
@@ -2419,18 +2409,18 @@ void Communist::initializeGuiFunctions()
 
 	mCommunistTradeButton->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[4]; 
+		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[3]; 
 		std::shared_ptr<GUIButton> _tradeButton = mCommunistTradeButton;
 		mTradeToolTipTimer = Timer::setTimer([=](){
 			_tooltipImage->setX(_tradeButton->getX() - _tradeButton->getWidth()/4); 
-			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*1.5); 
+			_tooltipImage->setY(_tradeButton->getY() - _tradeButton->getHeight()*2); 
 			_tooltipImage->setVisible(true);
 		}, 2000, 1);
 	});
 
 	mCommunistTradeButton->setMouseLeaveFunction([=]()
 	{
-		mToolTipInterface[4]->setVisible(false);
+		mToolTipInterface[3]->setVisible(false);
 		if(Timer::isTimer(mTradeToolTipTimer))
 			mTradeToolTipTimer->killTimer();
 	});
@@ -2438,6 +2428,8 @@ void Communist::initializeGuiFunctions()
 	/*Export knappen på interface*/
 	mCommunistTradeButton->setOnClickFunction([=]()
 	{
+		if(Timer::isTimer(mTradeToolTipTimer))
+			mTradeToolTipTimer->killTimer();
 		mCommunistMainWindow->setEnabled(false, true);
 		mImportWindow->setEnabled(true, true);
 
@@ -2818,24 +2810,6 @@ void Communist::initializeGuiFunctions()
 		mCommunistMainWindow->setEnabled(true, true);
 	});
 
-	mCommunistEndTurnButton->setMouseEnterFunction([=]()
-	{
-		std::shared_ptr<GUIImage> _tooltipImage = mToolTipInterface[5];
-		std::shared_ptr<GUIButton> _endturnButton = mCommunistEndTurnButton;
-		std::shared_ptr<GUIImage>  _endturnFrame = mEndTurnFrame;
-		mEndTurnToolTipTimer = Timer::setTimer([=](){
-			_tooltipImage->setX(_endturnButton->getX() - _endturnButton->getWidth()/2); 
-			_tooltipImage->setY(_endturnFrame->getY() - _endturnFrame->getHeight()*0.75); 
-			_tooltipImage->setVisible(true);
-		}, 2000, 1);
-	});
-
-	mCommunistEndTurnButton->setMouseLeaveFunction([=]()
-	{
-		mToolTipInterface[5]->setVisible(false);
-		if(Timer::isTimer(mEndTurnToolTipTimer))
-			mEndTurnToolTipTimer->killTimer();
-	});
 
 	/*nästa runda*/
 	mCommunistEndTurnButton->setOnClickFunction([=]()	
@@ -2882,7 +2856,7 @@ void Communist::initializeGuiFunctions()
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
 		mCommunistMainTheme->fadeToVolume(2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
-		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(500, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<GUIButton> endTurn = mCommunistEndTurnButton;
 		sf::FloatRect rect = sf::FloatRect(CommunistButtons["EndTurn"].first);
@@ -2908,13 +2882,6 @@ void Communist::initializeGuiFunctions()
 	
 	mCommunistGeneralButton->setMouseEnterFunction([=]()
 	{
-		std::shared_ptr<GUIImage> _tooptipImage = mToolTipInterface[0];
-		std::shared_ptr<GUIButton> _general = mCommunistGeneralButton;
-		mGeneralToolTipTimer = Timer::setTimer([=](){
-			_tooptipImage->setX(_general->getX());
-			_tooptipImage->setY(_general->getY() - _general->getHeight()*0.75);
-			_tooptipImage->setVisible(true);
-		}, 2000, 1);
 
 		mPickedGeneralWindow->setVisible(true);
 		mClosePickedGeneralWindow->setVisible(false);
@@ -2923,9 +2890,6 @@ void Communist::initializeGuiFunctions()
 	{
 		mPickedGeneralWindow->setVisible(false);
 		mClosePickedGeneralWindow->setVisible(true);
-		mToolTipInterface[0]->setVisible(false);
-		if(Timer::isTimer(mGeneralToolTipTimer))
-			mGeneralToolTipTimer->killTimer();
 	});
 }
 
