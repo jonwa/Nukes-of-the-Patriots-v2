@@ -2,6 +2,7 @@
 #define _GUIElement_H
 
 #include <SFML\Graphics.hpp>
+#include <SFML\Network.hpp>
 #include <memory>
 #include <vector>
 #include <functional>
@@ -52,7 +53,7 @@ public:
 
 	virtual void	setText(std::string text){};
 	virtual void	setScale(float width, float height) {}
-	void			setOnClickFunction(std::function<void()>);
+	void			setOnClickFunction(std::function<void()> func);
 	void			setMouseEnterFunction(std::function<void ()>);
 	void			setMouseLeaveFunction(std::function<void ()>);
 	void			setOnGuiChangeFunction(std::function <void()> func);

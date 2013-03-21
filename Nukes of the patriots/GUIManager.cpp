@@ -1,5 +1,6 @@
 #include "GUIElement.h"
 #include "GUIManager.h"
+#include "GameManager.h"
 #include <iostream>
 
 GUIManager::GUIManager() :
@@ -72,27 +73,30 @@ void GUIManager::render(sf::RenderStates states)
 
 void GUIManager::update(sf::Event event)
 {
-	bool clicked = false;
-	bool moved = false;
-	if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+	if( (GameManager::getInstance()->getGameType() == LAN && GameManager::getInstance()->isMyTurnToPlay()) || GameManager::getInstance()->getGameType() == VERSUS )
 	{
-		if(!mMouseDown)
+		bool clicked = false;
+		bool moved = false;
+		if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
 		{
-			mMouseDown = true;
-			clicked = true;
+			if(!mMouseDown)
+			{
+				mMouseDown = true;
+				clicked = true;
+			}
 		}
-	}
-	else if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-		mMouseDown = false;
-	else if(event.type == sf::Event::MouseMoved)
-		moved = true;
-	for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mGuiElements.size(); ++i)
-	{
-		if(clicked)
-			mGuiElements[i]->onClick(mWindow);
-		if(moved)
-			mGuiElements[i]->onMove(mWindow);
-		mGuiElements[i]->update(mWindow, event);
+		else if(event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+			mMouseDown = false;
+		else if(event.type == sf::Event::MouseMoved)
+			moved = true;
+		for(std::vector<std::shared_ptr<GUIElement> >::size_type i = 0; i < mGuiElements.size(); ++i)
+		{
+			if(clicked)
+				mGuiElements[i]->onClick(mWindow);
+			if(moved)
+				mGuiElements[i]->onMove(mWindow);
+			mGuiElements[i]->update(mWindow, event);
+		}
 	}
 }
 

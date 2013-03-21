@@ -23,6 +23,7 @@
 #include <SFML\Network.hpp>
 #include "Sound.h"
 #include "SoundHandler.h"
+#include "MovieHandler.h"
 static int width = 1024;
 static int height = 768;
 
@@ -49,6 +50,7 @@ GameManager::GameManager() :
 	mCreateServerEvent(nullptr),
 	mConnectToServerEvent(nullptr),
 	mCreateServerTimer(nullptr),
+	mSearchForServerTimer(nullptr),
 	mVecPlayersLeft(),		
 	mRound(0),
 	mLoaded(false),
@@ -59,7 +61,9 @@ GameManager::GameManager() :
 	mRemoteIpAddress(""),
 	mRemotePort(0),
 	mPlayersTurn(0),
-	mReady(false)
+	mReady(false),
+	mShowWaitingScreen(true),
+	mInitialized(false)
 {
 	cursorTexture.loadFromFile("Images/Mouse/MouseCursor.png");
 	cursorClickedTexture.loadFromFile("Images/Mouse/MouseCursorClicked.png");
@@ -160,6 +164,8 @@ GameManager::GameManager() :
 			{
 				func();
 			}
+			if(guiElement->getGUIType() == BUTTON)
+				guiElement->setMouseIsInside(true);
 		}
 	});
 
@@ -176,6 +182,8 @@ GameManager::GameManager() :
 			{
 				func();
 			}
+			if(guiElement->getGUIType() == BUTTON)
+				guiElement->setMouseIsInside(false);
 		}
 	});
 
@@ -337,37 +345,6 @@ GameManager::GameManager() :
 		mRemoteClient->setReady(ready == 1 ? true : false);
 	});
 
-	Event::addEventHandler("syncRandomPlayerNextRound",
-		[=](sf::Packet packet)
-	{
-		int randomPlayer = 0;
-		packet>>randomPlayer;
-		if(randomPlayer == 0 && mRemoteClient->getSuperPower() == CAPITALIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == COMMUNIST)
-			setEnemyTurn();
-		else if(randomPlayer == 0 && mRemoteClient->getSuperPower() == COMMUNIST || randomPlayer == 1 && mRemoteClient->getSuperPower() == CAPITALIST)
-			setMyTurn();
-		//If both player has same spy network, then select random as next player directly
-		std::vector<std::shared_ptr<SuperPower>> _nextPlayers = mVecPlayersLeft;
-		//std::function<void(std::shared_ptr<SuperPower>)> _selectStartingPlayer = selectStartingPlayer;
-		//mCloseStatsWindow->setOnClickFunction([=]()
-		//{
-		//	if(_nextPlayers.size() == 1)
-		//	{
-		//		_selectStartingPlayer(_nextPlayers[randomPlayer]);
-		//	}
-		//	else
-		//	{
-		//		setCurrentPlayer(nextPlayers[randomPlayer]); // Need to set setCurrentPlayer to update player round
-		//		mFirstDecideWhoStartWindow->setVisible(true);
-		//		mStatsWindow[1]->setVisible(false);
-		//		//mNextWindowToShow = mFirstDecideWhoStartWindow;
-		//		mFirstDecideWhoStartWindow->setEnabled(true, true);
-		//		mFirstCapitalistSpyNetworkText->setText("Spy network: " + intToString(getCapitalist()->getSpyNetwork()));
-		//		mFirstCommunistSpyNetworkText->setText("Spy network: " + intToString(getCommunist()->getSpyNetwork()));
-		//	} 
-		//});
-	});
-
 	Event::addEventHandler("statsWindowReady",
 		[=](sf::Packet packet)
 	{
@@ -377,6 +354,7 @@ GameManager::GameManager() :
 	Event::addEventHandler("syncRandomStartingPlayer", 
 		[=](sf::Packet packet)
 	{
+		showWaitingScreen(false);
 		int player = 0;
 		packet>>player;
 		setRandomPlayer(mVecSuperPowers[player]);
@@ -552,18 +530,22 @@ void GameManager::reset()
 
 void GameManager::init(int year)
 {
+	std::cout<<"start of loading"<<std::endl;
 	if(!mLoaded)
 	{
 		getInstance()->setYear(year);
 		loadPresidents();
+		std::cout<<"after presidents"<<std::endl;
 		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
 		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		std::cout<<"after superpowers"<<std::endl;
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
 		mYearText->setText(intToString(mYear));
 		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
+		std::cout<<"after year text"<<std::endl;
 
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
@@ -615,6 +597,7 @@ void GameManager::init(int year)
 			mLoaded = true;
 			mCurrentPlayer->setRound(1);
 			mCurrentPlayer->showGUI();
+			std::cout<<"after showing current player gui"<<std::endl;
 		}
 		mReady = true;
 		if(getGameType() == LAN)
@@ -650,7 +633,8 @@ void GameManager::init(int year)
 		mCurrentPlayer->showGUI();
 	}
 	//startRound();
-
+	std::cout<<"end of loading"<<std::endl;
+	//MovieHandler::getInstance()->setLoaded(true);
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()
@@ -1033,6 +1017,7 @@ void GameManager::nextRound()
 		}, 3000, 1);
 		if(getGameType() == LAN)
 		{
+			showWaitingScreen(true);
 			mReady = false;
 			mRemoteClient->setReady(false);
 			int randomPlayer = Randomizer::getInstance()->randomNr(nextPlayers.size(), 0);
@@ -1057,22 +1042,27 @@ void GameManager::nextRound()
 				}
 				if(mReady && mRemoteClient->isReady())
 				{
-					if(nextPlayers.size() == 1)
+					if(!initWinningScreen())
 					{
-						if(nextPlayers[randomPlayer]->getType() == mRemoteClient->getSuperPower())
-							setEnemyTurn();
-						else
-							setMyTurn();
-						selectStartingPlayer();
-					}
-					else
-					{
-						if(isMyTurnToPlay())
+						if(nextPlayers.size() == 1)
 						{
-							setRandomPlayer(nextPlayers[randomPlayer]);
-							sf::Packet _packet;
-							_packet<<(nextPlayers[randomPlayer]->getType() == CAPITALIST ? 0 : 1);
-							triggerOtherPlayersEvent("syncRandomStartingPlayer", _packet);
+							if(nextPlayers[randomPlayer]->getType() == mRemoteClient->getSuperPower())
+								setEnemyTurn();
+							else
+								setMyTurn();
+							selectStartingPlayer();
+							showWaitingScreen(false);
+						}
+						else
+						{
+							if(isMyTurnToPlay())
+							{
+								showWaitingScreen(false);
+								setRandomPlayer(nextPlayers[randomPlayer]);
+								sf::Packet _packet;
+								_packet<<(nextPlayers[randomPlayer]->getType() == CAPITALIST ? 0 : 1);
+								triggerOtherPlayersEvent("syncRandomStartingPlayer", _packet);
+							}
 						}
 					}
 				}
@@ -1446,20 +1436,21 @@ void GameManager::searchForServers()
 	mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
 	sf::Packet packet;
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
-	mUdpClient->triggerServerEvent("clientSearchingForServers", packet);
-	if(mCreateServerTimer == nullptr)
+	mSearchForServerTimer = Timer::setTimer([=]()
 	{
-		mCreateServerTimer = Timer::setTimer([=]()
-		{
-			createServer();
-		}, 5000, 1);
-	}
+		mUdpClient->triggerServerEvent("clientSearchingForServers", packet);
+	}, 50, 0);
+	mCreateServerTimer = Timer::setTimer([=]()
+	{
+		createServer();
+	}, 5000, 1);
 }
 
 void GameManager::createServer()
 {
 	if(mUdpServer == nullptr)
 	{
+		mSearchForServerTimer->killTimer();
 		Menu::getInstance()->mWaitingForClientText->setText("Waiting for players to connect...");
 		std::cout<<"No server found... creating server"<<std::endl;
 		mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
@@ -1521,6 +1512,7 @@ void GameManager::connectToServer(std::string ipAdress, unsigned short port)
 	packet<<sf::IpAddress::getLocalAddress().toString()<<mUdpClient->getPort();
 	mUdpClient->triggerServerEvent("connectToServer", packet);
 	*/
+	mSearchForServerTimer->killTimer();
 	mCreateServerTimer->killTimer();
 	mTcpClient = new sf::TcpClient(port, sf::IpAddress(ipAdress));
 }
@@ -1540,6 +1532,17 @@ void GameManager::tick(sf::RenderWindow &window)
 
 		if(!isMyTurnToPlay())
 			window.draw(remoteCursor);
+		if(mShowWaitingScreen && !isMyTurnToPlay())
+		{
+			sf::RectangleShape rect(sf::Vector2f(window.getSize().x, window.getSize().y));
+			rect.setFillColor(sf::Color(0, 0, 0, 150));
+			window.draw(rect);
+
+			sf::Text text("Waiting for other player...");
+			text.setPosition(window.getSize().x * 0.5, window.getSize().y * 0.25);
+			text.setOrigin(text.getLocalBounds().width * 0.5, text.getLocalBounds().height * 0.5);
+			window.draw(text);
+		}
 	}
 	cursor.setPosition(mousePos.x, mousePos.y);
 
@@ -1661,7 +1664,25 @@ void GameManager::setMyTurn()
 
 }
 
+void GameManager::showWaitingScreen(bool show)
+{
+	mShowWaitingScreen = show;
+}
 
+void GameManager::stopSearchingForServer()
+{
+	if(Timer::isTimer(mSearchForServerTimer))
+		mSearchForServerTimer->killTimer();
+	if(Timer::isTimer(mCreateServerTimer))
+		mCreateServerTimer->killTimer();
+}
 
-// Sync packet sending - wait until packet has been sent to send next packet
+void GameManager::setInitialized(bool initialized)
+{
+	mInitialized = initialized;
+}
 
+bool GameManager::isInitialized()
+{
+	return mInitialized;
+}

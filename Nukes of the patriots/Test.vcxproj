@@ -16,6 +16,7 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GUIAnimation.cpp" />
     <ClCompile Include="GUIScrollBar.cpp" />
+    <ClCompile Include="MovieHandler.cpp" />
     <ClCompile Include="RemoteClient.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="GUIAnimation.h" />
     <ClInclude Include="GUIScrollBar.h" />
+    <ClInclude Include="MovieHandler.h" />
     <ClInclude Include="RemoteClient.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundHandler.h" />

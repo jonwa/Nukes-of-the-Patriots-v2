@@ -14,6 +14,7 @@
 #include "Event.h"
 #include <SFML/Network.hpp>
 #include <SFML\Audio\Listener.hpp>
+#include "MovieHandler.h"
 
 Menu::Menu() : 
 	mWindow(nullptr),
@@ -23,6 +24,7 @@ Menu::Menu() :
 	fullscreen(true),
 	mFullscreenCount(true)
 { 
+	mLoadingMovie.openFromFile("loading.wmv");
 	//initializeIntroVideo();
 	initialize(); 
 	initializeGuiFuctions();
@@ -729,12 +731,18 @@ void Menu::initializeGuiFuctions()
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
-			Timer::setTimer([=]()
-			{
-				_parentWindow->setVisible(false); 
-				_music.at("MainMenuTrack")->stop(); 
-				GameManager::getInstance()->init(1952); // initierar första året
-			}, 100, 1);
+			GameManager::getInstance()->showWaitingScreen(false);
+			//Timer::setTimer([=]()
+			//{
+				_parentWindow->setVisible(false);
+				_music.at("MainMenuTrack")->stop();
+				MovieHandler::getInstance()->setMovie(mLoadingMovie);
+				MovieHandler::getInstance()->setLoaded(false);
+				MovieHandler::getInstance()->playMovie();
+				GameManager::getInstance()->init(1952);
+				MovieHandler::getInstance()->setLoaded(true);
+				std::cout<<"loaded!"<<std::endl;
+			//}, 100, 1);
 		}
 	});
 
@@ -792,13 +800,18 @@ void Menu::initializeGuiFuctions()
 		std::map<std::string, std::shared_ptr<sf::Music>> _music = MenuMusic;
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
-			Timer::setTimer([=]()
-			{
+			GameManager::getInstance()->showWaitingScreen(false);
+			//Timer::setTimer([=]()
+			//{
 				_parentWindow->setVisible(false);
-
-				_music.at("MainMenuTrack")->stop(); 
-				GameManager::getInstance()->init(1952); // initierar första året
-			}, 100, 1);
+				_music.at("MainMenuTrack")->stop();
+				MovieHandler::getInstance()->setMovie(mLoadingMovie);
+				MovieHandler::getInstance()->setLoaded(false);
+				MovieHandler::getInstance()->playMovie();
+				GameManager::getInstance()->init(1952);
+				MovieHandler::getInstance()->setLoaded(true);
+				std::cout<<"loaded!"<<std::endl;
+			//}, 100, 1);
 		}
 	});
 
@@ -869,6 +882,8 @@ void Menu::initializeGuiFuctions()
 
 	mCloseWaitingForClientWindow->setOnClickFunction([=]()
 	{
+		GameManager::getInstance()->stopSearchingForServer();
+		mWaitingForClientText->setText("Searching for server...");
 		mWaitingForClientWindow->setVisible(false);
 		mWaitingForClientWindow->setEnabled(false, true);
 		mLanPlayWindow->setEnabled(true, true);

@@ -45,6 +45,7 @@ Capitalist::Capitalist() :
 	mUpdateGUIThread = new sf::Thread(&Capitalist::updateGUI, this);
 	mUpdateGUIThread->launch();
 }
+
 Capitalist::~Capitalist()
 {
 	

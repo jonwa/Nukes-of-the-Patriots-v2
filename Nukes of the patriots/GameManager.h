@@ -105,6 +105,10 @@ public:
 	void										setEnemyTurn();
 	void										setMyTurn();
 	void										setRandomPlayer(std::shared_ptr<SuperPower> player);
+	void										showWaitingScreen(bool show);
+	void										stopSearchingForServer();
+	void										setInitialized(bool initialized);
+	bool										isInitialized();
 private:
 	std::string mFileName;
 	SaveFilesVec mSaveFiles;
@@ -195,6 +199,7 @@ private:
 	Event *mCreateServerEvent;
 	Event *mConnectToServerEvent;
 	Timer *mCreateServerTimer;
+	Timer *mSearchForServerTimer;
 
 	ServerState			mServerState;
 	GameType			mGameType;
@@ -206,6 +211,8 @@ private:
 
 	int mPlayersTurn; // 0 = servers turn
 	bool mReady;
+	bool mShowWaitingScreen;
+	bool mInitialized;
 };
 
 
