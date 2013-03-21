@@ -348,8 +348,8 @@ void Communist::loadGame(tinyxml2::XMLDocument &doc)
 //spelar upp musiken samt loopar den
 void Communist::playMusic()
 {
-	mCommunistMainTheme->playSound(true);
-	mCommunistMainTheme->setVolume(130);
+	//mCommunistMainTheme->playSound(true);
+	//mCommunistMainTheme->setVolume(130);
 }
 //Stoppar musiken
 void Communist::stopMusic()
@@ -2219,15 +2219,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Nuclear")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Nuclear");
-			mUpgradeNuclearWeaponButton->canClick(true);
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
 			mGoods -= nuclearGoodsPrice;
 			mTech  -= nuclearTechPrice;
 		}
-		else
-			mUpgradeNuclearWeaponButton->canClick(false);
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
@@ -2255,15 +2252,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Space")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Space");
-			mUpgradeSpaceProgramButton->canClick(true);
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
 			mGoods -= spaceProgramGoodsPrice;
 			mTech  -= spaceProgramTechPrice;
 		}
-		else
-			mUpgradeSpaceProgramButton->canClick(false);
 	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
@@ -2290,15 +2284,11 @@ void Communist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpyNetworkText->getText());
 		if(mTech >= spyNetworkTechPrice)
 		{
-			mUpgradeSpyNetworkButton->canClick(true);
 			++amount;
 			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
 			upgradeWindowText();
 		}
-		else
-			mUpgradeSpyNetworkButton->canClick(false);
-		
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
@@ -2857,7 +2847,7 @@ void Communist::initializeGuiFunctions()
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
 		mCommunistMainTheme->fadeToVolume(2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
-		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(500, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<GUIButton> endTurn = mCommunistEndTurnButton;
 		sf::FloatRect rect = sf::FloatRect(CommunistButtons["EndTurn"].first);

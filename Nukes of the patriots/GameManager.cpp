@@ -522,6 +522,7 @@ void GameManager::reset()
 		(*it)->reset();
 	}
 	AnimationHandler::getInstance()->reset();
+	setGameType(VERSUS);
 	getCap()->hideGUI();
 	getCom()->hideGUI();
 }
@@ -748,6 +749,18 @@ void GameManager::removePresidentFromList(std::shared_ptr<President> president)
 	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
 	{
 		if(*it == president)
+		{
+			mPresidentVector.erase(it);
+			break;
+		}
+	}
+}
+
+void GameManager::removePresidentFromList(std::string name)
+{
+	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
+	{
+		if((*it)->getName() == name)
 		{
 			mPresidentVector.erase(it);
 			break;
@@ -1558,6 +1571,11 @@ void GameManager::update(sf::Event &event)
 GameType GameManager::getGameType()
 {
 	return mGameType;
+}
+
+void GameManager::setGameType(GameType gameType)
+{
+	mGameType = gameType;
 }
 
 void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)

@@ -17,7 +17,7 @@ void SoundHandler::tick()
 { 
 	for(std::vector<std::shared_ptr<Sound> >::size_type it = 0; it < mMusicVector.size(); it++)
 	{
-		//mMusicVector[it]->tick();
+		mMusicVector[it]->tick();
 	}
 }
 

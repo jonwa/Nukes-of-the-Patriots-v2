@@ -2705,10 +2705,13 @@ void Capitalist::initializeGuiFunctions()
 		mExportedFoodPreviousRound = mExportedFood;
 		mExportedGoodsPreviousRound = mExportedGoods;
 		mExportedTechPreviousRound = mExportedTech;
+
 		int foodBought = mFood - mFoodPreviousRound;
-		
+		std::cout << "Food this round: " << mFood << "| Food previous round: " << mFoodPreviousRound << "| Food bought: " << foodBought << std::endl;
 		int goodsBought = mGoods - mGoodsPreviousRound;
+		std::cout << "Goods this round: " << mGoods << "| Goods previous round: " << mGoodsPreviousRound << "| Goods bought: " << goodsBought << std::endl;
 		int techBought = mTech - mTechPreviousRound;
+		std::cout << "Tech this round: " << mTech << "| Tech previous round: " << mTechPreviousRound << "| Tech bought: " << techBought << std::endl;
 		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
 
 		int foodTotalCost = foodBought * foodCost;
@@ -2779,11 +2782,15 @@ void Capitalist::initializeGuiFunctions()
 				}
 				else if(resourceLink[resourceType[rand]] == "goods")
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+					mIncreasedResoucesSound->playSound();
 					goodsCost += 1;
 					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 				}
 				else
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+					mIncreasedResoucesSound->playSound();
 					techCost += 1;
 					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 				}
@@ -2823,11 +2830,15 @@ void Capitalist::initializeGuiFunctions()
 				}
 				else if(resourceLink[resourceType[rand]] == "goods")
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Goods"));
+					mIncreasedResoucesSound->playSound();
 					goodsCost += 1;
 					mIncreasedResourcesText->setText("The price of goods is now " + intToString(goodsCost) + " §");
 				}
 				else
 				{
+					mIncreasedResoucesSound->setSound(getSoundEffect("Buttons/Factory"));
+					mIncreasedResoucesSound->playSound();
 					techCost += 1;
 					mIncreasedResourcesText->setText("The price of tech is now " + intToString(techCost) + " §");
 				}
@@ -2854,7 +2865,7 @@ void Capitalist::initializeGuiFunctions()
 	
 	mCloseIncreasedResourcesPriceWindow->setOnClickFunction([=]()
 	{
-		//mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
+		mIncreasedResoucesSound->fadeToVolume(500, mIncreasedResoucesSound->getVolume(), 0);
 		mIncreasedResourcesPriceWindow->setVisible(false);
 
 		updateFood(mPopulationEatsFoodText);
@@ -2896,7 +2907,7 @@ void Capitalist::initializeGuiFunctions()
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
 		mCapitalistMainTheme->fadeToVolume(2000, CapitalistMusic["CapitalistMainTheme"]->getVolume(), 0);
-		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(500, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<Sound> music = mCapitalistMainTheme;
 		std::shared_ptr<GUIButton> endTurn = mCapitalistEndTurnButton;

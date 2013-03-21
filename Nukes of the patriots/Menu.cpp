@@ -856,6 +856,8 @@ void Menu::initializeGuiFuctions()
 
 	mBackToMainMenuButton[0]->setOnClickFunction([=]()
 	{
+		if(GameManager::getInstance()->getGameType() == LAN)
+			GameManager::getInstance()->setGameType(VERSUS);
 		mChooseTeamWindow->setVisible(false);
 		mMainMenuWindow->setVisible(true);
 	});
