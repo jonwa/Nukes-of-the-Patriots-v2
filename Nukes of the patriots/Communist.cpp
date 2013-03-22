@@ -46,6 +46,7 @@ Communist::Communist() :
 	propagandaInitialize();
 	mUpdateGUIThread = new sf::Thread(&Communist::updateGUI, this);
 	mUpdateGUIThread->launch();
+	updateGUI();
 }
 
 void Communist::reset()
@@ -1182,7 +1183,7 @@ void Communist::initializeCommunistWindow()
 	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 
 	
-	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), intToString(mPopulation) + " million", mCommunistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), "Population: " + intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.7, 0.7);
 
 	mPopulationText->setAlignment("middle");

@@ -47,6 +47,7 @@ int main()
 	Menu::getInstance()->getWindows("MainMenu")->setVisible(true);
 	Menu::getInstance()->loadConfig();
 	GameManager::getInstance()->loadFileName();
+	Menu::getInstance()->playMusic();
 	movieHandler->setLoaded(true);
 
 	bool sleeping = false;

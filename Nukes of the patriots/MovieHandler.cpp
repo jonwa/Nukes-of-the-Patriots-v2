@@ -29,15 +29,16 @@ void MovieHandler::init(sf::RenderWindow &window)
 	mThread = new sf::Thread([=]()
 	{
 		mMovie->play();
-		mWindow->setActive(true);
 		int timesPlayed = 0;
+		mWindow->setActive(false);
 		while(!isLoaded() || (mMovie->getStatus() == sfe::Movie::Playing && timesPlayed == 0))
 		{
+			mWindow->setActive(true);
 			mWindow->clear();
 			mWindow->draw(*mMovie);
-			sf::RectangleShape rect(sf::Vector2f(200, 50));
-			rect.setFillColor(sf::Color(0, 255, 0, 255));
-			mWindow->draw(rect);
+			//sf::RectangleShape rect(sf::Vector2f(200, 50));
+			//rect.setFillColor(sf::Color(0, 255, 0, 255));
+			//mWindow->draw(rect);
 			mWindow->display();
 			if(mMovie->getStatus() == sfe::Movie::Stopped)
 			{
