@@ -339,8 +339,8 @@ void Communist::loadGame(tinyxml2::XMLDocument &doc)
 
 void Communist::playMusic()
 {
-	//mCommunistMainTheme->playSound(true);
-	//mCommunistMainTheme->setVolume(130);
+	mCommunistMainTheme->playSound(true);
+	mCommunistMainTheme->setVolume(130);
 }
 
 void Communist::stopMusic()
