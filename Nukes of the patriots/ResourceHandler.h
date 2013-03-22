@@ -29,19 +29,14 @@ class ResourceHandler
 {
 public:
 	~ResourceHandler();
-	
-	//Singleton mönster för instansiering
+
 	static ResourceHandler* getInstance();
 
-	//Texture funktioner
 	void loadTexture(const std::string &path, const std::string &key);
 	sf::Texture& getTexture(std::string &path);
 
-	//Sound funktioner
 	void loadSound(const std::string &path, const std::string &key);
-	/*sf::SoundBuffer& getSound(std::string &path);*/
 
-	//Music funktioner
 	void loadMusic(const std::string &path, const std::string &key);
 	std::shared_ptr<sf::Music> getMusic(std::string &path);
 
@@ -55,7 +50,6 @@ private:
 	ResourceHandler operator = (const ResourceHandler& resourceHandler) { }
 	ResourceHandler(const ResourceHandler& copy) { }
 
-	//Singleton mönster för instansiering
 	static ResourceHandler* mInstance;
 
 	//std::map :ar innehållandes Images, SoundBuffers and Music

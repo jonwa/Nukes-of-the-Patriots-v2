@@ -35,6 +35,7 @@ public:
 	float getPatriotismTaxModifier();
 	float getPopEatsMore();
 
+	void setName(std::string &string);
 	void setFoodPriceModifier(float value);
 	void setGoodsPriceModifier(float value);
 	void setTechPriceModifier(float value);
@@ -73,3 +74,4 @@ private:
 	std::vector<std::string> mNegativeStats;
 	std::vector<std::string> randomStats;
 };
+

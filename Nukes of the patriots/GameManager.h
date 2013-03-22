@@ -45,7 +45,7 @@ public:
 
 	typedef std::vector<std::string> SaveFilesVec;
 	void saveGame();
-	void loadGame();
+	void loadGame(std::string &fileName);
 	void saveFileName();
 	void loadFileName();
 	void setDocumentName(std::string fileName);

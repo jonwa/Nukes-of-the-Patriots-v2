@@ -55,17 +55,14 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *capitalist = doc.NewElement("Capitalist");
 
-	//saving round
 	tinyxml2::XMLElement *round = doc.NewElement("Round");
 	round->SetAttribute("value", mRound);
 	capitalist->InsertEndChild(round);
 
-	//saving city_image_counter
 	tinyxml2::XMLElement *count = doc.NewElement("Count");
 	count->SetAttribute("value", mCount);
 	capitalist->InsertEndChild(count);
 
-	//saving overall information (population, patriotism, currency, taxes)
 	tinyxml2::XMLElement *overallInformation = doc.NewElement("OverallInformation");
 	overallInformation->SetAttribute("Population", getPopulation());
 	overallInformation->SetAttribute("Patriotism", getPatriotism());
@@ -74,7 +71,6 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 	//overallInformation->SetAttribute("TaxDecreased", mTaxDecreased);
 	capitalist->InsertEndChild(overallInformation);
 
-	//saving overall information from previous round (population, patriotism, currency, taxes)
 	tinyxml2::XMLElement *overallInformationPreviousRound = doc.NewElement("OverallInformationPreviousRound");
 	overallInformationPreviousRound->SetAttribute("Population_previous_round", getPopulationPreviousRound());
 	overallInformationPreviousRound->SetAttribute("Patriotism_previous_round", getPatriotismPreviousRound());
@@ -82,69 +78,80 @@ void Capitalist::saveGame(tinyxml2::XMLDocument &doc)
 	overallInformationPreviousRound->SetAttribute("Taxes_previous_round", getTaxPreviousRound());
 	capitalist->InsertEndChild(overallInformationPreviousRound);
 
-	//saving President information
 	tinyxml2::XMLElement *president = doc.NewElement("PresidentInformation");
-	president->SetAttribute("President", mPresident);
+	president->SetAttribute("name", mPresident->getName().c_str());
+	president->SetAttribute("first_positive_stat", mPresident->getFirstPositiveStat().c_str());
+	president->SetAttribute("second_positive_stat", mPresident->getSecondPositiveStat().c_str());
+	president->SetAttribute("negative_stat", mPresident->getNegativeStat().c_str());
+	//president->SetAttribute("biography", mPresident->getBiography().c_str());
+	president->SetAttribute("nuclear_price_modifier", mPresident->getNuclearPriceModifier());
+	president->SetAttribute("space_program_modifier", mPresident->getSpacePriceModifier());
+	president->SetAttribute("spy_network_modifier", mPresident->getSpyPriceModifier());
+	president->SetAttribute("food_price_modifier", mPresident->getFoodPriceModifier());
+	president->SetAttribute("goods_price_modifier", mPresident->getGoodsPriceModifier());
+	president->SetAttribute("tech_price_modifier", mPresident->getTechPriceModifier());
+	president->SetAttribute("patriotism_tax_modifier", mPresident->getPatriotismTaxModifier());
+	president->SetAttribute("population_eats_more_food", mPresident->getPopEatsMore());
+	president->SetAttribute("years_elected", mPresident->getYearsElected());
+	std::string temp_presidentName = mPresident->getName().c_str();
+	//president->SetAttribute("image", mCapitalistPresident->getTexture()->copyToImage().saveToFile("savedFiles/" + temp_presidentName + ".png"));
 	president->SetAttribute("Picked_president", mPickedPresident);
 	capitalist->InsertEndChild(president);
 
-	//saving resources information (amount)
+
 	tinyxml2::XMLElement *resourcesAmount = doc.NewElement("ResourcesAmount");
 	resourcesAmount->SetAttribute("food_amount", getFood());
 	resourcesAmount->SetAttribute("goods_amount", getGoods());
 	resourcesAmount->SetAttribute("tech_amount", getTech()); 
 	capitalist->InsertEndChild(resourcesAmount);
 
-	//saving resources information (prices)
+
 	tinyxml2::XMLElement *resourcesPrices = doc.NewElement("ResourcesPrices");
 	resourcesPrices->SetAttribute("food_price", foodCost);
 	resourcesPrices->SetAttribute("goods_price", goodsCost);
 	resourcesPrices->SetAttribute("tech_price", techCost);
 	capitalist->InsertEndChild(resourcesPrices);
 
-	//saving resources information from previous round
+
 	tinyxml2::XMLElement *previousRoundResources = doc.NewElement("PreviousRoundResources");
 	previousRoundResources->SetAttribute("Food_previous_round", getFoodPreviousRound());
 	previousRoundResources->SetAttribute("Goods_previous_round", getGoodsPreviousRound());
 	previousRoundResources->SetAttribute("Tech_previous_round", getTaxPreviousRound());
 	capitalist->InsertEndChild(previousRoundResources);
 
-	//saving exported resources information (amount)
 	tinyxml2::XMLElement *exportedResources = doc.NewElement("ExportedResourcesAmount");
 	exportedResources->SetAttribute("food_amount", getExportedFood());
 	exportedResources->SetAttribute("goods_amount", getExportedGoods());
 	exportedResources->SetAttribute("tech_amount", getExportedTech());
 	capitalist->InsertEndChild(exportedResources);
 
-	//saving exported resources information (prices)
+
 	tinyxml2::XMLElement *exportedResourcesPrices = doc.NewElement("ExportedResourcesPrices");
 	exportedResourcesPrices->SetAttribute("food_price", getExportedFoodPrice());
 	exportedResourcesPrices->SetAttribute("goods_price", getExportedGoodsPrice());
 	exportedResourcesPrices->SetAttribute("tech_price", getExportedTechPrice());
 	capitalist->InsertEndChild(exportedResourcesPrices);
 
-	//saving exported resources information (sold)
 	tinyxml2::XMLElement *exportedResourcesSold = doc.NewElement("ExportedResourcesSold");
 	exportedResourcesSold->SetAttribute("food_sold", getExportedFoodSold());
 	exportedResourcesSold->SetAttribute("goods_sold", getExportedGoodsSold());
 	exportedResourcesSold->SetAttribute("tech_sold", getExportedTechSold());
 	capitalist->InsertEndChild(exportedResourcesSold);
 
-	//saving exported resources information from previous round
 	tinyxml2::XMLElement *previousRoundExportedResources = doc.NewElement("PreviousRoundExportedResources");
 	previousRoundExportedResources->SetAttribute("Exported_food_previous_round", getExportedFoodPreviousRound());
 	previousRoundExportedResources->SetAttribute("Exported_goods_previous_round", getExportedGoodsPreviousRound());
 	previousRoundExportedResources->SetAttribute("Exported_tech_previous_round", getExportedTechPreviousRound());
 	capitalist->InsertEndChild(previousRoundExportedResources);
 
-	//saving upgrades (nuclear, spaceprogram, spynetwork)
+
 	tinyxml2::XMLElement *upgrades = doc.NewElement("Upgrades");
 	upgrades->SetAttribute("Nuclear_weapon", getNuclearWeapon());
 	upgrades->SetAttribute("Space_program", getSpaceProgram());
 	upgrades->SetAttribute("Spy_network", getSpyNetwork());
 	capitalist->InsertEndChild(upgrades);
+	
 
-	//saving upgrades from previous round
 	tinyxml2::XMLElement *previousRoundUpgrades = doc.NewElement("PreviousRoundUpgrades");
 	previousRoundUpgrades->SetAttribute("Nuclear_weapon_previous_round", getNuclearWeaponPreviousRound());
 	previousRoundUpgrades->SetAttribute("Space_program_previous_round", getSpaceProgramPreviousRound());
@@ -159,76 +166,88 @@ void Capitalist::loadGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *capitalist = doc.FirstChildElement("Capitalist");
 
-	//loading round
+
 	tinyxml2::XMLElement *round = capitalist->FirstChildElement("Round");
 	mRound = atoi(round->Attribute("value"));
 
-	//loading city_image_count
 	tinyxml2::XMLElement *count = capitalist->FirstChildElement("Count");
 	mCount = atoi(count->Attribute("value"));
 
-	//loading overall information
+
 	tinyxml2::XMLElement *overallInformation = capitalist->FirstChildElement("OverallInformation");
 	mPopulation = atoi(overallInformation->Attribute("Population"));
 	mPatriotism = atoi(overallInformation->Attribute("Patriotism"));
 	mCurrency	= atoi(overallInformation->Attribute("Currency"));
 	mTaxes		= atoi(overallInformation->Attribute("Taxes"));
 
-	//loading overall information from previous round
+
 	tinyxml2::XMLElement *overallInformationPreviousRound = capitalist->FirstChildElement("OverallInformationPreviousRound");
 	mPopulationPreviousRound = atoi(overallInformationPreviousRound->Attribute("Population_previous_round"));
 	mPatriotismPreviousRound = atoi(overallInformationPreviousRound->Attribute("Patriotism_previous_round"));
 	mCurrencyPreviousRound   = atoi(overallInformationPreviousRound->Attribute("Currency_previous_round"));
 	mTaxesPreviousRound		 = atoi(overallInformationPreviousRound->Attribute("Taxes_previous_round"));
 
-	//loading General information
+
 	tinyxml2::XMLElement *president = capitalist->FirstChildElement("PresidentInformation");
 	//ADD THE INFORMATION ABOUT WHICH PRESIDENT THAT WAS PICKED
+	std::string tempName = president->Attribute("name");
+	mPresident->setName(tempName);
+	mPresident->setFirstPositiveStat(president->Attribute("first_positive_stat"));
+	mPresident->setSecondPositiveStat(president->Attribute("second_positive_stat"));
+	mPresident->setNegativeStat(president->Attribute("negative_stat"));
+	//
+	mPresident->setNuclearPriceModifier((float)atof(president->Attribute("nuclear_price_modifier")));
+	mPresident->setSpacePriceModifier((float)atof(president->Attribute("space_program_modifier")));
+	mPresident->setSpyPriceModifier((float)atof(president->Attribute("spy_network_modifier")));
+	mPresident->setFoodPriceModifier((float)atof(president->Attribute("food_price_modifier")));
+	mPresident->setGoodsPriceModifier((float)atof(president->Attribute("goods_price_modifier")));
+	mPresident->setTechPriceModifier((float)atof(president->Attribute("tech_price_modifier")));
+	mPresident->setPatriotismTaxModifier((float)atof(president->Attribute("patriotism_tax_modifier")));
+	mPresident->setPopEatsMore((float)atof(president->Attribute("population_eats_more_food")));
+	mPresident->setYearsElected(atoi(president->Attribute("years_elected")));
 	mPickedPresident = atoi(president->Attribute("Picked_president"));
 
-	//loading resources (amount)
+
 	tinyxml2::XMLElement *resourcesAmount = capitalist->FirstChildElement("ResouresAmount");
 	mFood	= atoi(resourcesAmount->Attribute("food_amount"));
 	mGoods	= atoi(resourcesAmount->Attribute("goods_amount"));
 	mTech	= atoi(resourcesAmount->Attribute("tech_amount"));
 
-	//loading resources (prices)
+
 	tinyxml2::XMLElement *resourcesPrices = capitalist->FirstChildElement("ResourcesPrices");
 	foodCost	= atoi(resourcesPrices->Attribute("food_price"));
 	goodsCost	= atoi(resourcesPrices->Attribute("goods_price"));
 	techCost	= atoi(resourcesPrices->Attribute("tech_price"));
 
-	//loading resources information from previous round
+
 	tinyxml2::XMLElement *previousRoundResources = capitalist->FirstChildElement("PreviousRoundResources");
 	mFoodPreviousRound  = atoi(previousRoundResources->Attribute("Food_previous_round"));
 	mGoodsPreviousRound = atoi(previousRoundResources->Attribute("Goods_previous_round"));
 	mTaxesPreviousRound = atoi(previousRoundResources->Attribute("Tech_previous_round"));
 
-	//loading exported resource information (amount)
+
 	tinyxml2::XMLElement *exportedResources = capitalist->FirstChildElement("ExportedResourcesAmount");
 	mExportedFood  = atoi(exportedResources->Attribute("food_amount"));
 	mExportedGoods = atoi(exportedResources->Attribute("goods_amount"));
 	mExportedTech  = atoi(exportedResources->Attribute("tech_amount"));
 
-	//loading exported resources information (prices)
 	tinyxml2::XMLElement *exportedResourcesPrices = capitalist->FirstChildElement("ExportedResourcesPrices");
 	mExportedFoodPrice  = atoi(exportedResourcesPrices->Attribute("food_price"));
 	mExportedGoodsPrice = atoi(exportedResourcesPrices->Attribute("goods_price"));
 	mExportedTechPrice  = atoi(exportedResourcesPrices->Attribute("tech_price"));
 
-	//loading exported resources information from previous round
+
 	tinyxml2::XMLElement *previousRoundExportedResources = capitalist->FirstChildElement("PreviousRoundExportedResources");
 	mExportedFoodPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_food_previous_round"));
 	mExportedGoodsPreviousRound = atoi(previousRoundExportedResources->Attribute("Exported_goods_previous_round"));
 	mExportedTechPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_tech_previous_round"));
 
-	//loading upgrades (nuclear, spaceprogram, spynetwork)
+
 	tinyxml2::XMLElement *upgrades = capitalist->FirstChildElement("Upgrades");
 	mNuclearWeapon = atoi(upgrades->Attribute("Nuclear_weapon"));
 	mSpaceProgram  = atoi(upgrades->Attribute("Space_program"));
 	mSpyNetwork    = atoi(upgrades->Attribute("Spy_network"));
 
-	//loading upgrades from previoud round
 	tinyxml2::XMLElement *previousRoundUpgrades = capitalist->FirstChildElement("PreviousRoundUpgrades");
 	mNuclearWeaponPreviousRound  = atoi(previousRoundUpgrades->Attribute("Nuclear_weapon_previous_round"));
 	mSpaceProgramPreviousRound	 = atoi(previousRoundUpgrades->Attribute("Space_program_previous_round"));

@@ -4,8 +4,6 @@
 #include "Timer.h"
 #include <SFML/Audio.hpp>
 
-
-
 class Sound
 {
 public:

@@ -584,9 +584,6 @@ void Menu::initializeGuiFuctions()
 		GameManager::getInstance()->searchForServers();
 	});
 
-	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
-	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
-	mLoadGameButton->setOnClickFunction([=]()			{ });
 	
 	mSettingsButton[0]->setMouseEnterFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["SettingsHover"]); });
 	mSettingsButton[0]->setMouseLeaveFunction([=]()		{ mSettingsButton[0]->setTexture(ButtonPos["Settings"]); });
@@ -815,10 +812,6 @@ void Menu::initializeGuiFuctions()
 		reset();
 	});
 
-	mSaveGameButton->setOnClickFunction([=]()
-	{
-		
-	});
 
 	mLanPlayQuickConnect->setOnClickFunction([=]()
 	{
@@ -829,15 +822,15 @@ void Menu::initializeGuiFuctions()
 		GameManager::getInstance()->searchForServers();
 	});
 
-	mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
-	mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
-	mLoadGameButton->setOnClickFunction([=]()			
-	{
-		setLoadGameButtonText();
-		GUIManager::getInstance()->setOnTop(mLoadGameWindow);
-		mLoadGameWindow->setVisible(true);
-		mMainMenuWindow->setEnabled(false, true);
-	});
+	//mLoadGameButton->setMouseEnterFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGameHover"]); });
+	//mLoadGameButton->setMouseLeaveFunction([=]()		{ mLoadGameButton->setTexture(ButtonPos["LoadGame"]); });
+	//mLoadGameButton->setOnClickFunction([=]()			
+	//{
+	//	setLoadGameButtonText();
+	//	GUIManager::getInstance()->setOnTop(mLoadGameWindow);
+	//	mLoadGameWindow->setVisible(true);
+	//	mMainMenuWindow->setEnabled(false, true);
+	//});
 
 	mCloseLoadGameWindow->setOnClickFunction([=]()
 	{
@@ -866,14 +859,16 @@ void Menu::initializeGuiFuctions()
 		mMainMenuWindow->setVisible(true);
 	});
 
-	mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });
-	mSaveGameButton->setMouseLeaveFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGame"]); });
-	mSaveGameButton->setOnClickFunction([=]()
-	{
-		mInGameMenuWindow->setEnabled(false, true);
-		GUIManager::getInstance()->setOnTop(mSaveGameWindow[0]);
-		mSaveGameWindow[0]->setVisible(true);
-	});
+	//DETTA ÄR BORTKOMMENTERAT DÅ DET INTE GÅR ATT FÅ KLART SPARA/LADDA
+
+	//mSaveGameButton->setMouseEnterFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGameHover"]); });
+	//mSaveGameButton->setMouseLeaveFunction([=]()			{ mSaveGameButton->setTexture(ButtonPos["SaveGame"]); });
+	//mSaveGameButton->setOnClickFunction([=]()
+	//{
+	//	mInGameMenuWindow->setEnabled(false, true);
+	//	GUIManager::getInstance()->setOnTop(mSaveGameWindow[0]);
+	//	mSaveGameWindow[0]->setVisible(true);
+	//});
 
 	mCloseSaveGameWindow[0]->setOnClickFunction([=]()
 	{
@@ -896,16 +891,19 @@ void Menu::initializeGuiFuctions()
 	mSavedGameSlots[0]->setOnClickFunction([=]()
 	{
 		std::cout << mSavedGameText[0]->getText() << std::endl;
+		GameManager::getInstance()->loadGame(mSavedGameText[0]->getText());
 	});
 	
 	mSavedGameSlots[1]->setOnClickFunction([=]()
 	{
 		std::cout << mSavedGameText[1]->getText() << std::endl;
+		GameManager::getInstance()->loadGame(mSavedGameText[1]->getText());
 	});
 	
 	mSavedGameSlots[2]->setOnClickFunction([=]()
 	{
 		std::cout << mSavedGameText[2]->getText() << std::endl;
+		GameManager::getInstance()->loadGame(mSavedGameText[2]->getText());
 	});
 
 	mCloseCreditsButton->setOnClickFunction([=]()

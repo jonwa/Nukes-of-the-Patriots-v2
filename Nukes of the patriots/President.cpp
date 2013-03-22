@@ -167,6 +167,11 @@ void President::randomStatFunc()
 	randomStats.clear();
 }
 
+void President::setName(std::string &string)
+{
+	mName = string;
+}
+
 std::string President::getName()const
 {
 	return mName;

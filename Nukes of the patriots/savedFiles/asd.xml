@@ -1,0 +1,39 @@
+<Capitalist>
+    <Round value="6"/>
+    <Count value="0"/>
+    <OverallInformation Population="59" Patriotism="13" Currency="1265" Taxes="25"/>
+    <OverallInformationPreviousRound Population_previous_round="57" Patriotism_previous_round="13" Currency_previous_round="1265" Taxes_previous_round="20"/>
+    <PresidentInformation President="1" Picked_president="0"/>
+    <ResourcesAmount food_amount="119" goods_amount="15" tech_amount="1"/>
+    <ResourcesPrices food_price="14" goods_price="14" tech_price="30"/>
+    <PreviousRoundResources Food_previous_round="119" Goods_previous_round="15" Tech_previous_round="20"/>
+    <ExportedResourcesAmount food_amount="0" goods_amount="0" tech_amount="0"/>
+    <ExportedResourcesPrices food_price="0" goods_price="0" tech_price="0"/>
+    <ExportedResourcesSold food_sold="0" goods_sold="0" tech_sold="0"/>
+    <PreviousRoundExportedResources Exported_food_previous_round="0" Exported_goods_previous_round="0" Exported_tech_previous_round="0"/>
+    <Upgrades Nuclear_weapon="11" Space_program="2" Spy_network="1"/>
+    <PreviousRoundUpgrades Nuclear_weapon_previous_round="11" Space_program_previous_round="2" Spy_network_previous_round="1"/>
+</Capitalist>
+
+<Communist>
+    <Round value="5"/>
+    <Count value="0"/>
+    <OverallInformation Population="60" Patriotism="5" Currency="4925" Taxes="30"/>
+    <OverallInformationPreviousRound Population_previous_round="58" Patriotism_previous_round="5" Currency_previous_round="3824" Taxes_previous_round="30"/>
+    <GeneralInformation General="1" value="4"/>
+    <ResourcesAmount food_amount="11" goods_amount="0" tech_amount="0"/>
+    <ResourcesPrices food_price="10" goods_price="20" tech_price="30"/>
+    <PreviousRoundResources Food_previous_round="13" Goods_previous_round="0" Tech_previous_round="0"/>
+    <ExportedResourcesAmount food_amount="0" goods_amount="0" tech_amount="0"/>
+    <ExportedResourcesPrices food_price="0" goods_price="0" tech_price="0"/>
+    <PreviousRoundExportedResources Exported_food_previous_round="0" Exported_goods_previous_round="0" Exported_tech_previous_round="0"/>
+    <Upgrades Nuclear_weapon="10" Space_program="0" Spy_network="0"/>
+    <PreviousRoundUpgrades Nuclear_weapon_previous_round="10" Space_program_previous_round="0" Spy_network_previous_round="0"/>
+</Communist>
+
+<GameManager>
+    <Year value="1957"/>
+    <Round value="10"/>
+    <CapitalistName name="asd"/>
+    <CommunistName name="sd"/>
+</GameManager>

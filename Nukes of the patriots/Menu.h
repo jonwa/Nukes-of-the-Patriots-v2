@@ -94,7 +94,7 @@ private:
 	void resetPickTeamValues();
 
 
-	//THIS IS A PLACEHOLDER, REMOVE IT WHEN GRAPHIC IS UPDATED
+	
 	std::shared_ptr<GUIImage> mCreditsPlaceholder;
 
 	std::shared_ptr<GUIWindow> mParentWindow;
@@ -119,7 +119,6 @@ private:
 	std::shared_ptr<GUIText>   mVolumeText;
 	std::shared_ptr<GUIScrollBar> mVolumeScrollBar;
 	std::shared_ptr<GUIImage>  mFullscreenImage;
-	//std::shared_ptr<GUIButton> mMuteSound;
 	std::shared_ptr<GUIText>   mWindowSizeText;
 	std::shared_ptr<GUIText>   mFullscreenModeText;
 	std::shared_ptr<GUIButton> mFullscreenModeButton;

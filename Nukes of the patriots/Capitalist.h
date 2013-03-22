@@ -3,6 +3,7 @@
  * 
  *    Arvid Backman 2013-01-21
  *	  Jon Wahlström
+ *    Aleksi Lindeman
  */
 
 #ifndef CAPITALIST_H
@@ -31,6 +32,7 @@ class Communist;
 #include "Sound.h"
 #include "tinyxml2.h"
 #include "RemoteClient.h"
+
 
 class Capitalist : public SuperPower 
 {
@@ -92,6 +94,7 @@ private:
 			return 0;
 		return atoi(str.c_str());
 	}
+
 
 
 	std::shared_ptr<President> mPresident;

@@ -56,4 +56,20 @@
 		<height>40</height>
 		<image>BetweenTurns/Ok-knapp-aktiv</image>
 	</button>
+	<button>
+		<name>CancelSave</name>
+		<xPos>430</xPos>
+		<yPos>350</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>BetweenTurns/Ok-knapp-aktiv</image>
+	</button>
+	<button>
+		<name>Overwrite</name>
+		<xPos>180</xPos>
+		<yPos>350</yPos>
+		<width>100</width>
+		<height>40</height>
+		<image>BetweenTurns/Ok-knapp-aktiv</image>
+	</button>
 </buttons>

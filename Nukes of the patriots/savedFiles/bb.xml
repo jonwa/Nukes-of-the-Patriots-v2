@@ -1,11 +1,13 @@
 <Capitalist>
     <Round value="1"/>
     <Count value="0"/>
-    <OverallInformation Population="50" Patriotism="5" Currency="0" Taxes="30"/>
+    <OverallInformation Population="50" Patriotism="5" Currency="1500" Taxes="30"/>
     <OverallInformationPreviousRound Population_previous_round="50" Patriotism_previous_round="5" Currency_previous_round="0" Taxes_previous_round="30"/>
-    <PresidentInformation President="0" Picked_president="1"/>
+    <PresidentInformation name="Gramma" first_positive_stat="Goods Price -3" second_positive_stat="Space program 
+20% cheaper" negative_stat="Food price +2" nuclear_price_modifier="1" space_program_modifier="0.8" spy_network_modifier="1" food_price_modifier="2" goods_price_modifier="-3" tech_price_modifier="0" patriotism_tax_modifier="0" population_eats_more_food="1" years_elected="1" image="1" Picked_president="0"/>
     <ResourcesAmount food_amount="0" goods_amount="0" tech_amount="0"/>
-    <ResourcesPrices food_price="10" goods_price="20" tech_price="30"/>
+    <ResourcesPrices food_price="12" goods_price="17" tech_price="30"/>
+    <window president="0"/>
     <PreviousRoundResources Food_previous_round="0" Goods_previous_round="0" Tech_previous_round="30"/>
     <ExportedResourcesAmount food_amount="0" goods_amount="0" tech_amount="0"/>
     <ExportedResourcesPrices food_price="0" goods_price="0" tech_price="0"/>
@@ -16,11 +18,11 @@
 </Capitalist>
 
 <Communist>
-    <Round value="0"/>
+    <Round value="1"/>
     <Count value="0"/>
-    <OverallInformation Population="50" Patriotism="5" Currency="0" Taxes="30"/>
+    <OverallInformation Population="50" Patriotism="5" Currency="1500" Taxes="30"/>
     <OverallInformationPreviousRound Population_previous_round="50" Patriotism_previous_round="5" Currency_previous_round="0" Taxes_previous_round="30"/>
-    <GeneralInformation General="0" value="0"/>
+    <GeneralInformation General="1" value="0"/>
     <ResourcesAmount food_amount="0" goods_amount="0" tech_amount="0"/>
     <ResourcesPrices food_price="10" goods_price="20" tech_price="30"/>
     <PreviousRoundResources Food_previous_round="0" Goods_previous_round="0" Tech_previous_round="0"/>
@@ -33,6 +35,7 @@
 
 <GameManager>
     <Year value="1952"/>
-    <Round value="0"/>
-    <Loaded value="1"/>
+    <Round value="1"/>
+    <CapitalistName name="da"/>
+    <CommunistName name="ad"/>
 </GameManager>

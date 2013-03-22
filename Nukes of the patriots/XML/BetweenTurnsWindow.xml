@@ -56,4 +56,12 @@
 		<height>768</height>
 		<image></image>
 	</window>
+	<window>
+		<name>UnableToSave</name>
+		<xPos>162</xPos>
+		<yPos>50</yPos>
+		<width>700</width>
+		<height>456</height>
+		<image>BetweenTurns/choose_team</image>
+	</window>
 </windows>

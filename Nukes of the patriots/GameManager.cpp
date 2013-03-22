@@ -444,10 +444,15 @@ void GameManager::saveGame()
 	round->SetAttribute("value", mRound);
 	gameManager->InsertEndChild(round);
 
-	//saving loaded
-	tinyxml2::XMLElement *loaded = doc.NewElement("Loaded");
-	loaded->SetAttribute("value", mLoaded);
-	gameManager->InsertEndChild(loaded);
+	//saving capitalistnamefield
+	tinyxml2::XMLElement *capitalistName = doc.NewElement("CapitalistName");
+	capitalistName->SetAttribute("name", Menu::getInstance()->getEditField("CapitalistNameField")->getText().c_str());
+	gameManager->InsertEndChild(capitalistName);
+
+	//saving communistnamefield
+	tinyxml2::XMLElement *communistName = doc.NewElement("CommunistName");
+	communistName->SetAttribute("name", Menu::getInstance()->getEditField("CommunistNameField")->getText().c_str());
+	gameManager->InsertEndChild(communistName);
 
 	//saving Communist and Capitalist information 
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
@@ -473,28 +478,34 @@ void GameManager::saveFileName()
 	fileNamesDoc.SaveFile("savedFiles/savedFileNames.xml");
 }
 
-void GameManager::loadGame()
+void GameManager::loadGame(std::string &fileName)
 {
+	std::string temp = ("savedFiles/" + fileName + ".xml");
 	tinyxml2::XMLDocument doc;
-	doc.LoadFile(mFileName.c_str());
+	doc.LoadFile(temp.c_str());
 	tinyxml2::XMLElement *gameManager = doc.FirstChildElement("GameManager");
 	
-	//loading year
-	tinyxml2::XMLElement *year = gameManager->FirstChildElement("Year");
-	mYear = atoi(year->Attribute("value"));
-
-	//loading round
-	tinyxml2::XMLElement *round = gameManager->FirstChildElement("Round");
-	mRound = atoi(round->Attribute("value"));
-
-	//loading loaded
-	tinyxml2::XMLElement *loaded = gameManager->FirstChildElement("Loaded");
-	mLoaded = atoi(loaded->Attribute("value"));
 
 	for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
 		(*it)->loadGame(doc);
 	}
+
+	//loading communistnamefield
+	tinyxml2::XMLElement *communistName = gameManager->FirstChildElement("CommunistName");
+	Menu::getInstance()->getEditField("CommunistNameField")->setText(communistName->Attribute("name"));
+
+	//loading capitalistnamefield
+	tinyxml2::XMLElement *capitalistName = gameManager->FirstChildElement("CapitalistName");
+	Menu::getInstance()->getEditField("CapitalistNameField")->setText(capitalistName->Attribute("name"));
+
+	//loading round
+	tinyxml2::XMLElement *round = gameManager->FirstChildElement("Round");
+	mRound = atoi(round->Attribute("value"));
+
+	//loading year
+	tinyxml2::XMLElement *year = gameManager->FirstChildElement("Year");
+	init(atoi(year->Attribute("value")));
 }
 
 void GameManager::loadFileName()
@@ -1292,7 +1303,7 @@ void GameManager::initializeGuiElement()
 	mStatsWindow[0]->setVisible(false);
 	mStatsWindow[1]->setVisible(false);
 
-	mUnableToSaveWindow					 = GUIWindow::create(BetweenTurnsWindow["UnableToSave"], mParentWindow);
+	mUnableToSaveWindow					 = GUIWindow::create(BetweenTurnsWindow["UnableToSave"]);
 	mCancelSaveButton					 = GUIButton::create(BetweenTurnsButton["CancelSave"], mUnableToSaveWindow);
 	mOverWriteButton					 = GUIButton::create(BetweenTurnsButton["Overwrite"], mUnableToSaveWindow);
 	mUnableToSaveText					 = GUIText::create(sf::FloatRect(130, 100, 100, 40), "< A saved file with this name already exists >\n< Overwrite? >", mUnableToSaveWindow);
@@ -1331,7 +1342,7 @@ void GameManager::initializeGuiElement()
 	//GUIManager::getInstance()->addGUIElement(mSecondDecideWhoStartWindow);
 	//GUIManager::getInstance()->addGUIElement(mStatsWindow[0]);
 	//GUIManager::getInstance()->addGUIElement(mStatsWindow[1]);
-	//GUIManager::getInstance()->addGUIElement(mUnableToSaveWindow);
+	GUIManager::getInstance()->addGUIElement(mUnableToSaveWindow);
 	//GUIManager::getInstance()->addGUIElement(mWinScreenWindow);
 
 }

@@ -3,7 +3,7 @@ Klass för kommunisterna i spelet Nukes of the Patriots
 
 	Av:Arvid Backman 2013-01-21
 	   Jon Wahlström
-
+	   Aleksi Lindeman
 */
 
 #ifndef COMMUNIST_H

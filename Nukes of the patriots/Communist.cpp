@@ -168,22 +168,21 @@ Communist::~Communist()
 	
 }
 
-//saving commmunist information
+//save commmunist information
 void Communist::saveGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *communist = doc.NewElement("Communist");
 
-	//saving round
 	tinyxml2::XMLElement *round = doc.NewElement("Round");
 	round->SetAttribute("value", mRound);
 	communist->InsertEndChild(round);
 
-	//saving city_image_counter
+
 	tinyxml2::XMLElement *count = doc.NewElement("Count");
 	count->SetAttribute("value", mCount);
 	communist->InsertEndChild(count);
 
-	//saving overall information (population, patriotism, currency, taxes)
+
 	tinyxml2::XMLElement *overallInformation = doc.NewElement("OverallInformation");
 	overallInformation->SetAttribute("Population", getPopulation());
 	overallInformation->SetAttribute("Patriotism", getPatriotism());
@@ -192,7 +191,7 @@ void Communist::saveGame(tinyxml2::XMLDocument &doc)
 	//overallInformation->SetAttribute("TaxDecreased", mTaxDecreased);
 	communist->InsertEndChild(overallInformation);
 
-	//saving overall information from previous round (population, patriotism, currency, taxes)
+
 	tinyxml2::XMLElement *overallInformationPreviousRound = doc.NewElement("OverallInformationPreviousRound");
 	overallInformationPreviousRound->SetAttribute("Population_previous_round", getPopulationPreviousRound());
 	overallInformationPreviousRound->SetAttribute("Patriotism_previous_round", getPatriotismPreviousRound());
@@ -200,62 +199,55 @@ void Communist::saveGame(tinyxml2::XMLDocument &doc)
 	overallInformationPreviousRound->SetAttribute("Taxes_previous_round", getTaxPreviousRound());
 	communist->InsertEndChild(overallInformationPreviousRound);
 
-	//saving General information
 	tinyxml2::XMLElement *general = doc.NewElement("GeneralInformation");
 	general->SetAttribute("General", mGeneral);
 	general->SetAttribute("value", generalCount);
 	communist->InsertEndChild(general);
 
-	//saving resources information (amount)
 	tinyxml2::XMLElement *resourcesAmount = doc.NewElement("ResourcesAmount");
 	resourcesAmount->SetAttribute("food_amount", getFood());
 	resourcesAmount->SetAttribute("goods_amount", getGoods());
 	resourcesAmount->SetAttribute("tech_amount", getTech()); 
 	communist->InsertEndChild(resourcesAmount);
 
-	//saving resoures information (prices)
 	tinyxml2::XMLElement *resourcesPrices = doc.NewElement("ResourcesPrices");
 	resourcesPrices->SetAttribute("food_price", foodCost);
 	resourcesPrices->SetAttribute("goods_price", goodsCost);
 	resourcesPrices->SetAttribute("tech_price", techCost);
 	communist->InsertEndChild(resourcesPrices);
 
-	//saving resources information from previous round
 	tinyxml2::XMLElement *previousRoundResources = doc.NewElement("PreviousRoundResources");
 	previousRoundResources->SetAttribute("Food_previous_round", getFoodPreviousRound());
 	previousRoundResources->SetAttribute("Goods_previous_round", getGoodsPreviousRound());
 	previousRoundResources->SetAttribute("Tech_previous_round", getTechPreviousRound());
 	communist->InsertEndChild(previousRoundResources);
 
-	//saving exported resources information (amount)
 	tinyxml2::XMLElement *exportedResources = doc.NewElement("ExportedResourcesAmount");
 	exportedResources->SetAttribute("food_amount", getExportedFood());
 	exportedResources->SetAttribute("goods_amount", getExportedGoods());
 	exportedResources->SetAttribute("tech_amount", getExportedTech());
 	communist->InsertEndChild(exportedResources);
 
-	//saving exported resources information (prices)
 	tinyxml2::XMLElement *exportedResourcesPrices = doc.NewElement("ExportedResourcesPrices");
 	exportedResourcesPrices->SetAttribute("food_price", getExportedFoodPrice());
 	exportedResourcesPrices->SetAttribute("goods_price", getExportedGoodsPrice());
 	exportedResourcesPrices->SetAttribute("tech_price", getExportedTechPrice());
 	communist->InsertEndChild(exportedResourcesPrices);
 
-	//saving exported resources information from previous round
 	tinyxml2::XMLElement *previousRoundExportedResources = doc.NewElement("PreviousRoundExportedResources");
 	previousRoundExportedResources->SetAttribute("Exported_food_previous_round", getExportedFoodPreviousRound());
 	previousRoundExportedResources->SetAttribute("Exported_goods_previous_round", getExportedGoodsPreviousRound());
 	previousRoundExportedResources->SetAttribute("Exported_tech_previous_round", getExportedTechPreviousRound());
 	communist->InsertEndChild(previousRoundExportedResources);
 
-	//saving upgrades (nuclear, spaceprogram, spynetwork)
+
 	tinyxml2::XMLElement *upgrades = doc.NewElement("Upgrades");
 	upgrades->SetAttribute("Nuclear_weapon", getNuclearWeapon());
 	upgrades->SetAttribute("Space_program", getSpaceProgram());
 	upgrades->SetAttribute("Spy_network", getSpyNetwork());
 	communist->InsertEndChild(upgrades);
 
-	//saving upgrades from previous round
+
 	tinyxml2::XMLElement *previousRoundUpgrades = doc.NewElement("PreviousRoundUpgrades");
 	previousRoundUpgrades->SetAttribute("Nuclear_weapon_previous_round", getNuclearWeaponPreviousRound());
 	previousRoundUpgrades->SetAttribute("Space_program_previous_round", getSpaceProgramPreviousRound());
@@ -265,93 +257,91 @@ void Communist::saveGame(tinyxml2::XMLDocument &doc)
 	doc.InsertEndChild(communist);
 }
 
+//load communist information
 void Communist::loadGame(tinyxml2::XMLDocument &doc)
 {
 	tinyxml2::XMLElement *communist = doc.FirstChildElement("Communist");
 
-	//loading round
+
 	tinyxml2::XMLElement *round = communist->FirstChildElement("Round");
 	mRound = atoi(round->Attribute("value"));
 
-	//loading city_image_count
+
 	tinyxml2::XMLElement *count = communist->FirstChildElement("Count");
 	mCount = atoi(count->Attribute("value"));
 
-	//loading overall information
+
 	tinyxml2::XMLElement *overallInformation = communist->FirstChildElement("OverallInformation");
 	mPopulation = atoi(overallInformation->Attribute("Population"));
 	mPatriotism = atoi(overallInformation->Attribute("Patriotism"));
 	mCurrency	= atoi(overallInformation->Attribute("Currency"));
 	mTaxes		= atoi(overallInformation->Attribute("Taxes"));
 
-	//loading overall information from previous round
+
 	tinyxml2::XMLElement *overallInformationPreviousRound = communist->FirstChildElement("OverallInformationPreviousRound");
 	mPopulationPreviousRound = atoi(overallInformationPreviousRound->Attribute("Population_previous_round"));
 	mPatriotismPreviousRound = atoi(overallInformationPreviousRound->Attribute("Patriotism_previous_round"));
 	mCurrencyPreviousRound   = atoi(overallInformationPreviousRound->Attribute("Currency_previous_round"));
 	mTaxesPreviousRound		 = atoi(overallInformationPreviousRound->Attribute("Taxes_previous_round"));
 
-	//loading General information
+
 	tinyxml2::XMLElement *general = communist->FirstChildElement("GeneralInformation");
 	//mGeneral	= (general->Attribute("General"));
 	generalCount = atoi(general->Attribute("value"));
 
-	//loading resources (amount)
+
 	tinyxml2::XMLElement *resourcesAmount = communist->FirstChildElement("ResouresAmount");
 	mFood	= atoi(resourcesAmount->Attribute("food_amount"));
 	mGoods	= atoi(resourcesAmount->Attribute("goods_amount"));
 	mTech	= atoi(resourcesAmount->Attribute("tech_amount"));
 
-	//loading resources (prices)
+
 	tinyxml2::XMLElement *resourcesPrices = communist->FirstChildElement("ResourcesPrices");
 	foodCost	= atoi(resourcesPrices->Attribute("food_price"));
 	goodsCost	= atoi(resourcesPrices->Attribute("goods_price"));
 	techCost	= atoi(resourcesPrices->Attribute("tech_price"));
 
-	//loading resources information from previous round
 	tinyxml2::XMLElement *previousRoundResources = communist->FirstChildElement("PreviousRoundResources");
 	mFoodPreviousRound  = atoi(previousRoundResources->Attribute("Food_previous_round"));
 	mGoodsPreviousRound = atoi(previousRoundResources->Attribute("Goods_previous_round"));
 	mTaxesPreviousRound = atoi(previousRoundResources->Attribute("Tech_previous_round"));
 
-	//loading exported resource information (amount)
+
 	tinyxml2::XMLElement *exportedResources = communist->FirstChildElement("ExportedResourcesAmount");
 	mExportedFood  = atoi(exportedResources->Attribute("food_amount"));
 	mExportedGoods = atoi(exportedResources->Attribute("goods_amount"));
 	mExportedTech  = atoi(exportedResources->Attribute("tech_amount"));
 
-	//loading exported resources information (prices)
+
 	tinyxml2::XMLElement *exportedResourcesPrices = communist->FirstChildElement("ExportedResourcesPrices");
 	mExportedFoodPrice  = atoi(exportedResourcesPrices->Attribute("food_price"));
 	mExportedGoodsPrice = atoi(exportedResourcesPrices->Attribute("goods_price"));
 	mExportedTechPrice  = atoi(exportedResourcesPrices->Attribute("tech_price"));
 
-	//loading exported resources information from previous round
+
 	tinyxml2::XMLElement *previousRoundExportedResources = communist->FirstChildElement("PreviousRoundExportedResources");
 	mExportedFoodPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_food_previous_round"));
 	mExportedGoodsPreviousRound = atoi(previousRoundExportedResources->Attribute("Exported_goods_previous_round"));
 	mExportedTechPreviousRound  = atoi(previousRoundExportedResources->Attribute("Exported_tech_previous_round"));
 
-	//loading upgrades (nuclear, spaceprogram, spynetwork)
+
 	tinyxml2::XMLElement *upgrades = communist->FirstChildElement("Upgrades");
 	mNuclearWeapon = atoi(upgrades->Attribute("Nuclear_weapon"));
 	mSpaceProgram  = atoi(upgrades->Attribute("Space_program"));
 	mSpyNetwork    = atoi(upgrades->Attribute("Spy_network"));
 
-	//loading upgrades from previoud round
 	tinyxml2::XMLElement *previousRoundUpgrades = communist->FirstChildElement("PreviousRoundUpgrades");
 	mNuclearWeaponPreviousRound  = atoi(previousRoundUpgrades->Attribute("Nuclear_weapon_previous_round"));
 	mSpaceProgramPreviousRound	 = atoi(previousRoundUpgrades->Attribute("Space_program_previous_round"));
 	mSpyNetworkPreviousRound	 = atoi(previousRoundUpgrades->Attribute("Spy_network_previous_round"));
 }
 
-//spelar upp musiken samt loopar den
 void Communist::playMusic()
 {
 	mCommunistMainTheme->playSound(true);
 	mCommunistMainTheme->setVolume(130);
 }
-//Stoppar musiken
+
 void Communist::stopMusic()
 {
 	mCommunistMainTheme->stopSound();
