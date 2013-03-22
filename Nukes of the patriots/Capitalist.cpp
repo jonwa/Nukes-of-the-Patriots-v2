@@ -996,7 +996,7 @@ void Capitalist::initializeCapitalistWindow()
 	mLeftPanel							= GUIImage::create(CapitalistButtons["LeftPanel"], mCapitalistMainWindow);
 	mRightPanel							= GUIImage::create(CapitalistButtons["RightPanel"], mCapitalistMainWindow);
 
-	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), intToString(mPopulation) + " million", mCapitalistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), "Population: " + intToString(mPopulation) + " million", mCapitalistMainWindow);
 	mPopulationText->setScale(0.7, 0.7);
 	mPopulationText->setColor(sf::Color::White);
 	mPopulationText->setAlignment("middle");

@@ -338,8 +338,8 @@ void Communist::loadGame(tinyxml2::XMLDocument &doc)
 
 void Communist::playMusic()
 {
-	//mCommunistMainTheme->playSound(true);
-	//mCommunistMainTheme->setVolume(130);
+	mCommunistMainTheme->playSound(true);
+	mCommunistMainTheme->setVolume(130);
 }
 
 void Communist::stopMusic()
@@ -1182,7 +1182,7 @@ void Communist::initializeCommunistWindow()
 	mRightPanel						= GUIImage::create(CommunistButtons["RightPanel"], mCommunistMainWindow); 
 
 	
-	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), intToString(mPopulation) + " million", mCommunistMainWindow);
+	mPopulationText						= GUIText::create(sf::FloatRect(698, 4, 0, 0), "Population: " + intToString(mPopulation) + " million", mCommunistMainWindow);
 	mPopulationText->setScale(0.7, 0.7);
 
 	mPopulationText->setAlignment("middle");

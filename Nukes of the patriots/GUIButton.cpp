@@ -110,6 +110,7 @@ void GUIButton::setSize(float width, float height)
 
 void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
+	mOnClickSound->setVolume(15);
 	mOnClickSound->play();
 }
 
