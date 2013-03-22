@@ -338,8 +338,8 @@ void Communist::loadGame(tinyxml2::XMLDocument &doc)
 
 void Communist::playMusic()
 {
-	mCommunistMainTheme->playSound(true);
-	mCommunistMainTheme->setVolume(130);
+	//mCommunistMainTheme->playSound(true);
+	//mCommunistMainTheme->setVolume(130);
 }
 
 void Communist::stopMusic()
@@ -2209,15 +2209,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Nuclear")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Nuclear");
-			mUpgradeNuclearWeaponButton->canClick(true);
 			++amount;
 			mBuyNuclearText->setText(amount);
 			upgradeWindowText();
 			mGoods -= nuclearGoodsPrice;
 			mTech  -= nuclearTechPrice;
 		}
-		else
-			mUpgradeNuclearWeaponButton->canClick(false);
 	});		
 	mCancelUpgradeNuclearWeaponButton->setOnClickFunction([=]() 
 	{
@@ -2245,15 +2242,12 @@ void Communist::initializeGuiFunctions()
 		{
 			if(getSoundEffect("Buttons/Space")->getStatus() == sf::Music::Stopped)
 				playSoundEffect("Buttons/Space");
-			mUpgradeSpaceProgramButton->canClick(true);
 			++amount;
 			mBuySpaceProgramText->setText(amount);
 			upgradeWindowText();
 			mGoods -= spaceProgramGoodsPrice;
 			mTech  -= spaceProgramTechPrice;
 		}
-		else
-			mUpgradeSpaceProgramButton->canClick(false);
 	});
 	mCancelUpgradeSpaceProgramButton->setOnClickFunction([=]() 
 	{
@@ -2280,15 +2274,11 @@ void Communist::initializeGuiFunctions()
 		int amount = stringToInt(mBuySpyNetworkText->getText());
 		if(mTech >= spyNetworkTechPrice)
 		{
-			mUpgradeSpyNetworkButton->canClick(true);
 			++amount;
 			mTech -= spyNetworkTechPrice;
 			mBuySpyNetworkText->setText(amount);
 			upgradeWindowText();
 		}
-		else
-			mUpgradeSpyNetworkButton->canClick(false);
-		
 	});		
 	mCancelUpgradeSpyNetworkButton->setOnClickFunction([=]() 
 	{
@@ -2384,7 +2374,16 @@ void Communist::initializeGuiFunctions()
 			(mPickedGeneralPlaque->getRectangle(), mFirstGeneralPlaque->getTexture()));
 
 		mGeneralBiography->setText(mGeneral->getBiography());
-		//mGeneral->playSlogan();
+
+		int volume = mCommunistMainTheme->getVolume();
+		std::shared_ptr<Sound> _sound = mCommunistMainTheme;
+		std::shared_ptr<President> _general = mGeneral;
+		_sound->fadeToVolume(500, _sound->getVolume(), 25);
+		Timer::setTimer([=]()
+		{
+			_sound->fadeToVolume(1000, _sound->getVolume(), volume);
+		}, _general->getSlogan()->getDuration().asMilliseconds(), 1);
+		mGeneral->playSlogan();
 
 	});
 	/*Stänger ner fönster som visar vilken general som blivit vald*/
@@ -2847,7 +2846,7 @@ void Communist::initializeGuiFunctions()
 	mClosePopulationEatsFoodWindow->setOnClickFunction([=]()
 	{
 		mCommunistMainTheme->fadeToVolume(2000, CommunistMusic["CommunistMainTheme"]->getVolume(), 0);
-		mPopulationEatsSound->fadeToVolume(1000, mPopulationEatsSound->getVolume(), 0);
+		mPopulationEatsSound->fadeToVolume(500, mPopulationEatsSound->getVolume(), 0);
 		mPopulationEatsFoodWindow->setVisible(false);
 		std::shared_ptr<GUIButton> endTurn = mCommunistEndTurnButton;
 		sf::FloatRect rect = sf::FloatRect(CommunistButtons["EndTurn"].first);

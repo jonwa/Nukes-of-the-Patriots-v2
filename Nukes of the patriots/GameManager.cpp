@@ -23,6 +23,7 @@
 #include <SFML\Network.hpp>
 #include "Sound.h"
 #include "SoundHandler.h"
+#include "MovieHandler.h"
 static int width = 1024;
 static int height = 768;
 
@@ -533,24 +534,29 @@ void GameManager::reset()
 		(*it)->reset();
 	}
 	AnimationHandler::getInstance()->reset();
+	setGameType(VERSUS);
 	getCap()->hideGUI();
 	getCom()->hideGUI();
 }
 
 void GameManager::init(int year)
 {
+	std::cout<<"start of loading"<<std::endl;
 	if(!mLoaded)
 	{
 		getInstance()->setYear(year);
 		loadPresidents();
+		std::cout<<"after presidents"<<std::endl;
 		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
 		mVecSuperPowers.push_back(std::make_shared<Communist>());
+		std::cout<<"after superpowers"<<std::endl;
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
 		mYearText->setText(intToString(mYear));
 		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
+		std::cout<<"after year text"<<std::endl;
 
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
@@ -602,6 +608,7 @@ void GameManager::init(int year)
 			mLoaded = true;
 			mCurrentPlayer->setRound(1);
 			mCurrentPlayer->showGUI();
+			std::cout<<"after showing current player gui"<<std::endl;
 		}
 		mReady = true;
 		if(getGameType() == LAN)
@@ -637,7 +644,8 @@ void GameManager::init(int year)
 		mCurrentPlayer->showGUI();
 	}
 	//startRound();
-
+	std::cout<<"end of loading"<<std::endl;
+	//MovieHandler::getInstance()->setLoaded(true);
 }
 
 std::shared_ptr<SuperPower> GameManager::getCapitalist()
@@ -759,6 +767,18 @@ void GameManager::removePresidentFromList(std::shared_ptr<President> president)
 	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
 	{
 		if(*it == president)
+		{
+			mPresidentVector.erase(it);
+			break;
+		}
+	}
+}
+
+void GameManager::removePresidentFromList(std::string name)
+{
+	for(std::vector<std::shared_ptr<President> >::iterator it = mPresidentVector.begin(); it != mPresidentVector.end(); ++it)
+	{
+		if((*it)->getName() == name)
 		{
 			mPresidentVector.erase(it);
 			break;
@@ -1540,10 +1560,10 @@ void GameManager::tick(sf::RenderWindow &window)
 			sf::RectangleShape rect(sf::Vector2f(window.getSize().x, window.getSize().y));
 			rect.setFillColor(sf::Color(0, 0, 0, 150));
 			window.draw(rect);
-			
+
 			sf::Text text("Waiting for other player...");
-			text.setOrigin(text.getLocalBounds().width/2, text.getLocalBounds().height/2);
-			text.setPosition(window.getSize().x/2, window.getSize().y * 0.25);
+			text.setPosition(window.getSize().x * 0.5, window.getSize().y * 0.25);
+			text.setOrigin(text.getLocalBounds().width * 0.5, text.getLocalBounds().height * 0.5);
 			window.draw(text);
 		}
 	}
@@ -1569,6 +1589,11 @@ void GameManager::update(sf::Event &event)
 GameType GameManager::getGameType()
 {
 	return mGameType;
+}
+
+void GameManager::setGameType(GameType gameType)
+{
+	mGameType = gameType;
 }
 
 void GameManager::syncGUIClick(std::shared_ptr<GUIElement> guiElement)

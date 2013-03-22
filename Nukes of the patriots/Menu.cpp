@@ -14,6 +14,7 @@
 #include "Event.h"
 #include <SFML/Network.hpp>
 #include <SFML\Audio\Listener.hpp>
+#include "MovieHandler.h"
 
 Menu::Menu() : 
 	mWindow(nullptr),
@@ -23,6 +24,7 @@ Menu::Menu() :
 	fullscreen(true),
 	mFullscreenCount(true)
 { 
+	mLoadingMovie.openFromFile("loading.wmv");
 	//initializeIntroVideo();
 	initialize(); 
 	initializeGuiFuctions();
@@ -705,12 +707,17 @@ void Menu::initializeGuiFuctions()
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
 			GameManager::getInstance()->showWaitingScreen(false);
-			Timer::setTimer([=]()
-			{
-				_parentWindow->setVisible(false); 
-				_music.at("MainMenuTrack")->stop(); 
-				GameManager::getInstance()->init(1952); // initierar första året
-			}, 100, 1);
+			//Timer::setTimer([=]()
+			//{
+				_parentWindow->setVisible(false);
+				_music.at("MainMenuTrack")->stop();
+				MovieHandler::getInstance()->setMovie(mLoadingMovie);
+				MovieHandler::getInstance()->setLoaded(false);
+				MovieHandler::getInstance()->playMovie();
+				GameManager::getInstance()->init(1952);
+				MovieHandler::getInstance()->setLoaded(true);
+				std::cout<<"loaded!"<<std::endl;
+			//}, 100, 1);
 		}
 	});
 
@@ -769,12 +776,17 @@ void Menu::initializeGuiFuctions()
 		if(mCommunistTeamChosen && mCapitalistTeamChosen)
 		{
 			GameManager::getInstance()->showWaitingScreen(false);
-			Timer::setTimer([=]()
-			{
+			//Timer::setTimer([=]()
+			//{
 				_parentWindow->setVisible(false);
-				_music.at("MainMenuTrack")->stop(); 
-				GameManager::getInstance()->init(1952); // initierar första året
-			}, 100, 1);
+				_music.at("MainMenuTrack")->stop();
+				MovieHandler::getInstance()->setMovie(mLoadingMovie);
+				MovieHandler::getInstance()->setLoaded(false);
+				MovieHandler::getInstance()->playMovie();
+				GameManager::getInstance()->init(1952);
+				MovieHandler::getInstance()->setLoaded(true);
+				std::cout<<"loaded!"<<std::endl;
+			//}, 100, 1);
 		}
 	});
 
@@ -849,6 +861,8 @@ void Menu::initializeGuiFuctions()
 
 	mBackToMainMenuButton[0]->setOnClickFunction([=]()
 	{
+		if(GameManager::getInstance()->getGameType() == LAN)
+			GameManager::getInstance()->setGameType(VERSUS);
 		mChooseTeamWindow->setVisible(false);
 		mMainMenuWindow->setVisible(true);
 	});

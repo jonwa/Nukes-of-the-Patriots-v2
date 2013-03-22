@@ -13,7 +13,8 @@ std::shared_ptr<GUIButton> GUIButton::create(std::pair<sf::FloatRect, sf::Textur
 }
 
 GUIButton::GUIButton(std::pair<sf::FloatRect, sf::Texture*> &pair, std::shared_ptr<GUIElement> parent) :
-	GUIElement(pair.first, parent, BUTTON)
+	GUIElement(pair.first, parent, BUTTON),
+	mCanClick(true)
 {
 	if(mGlowEffect == nullptr)
 	{
@@ -109,7 +110,6 @@ void GUIButton::setSize(float width, float height)
 
 void GUIButton::onGUIClick(int mouseX, int mouseY)
 {
-	mOnClickSound->setVolume(15);
 	mOnClickSound->play();
 }
 
@@ -117,13 +117,11 @@ void GUIButton::canClick(bool i)
 {
 	if(i)
 	{
-		if(mOnClickSound != mSuccessSound)
-			mOnClickSound = mSuccessSound;
+		mOnClickSound = mSuccessSound;
 	}
 	else
 	{
-		if(mOnClickSound != mFailedSound)
-			mOnClickSound = mFailedSound;
+		mOnClickSound = mFailedSound;
 	}
 }
 
@@ -131,5 +129,4 @@ void GUIButton::setColor(sf::Color color)
 {
 	mSprite.setColor(color);
 	GUIElement::setColor(color);
-
 }

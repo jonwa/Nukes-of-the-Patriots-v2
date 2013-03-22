@@ -149,6 +149,9 @@
     <ClCompile Include="RemoteClient.cpp">
       <Filter>Source Files\network</Filter>
     </ClCompile>
+    <ClCompile Include="MovieHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GUIButton.h">
@@ -246,6 +249,9 @@
     </ClInclude>
     <ClInclude Include="President.h">
       <Filter>Header Files\SuperPower</Filter>
+    </ClInclude>
+    <ClInclude Include="MovieHandler.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

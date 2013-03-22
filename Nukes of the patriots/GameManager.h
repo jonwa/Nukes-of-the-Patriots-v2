@@ -90,6 +90,7 @@ public:
 	void										init(int year);
 
 	GameType									getGameType();
+	void										setGameType(GameType gameType);
 	void										syncGUIClick(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseEnter(std::shared_ptr<GUIElement> guiElement);
 	void										syncGUIMouseLeave(std::shared_ptr<GUIElement> guiElement);
@@ -101,12 +102,14 @@ public:
 
 	std::shared_ptr<President>					getPresidentByName(std::string name);
 	void										removePresidentFromList(std::shared_ptr<President> president);
+	void										removePresidentFromList(std::string name);
 	void										nextPlayersTurn();
 	void										setEnemyTurn();
 	void										setMyTurn();
 	void										setRandomPlayer(std::shared_ptr<SuperPower> player);
 	void										showWaitingScreen(bool show);
 	void										stopSearchingForServer();
+
 private:
 	std::string mFileName;
 	SaveFilesVec mSaveFiles;
@@ -210,6 +213,7 @@ private:
 	int mPlayersTurn; // 0 = servers turn
 	bool mReady;
 	bool mShowWaitingScreen;
+
 };
 
 
