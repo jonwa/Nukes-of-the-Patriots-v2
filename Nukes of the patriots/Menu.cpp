@@ -6,6 +6,7 @@
 #include <iostream>
 #include <SFML\Window\Mouse.hpp>
 #include "GameManager.h"
+#include "SuperPower.h"
 #include "Timer.h"
 #include "Event.h"
 #include <SFML/Network.hpp>

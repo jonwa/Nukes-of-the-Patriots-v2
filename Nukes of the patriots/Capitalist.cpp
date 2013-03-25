@@ -434,7 +434,7 @@ void Capitalist::newYearStart()
 		mFoodChangeValue->setText("");
 	}
 	
-	mFood -= (float)mPopulationPreviousRound*mPresident->getPopEatsMore(); ////// FIXA DETTA SÅ ATT DET STÄMMER
+	mFood -= (float)mPopulationPreviousRound*mPresident->getPopEatsMore();
 	if(mFood < 0) mFood = 0;
 	int taxPatriotismChange = 0;
 	int taxChange = mTaxes - mTaxesPreviousRound;
@@ -2717,7 +2717,6 @@ void Capitalist::initializeGuiFunctions()
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
 		mCapitalistPresident->setX(mPresidentFrame->getX() + 8); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
 		mCapitalistPresident->setScale(0.55, 0.60);
-		mPresident->resetAnimation();
 		mTaxesIncomeWindow->setVisible(true);
 		mTaxesIncomeWindow->setEnabled(true, true);
 
