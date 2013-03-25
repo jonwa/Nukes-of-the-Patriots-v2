@@ -4,7 +4,6 @@
 #include "GameManager.h"
 #include <iostream>
 #include <sstream>
-#include "GameManager.h"
 
 std::shared_ptr<GUIEditField> GUIEditField::create(sf::FloatRect rect, Type type, std::string text, bool onlyNumbers, std::shared_ptr<GUIElement> parent)
 {
@@ -157,7 +156,6 @@ bool GUIEditField::update(sf::RenderWindow *window, sf::Event event)
 	TimerHandler::getInstance()->tick();
 	//int value = 0;
 	//std::istringstream("1337")>>value;
-	//std::cout<<value<<std::endl;
 	if(isSelected())
 	{
 		if(event.type == sf::Event::KeyPressed)
@@ -393,7 +391,6 @@ void GUIEditField::onGUIClick(int mouseX, int mouseY)
 		}
 	}
 	mCaretIndex = newCaret;
-	//std::cout<<"on gui click!"<<std::endl;
 }
 
 void GUIEditField::setTexture(std::pair<sf::FloatRect, sf::Texture*> &pair)

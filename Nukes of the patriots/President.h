@@ -50,9 +50,6 @@ public:
 	int getYearsElected() { return mYearsElected; }
 	void setYearsElected(int years) { mYearsElected = years; }
 	void playSlogan();
-	void presidentAnimation();
-	void resetAnimation();
-	sf::Texture* getCurrentAnimationFrame()const;
 
 	void setFirstPositiveStat(std::string stat);
 	void setSecondPositiveStat(std::string stat);
@@ -70,7 +67,6 @@ private:
 	sf::Sprite mPortrait;
 	sf::Texture* mClickedPortraitTexture;
 	sf::Texture* mTexture;
-	sf::Clock	 mAnimationClock;
 	std::map <std::string, float> mValues;
 	std::vector<std::string> mPositiveStats;
 	std::vector<std::string> mNegativeStats;

@@ -3,7 +3,6 @@
 #include <iostream>
 #include "tinyxml2.h"
 #include <sstream>
-#include "Timer.h"
 
 static std::string histories[] = {
 	""
@@ -12,7 +11,6 @@ static std::string histories[] = {
 static std::map<std::string, std::string> biographyMap;
 static std::map<std::string, std::pair<int, int>> animationMap;
 static std::map<std::string, std::vector<sf::Texture*>> textures;
-static Timer* resetTimer;
 
 void initBiographyMap()
 {
@@ -297,31 +295,6 @@ void President::playSlogan()
 {
 	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->setVolume(50);
 	ResourceHandler::getInstance()->getMusic("Slogans/" + mName)->play();
-}
-
-void President::presidentAnimation()
-{
-	float progress = mAnimationClock.getElapsedTime().asMilliseconds()/mTimeOut;
-	progress = std::min<float>(progress, 1.0f);
-	int frame = progress * (mFrames-1);
-	mCurrentFrame = frame;
-	std::cout <<"current frame: " << mCurrentFrame << std::endl;
-}
-
-void President::resetAnimation()
-{
-	/*if(resetTimer != nullptr)
-		resetTimer->killTimer();
-	resetTimer = Timer::setTimer([=]()
-	{
-		mCurrentFrame = 0;
-	}, mTimeOut, 1);
-	mAnimationClock.restart();*/
-}
-
-sf::Texture* President::getCurrentAnimationFrame()const
-{
-	return textures[mName][mCurrentFrame];
 }
 
 sf::Texture* President::getTexture()

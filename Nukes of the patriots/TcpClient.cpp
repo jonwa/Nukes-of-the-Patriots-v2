@@ -25,7 +25,6 @@ void sf::TcpClient::connect()
 			sf::Packet packet;
 			packet<<mServerAddress.toString()<<mServerPort;
 			Event::triggerEvent("onClientPlayerConnected", packet);
-			//std::cout<<"You connected to the server!"<<std::endl;
 		}
 	}
 }
