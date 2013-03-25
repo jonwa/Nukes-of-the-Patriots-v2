@@ -11,7 +11,6 @@
 #include "tinyxml2.h"
 #include "GUIText.h"
 #include "Timer.h"
-#include "TimerHandler.h"
 #include "GUIAnimation.h"
 #include "AnimationHandler.h"
 #include "Menu.h"
@@ -22,7 +21,6 @@
 #include "UdpServer.h"
 #include <SFML\Network.hpp>
 #include "Sound.h"
-#include "SoundHandler.h"
 #include "MovieHandler.h"
 static int width = 1024;
 static int height = 768;
@@ -77,7 +75,6 @@ GameManager::GameManager() :
 		char ipAddress[1024];
 		unsigned short port;
 		packet>>ipAddress>>port;
-		std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 		mRemoteIpAddress = ipAddress;
 		mRemotePort = 55001;
 		mPlayersTurn = 0;
@@ -97,7 +94,6 @@ GameManager::GameManager() :
 		char ipAddress[1024];
 		unsigned short port;
 		packet>>ipAddress>>port;
-		std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 		mRemoteIpAddress = ipAddress;
 		mRemotePort = 55005;
 		mPlayersTurn = 0;
@@ -271,7 +267,6 @@ GameManager::GameManager() :
 			firstPresident = getPresidentByName(name);
 		if(firstPresident != nullptr)
 		{
-			std::cout<<"First president found!"<<std::endl;
 			firstPresident->setFirstPositiveStat(firstPositiveStat);
 			firstPresident->setSecondPositiveStat(secondPositiveStat);
 			firstPresident->setNegativeStat(negativeStat);
@@ -288,7 +283,6 @@ GameManager::GameManager() :
 		std::shared_ptr<President> secondPresident = getPresidentByName(name2);
 		if(secondPresident != nullptr)
 		{
-			std::cout<<"Second president found!"<<std::endl;
 			secondPresident->setFirstPositiveStat(firstPositiveStat2);
 			secondPresident->setSecondPositiveStat(secondPositiveStat2);
 			secondPresident->setNegativeStat(negativeStat2);
@@ -541,22 +535,18 @@ void GameManager::reset()
 
 void GameManager::init(int year)
 {
-	std::cout<<"start of loading"<<std::endl;
 	if(!mLoaded)
 	{
 		getInstance()->setYear(year);
 		loadPresidents();
-		std::cout<<"after presidents"<<std::endl;
 		mVecSuperPowers.push_back(std::make_shared<Capitalist>());
 		mVecSuperPowers.push_back(std::make_shared<Communist>());
-		std::cout<<"after superpowers"<<std::endl;
 		mVecPlayersLeft = mVecSuperPowers;
 
 		/*Skriver ut året på interface*/
 		mYearText->setText(intToString(mYear));
 		mYearText->setVisible(true);
 		GUIManager::getInstance()->addGUIElement(mYearText);
-		std::cout<<"after year text"<<std::endl;
 
 	 /*for(std::vector<std::shared_ptr<SuperPower> >::iterator it = mVecSuperPowers.begin(); it != mVecSuperPowers.end(); it++)
 	{
@@ -608,7 +598,6 @@ void GameManager::init(int year)
 			mLoaded = true;
 			mCurrentPlayer->setRound(1);
 			mCurrentPlayer->showGUI();
-			std::cout<<"after showing current player gui"<<std::endl;
 		}
 		mReady = true;
 		if(getGameType() == LAN)
@@ -644,7 +633,6 @@ void GameManager::init(int year)
 		mCurrentPlayer->showGUI();
 	}
 	//startRound();
-	std::cout<<"end of loading"<<std::endl;
 	//MovieHandler::getInstance()->setLoaded(true);
 }
 
@@ -1475,7 +1463,6 @@ void GameManager::createServer()
 	{
 		mSearchForServerTimer->killTimer();
 		Menu::getInstance()->mWaitingForClientText->setText("Waiting for players to connect...");
-		std::cout<<"No server found... creating server"<<std::endl;
 		mUdpClient->setReceivingAddress(sf::IpAddress::Broadcast.toString());
 		mUdpServer = new sf::UdpServer(55005);
 		mTcpServer = new sf::TcpServer(55006);
@@ -1485,7 +1472,6 @@ void GameManager::createServer()
 		{
 			//char msg[1024];
 			//packet>>msg;
-			//std::cout<<"client: "<<msg<<std::endl;
 		});
 		Timer::setTimer([=]()
 		{
@@ -1501,7 +1487,6 @@ void GameManager::createServer()
 				char ipAddress[1024];
 				unsigned short port;
 				packet>>ipAddress>>port;
-				std::cout<<"client searching for server: "<<ipAddress<<":"<<port<<std::endl;
 				sf::Packet _packet;
 				_packet<<sf::IpAddress::getLocalAddress().toString()<<mTcpServer->getPort();
 				mUdpServer->triggerClientEvent("hereIam", _packet, sf::IpAddress(ipAddress), port);
@@ -1514,7 +1499,6 @@ void GameManager::createServer()
 			char ipAddress[1024];
 			unsigned short port;
 			packet>>ipAddress>>port;
-			std::cout<<"connected to server: "<<ipAddress<<" "<<port<<std::endl;
 			sf::Packet _packet;
 			_packet<<sf::IpAddress::getLocalAddress().toString()<<mTcpServer->getPort();
 			mRemoteIpAddress = ipAddress;
@@ -1668,7 +1652,6 @@ std::shared_ptr<President> GameManager::getPresidentByName(std::string name)
 
 void GameManager::nextPlayersTurn()
 {
-	std::cout<<"setting next players turn..."<<std::endl;
 	setEnemyTurn();
 	sf::Packet packet;
 	packet<<mPlayersTurn;

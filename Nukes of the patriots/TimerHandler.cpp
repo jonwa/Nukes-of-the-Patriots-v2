@@ -1,6 +1,5 @@
 #include "TimerHandler.h"
 #include "Timer.h"
-#include <iostream>
 
 TimerHandler::TimerHandler() :
 	mVecTimers(){}
@@ -24,7 +23,6 @@ void TimerHandler::removeTimer(Timer* timer)
 		if(mVecTimers[it] == timer)
 		{
 			mVecTimers[it] = NULL; // Elements are not going to be deleted here
-			std::cout << "remove timer: " << mVecTimers[it]<<std::endl;
 			break;
 		}
 	}

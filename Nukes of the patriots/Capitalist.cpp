@@ -13,8 +13,6 @@
 #include <functional>
 #include "GameManager.h"
 #include "Timer.h"
-#include "TimerHandler.h"
-#include "Communist.h"
 #include "GUIAnimation.h"
 #include <SFML\Window\Mouse.hpp>
 #include <SFML\Window\Keyboard.hpp>
@@ -436,7 +434,7 @@ void Capitalist::newYearStart()
 		mFoodChangeValue->setText("");
 	}
 	
-	mFood -= (float)mPopulationPreviousRound*mPresident->getPopEatsMore(); ////// FIXA DETTA SÅ ATT DET STÄMMER
+	mFood -= (float)mPopulationPreviousRound*mPresident->getPopEatsMore();
 	if(mFood < 0) mFood = 0;
 	int taxPatriotismChange = 0;
 	int taxChange = mTaxes - mTaxesPreviousRound;
@@ -561,7 +559,6 @@ void Capitalist::newYearStart()
 	//mCurrentPopulationText[1]->setText(mPopulation);
 	//mCurrentTaxesText[1]->setText(mTaxes);
 	//mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
-	//std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + spaceProgramAmount + exportedChange;
 	mPatriotism += totalPatriotismChange;
@@ -580,7 +577,6 @@ void Capitalist::update()
 	mWindowHeadlines[0]->setText(intToString(GameManager::getInstance()->getYear()) + " Presidential Elections ");
 	mImportHeadliner->setText("Import From " + Menu::getInstance()->getEditField("CommunistNameField")->getText());
 	
-	//std::cout<<"capitalist mRound: "<<mRound<<std::endl;
 	if(mRound > 1)
 	{
 		if((mRound-1) % 4 == 0 ) 
@@ -662,8 +658,6 @@ void Capitalist::update()
 	//setExportedFoodSold(0);
 	//setExportedGoodsSold(0);
 	//setExportedTechSold(0);
-	//std::cout<<"tax previous round: "<<mTaxesPreviousRound<<std::endl;
-	//std::cout<<"population previous round: "<<mPopulationPreviousRound<<std::endl;
 	mTaxesPatriotismChange->setText(0);
 
 	changeCityImage();
@@ -2723,7 +2717,6 @@ void Capitalist::initializeGuiFunctions()
 		mCapitalistPresident->setTexture(std::pair<sf::FloatRect, sf::Texture*>(mCapitalistPresident->getRectangle(), mPresident->getTexture()));
 		mCapitalistPresident->setX(mPresidentFrame->getX() + 8); mCapitalistPresident->setY(mPresidentFrame->getY() + 9);
 		mCapitalistPresident->setScale(0.55, 0.60);
-		mPresident->resetAnimation();
 		mTaxesIncomeWindow->setVisible(true);
 		mTaxesIncomeWindow->setEnabled(true, true);
 
@@ -2738,11 +2731,8 @@ void Capitalist::initializeGuiFunctions()
 		mExportedTechPreviousRound = mExportedTech;
 
 		int foodBought = mFood - mFoodPreviousRound;
-		std::cout << "Food this round: " << mFood << "| Food previous round: " << mFoodPreviousRound << "| Food bought: " << foodBought << std::endl;
 		int goodsBought = mGoods - mGoodsPreviousRound;
-		std::cout << "Goods this round: " << mGoods << "| Goods previous round: " << mGoodsPreviousRound << "| Goods bought: " << goodsBought << std::endl;
 		int techBought = mTech - mTechPreviousRound;
-		std::cout << "Tech this round: " << mTech << "| Tech previous round: " << mTechPreviousRound << "| Tech bought: " << techBought << std::endl;
 		int totalBought = (foodBought*foodCost) + (goodsBought*goodsCost) + (techBought*techCost);
 
 		int foodTotalCost = foodBought * foodCost;

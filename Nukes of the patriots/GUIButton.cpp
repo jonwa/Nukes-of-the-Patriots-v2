@@ -96,7 +96,6 @@ void GUIButton::setScale(float width, float height)
 	/*mSprite.setTextureRect(sf::IntRect(0, 0, mRectangle.width, mRectangle.height));*/
 	mSprite.setScale(width, height);
 
-	//std::cout << mSprite.getScale().x << " " << mSprite.getScale().y  << " " << mSprite.getTextureRect().width << " " << mSprite.getTextureRect().height << std::endl;
 }
 
 void GUIButton::setSize(float width, float height)

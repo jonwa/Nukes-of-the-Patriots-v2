@@ -47,7 +47,6 @@ void Sound::tick()
 		}
 		float progress = 1 - (timeleft/duration);
 		int volumeDiff = mEndVolume - mStartVolume;
-		//std::cout<<"progress: "<<progress<<" volume: "<<volumeDiff*progress<<std::endl;
 		mMusic->setVolume(mStartVolume + volumeDiff*progress);
 	}
 }

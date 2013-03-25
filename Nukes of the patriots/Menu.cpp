@@ -1,15 +1,12 @@
 #include "Menu.h"
 #include "GUIManager.h"
 #include "tinyxml2.h"
-#include "Capitalist.h"
-#include "Communist.h"
 #include "ResourceHandler.h"
 #include <sstream>
 #include <iostream>
 #include <SFML\Window\Mouse.hpp>
-#include "AnimationHandler.h"
 #include "GameManager.h"
-#include "TimerHandler.h"
+#include "SuperPower.h"
 #include "Timer.h"
 #include "Event.h"
 #include <SFML/Network.hpp>
@@ -130,10 +127,8 @@ void Menu::loadTeamAnimation()
 	{
 		std::stringstream s;
 		s<<"teamAnimation/teamsign_animation."<<i+1<<".png";
-		//std::cout<<"teamAnimation/teamsign_animation."<<i+1<<".png"<<std::endl;
 		mTeamAnimationFrames[i].loadFromFile(s.str());
 	}
-	std::cout<<"done loading animation!"<<std::endl;
 }
 
 void Menu::clear()
@@ -149,7 +144,6 @@ void Menu::update(sf::Event &event)
 	if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape)
 	{
 		//GameManager::getInstance()->getCurrentPlayer()->hideGUI();
-		std::cout<<"in game menu is visible"<<std::endl;
 
 		GUIManager::getInstance()->setOnTop(mInGameMenuWindow);
 
@@ -181,7 +175,6 @@ void Menu::setLoadGameButtonText()
 			break;
 		//mTestText->setRectangle(mTestText->getRectangle());
 	}
-		std::cout << "size of vector " << save.size() << std::endl << std::endl;
 }
 
 std::shared_ptr<GUIWindow> Menu::getWindows(std::string string)
@@ -716,7 +709,6 @@ void Menu::initializeGuiFuctions()
 				MovieHandler::getInstance()->playMovie();
 				GameManager::getInstance()->init(1952);
 				MovieHandler::getInstance()->setLoaded(true);
-				std::cout<<"loaded!"<<std::endl;
 			//}, 100, 1);
 		}
 	});
@@ -785,7 +777,6 @@ void Menu::initializeGuiFuctions()
 				MovieHandler::getInstance()->playMovie();
 				GameManager::getInstance()->init(1952);
 				MovieHandler::getInstance()->setLoaded(true);
-				std::cout<<"loaded!"<<std::endl;
 			//}, 100, 1);
 		}
 	});
@@ -904,19 +895,16 @@ void Menu::initializeGuiFuctions()
 
 	mSavedGameSlots[0]->setOnClickFunction([=]()
 	{
-		std::cout << mSavedGameText[0]->getText() << std::endl;
 		GameManager::getInstance()->loadGame(mSavedGameText[0]->getText());
 	});
 	
 	mSavedGameSlots[1]->setOnClickFunction([=]()
 	{
-		std::cout << mSavedGameText[1]->getText() << std::endl;
 		GameManager::getInstance()->loadGame(mSavedGameText[1]->getText());
 	});
 	
 	mSavedGameSlots[2]->setOnClickFunction([=]()
 	{
-		std::cout << mSavedGameText[2]->getText() << std::endl;
 		GameManager::getInstance()->loadGame(mSavedGameText[2]->getText());
 	});
 

@@ -2,12 +2,6 @@
 #include <SFML\Window\Mouse.hpp>
 #include <SFML\Window\Keyboard.hpp>
 #include "GUIManager.h"
-#include "GUIElement.h"
-#include "GUIWindow.h"
-#include "GUIButton.h"
-#include "GUIText.h"
-#include "Capitalist.h"
-#include "Communist.h"
 #include "Menu.h"
 #include <string>
 #include <sstream>

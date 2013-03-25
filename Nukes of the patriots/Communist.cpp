@@ -621,7 +621,6 @@ void Communist::newYearStart()
 	//mCurrentPopulationText[1]->setText(mPopulation);
 	//mCurrentTaxesText[1]->setText(mTaxes);
 	//mTaxesIncomeText[1]->setText(intToString(mTaxesPreviousRound*mPopulationPreviousRound));
-	//std::cout<<"income window tax: "<<mTaxesPreviousRound*mPopulationPreviousRound<<std::endl;
 	mTaxesIncomeWindow->setVisible(true);
 
 	int totalPatriotismChange = foodPatriotismChange + taxPatriotismChange + nuclearWeaponChange + spaceProgramChange + spaceProgramAmount + exportedChange;
@@ -648,7 +647,6 @@ void Communist::newYearStart()
 		default:
 			break;
 	}
-	std::cout<<"case: "<<(mRound%5 + 1)<<std::endl;
 	
 }
 
